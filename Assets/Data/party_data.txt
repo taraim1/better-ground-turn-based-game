@@ -1,0 +1,26 @@
+{
+    "names": [
+        "John",
+        "Karl",
+        "Asha",
+        "Drake"
+    ],
+    "max_health": [
+        20,
+        40,
+        15,
+        30
+    ],
+    "max_willpower": [
+        10,
+        20,
+        8,
+        12
+    ],
+    "number_of_skill_slots": [
+        2,
+        2,
+        4,
+        2
+    ]
+}
