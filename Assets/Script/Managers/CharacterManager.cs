@@ -30,9 +30,8 @@ public class CharacterManager : Singletone<CharacterManager>
 
     public List<GameObject> playerble_Characters = new List<GameObject>(); // 플레이어블 캐릭터들 리스트
 
-    private void Start()
+    public void spawn_character()
     {
-        //캐릭터 스포너 생성
 
         //플레이어블 캐릭터 생성
         for (int i = 0; i < 4; i++) 
@@ -41,5 +40,6 @@ public class CharacterManager : Singletone<CharacterManager>
             SpawnCharactor.instance.spawn_playerble_charactor(playable_character_base);
             
         }
+        BattleManager.instance.is_Characters_spawned = true;
     }
 }

@@ -1,26 +1,26 @@
 {
-    "names": [
-        "John",
-        "Karl",
-        "Asha",
-        "Drake"
+    "names_temp": [
+        "player1",
+        "player2",
+        "player3",
+        "player4"
     ],
-    "max_health": [
+    "max_health_temp": [
+        30,
         20,
-        40,
         15,
-        30
+        20
     ],
-    "max_willpower": [
+    "max_willpower_temp": [
+        15,
         10,
-        20,
         8,
-        12
+        10
     ],
-    "number_of_skill_slots": [
+    "number_of_skill_slots_temp": [
+        1,
         2,
-        2,
-        4,
+        3,
         2
     ]
 }
