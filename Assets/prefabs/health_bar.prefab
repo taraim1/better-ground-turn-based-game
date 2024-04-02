@@ -87,7 +87,7 @@ MonoBehaviour:
   m_Direction: 0
   m_MinValue: 0
   m_MaxValue: 15
-  m_WholeNumbers: 1
+  m_WholeNumbers: 0
   m_Value: 15
   m_OnValueChanged:
     m_PersistentCalls:
@@ -131,7 +131,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target_object: {fileID: 0}
-  offset: {x: 0, y: 0, z: 0}
+  offset: {x: 0, y: -90, z: 0}
 --- !u!1 &7109349729546784895
 GameObject:
   m_ObjectHideFlags: 0

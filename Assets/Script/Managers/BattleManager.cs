@@ -39,7 +39,7 @@ public class BattleManager : Singletone<BattleManager> //싱글톤임
         //파티 데이터 불러오기
         PartyManager.instance.read_Json_file();
 
-        //전투 중인 캐릭터의 데이터 리스트 불러오기
+        //전투 중인 캐릭터의 Playable Character 인스턴스 리스트를 불러오기 (정보저장용)
         for (int i = 0; i < PartyManager.party_member_count; i++) 
         { 
             playable_Characters_data.Add(PartyManager.instance.get_character_of_party(i));
@@ -52,6 +52,15 @@ public class BattleManager : Singletone<BattleManager> //싱글톤임
         for (int i = 0; i < PartyManager.party_member_count; i++) 
         {
             playable_characters[i].name = playable_Characters_data[i].get_character_name();
+        }
+
+        //체력바 리스트 초기화
+        BattleUI_Manager.instance.clear_health_bar_list();
+
+        //체력바 소환
+        for (int i = 0; i < PartyManager.party_member_count; i++) 
+        {
+            BattleUI_Manager.instance.summon_health_bar(playable_characters[i]);
         }
 
         yield break;
