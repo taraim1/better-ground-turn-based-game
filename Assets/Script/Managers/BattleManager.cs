@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 
 
@@ -63,9 +64,27 @@ public class BattleManager : Singletone<BattleManager> //싱글톤임
             BattleUI_Manager.instance.summon_health_bar(playable_characters[i]);
         }
 
+
         yield break;
     
     }
+
+    void OnEnable()
+    {
+        // 델리게이트 체인 추가
+        SceneManager.sceneLoaded += Check_battle_scene_load;
+    }
+
+    //Battle씬 시작시 전투 시작되도록 하기
+    private void Check_battle_scene_load(Scene scene, LoadSceneMode mode)
+    {
+        if (scene.name == "Battle") 
+        { 
+            battle_start_trigger = true;
+        }
+        
+    }
+
 
     private void Update()
     {

@@ -14,7 +14,7 @@ public class PartyManager : Singletone<PartyManager>, IJson
     public void read_Json_file() //파티 데이터를 Json파일에서 읽고 PartyDataContainer에 업로드
     {
         PartyDataContainer container = new PartyDataContainer();
-        container = JsonUtility.FromJson<PartyDataContainer>(File.ReadAllText(Application.dataPath + "/Data/party_data.txt"));
+        container = JsonUtility.FromJson<PartyDataContainer>(File.ReadAllText(Application.dataPath + "/Data/party_data.json"));
         PartyDataContainer.names = container.names_temp;
         PartyDataContainer.max_health = container.max_health_temp;
         PartyDataContainer.max_willpower = container.max_willpower_temp;
@@ -29,7 +29,7 @@ public class PartyManager : Singletone<PartyManager>, IJson
         container.max_willpower_temp = PartyDataContainer.max_willpower;
         container.number_of_skill_slots_temp = PartyDataContainer.number_of_skill_slots;
         string output = JsonUtility.ToJson(container, true);
-        File.WriteAllText(Application.dataPath + "/Data/party_data.txt", output);
+        File.WriteAllText(Application.dataPath + "/Data/party_data.json", output);
     }
 
     //캐릭터를 받아서 인덱스를 따라 파티 데이터 콘테이너에 저장
