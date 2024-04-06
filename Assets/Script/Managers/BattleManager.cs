@@ -64,6 +64,14 @@ public class BattleManager : Singletone<BattleManager> //싱글톤임
             BattleUI_Manager.instance.summon_health_bar(playable_characters[i]);
         }
 
+        //체력바 초기값 설정
+        for (int i = 0; i < PartyManager.party_member_count; i++)
+        {
+            int max_health = playable_Characters_data[i].get_character_int_property(CharacterManager.character_int_properties.max_health);
+            BattleUI_Manager.instance.set_UI_slider_property_of_UIelement(BattleUI_Manager.UI_bars.health_bar, i, BattleUI_Manager.UI_bars_properties.max_value, max_health);
+            BattleUI_Manager.instance.set_UI_slider_property_of_UIelement(BattleUI_Manager.UI_bars.health_bar, i, BattleUI_Manager.UI_bars_properties.current_value, max_health);
+        }
+
 
         yield break;
     
