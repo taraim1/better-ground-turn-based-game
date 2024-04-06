@@ -55,13 +55,26 @@ public class BattleManager : Singletone<BattleManager> //싱글톤임
             playable_characters[i].name = playable_Characters_data[i].get_character_name();
         }
 
-        //체력바 리스트 초기화
-        BattleUI_Manager.instance.clear_health_bar_list();
+        //체력바, 정신력바 리스트 초기화
+        BattleUI_Manager.instance.clear_bar_list(BattleUI_Manager.UI_bars.health_bar);
+        BattleUI_Manager.instance.clear_bar_list(BattleUI_Manager.UI_bars.willpower_bar);
 
-        //체력바 소환
+        //체력바, 정신력바 소환
         for (int i = 0; i < PartyManager.party_member_count; i++) 
         {
-            BattleUI_Manager.instance.summon_health_bar(playable_characters[i]);
+            BattleUI_Manager.instance.summon_UI_bar(BattleUI_Manager.UI_bars.health_bar, playable_characters[i]);
+            BattleUI_Manager.instance.summon_UI_bar(BattleUI_Manager.UI_bars.willpower_bar, playable_characters[i]);
+        }
+
+        //체력바, 정신력바 초기값 설정
+        for (int i = 0; i < PartyManager.party_member_count; i++)
+        {
+            int max_health = playable_Characters_data[i].get_character_int_property(CharacterManager.character_int_properties.max_health);
+            BattleUI_Manager.instance.set_UI_slider_property_of_UIelement(BattleUI_Manager.UI_bars.health_bar, i, BattleUI_Manager.UI_bars_properties.max_value, max_health);
+            BattleUI_Manager.instance.set_UI_slider_property_of_UIelement(BattleUI_Manager.UI_bars.health_bar, i, BattleUI_Manager.UI_bars_properties.current_value, max_health);
+            int max_willpower = playable_Characters_data[i].get_character_int_property(CharacterManager.character_int_properties.max_willpower);
+            BattleUI_Manager.instance.set_UI_slider_property_of_UIelement(BattleUI_Manager.UI_bars.willpower_bar, i, BattleUI_Manager.UI_bars_properties.max_value, max_willpower);
+            BattleUI_Manager.instance.set_UI_slider_property_of_UIelement(BattleUI_Manager.UI_bars.willpower_bar, i, BattleUI_Manager.UI_bars_properties.current_value, max_willpower);
         }
 
 

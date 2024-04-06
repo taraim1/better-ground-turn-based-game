@@ -1684,6 +1684,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   health_bar_prefab: {fileID: 953389889809876917, guid: e0a15ee19bccfee419d609ebeb27ba21,
     type: 3}
+  willpower_bar_prefab: {fileID: 953389889809876917, guid: 036998866c0c8fb4d9ac1e6ae5075a2f,
+    type: 3}
 --- !u!1 &1375931199
 GameObject:
   m_ObjectHideFlags: 0
