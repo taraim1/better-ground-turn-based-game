@@ -35,22 +35,22 @@ public class PartyManager : Singletone<PartyManager>, IJson
     //캐릭터를 받아서 인덱스를 따라 파티 데이터 콘테이너에 저장
     public void set_character_to_party(Playable_Character character, int index) 
     {
-        PartyDataContainer.names[index] = character.get_character_name();
-        PartyDataContainer.max_health[index] = character.get_character_int_property(CharacterManager.character_int_properties.max_health);
-        PartyDataContainer.max_willpower[index] = character.get_character_int_property(CharacterManager.character_int_properties.max_willpower);
-        PartyDataContainer.number_of_skill_slots[index] = character.get_character_int_property(CharacterManager.character_int_properties.number_of_skill_slots);
+        PartyDataContainer.names[index] = character.Character_name;
+        PartyDataContainer.max_health[index] = character.Max_health;
+        PartyDataContainer.max_willpower[index] = character.Max_willpower;
+        PartyDataContainer.number_of_skill_slots[index] = character.Number_of_skill_slots;
     }
 
     //파티의 인덱스번째의 자리에 있는 캐릭터의 인스턴스를 얻어내는 메소드
     public Playable_Character get_character_of_party(int index) 
     { 
         Playable_Character character = new Playable_Character();
-        character.set_character_name(PartyDataContainer.names[index]);
-        character.set_character_int_property(CharacterManager.character_int_properties.max_health, PartyDataContainer.max_health[index]);
-        character.set_character_int_property(CharacterManager.character_int_properties.current_health, PartyDataContainer.max_health[index]);
-        character.set_character_int_property(CharacterManager.character_int_properties.max_willpower, PartyDataContainer.max_willpower[index]);
-        character.set_character_int_property(CharacterManager.character_int_properties.current_willpower, PartyDataContainer.max_willpower[index]);
-        character.set_character_int_property(CharacterManager.character_int_properties.number_of_skill_slots, PartyDataContainer.number_of_skill_slots[index]);
+        character.Character_name = PartyDataContainer.names[index];
+        character.Max_health = PartyDataContainer.max_health[index];
+        character.Current_health = PartyDataContainer.max_health[index];
+        character.Max_willpower = PartyDataContainer.max_willpower[index];
+        character.Current_willpower =  PartyDataContainer.max_willpower[index];
+        character.Number_of_skill_slots =  PartyDataContainer.number_of_skill_slots[index];
         return character;
     }
 

@@ -52,7 +52,7 @@ public class BattleManager : Singletone<BattleManager> //싱글톤임
         //캐릭터 오브젝트 이름 설정
         for (int i = 0; i < PartyManager.party_member_count; i++) 
         {
-            playable_characters[i].name = playable_Characters_data[i].get_character_name();
+            playable_characters[i].name = playable_Characters_data[i].Character_name;
         }
 
         //체력바, 정신력바 리스트 초기화
@@ -69,10 +69,10 @@ public class BattleManager : Singletone<BattleManager> //싱글톤임
         //체력바, 정신력바 초기값 설정
         for (int i = 0; i < PartyManager.party_member_count; i++)
         {
-            int max_health = playable_Characters_data[i].get_character_int_property(CharacterManager.character_int_properties.max_health);
+            int max_health = playable_Characters_data[i].Max_health;
             BattleUI_Manager.instance.set_UI_slider_property_of_UIelement(BattleUI_Manager.UI_bars.health_bar, i, BattleUI_Manager.UI_bars_properties.max_value, max_health);
             BattleUI_Manager.instance.set_UI_slider_property_of_UIelement(BattleUI_Manager.UI_bars.health_bar, i, BattleUI_Manager.UI_bars_properties.current_value, max_health);
-            int max_willpower = playable_Characters_data[i].get_character_int_property(CharacterManager.character_int_properties.max_willpower);
+            int max_willpower = playable_Characters_data[i].Max_willpower;
             BattleUI_Manager.instance.set_UI_slider_property_of_UIelement(BattleUI_Manager.UI_bars.willpower_bar, i, BattleUI_Manager.UI_bars_properties.max_value, max_willpower);
             BattleUI_Manager.instance.set_UI_slider_property_of_UIelement(BattleUI_Manager.UI_bars.willpower_bar, i, BattleUI_Manager.UI_bars_properties.current_value, max_willpower);
         }
