@@ -6,11 +6,6 @@ public class test : MonoBehaviour
 {
 
    
-    void Start()
-    {
-
-        PartyManager.instance.read_Json_file();
-    }
 
 }
 

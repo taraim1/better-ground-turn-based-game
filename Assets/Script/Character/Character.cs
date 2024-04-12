@@ -9,77 +9,34 @@ using UnityEngine;
 public class Character
 {
     private string character_name;
+    public string Character_name { get { return character_name; } set { character_name = value; } }
+
+    private string description;
+    public string Description { get { return description; }}
+
+    private int character_code;
+    public int Character_code { get { return character_code; }}
+
     private int max_health;
+    public int Max_health { get { return max_health; } set { max_health = value; } }
+
     private int current_health;
+    public int Current_health { get { return current_health; } set { current_health = value; } }
+
     private int max_willpower;
+    public int Max_willpower { get { return max_willpower; } set { max_willpower = value; } }
+
     private int current_willpower;
+    public int Current_willpower { get { return current_willpower; } set { current_willpower = value; } }
+
     private int number_of_skill_slots;
+    public int Number_of_skill_slots { get { return number_of_skill_slots; } set { number_of_skill_slots = value; } }
 
+    private int min_speed;
+    public int Min_speed { get { return min_speed; } set { min_speed = value; } }
 
-    public string get_character_name() //캐릭터 이름 가져오는 메소드
-    {
-        return character_name;
-    }
-
-    public void set_character_name(string name) // 캐릭터 이름 설정 메소드
-    { 
-        character_name = name;
-    }
-
-    public int get_character_int_property(CharacterManager.character_int_properties property) 
-        // 캐릭터의 인트 속성값 가져오는 메소드
-    {
-
-        if (property == CharacterManager.character_int_properties.max_health)
-        {
-            return max_health;
-        }
-        else if (property == CharacterManager.character_int_properties.current_health)
-        {
-            return current_health;
-        }
-        else if (property == CharacterManager.character_int_properties.max_willpower)
-        {
-            return max_willpower;
-        }
-        else if (property == CharacterManager.character_int_properties.current_willpower)
-        {
-            return current_willpower;
-        }
-        else if (property == CharacterManager.character_int_properties.number_of_skill_slots)
-        {
-            return number_of_skill_slots;
-        }
-        else { return 0; }
-
-        }
-
-    public void set_character_int_property(CharacterManager.character_int_properties property, int value)
-    // 캐릭터의 인트 속성값 설정하는 메소드
-    {
-
-        if (property == CharacterManager.character_int_properties.max_health)
-        {
-            max_health = value;
-        }
-        else if (property == CharacterManager.character_int_properties.current_health)
-        {
-            current_health = value;
-        }
-        else if (property == CharacterManager.character_int_properties.max_willpower)
-        {
-            max_willpower = value;
-        }
-        else if (property == CharacterManager.character_int_properties.current_willpower)
-        {
-            current_willpower = value;
-        }
-        else if (property == CharacterManager.character_int_properties.number_of_skill_slots)
-        {
-            number_of_skill_slots = value;
-        }
-
-    }
+    private int max_speed;
+    public int Max_speed { get { return max_speed; } set { max_speed = value; } }
 
 
 }

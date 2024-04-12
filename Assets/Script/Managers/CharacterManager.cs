@@ -6,18 +6,9 @@ using UnityEngine.TextCore.Text;
 
 public class CharacterManager : Singletone<CharacterManager>
 {
-    public enum character_int_properties
-    {
-        max_health,
-        current_health,
-        max_willpower,
-        current_willpower,
-        number_of_skill_slots
-    }
+
 
     public GameObject playable_character_base;
-
-
 
 
     public List<GameObject> playerble_Characters = new List<GameObject>(); // 플레이어블 캐릭터들 리스트
