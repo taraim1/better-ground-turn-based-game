@@ -1,0 +1,26 @@
+{
+    "names_temp": [
+        "player1",
+        "player2",
+        "player3",
+        "player4"
+    ],
+    "max_health_temp": [
+        30,
+        20,
+        15,
+        20
+    ],
+    "max_willpower_temp": [
+        15,
+        10,
+        8,
+        10
+    ],
+    "number_of_skill_slots_temp": [
+        1,
+        2,
+        3,
+        2
+    ]
+}
