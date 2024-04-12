@@ -45,6 +45,7 @@ public class ResourceManager : Singletone<ResourceManager>, IJson
                 else { Debug.Log("골드는 음수가 될 수 없습니다. 골드 변경이 취소되었습니다."); };
                 break;
         }
+        write_Json_file(); // json으로 저장
     }
 
     public void add_resource(resources type, int value) //자원 수 더하기
