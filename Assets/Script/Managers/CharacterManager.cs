@@ -2,16 +2,51 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.IO;
 using UnityEngine.TextCore.Text;
 
 public class CharacterManager : Singletone<CharacterManager>
 {
 
+    public enum character_code 
+    {
+        kimchunsik,
+        test
+    }
 
     public GameObject playable_character_base;
 
+    // 캐릭터 코드에 따른 저장 이름 리턴
+    public string get_data_path(CharacterManager.character_code code)
+    {
+        switch (code)
+        {
+            case CharacterManager.character_code.kimchunsik:
+                return "kimchunsik.json";
+            default:
+                return "";
 
-    public List<GameObject> playerble_Characters = new List<GameObject>(); // 플레이어블 캐릭터들 리스트
+        }
+    }
+
+    // 캐릭터를 캐릭터 코드에 해당하는 json 파일에 저장
+    public void save_character_to_json(Character character)
+    {
+        string path = "/Data/CharacterData_";
+        path += get_data_path(character.code);
+        string output = JsonUtility.ToJson(character, true);
+        File.WriteAllText(Application.dataPath + path, output);
+    }
+
+    // 캐릭터를 캐릭터 코드에 해당하는 json 파일에서 불러온 뒤 string으로 리턴
+    public string load_character_from_json(CharacterManager.character_code code)
+    {
+        string path = "/Data/CharacterData_";
+        path += get_data_path(code);
+        string output = File.ReadAllText(Application.dataPath + path);
+        return output;
+    }
+
 
     public void spawn_character()
     {

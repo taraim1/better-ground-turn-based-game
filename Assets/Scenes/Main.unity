@@ -2833,7 +2833,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playable_character_base: {fileID: 1766090985930963044, guid: 9e25d508eddfdb247a2b34bb19f6cfd8,
     type: 3}
-  playerble_Characters: []
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
