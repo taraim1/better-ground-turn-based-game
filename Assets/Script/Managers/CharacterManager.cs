@@ -10,7 +10,8 @@ public class CharacterManager : Singletone<CharacterManager>
 
     public enum character_code 
     {
-        kimchunsik
+        kimchunsik,
+        test
     }
 
     public GameObject playable_character_base;
