@@ -50,16 +50,22 @@ public class CharacterManager : Singletone<CharacterManager>
 
     public void spawn_character()
     {
-       for (int i = 0; i < 4; i++) 
+        int party_member_count = PartyManager.instance.get_party_member_count();
+        for (int i = 0; i < party_member_count; i++) 
         {
 
-            //플레이어블 캐릭터가 소환될 위치를 불러옴
+            // 플레이어블 캐릭터가 소환될 위치를 불러옴
             Vector3 spawn_pos = BattleManager.instance.playable_character_position_settings[i];
 
-            //플레이어블 캐릭터 생성
+            // 플레이어블 캐릭터 오브젝트 생성
             GameObject obj = Instantiate(playable_character_base, spawn_pos, Quaternion.identity);
 
-            //플레이어블 캐릭터 오브젝트를 BattleManager의 리스트에 넣기
+            // 파티에서 캐릭터 데이터를 불러와 BattleManager의 리스트에 넣기
+            Character character = new Character();
+            character = JsonUtility.FromJson<Character>(CharacterManager.instance.load_character_from_json(PartyManager.instance.get_charactor_code(i)));
+            BattleManager.instance.playable_character_data.Add(character);
+
+            // 플레이어블 캐릭터 오브젝트를 BattleManager의 리스트에 넣기
             BattleManager.instance.playable_characters.Add(obj);
 
         }
