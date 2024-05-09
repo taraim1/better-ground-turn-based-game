@@ -8,7 +8,7 @@ public class BtnManager : MonoBehaviour
     [SerializeField] Sprite btnSelected; //버튼 선택시 이미지
 
     Shop_Btn[] tabs; //버튼들을 보관해 둘 배열들
-
+    public int Current_Scene;
     // Start is called before the first frame update
     void Start()
     {
@@ -22,6 +22,11 @@ public class BtnManager : MonoBehaviour
         {
             bool isActiveTab = S_Button == tabs[i]; //i 번째 탭이 눌려진 탭인지 판단.
             tabs[i].GetPanel.SetActive(isActiveTab);//모든 탭을 다 꺼준다.
+            if (isActiveTab ) 
+            { 
+                Debug.Log(i);
+                Current_Scene = i;
+            }
             tabs[i].ChangeBtnImg(isActiveTab? btnSelected : btnNormal); //삼항연산자로 이미지 바꾸기
         }
     }
