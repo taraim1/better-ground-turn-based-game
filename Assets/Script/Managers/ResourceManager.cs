@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
 
-public class ResourceManager : Singletone<ResourceManager>, IJson
+public class ResourceManager : Singletone<ResourceManager>
 {
     [SerializeField]
     private int gold;

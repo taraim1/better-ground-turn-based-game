@@ -3,58 +3,78 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
 using UnityEngine.Rendering.VirtualTexturing;
+using UnityEngine.TextCore.Text;
+using Unity.VisualScripting;
 
-public class PartyManager : Singletone<PartyManager>, IJson
+
+public class PartyManager : Singletone<PartyManager>
 {
-   
+
+    // 현재 파티 데이터가 담기는 곳
+    private PartyDataContainer PartyData = new PartyDataContainer();
 
 
-    public static int party_member_count = 4;
-    private TextAsset party_data_txt;
-    public void read_Json_file() //파티 데이터를 Json파일에서 읽고 PartyDataContainer에 업로드
+
+    [System.Serializable]
+    private class PartyDataContainer 
     {
-        PartyDataContainer container = new PartyDataContainer();
-        container = JsonUtility.FromJson<PartyDataContainer>(File.ReadAllText(Application.dataPath + "/Data/party_data.json"));
-        PartyDataContainer.names = container.names_temp;
-        PartyDataContainer.max_health = container.max_health_temp;
-        PartyDataContainer.max_willpower = container.max_willpower_temp;
-        PartyDataContainer.number_of_skill_slots = container.number_of_skill_slots_temp;
+        public int party_member_count;
+        private int party_member_max = 4;
+        public int party_member_Max { get { return party_member_max; } set { party_member_max = value; }}
+        public List<CharacterManager.character_code> party_codes = new List<CharacterManager.character_code>();
     }
-    public void write_Json_file() //파티 데이터를 Json파일로 저장
+
+    // 현재 파티 데이터를 json 파일로 저장
+    private void save_party_to_json() 
     {
-        PartyDataContainer container = new PartyDataContainer();
-        
-        container.names_temp = PartyDataContainer.names;
-        container.max_health_temp = PartyDataContainer.max_health;
-        container.max_willpower_temp = PartyDataContainer.max_willpower;
-        container.number_of_skill_slots_temp = PartyDataContainer.number_of_skill_slots;
-        string output = JsonUtility.ToJson(container, true);
-        File.WriteAllText(Application.dataPath + "/Data/party_data.json", output);
+        string output = JsonUtility.ToJson(PartyData, true);
+        File.WriteAllText(Application.dataPath + "/Data/PartyData.json", output);
     }
 
-    //캐릭터를 받아서 인덱스를 따라 파티 데이터 콘테이너에 저장
-    public void set_character_to_party(Playable_Character character, int index) 
+    // 현재 파티 데이터를 json 파일에서 불러와 덮어씌움
+    private void load_party_from_json()
     {
-        PartyDataContainer.names[index] = character.Character_name;
-        PartyDataContainer.max_health[index] = character.Max_health;
-        PartyDataContainer.max_willpower[index] = character.Max_willpower;
-        PartyDataContainer.number_of_skill_slots[index] = character.Number_of_skill_slots;
+        string output = File.ReadAllText(Application.dataPath + "/Data/PartyData.json");
+        PartyData = JsonUtility.FromJson<PartyDataContainer>(output);
     }
 
-    //파티의 인덱스번째의 자리에 있는 캐릭터의 인스턴스를 얻어내는 메소드
-    public Playable_Character get_character_of_party(int index) 
-    { 
-        Playable_Character character = new Playable_Character();
-        character.Character_name = PartyDataContainer.names[index];
-        character.Max_health = PartyDataContainer.max_health[index];
-        character.Current_health = PartyDataContainer.max_health[index];
-        character.Max_willpower = PartyDataContainer.max_willpower[index];
-        character.Current_willpower =  PartyDataContainer.max_willpower[index];
-        character.Number_of_skill_slots =  PartyDataContainer.number_of_skill_slots[index];
-        return character;
+    // 캐릭터 코드를 파티에 추가
+    public void add_character_to_party(CharacterManager.character_code code) 
+    {
+        if (PartyData.party_member_count >= PartyData.party_member_Max)
+        {
+            Debug.Log("오류: 파티 최대 인원 수에 도달하여 더 이상 추가가 불가능합니다.");
+            return;
+        }
+ 
+        PartyData.party_codes.Add(code);
+        PartyData.party_member_count++;
+        save_party_to_json();
+
     }
 
-    
+    // 캐릭터 코드를 파티에서 제거
+    public void remove_character_from_party(CharacterManager.character_code code)
+    {
+        if (PartyData.party_member_count == 0)
+        {
+            Debug.Log("오류: 파티가 비어 있어 삭제가 불가능합니다.");
+            return;
+        }
+
+        if (!PartyData.party_codes.Remove(code)) 
+        {
+            Debug.Log("오류: 파티에 삭제하려는 캐릭터가 없습니다.");
+            return;
+        }
+
+        PartyData.party_member_count--;
+        save_party_to_json();
+    }
 
 
+    private void Start()
+    {
+        load_party_from_json();
+    }
 }
