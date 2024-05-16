@@ -10,7 +10,7 @@ public class Shop_Btn : MonoBehaviour
     [SerializeField] GameObject panel;
     Image btnImage;
     
-    public GameObject GetPanel => panel; //가져온 패널 메서드 연결
+    //public GameObject GetPanel => panel; //가져온 패널 메서드 연결
 
     BtnManager parent; //Btnmanager코드를 부모로 하기
     // Start is called before the first frame update
