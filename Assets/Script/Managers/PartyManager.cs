@@ -72,29 +72,6 @@ public class PartyManager : Singletone<PartyManager>
         save_party_to_json();
     }
 
-    // 파티에 몇 명 있는지 리턴
-    public int get_party_member_count() 
-    {
-        return PartyData.party_member_count;
-    }
-
-    // 파티의 i번째 캐릭터 코드 리턴
-    public CharacterManager.character_code get_charactor_code(int index) 
-    {
-        if (index < 0) 
-        {
-            Debug.Log("오류: 음수 인덱스의 파티 데이터는 없습니다.");
-            return 0;
-        }
-
-        if (index >= get_party_member_count()) 
-        {
-            Debug.Log("오류: 파티 데이터 크기를 넘어서는 인덱스 값으로 데이터를 요청했습니다.");
-            return 0;
-        }
-
-        return PartyData.party_codes[index];
-    }
 
     private void Start()
     {
