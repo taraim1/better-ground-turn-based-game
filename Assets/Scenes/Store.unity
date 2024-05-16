@@ -389,7 +389,6 @@ GameObject:
   - component: {fileID: 111476338}
   - component: {fileID: 111476337}
   - component: {fileID: 111476336}
-  - component: {fileID: 111476339}
   m_Layer: 5
   m_Name: Pick_Button_10
   m_TagString: Untagged
@@ -461,7 +460,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 111476339}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: Random_Card, Assembly-CSharp
         m_MethodName: Randomizer_10Time
         m_Mode: 1
@@ -511,21 +510,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 111476334}
   m_CullTransparentMesh: 1
---- !u!114 &111476339
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 111476334}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a381085bec563124e95799ae44aa4985, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  cardPrefab: {fileID: 0}
-  Card_Summon: {fileID: 0}
-  Grade_Result: []
 --- !u!1 &193917006
 GameObject:
   m_ObjectHideFlags: 0
