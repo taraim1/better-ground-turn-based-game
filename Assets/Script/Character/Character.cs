@@ -7,7 +7,7 @@ using System.IO;
 
 
 [System.Serializable]
-public class Character
+public class Character 
 {
     /*
         캐릭터 데이터가 저장되는 클래스
@@ -35,7 +35,7 @@ public class Character
         }
         else
         {
-            return max_health[level - 1];
+            return max_health[level];
         }
     }
 
@@ -48,7 +48,7 @@ public class Character
         }
         else
         {
-            return max_willpower[level - 1];
+            return max_willpower[level];
         }
     }
 }

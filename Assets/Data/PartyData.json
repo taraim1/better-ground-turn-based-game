@@ -1,7 +1,9 @@
 {
-    "party_member_count": 2,
+    "party_member_count": 4,
     "party_codes": [
         0,
-        1
+        0,
+        0,
+        0
     ]
 }
