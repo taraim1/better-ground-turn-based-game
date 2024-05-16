@@ -22,8 +22,8 @@ public class BattleUI_Manager : Singletone<BattleUI_Manager>
         current_value
     }
 
-    private List<GameObject> health_bars = new List<GameObject>();
-    private List<GameObject> willpower_bars = new List<GameObject>(); 
+    private List<GameObject> health_bars = new List<GameObject>(); //0번~3번 : 플레이어블 캐릭터 체력바
+    private List<GameObject> willpower_bars = new List<GameObject>(); //0번~3번 : 플레이어블 캐릭터 정신력바
 
     public void clear_bar_list(UI_bars bar_type) 
     {
@@ -37,13 +37,6 @@ public class BattleUI_Manager : Singletone<BattleUI_Manager>
                 break;
         }
     }
-
-    public void clear_all_bar_list() 
-    {
-        health_bars.Clear();
-        willpower_bars.Clear();
-    }
-
     public void summon_UI_bar(UI_bars bar_type, GameObject character_obj) //캐릭터 체력바 소환
     {
         GameObject bar;
@@ -82,7 +75,7 @@ public class BattleUI_Manager : Singletone<BattleUI_Manager>
         }
     }
 
-    public void set_bar_property(UI_bars bar_type, int index, UI_bars_properties property, float value) //특정 UI 요소의 값을 변경
+    public void set_UI_slider_property_of_UIelement(UI_bars bar_type, int index, UI_bars_properties property, float value) //특정 UI 요소의 값을 변경
     { 
         switch (bar_type) 
         {

@@ -1920,7 +1920,6 @@ MonoBehaviour:
   - {x: -3, y: 2, z: 0}
   - {x: -3, y: -3, z: 0}
   playable_characters: []
-  playable_character_data: []
 --- !u!1 &1500776802
 GameObject:
   m_ObjectHideFlags: 0
