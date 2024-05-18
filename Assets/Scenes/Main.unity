@@ -1915,11 +1915,12 @@ MonoBehaviour:
   is_Characters_spawned: 0
   is_Characters_loaded: 0
   playable_character_position_settings:
-  - {x: -7, y: 2, z: 0}
-  - {x: -7, y: -3, z: 0}
-  - {x: -3, y: 2, z: 0}
-  - {x: -3, y: -3, z: 0}
+  - {x: -6, y: 2.5, z: 0}
+  - {x: -6, y: 0, z: 0}
+  - {x: -4, y: 2.5, z: 0}
+  - {x: -4, y: 0, z: 0}
   playable_characters: []
+  playable_character_data: []
 --- !u!1 &1500776802
 GameObject:
   m_ObjectHideFlags: 0
