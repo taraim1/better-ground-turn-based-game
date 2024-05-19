@@ -42,6 +42,7 @@ public class BattleManager : Singletone<BattleManager> // 싱글톤임
         playable_characters.Clear();
         playable_character_data.Clear();
         hand_data.Clear();
+        CardManager.instance.Setup_all();
 
         // 캐릭터 오브젝트 및 Character 인스턴스 생성
         CharacterManager.instance.spawn_character();

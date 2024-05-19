@@ -13,13 +13,14 @@ public class card : MonoBehaviour
     [SerializeField] TMP_Text typeTMP;
     [SerializeField] TMP_Text behavior_typeTMP;
     [SerializeField] TMP_Text value_rangeTMP;
+    [SerializeField] int index;
 
     // 카드의 원래 위치, 회전, 스케일을 저장
     public PRS originPRS;
 
     public Cards Card;
 
-    public void Setup(Cards card) 
+    public void Setup(Cards card, int index) 
     {
         Card = card;
 
@@ -29,12 +30,15 @@ public class card : MonoBehaviour
         typeTMP.text = Card.type;
         behavior_typeTMP.text = Card.behavior_type;
         value_rangeTMP.text = string.Format("{0} - {1}", Card.minPowerOfLevel[0], Card.maxPowerOfLevel[0]);
-
+        this.index = index;
     }
 
     // 주어진 PRS로 Dotween 사용한 이동 or 그냥 이동
     public void MoveTransform(PRS prs, bool use_Dotween, float DotweenTime) 
     {
+        // 이동 초기화
+        transform.DOKill();
+
         if (use_Dotween) 
         {
             transform.DOMove(prs.pos, DotweenTime);
@@ -43,7 +47,6 @@ public class card : MonoBehaviour
             return;
         }
 
-        transform.DOKill();
         transform.position = prs.pos;
         transform.rotation = prs.rot;
         transform.localScale = prs.scale;

@@ -11,12 +11,16 @@ public class CardManager : Singletone<CardManager>
     [SerializeField] Transform left_card_transform;
     [SerializeField] Transform right_card_transform;
     [SerializeField] Transform diactivated_card_transform;
+    [SerializeField] Transform highlighted_card_transform;
 
     List<Cards> cards_buffer;
     public GameObject card_prefab;
 
     // 현재 보는 중인 카드패의 인덱스, 안 보는 중이면 -1
     public int active_index;
+
+    // 현재 클릭한 카드
+    public card highlighted_card;
 
     // 버퍼에서 첫 카드 뽑기
     public Cards PopCard() 
@@ -59,7 +63,7 @@ public class CardManager : Singletone<CardManager>
             cardObj.transform.position = diactivated_card_transform.position;
         }
         card card = cardObj.GetComponent<card>();
-        card.Setup(PopCard());
+        card.Setup(PopCard(), index);
         BattleManager.instance.hand_data[index].Add(card);
 
         Set_origin_order(index);
@@ -74,20 +78,31 @@ public class CardManager : Singletone<CardManager>
         }
     }
 
-    void Aline_cards(int index) // 카드 위치, 회전, 스케일 등 정렬 
+    public void Aline_cards(int index) // 카드 위치, 회전, 스케일 등 정렬 
     { 
         List<PRS> origin_cards_PRS = new List<PRS>();
-        origin_cards_PRS = Round_alignment(left_card_transform, right_card_transform, BattleManager.instance.hand_data[index].Count, 0.5f, Vector3.one * 1.5f, index);
+        origin_cards_PRS = set_card_alignment(left_card_transform, right_card_transform, BattleManager.instance.hand_data[index].Count, 0.5f, Vector3.one * 1.5f, index);
 
         for (int i = 0; i < BattleManager.instance.hand_data[index].Count; i++) 
         {
             card targetCard = BattleManager.instance.hand_data[index][i];
 
             targetCard.originPRS = origin_cards_PRS[i];
+            // 활성화된 카드면
             if (index == active_index)
             {
-                targetCard.MoveTransform(targetCard.originPRS, true, 0.5f);
+                // 하이라이트된 카드면
+                if (targetCard == highlighted_card)
+                {
+                    targetCard.MoveTransform(new PRS(highlighted_card_transform.position, highlighted_card_transform.rotation, Vector3.one * 2f), true, 0.2f);
+                }
+                // 아니면
+                else 
+                {
+                    targetCard.MoveTransform(targetCard.originPRS, true, 0.5f);
+                }            
             }
+            // 아니면
             else 
             {
                 targetCard.MoveTransform(targetCard.originPRS, false, 0f);
@@ -96,7 +111,7 @@ public class CardManager : Singletone<CardManager>
         }
     }
 
-    List<PRS> Round_alignment(Transform leftTr, Transform rightTr, int CardCount, float height, Vector3 scale, int index) // 카드들의 PRS값 리스트를 계산해 반환
+    List<PRS> set_card_alignment(Transform leftTr, Transform rightTr, int CardCount, float height, Vector3 scale, int index) // 카드들의 PRS값 리스트를 계산해 반환
     {
         float[] objLerps = new float[CardCount];
         List<PRS> results = new List<PRS>(CardCount);
@@ -111,6 +126,7 @@ public class CardManager : Singletone<CardManager>
             return results;
         }
 
+        // 간격조정
         switch (CardCount) 
         {
             case 1: objLerps = new float[] { 0.5f }; break;
@@ -125,6 +141,7 @@ public class CardManager : Singletone<CardManager>
                 break;
         }
 
+        // 위치 계산
         for (int i = 0; i < CardCount; i++) 
         {
             var targetPos = Vector3.Lerp(leftTr.position, rightTr.position, objLerps[i]);
@@ -150,6 +167,12 @@ public class CardManager : Singletone<CardManager>
         }
     }
 
+    public void Setup_all() 
+    {
+        Setup_cardBuffer();
+        active_index = -1;
+        highlighted_card = null;
+    }
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         if (scene.name != "Battle") 
@@ -163,7 +186,6 @@ public class CardManager : Singletone<CardManager>
     }
     void Start()
     {
-        Setup_cardBuffer();
         SceneManager.sceneLoaded += OnSceneLoaded;
     }
 

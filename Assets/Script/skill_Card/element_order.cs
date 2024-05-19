@@ -36,5 +36,9 @@ public class element_order : MonoBehaviour
         }
     }
 
+    public void Return_to_origin_order() 
+    {
+        Set_order(origin_order);
+    }
 
 }
