@@ -43,6 +43,7 @@ public class card : MonoBehaviour
             return;
         }
 
+        transform.DOKill();
         transform.position = prs.pos;
         transform.rotation = prs.rot;
         transform.localScale = prs.scale;

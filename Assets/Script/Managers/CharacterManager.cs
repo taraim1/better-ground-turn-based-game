@@ -60,6 +60,13 @@ public class CharacterManager : Singletone<CharacterManager>
             // 플레이어블 캐릭터 오브젝트 생성
             GameObject obj = Instantiate(playable_character_base, spawn_pos, Quaternion.identity);
 
+            // 플레이어블 캐릭터 오브젝트 번호 지정
+            obj.GetComponent<Character_Obj>().Character_index = i;
+
+            // 패 추가
+            List<card> hand = new List<card>();
+            BattleManager.instance.hand_data.Add(hand);
+
             // 파티에서 캐릭터 데이터를 불러와 BattleManager의 리스트에 넣기
             Character character = new Character();
             character = JsonUtility.FromJson<Character>(CharacterManager.instance.load_character_from_json(PartyManager.instance.get_charactor_code(i)));

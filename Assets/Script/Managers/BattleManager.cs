@@ -23,6 +23,9 @@ public class BattleManager : Singletone<BattleManager> // 싱글톤임
     // 전투 중인 플레이어블 캐릭터들의 데이터 리스트
     public List<Character> playable_character_data = new List<Character>();
 
+    // 전투 중인 플레이어블 캐릭터들의 패 리스트
+    public List<List<card>> hand_data = new List<List<card>>();
+
     public enum phases // 한 턴의 페이즈 모음
     { 
         turn_start_effect_phase,
@@ -38,6 +41,7 @@ public class BattleManager : Singletone<BattleManager> // 싱글톤임
         is_Characters_spawned = false;
         playable_characters.Clear();
         playable_character_data.Clear();
+        hand_data.Clear();
 
         // 캐릭터 오브젝트 및 Character 인스턴스 생성
         CharacterManager.instance.spawn_character();
