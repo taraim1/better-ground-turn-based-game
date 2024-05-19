@@ -12,11 +12,11 @@ public class DetectRay : MonoBehaviour
         { 
             Vector2 pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
-            RaycastHit2D hit = Physics2D.Raycast(pos, Vector2.zero, 0f);
+            Collider2D clicked_collider = Physics2D.OverlapPoint(pos);
 
-            if (hit.collider != null) 
+            if (clicked_collider != null) 
             {
-                GameObject gameObj = hit.collider.gameObject;
+                GameObject gameObj = clicked_collider.gameObject;
                 // 전투에서 캐릭터 클릭 시 그 캐릭터의 패 보여줌
                 if (gameObj.tag == "PlayerCharacter") 
                 {
@@ -38,7 +38,7 @@ public class DetectRay : MonoBehaviour
                     // 하이라이트된 카드가 가장 앞으로 나오게 하기
                     gameObj.GetComponent<element_order>().Set_Most_front_order();
 
-                    // 카드 정렬
+                    // 카드 위치 계산 및 정렬
                     for (int i = 0; i < BattleManager.instance.hand_data.Count; i++)
                     {
                         CardManager.instance.Aline_cards(i);
@@ -59,6 +59,12 @@ public class DetectRay : MonoBehaviour
                         {
                             BattleManager.instance.hand_data[i][j].GetComponent<element_order>().Return_to_origin_order();
                         }
+                    }
+
+                    // 카드 위치 계산 및 정렬
+                    for (int i = 0; i < BattleManager.instance.hand_data.Count; i++)
+                    {
+                        CardManager.instance.Aline_cards(i);
                     }
                 }
             }

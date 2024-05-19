@@ -8,11 +8,16 @@ public class element_order : MonoBehaviour
     [SerializeField] Renderer[] middle_renderers;
     [SerializeField] string sorting_layer_name;
     int origin_order;
-
+    int current_order;
     public void Set_origin_order(int origin_order)
     {
         this.origin_order = origin_order * 5;
         Set_order(this.origin_order);
+    }
+
+    public int Get_order()
+    {
+        return current_order;
     }
 
     public void Set_Most_front_order() 
@@ -34,6 +39,8 @@ public class element_order : MonoBehaviour
             renderer.sortingLayerName = sorting_layer_name;
             renderer.sortingOrder = order + 1;
         }
+
+        current_order = order;
     }
 
     public void Return_to_origin_order() 

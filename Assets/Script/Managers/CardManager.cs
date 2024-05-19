@@ -88,6 +88,10 @@ public class CardManager : Singletone<CardManager>
             card targetCard = BattleManager.instance.hand_data[index][i];
 
             targetCard.originPRS = origin_cards_PRS[i];
+            
+            // 카드 겹침 때문에 보정값 넣어줌
+            targetCard.originPRS.pos.z -= targetCard.GetComponent<element_order>().Get_order()/100f;
+
             // 활성화된 카드면
             if (index == active_index)
             {
@@ -102,7 +106,7 @@ public class CardManager : Singletone<CardManager>
                     targetCard.MoveTransform(targetCard.originPRS, true, 0.5f);
                 }            
             }
-            // 아니면
+            // 비활성화 카드면 밑으로 내려감
             else 
             {
                 targetCard.MoveTransform(targetCard.originPRS, false, 0f);
@@ -152,6 +156,7 @@ public class CardManager : Singletone<CardManager>
                 targetPos.y += (curve-0.5f);
                 targetRot = Quaternion.Slerp(leftTr.rotation, rightTr.rotation, objLerps[i]);
             }
+
             results.Add(new PRS(targetPos, targetRot, scale));
         }
 
