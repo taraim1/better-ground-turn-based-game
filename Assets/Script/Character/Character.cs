@@ -26,6 +26,9 @@ public class Character
     public int current_willpower;
     public bool is_character_unlocked;
 
+    [SerializeField]
+    public CardManager.skillcard_code[] deck = new CardManager.skillcard_code[6];
+
     public int get_max_health_of_level(int level)
     {
         if (level > max_health.Count)

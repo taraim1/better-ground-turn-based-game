@@ -4,7 +4,7 @@ using UnityEngine;
 using System.IO;
 
 [System.Serializable]
-public class Cards 
+public class Cards // 카드 데이터가 스크립터블 오브젝트로 저장되는 클래스
 {
     public string name;
     public int cost;

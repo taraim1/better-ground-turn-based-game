@@ -23,6 +23,8 @@ public class CharacterManager : Singletone<CharacterManager>
         {
             case CharacterManager.character_code.kimchunsik:
                 return "kimchunsik.json";
+            case CharacterManager.character_code.test:
+                return "test.json";
             default:
                 return "";
 

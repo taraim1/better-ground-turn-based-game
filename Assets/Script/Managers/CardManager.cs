@@ -13,7 +13,17 @@ public class CardManager : Singletone<CardManager>
     [SerializeField] Transform diactivated_card_transform;
     [SerializeField] Transform highlighted_card_transform;
 
-    List<Cards> cards_buffer;
+    // 스킬카드 코드
+    public enum skillcard_code 
+    { 
+        simple_attack,
+        simple_defend,
+        simple_dodge
+    }
+
+    // 캐릭터들의 덱이 랜덤으로 섞여 들어가는 버퍼
+    List<List<Cards>> cards_buffer = new List<List<Cards>>();
+
     public GameObject card_prefab;
 
     // 현재 보는 중인 카드패의 인덱스, 안 보는 중이면 -1
@@ -22,33 +32,47 @@ public class CardManager : Singletone<CardManager>
     // 현재 클릭한 카드
     public card highlighted_card;
 
-    // 버퍼에서 첫 카드 뽑기
-    public Cards PopCard() 
+    // index번째 캐릭터의 덱 버퍼에서 첫 카드 뽑기
+    public Cards PopCard(int index) 
     {
-        if (cards_buffer.Count == 0) Setup_cardBuffer();
+        if (cards_buffer[index].Count == 0) Setup_cardBuffer();
 
-        Cards card = cards_buffer[0];
-        cards_buffer.RemoveAt(0);
+        Cards card = cards_buffer[index][0];
+        cards_buffer[index].RemoveAt(0);
         return card;
     }
 
     void Setup_cardBuffer() // 버퍼 초기화
     { 
-        cards_buffer = new List<Cards>();
-        // 버퍼에 카드 추가
-        for (int i = 0; i < cardsSO.cards.Length; i++) 
-        { 
-            Cards card = cardsSO.cards[i];
-            cards_buffer.Add(card);
+        cards_buffer.Clear();
+
+        // 버퍼에 카드들 추가
+        for (int i = 0; i < BattleManager.instance.hand_data.Count; i++) 
+        {
+            List<Cards> temp = new List<Cards>();
+
+            // 파티의 캐릭터마다의 덱에서 코드를 얻어서 카드 데이터를 불러옴
+            for (int j = 0; j < BattleManager.instance.playable_character_data[i].deck.Length; j++) 
+            {
+                // 스크립터블 오브젝트에서 데이터를 뽑아옴
+                Cards tempCard = cardsSO.cards[ (int) BattleManager.instance.playable_character_data[i].deck[j] ];
+                temp.Add(tempCard);
+                
+            }
+
+            cards_buffer.Add(temp);
         }
 
-        // 버퍼 섞기
+        // 덱 버퍼 섞기
         for (int i = 0; i < cards_buffer.Count; i++) 
-        { 
-            int rand = Random.Range(0, cards_buffer.Count);
-            Cards temp = cards_buffer[i];
-            cards_buffer[i] = cards_buffer[rand];
-            cards_buffer[rand] = temp;
+        {
+            for (int j = 0; j < cards_buffer[i].Count; j++)
+            {
+                int rand = Random.Range(0, cards_buffer[i].Count);
+                Cards temp = cards_buffer[i][j];
+                cards_buffer[i][j] = cards_buffer[i][rand];
+                cards_buffer[i][rand] = temp;
+            }
         }
 
         
@@ -63,7 +87,8 @@ public class CardManager : Singletone<CardManager>
             cardObj.transform.position = diactivated_card_transform.position;
         }
         card card = cardObj.GetComponent<card>();
-        card.Setup(PopCard(), index);
+        // index번째 캐릭터의 덱에서 카드를 뽑아옴
+        card.Setup(PopCard(index), index);
         BattleManager.instance.hand_data[index].Add(card);
 
         Set_origin_order(index);
@@ -194,8 +219,9 @@ public class CardManager : Singletone<CardManager>
         SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
-    private void Update()
+    private void Update() 
     {
+        // 테스트용 임시 코드
         if (Input.GetKeyDown(KeyCode.Keypad1)) 
         {
             Summon_card(0);
