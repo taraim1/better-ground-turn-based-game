@@ -25,7 +25,7 @@ public class BattleUI_Manager : Singletone<BattleUI_Manager>
     private List<GameObject> health_bars = new List<GameObject>();
     private List<GameObject> willpower_bars = new List<GameObject>(); 
 
-    public void clear_bar_list(UI_bars bar_type) 
+    void clear_bar_list(UI_bars bar_type) 
     {
         switch (bar_type) 
         { 
@@ -38,13 +38,13 @@ public class BattleUI_Manager : Singletone<BattleUI_Manager>
         }
     }
 
-    public void clear_all_bar_list() 
+    void clear_all_bar_list() 
     {
         health_bars.Clear();
         willpower_bars.Clear();
     }
 
-    public void summon_UI_bar(UI_bars bar_type, GameObject character_obj) //캐릭터 체력바 소환
+    void summon_UI_bar(UI_bars bar_type, GameObject character_obj) //캐릭터 체력바 소환
     {
         GameObject bar;
         switch (bar_type) 
@@ -93,6 +93,38 @@ public class BattleUI_Manager : Singletone<BattleUI_Manager>
                 set_UI_slider_property_of_object(willpower_bars[index], property, value);
                 break;
 
+        }
+    }
+
+
+    public void Setup_health_and_willpower_bars() // 전투 시작시 바 세팅
+    {
+        // 바 리스트 초기화
+        clear_all_bar_list();
+
+        for (int i = 0; i < BattleManager.instance.playable_characters.Count; i++)
+        {
+            // 체력바, 정신력바 생성
+            summon_UI_bar(UI_bars.health_bar, BattleManager.instance.playable_characters[i]);
+            summon_UI_bar(UI_bars.willpower_bar, BattleManager.instance.playable_characters[i]);
+
+            // 체력바, 정신력바 초기값 설정
+            instance.set_bar_property(UI_bars.health_bar, i, UI_bars_properties.max_value, BattleManager.instance.playable_character_data[i].get_max_health_of_level(BattleManager.instance.playable_character_data[i].level));
+            instance.set_bar_property(UI_bars.health_bar, i, UI_bars_properties.current_value, BattleManager.instance.playable_character_data[i].current_health);
+            instance.set_bar_property(UI_bars.willpower_bar, i, UI_bars_properties.max_value, BattleManager.instance.playable_character_data[i].get_max_willpower_of_level(BattleManager.instance.playable_character_data[i].level));
+            instance.set_bar_property(UI_bars.willpower_bar, i, UI_bars_properties.current_value, BattleManager.instance.playable_character_data[i].current_willpower);
+        }
+        for (int i = 0; i < BattleManager.instance.enemy_characters.Count; i++)
+        {
+            // 체력바, 정신력바 생성
+            instance.summon_UI_bar(UI_bars.health_bar, BattleManager.instance.enemy_characters[i]);
+            instance.summon_UI_bar(UI_bars.willpower_bar, BattleManager.instance.enemy_characters[i]);
+
+            // 체력바, 정신력바 초기값 설정
+            instance.set_bar_property(UI_bars.health_bar, BattleManager.instance.playable_characters.Count + i, UI_bars_properties.max_value, BattleManager.instance.enemy_character_data[i].get_max_health_of_level(BattleManager.instance.enemy_character_data[i].level));
+            instance.set_bar_property(UI_bars.health_bar, BattleManager.instance.playable_characters.Count + i, UI_bars_properties.current_value, BattleManager.instance.enemy_character_data[i].current_health);
+            instance.set_bar_property(UI_bars.willpower_bar, BattleManager.instance.playable_characters.Count + i, UI_bars_properties.max_value, BattleManager.instance.enemy_character_data[i].get_max_willpower_of_level(BattleManager.instance.enemy_character_data[i].level));
+            instance.set_bar_property(UI_bars.willpower_bar, BattleManager.instance.playable_characters.Count + i, UI_bars_properties.current_value, BattleManager.instance.enemy_character_data[i].current_willpower);
         }
     }
 

@@ -20,9 +20,14 @@ public class element_order : MonoBehaviour
         return current_order;
     }
 
-    public void Set_Most_front_order() 
+    public void Set_highlighted_order() 
     {
         Set_order(100);
+    }
+
+    public void Set_dragging_order()
+    {
+        Set_order(110);
     }
 
     public void Set_order(int order) 

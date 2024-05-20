@@ -134,6 +134,8 @@ MonoBehaviour:
   behavior_typeTMP: {fileID: 8510759400100246771}
   value_rangeTMP: {fileID: 484749187452356446}
   index: 0
+  drag_pointer_spr: {fileID: 21300000, guid: 53d93b1c7de9d964c9705ad05da4860b, type: 3}
+  state: 0
   Card:
     name: 
     cost: 0

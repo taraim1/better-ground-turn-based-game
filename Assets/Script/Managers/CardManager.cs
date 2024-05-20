@@ -103,7 +103,7 @@ public class CardManager : Singletone<CardManager>
         }
     }
 
-    public void Aline_cards(int index) // 카드 위치, 회전, 스케일 등 정렬 
+    public void Aline_cards(int index) // 카드 위치, 회전, 스케일, 순서 등 정렬 
     { 
         List<PRS> origin_cards_PRS = new List<PRS>();
         origin_cards_PRS = set_card_alignment(left_card_transform, right_card_transform, BattleManager.instance.hand_data[index].Count, 0.5f, Vector3.one * 1.5f, index);
@@ -120,16 +120,26 @@ public class CardManager : Singletone<CardManager>
             // 활성화된 카드면
             if (index == active_index)
             {
+
+                // 드래그 중인 카드면
+                if (targetCard.state == card.current_mode.dragging) 
+                {
+                    targetCard.gameObject.GetComponent<element_order>().Set_dragging_order();
+                    Vector3 mousepos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                    targetCard.MoveTransform(new PRS(new Vector3(mousepos.x, mousepos.y, targetCard.originPRS.pos.z), targetCard.originPRS.rot, Vector3.one), false, 0f);
+                    continue;
+                }
+
                 // 하이라이트된 카드면
                 if (targetCard == highlighted_card)
                 {
-                    targetCard.MoveTransform(new PRS(highlighted_card_transform.position, highlighted_card_transform.rotation, Vector3.one * 2f), true, 0.2f);
+                    targetCard.MoveTransform(new PRS(new Vector3(highlighted_card_transform.position.x, highlighted_card_transform.position.y, targetCard.originPRS.pos.z), highlighted_card_transform.rotation, Vector3.one * 2f), true, 0.2f);
+                    continue;
                 }
-                // 아니면
-                else 
-                {
-                    targetCard.MoveTransform(targetCard.originPRS, true, 0.5f);
-                }            
+
+                // 일반 카드면
+                targetCard.MoveTransform(targetCard.originPRS, true, 0.5f);
+                          
             }
             // 비활성화 카드면 밑으로 내려감
             else 

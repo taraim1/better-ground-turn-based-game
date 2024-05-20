@@ -8,7 +8,7 @@ using UnityEngine.TextCore.Text;
 public class CharacterManager : Singletone<CharacterManager>
 {
     // 적 데이터가 담긴 스크립터블 오브젝트
-    EnemySettingSO enemy_setting_data;
+    [SerializeField] EnemySettingSO enemySettingSO;
     public enum character_code 
     {
         kimchunsik,
@@ -22,6 +22,7 @@ public class CharacterManager : Singletone<CharacterManager>
 
 
     public GameObject playable_character_base;
+    public GameObject enemy_character_base;
 
     // 캐릭터 코드에 따른 저장 이름 리턴
     public string get_data_path<T>(T code)
@@ -69,7 +70,7 @@ public class CharacterManager : Singletone<CharacterManager>
     }
 
     // 캐릭터를 캐릭터 코드에 해당하는 json 파일에서 불러온 뒤 string으로 리턴
-    public string load_character_from_json(CharacterManager.character_code code)
+    public string load_character_from_json<T>(T code)
     {
         string path = "/Data";
         path += get_data_path(code);
@@ -100,7 +101,7 @@ public class CharacterManager : Singletone<CharacterManager>
 
             // 파티에서 캐릭터 데이터를 불러와 BattleManager의 리스트에 넣기
             Character character = new Character();
-            character = JsonUtility.FromJson<Character>(CharacterManager.instance.load_character_from_json(PartyManager.instance.get_charactor_code(i)));
+            character = JsonUtility.FromJson<Character>(load_character_from_json(PartyManager.instance.get_charactor_code(i)));
             BattleManager.instance.playable_character_data.Add(character);
 
             // 플레이어블 캐릭터 오브젝트를 BattleManager의 리스트에 넣기
@@ -109,7 +110,28 @@ public class CharacterManager : Singletone<CharacterManager>
         }
 
         // 적 캐릭터 생성
-        //int enemy_count = enemy_setting_data.enemy_Settigs[stage_index].enemy_Codes.Count;
+        int enemy_count = enemySettingSO.enemy_Settigs[stage_index].enemy_Codes.Count;
+        for (int i = 0; i < enemy_count; i++)
+        {
+
+            // 적 캐릭터가 소환될 위치를 불러옴
+            Vector3 spawn_pos = BattleManager.instance.enemy_character_position_settings[i];
+
+            // 적 캐릭터 오브젝트 생성
+            GameObject obj = Instantiate(enemy_character_base, spawn_pos, Quaternion.identity);
+
+            // 적 캐릭터 오브젝트 번호 지정
+            obj.GetComponent<Character_Obj>().Character_index = i;
+
+            // 적 데이터를 불러와 BattleManager의 적 리스트에 넣기
+            Character character = new Character();
+            character = JsonUtility.FromJson<Character>(load_character_from_json(enemySettingSO.enemy_Settigs[stage_index].enemy_Codes[i]));
+            BattleManager.instance.enemy_character_data.Add(character);
+
+            // 적 캐릭터 오브젝트를 BattleManager의 리스트에 넣기
+            BattleManager.instance.enemy_characters.Add(obj);
+
+        }
 
         BattleManager.instance.is_Characters_spawned = true;
     }
