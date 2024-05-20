@@ -78,7 +78,7 @@ public class CardManager : Singletone<CardManager>
         
     }
 
-    void Summon_card(int index) // 카드 생성 후 index번째의 패에 추가
+    public void Summon_card(int index) // 카드 생성 후 index번째의 패에 추가
     {
      
         var cardObj = Instantiate(card_prefab, card_spawnpoint.position, Quaternion.identity);
@@ -219,28 +219,5 @@ public class CardManager : Singletone<CardManager>
         SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
-    private void Update() 
-    {
-        // 테스트용 임시 코드
-        if (Input.GetKeyDown(KeyCode.Keypad1)) 
-        {
-            Summon_card(0);
-        }
-        if (Input.GetKeyDown(KeyCode.Keypad2))
-        {
-            Summon_card(1);
-        }
-        if (Input.GetKeyDown(KeyCode.Keypad3))
-        {
-            Summon_card(2);
-        }
-        if (Input.GetKeyDown(KeyCode.Keypad4))
-        {
-            Summon_card(3);
-        }
-        if (Input.GetKeyDown(KeyCode.Keypad5))
-        {
-            Change_active_hand(-1);
-        }
-    }
+
 }

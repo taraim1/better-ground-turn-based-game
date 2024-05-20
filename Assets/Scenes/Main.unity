@@ -1919,8 +1919,15 @@ MonoBehaviour:
   - {x: -6, y: 0, z: 0}
   - {x: -4, y: 2.5, z: 0}
   - {x: -4, y: 0, z: 0}
+  enemy_character_position_settings:
+  - {x: 4, y: 2.5, z: 0}
+  - {x: 4, y: 0, z: 0}
+  - {x: 6, y: 2.5, z: 0}
+  - {x: 6, y: 0, z: 0}
   playable_characters: []
   playable_character_data: []
+  enemy_characters: []
+  enemy_character_data: []
 --- !u!1 &1500776802
 GameObject:
   m_ObjectHideFlags: 0

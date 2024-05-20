@@ -15,6 +15,7 @@ public class BattleManager : Singletone<BattleManager> // 싱글톤임
     public bool is_Characters_loaded = false; // 전투 시작시 캐릭터 데이터가 불러와졌는가?
 
     public Vector3[] playable_character_position_settings = new Vector3[4]; //플레이어블 캐릭터 스폰 위치
+    public Vector3[] enemy_character_position_settings = new Vector3[4]; //적 캐릭터 스폰 위치
 
 
     // 전투 중인 플레이어블 캐릭터의 게임오브젝트 리스트
@@ -25,6 +26,12 @@ public class BattleManager : Singletone<BattleManager> // 싱글톤임
 
     // 전투 중인 플레이어블 캐릭터들의 패 리스트
     public List<List<card>> hand_data = new List<List<card>>();
+
+    // 전투 중인 적 캐릭터의 게임오브젝트 리스트
+    public List<GameObject> enemy_characters = new List<GameObject>();
+
+    // 전투 중인 적 캐릭터들의 데이터 리스트
+    public List<Character> enemy_character_data = new List<Character>();
 
     public enum phases // 한 턴의 페이즈 모음
     { 
@@ -41,14 +48,25 @@ public class BattleManager : Singletone<BattleManager> // 싱글톤임
         is_Characters_spawned = false;
         playable_characters.Clear();
         playable_character_data.Clear();
+        enemy_characters.Clear();
+        enemy_character_data.Clear();
         hand_data.Clear();
         
 
-        // 캐릭터 오브젝트 및 Character 인스턴스 생성
-        CharacterManager.instance.spawn_character();
+        // 캐릭터 오브젝트 및 Character 인스턴스 생성 (아군 / 적 모두)
+        CharacterManager.instance.spawn_character(0);
 
         // 카드 덱 세팅
         CardManager.instance.Setup_all();
+
+        // 초기 패 세팅 (3장 뽑음)
+        for (int i = 0; i < hand_data.Count; i++) 
+        {
+            for (int j = 0; j < 3; j++) 
+            {
+                CardManager.instance.Summon_card(i);
+            }
+        }
 
         // 현재 체력, 정신력 초기화
         for (int i = 0; i < playable_character_data.Count; i++) 
