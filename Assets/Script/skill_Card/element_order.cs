@@ -25,10 +25,7 @@ public class element_order : MonoBehaviour
         Set_order(100);
     }
 
-    public void Set_dragging_order()
-    {
-        Set_order(110);
-    }
+
 
     public void Set_order(int order) 
     {

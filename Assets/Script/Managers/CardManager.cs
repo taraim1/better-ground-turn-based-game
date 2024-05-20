@@ -108,6 +108,16 @@ public class CardManager : Singletone<CardManager>
         List<PRS> origin_cards_PRS = new List<PRS>();
         origin_cards_PRS = set_card_alignment(left_card_transform, right_card_transform, BattleManager.instance.hand_data[index].Count, 0.5f, Vector3.one * 1.5f, index);
 
+        // 드래그 중인 카드가 있는지 검사
+        bool isdragging = false;
+        for (int j = 0; j < BattleManager.instance.hand_data[index].Count; j++)
+        {
+            if (BattleManager.instance.hand_data[index][j].state == card.current_mode.dragging)
+            {
+                isdragging = true;
+            }
+        }
+
         for (int i = 0; i < BattleManager.instance.hand_data[index].Count; i++) 
         {
             card targetCard = BattleManager.instance.hand_data[index][i];
@@ -117,28 +127,37 @@ public class CardManager : Singletone<CardManager>
             // 카드 겹침 때문에 보정값 넣어줌
             targetCard.originPRS.pos.z -= targetCard.GetComponent<element_order>().Get_order()/100f;
 
+            // 드래그 중인 카드가 있다면 카드를 살짝 아래로 내림
+            if (isdragging) 
+            {
+                targetCard.originPRS.pos.y -= 2;
+            }
+
             // 활성화된 카드면
             if (index == active_index)
             {
 
-                // 드래그 중인 카드면
-                if (targetCard.state == card.current_mode.dragging) 
-                {
-                    targetCard.gameObject.GetComponent<element_order>().Set_dragging_order();
-                    Vector3 mousepos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-                    targetCard.MoveTransform(new PRS(new Vector3(mousepos.x, mousepos.y, targetCard.originPRS.pos.z), targetCard.originPRS.rot, Vector3.one), false, 0f);
-                    continue;
-                }
-
                 // 하이라이트된 카드면
                 if (targetCard == highlighted_card)
                 {
-                    targetCard.MoveTransform(new PRS(new Vector3(highlighted_card_transform.position.x, highlighted_card_transform.position.y, targetCard.originPRS.pos.z), highlighted_card_transform.rotation, Vector3.one * 2f), true, 0.2f);
+                    // 드래그 중인 카드가 없다면
+                    if (!isdragging) 
+                    {
+                        targetCard.MoveTransform(new PRS(new Vector3(highlighted_card_transform.position.x, highlighted_card_transform.position.y, targetCard.originPRS.pos.z), highlighted_card_transform.rotation, Vector3.one * 2f), true, 0.2f);
+                    }
+                    
                     continue;
                 }
 
                 // 일반 카드면
-                targetCard.MoveTransform(targetCard.originPRS, true, 0.5f);
+                if (isdragging)
+                {
+                    targetCard.MoveTransform(targetCard.originPRS, true, 0.4f);
+                }
+                else 
+                {
+                    targetCard.MoveTransform(targetCard.originPRS, true, 0.5f);
+                }
                           
             }
             // 비활성화 카드면 밑으로 내려감

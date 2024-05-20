@@ -19,7 +19,9 @@ public class card : MonoBehaviour
 
 
     SpriteRenderer spriteRenderer;
-    public Sprite drag_pointer_spr;
+    public Sprite drag_spr;
+
+    public GameObject drag_pointer;
     private void Awake()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
@@ -87,19 +89,12 @@ public class card : MonoBehaviour
             {
                 if (state == current_mode.dragging) 
                 {
+                    state = current_mode.normal;
                     CardManager.instance.highlighted_card = null;
-                    illust.sprite = Card.sprite;
-                    nameTMP.text = Card.name;
-                    costTMP.text = Card.cost.ToString();
-                    typeTMP.text = Card.type;
-                    behavior_typeTMP.text = Card.behavior_type;
-                    value_rangeTMP.text = string.Format("{0} - {1}", Card.minPowerOfLevel[0], Card.maxPowerOfLevel[0]);
-
+                    CardManager.instance.Aline_cards(CardManager.instance.active_index);
                     spriteRenderer.sprite = origin_sprite;
 
                 }
-                state = current_mode.normal;
-                CardManager.instance.Aline_cards(CardManager.instance.active_index);
                 yield break;
             }
             
@@ -114,7 +109,6 @@ public class card : MonoBehaviour
 
             }
 
-            CardManager.instance.Aline_cards(CardManager.instance.active_index);
             dragging_time += 0.01f;
             yield return new WaitForSeconds(0.01f);
         }
@@ -123,13 +117,14 @@ public class card : MonoBehaviour
     void drag_card() 
     {
         state = current_mode.dragging;
-        spriteRenderer.sprite = drag_pointer_spr;
-        illust.sprite = null;
-        nameTMP.text = null;
-        costTMP.text = null;
-        typeTMP.text = null;
-        behavior_typeTMP.text = null;
-        value_rangeTMP.text = null;
+        spriteRenderer.sprite = drag_spr;
+        Vector3 mousepos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        GameObject dragPointer = Instantiate(drag_pointer, new Vector3(mousepos.x, mousepos.y, -2), Quaternion.identity);
+        dragPointer.GetComponent<SpriteRenderer>().sortingOrder = 200;
+        // 드래그 포인터로 카드 데이터 넘겨줌
+        dragPointer.GetComponent<drag_pointer>().cards = Card;
+
+        CardManager.instance.Aline_cards(CardManager.instance.active_index);
     }
 
 }
