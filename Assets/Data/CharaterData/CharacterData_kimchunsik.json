@@ -1,7 +1,8 @@
 {
     "name": "김춘식",
     "description": "김춘식이다",
-    "code": 0,
+    "code": 1,
+    "enemy_code": 0,
     "level": 1,
     "max_health": [
         0,

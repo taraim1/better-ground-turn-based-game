@@ -17,6 +17,7 @@ public class Character
     public string name;
     public string description;
     public CharacterManager.character_code code;
+    public CharacterManager.enemy_code enemy_code;
     public int level;
     [SerializeField]
     private List<int> max_health = new List<int>() { 0, 30 };

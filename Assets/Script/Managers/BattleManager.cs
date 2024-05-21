@@ -9,7 +9,7 @@ public class BattleManager : Singletone<BattleManager> // 싱글톤임
 {
     
     public int current_turn = 0; // 현재 턴
-    public int current_phase = 0; // 현재 페이즈
+    public phases current_phase; // 현재 페이즈
     public bool battle_start_trigger = false; // 전투를 시작시키는 트리거
     public bool is_Characters_spawned = false; // 전투 시작시 플레이이어와 적 캐릭터가 스폰되었는가?
     public bool is_Characters_loaded = false; // 전투 시작시 캐릭터 데이터가 불러와졌는가?
@@ -47,7 +47,7 @@ public class BattleManager : Singletone<BattleManager> // 싱글톤임
         enemy_characters.Clear();
         enemy_character_data.Clear();
         hand_data.Clear();
-        
+        current_phase = phases.turn_start_effect_phase;
 
         // 캐릭터 오브젝트 및 Character 인스턴스 생성 (아군 / 적 모두)
         CharacterManager.instance.spawn_character(0);
@@ -55,10 +55,10 @@ public class BattleManager : Singletone<BattleManager> // 싱글톤임
         // 카드 덱 세팅
         CardManager.instance.Setup_all();
 
-        // 초기 패 세팅 (3장 뽑음)
+        // 초기 패 세팅 (2장 + turn_start_phase 1장 뽑음)
         for (int i = 0; i < hand_data.Count; i++) 
         {
-            for (int j = 0; j < 3; j++) 
+            for (int j = 0; j < 2; j++) 
             {
                 CardManager.instance.Summon_card(i);
             }
@@ -79,8 +79,39 @@ public class BattleManager : Singletone<BattleManager> // 싱글톤임
         // 체력바, 정신력바 초기화 및 생성
         BattleUI_Manager.instance.Setup_health_and_willpower_bars();
 
+
+        // 턴 시작
+        StartCoroutine(turn_start_phase());
+
         yield break;
     
+    }
+
+    // 턴 시작 페이즈
+    IEnumerator turn_start_phase() 
+    {
+        current_phase = phases.turn_start_effect_phase;
+
+        // 카드 1장 뽑음
+        for (int i = 0; i < hand_data.Count; i++)
+        {
+            for (int j = 0; j < 1; j++)
+            {
+                CardManager.instance.Summon_card(i);
+            }
+        }
+
+        // 적 스킬 설정 시작
+        StartCoroutine(enemy_skill_setting_phase());
+        yield break;
+    }
+
+    // 적 스킬 설정 페이즈
+    IEnumerator enemy_skill_setting_phase() 
+    {
+        current_phase = phases.enemy_skill_setting_phase;
+        BattleEventManager.Trigger_event("Enemy_skill_setting_phase");
+        yield break;
     }
 
     void OnEnable()

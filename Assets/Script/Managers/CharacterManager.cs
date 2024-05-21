@@ -11,12 +11,14 @@ public class CharacterManager : Singletone<CharacterManager>
     [SerializeField] EnemySettingSO enemySettingSO;
     public enum character_code 
     {
+        not_a_playable_character,
         kimchunsik,
         test
     }
 
     public enum enemy_code 
-    { 
+    {
+        not_a_enemy_character,
         test
     }
 
@@ -127,6 +129,9 @@ public class CharacterManager : Singletone<CharacterManager>
             Character character = new Character();
             character = JsonUtility.FromJson<Character>(load_character_from_json(enemySettingSO.enemy_Settigs[stage_index].enemy_Codes[i]));
             BattleManager.instance.enemy_character_data.Add(character);
+
+            // 적 데이터를 AI에 연결
+            obj.GetComponent<EnemyAI>().enemy = character;
 
             // 적 캐릭터 오브젝트를 BattleManager의 리스트에 넣기
             BattleManager.instance.enemy_characters.Add(obj);

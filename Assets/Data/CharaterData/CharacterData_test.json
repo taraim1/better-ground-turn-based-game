@@ -1,7 +1,8 @@
 {
     "name": "테스트 캐릭터",
     "description": "테스트용",
-    "code": 0,
+    "code": 2,
+    "enemy_code": 0,
     "level": 1,
     "max_health": [
         0,

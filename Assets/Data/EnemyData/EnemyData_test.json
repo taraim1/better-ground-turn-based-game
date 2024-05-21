@@ -2,6 +2,7 @@
     "name": "테스트용 적",
     "description": "적이다",
     "code": 0,
+    "enemy_code": 1,
     "level": 1,
     "max_health": [
         0,

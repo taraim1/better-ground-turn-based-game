@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: EnemySettingSO
   m_EditorClassIdentifier: 
   enemy_Settigs:
-  - enemy_Codes: 00000000000000000000000000000000
+  - enemy_Codes: 01000000010000000100000001000000
