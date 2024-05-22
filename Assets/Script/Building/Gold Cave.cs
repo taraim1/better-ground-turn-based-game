@@ -5,10 +5,10 @@ using System;
 using System.IO;
 using UnityEngine.UI;
 
-public class Building : MonoBehaviour
+public class GoldCave : MonoBehaviour
 {
     [System.Serializable]
-    private class BuildingData // °Ç¹°ÀÇ µ¥ÀÌÅÍ¸¦ ÀúÀåÇÏ´Â Å¬·¡½º
+    private class BuildingData // ï¿½Ç¹ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Í¸ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ Å¬ï¿½ï¿½ï¿½ï¿½
     {
         public string first_time_string;
         public string last_time_string;
@@ -74,7 +74,7 @@ public class Building : MonoBehaviour
 
     private void Update()
     {
-        // ÀÏÁ¤ ½Ã°£ÀÌ Áö³ª¸é ÀÚ¿ø È¹µæ °¡´É ÆË¾÷ÀÌ ¶ä
+        // ï¿½ï¿½ï¿½ï¿½ ï¿½Ã°ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ú¿ï¿½ È¹ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ë¾ï¿½ï¿½ï¿½ ï¿½ï¿½
         if (buildingData.isFirstClickSet && GoldImage.activeSelf == false) 
         {
             TimeSpan timeDifference = DateTime.Now - firstButtonClickTime;
@@ -98,7 +98,7 @@ public class Building : MonoBehaviour
     {
         if (!File.Exists(Application.dataPath + "/Data/building/gold_mine.json")) 
         {
-            Debug.Log("°Ç¹° µ¥ÀÌÅÍ ÆÄÀÏÀÌ ¾ø½À´Ï´Ù.");
+            Debug.Log("ï¿½Ç¹ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½.");
             return;
         }
 
