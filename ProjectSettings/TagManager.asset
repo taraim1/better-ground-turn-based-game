@@ -7,6 +7,7 @@ TagManager:
   - PlayerCharacter
   - SkillCard
   - EnemyCharacter
+  - enemySkillSlot
   layers:
   - Default
   - TransparentFX

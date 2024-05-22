@@ -158,6 +158,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3e663e8d4b8a0754eab037738d247296, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  cardsSO: {fileID: 11400000, guid: 3080a6a9f21a05b46bb959639cbd0586, type: 2}
   enemy:
     name: 
     description: 
@@ -170,3 +171,8 @@ MonoBehaviour:
     current_willpower: 0
     is_character_unlocked: 0
     deck: 000000000000000000000000000000000000000000000000
+  layoutGroup_prefab: {fileID: 3457913086231521101, guid: 56ef78f845a1e4c49a12f8416008f26f,
+    type: 3}
+  skill_slot_prefab: {fileID: 5858226105626517123, guid: 61a530f18f6294847adc4d56167708f2,
+    type: 3}
+  canvas: {fileID: 0}

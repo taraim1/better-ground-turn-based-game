@@ -12,6 +12,8 @@ public class CardManager : Singletone<CardManager>
     [SerializeField] Transform right_card_transform;
     [SerializeField] Transform diactivated_card_transform;
     [SerializeField] Transform highlighted_card_transform;
+    [SerializeField] Transform enemy_card_transform;
+    [SerializeField] Transform enemy_card_highlighted_transform;
 
     // 스킬카드 코드
     public enum skillcard_code 
@@ -29,8 +31,10 @@ public class CardManager : Singletone<CardManager>
     // 현재 보는 중인 카드패의 인덱스, 안 보는 중이면 -1
     public int active_index;
 
-    // 현재 클릭한 카드
+    // 현재 강조 중인 카드
     public card highlighted_card;
+
+
 
     // index번째 캐릭터의 덱 버퍼에서 첫 카드 뽑기
     public Cards PopCard(int index) 
@@ -93,7 +97,30 @@ public class CardManager : Singletone<CardManager>
 
         Set_origin_order(index);
         Aline_cards(index);
-    } 
+    }
+
+    public GameObject Summon_enemy_card(skillcard_code code) // 적 카드 생성해서 리턴
+    {
+
+        var cardObj = Instantiate(card_prefab, enemy_card_transform.position, Quaternion.identity);
+        card card = cardObj.GetComponent<card>();
+        card.isEnemyCard = true;
+        card.originPRS = new PRS(enemy_card_transform.position, enemy_card_transform.rotation, Vector3.one * 1.5f);
+        card.Setup(cardsSO.cards[(int)code], 0);
+
+        return cardObj;
+    }
+
+    // 적 카드를 강조
+    public void highlight_enemy_card(GameObject obj) 
+    {
+        card card = obj.GetComponent<card>();
+        PRS prs = new PRS(enemy_card_highlighted_transform.position, enemy_card_highlighted_transform.rotation, Vector3.one * 2f);
+        card.MoveTransform(prs, true, 0.4f);
+        card.state = card.current_mode.highlighted_enemy_card;
+
+    }
+
 
     void Set_origin_order(int index) // 카드 orderInLayer설정
     {
@@ -103,9 +130,15 @@ public class CardManager : Singletone<CardManager>
         }
     }
 
-    public void Aline_cards(int index) // 카드 위치, 회전, 스케일, 순서 등 정렬 
-    { 
-        List<PRS> origin_cards_PRS = new List<PRS>();
+    public void Aline_cards(int index) // index번째 패의 카드 위치, 회전, 스케일, 순서 등 정렬 
+    {
+        // 현재 보고 있는 패가 없을 때의 active_index
+        if (index == -1) 
+        {
+            return;
+        }
+
+        List<PRS> origin_cards_PRS;
         origin_cards_PRS = set_card_alignment(left_card_transform, right_card_transform, BattleManager.instance.hand_data[index].Count, 0.5f, Vector3.one * 1.5f, index);
 
         // 드래그 중인 카드가 있는지 검사
@@ -127,10 +160,17 @@ public class CardManager : Singletone<CardManager>
             // 카드 겹침 때문에 보정값 넣어줌
             targetCard.originPRS.pos.z -= targetCard.GetComponent<element_order>().Get_order()/100f;
 
-            // 드래그 중인 카드가 있다면 카드를 살짝 아래로 내림
+            // 드래그 중인 카드가 있다면 드래그 중이 아닌 카드들을 살짝 아래로 내림
             if (isdragging) 
             {
-                targetCard.originPRS.pos.y -= 2;
+                if (targetCard.state != card.current_mode.dragging)
+                {
+                    targetCard.originPRS.pos.y -= 2f;
+                }
+                else 
+                {
+                    targetCard.originPRS.pos.y -= 0.3f;
+                }
             }
 
             // 활성화된 카드면
@@ -150,14 +190,9 @@ public class CardManager : Singletone<CardManager>
                 }
 
                 // 일반 카드면
-                if (isdragging)
-                {
-                    targetCard.MoveTransform(targetCard.originPRS, true, 0.4f);
-                }
-                else 
-                {
-                    targetCard.MoveTransform(targetCard.originPRS, true, 0.5f);
-                }
+
+                targetCard.MoveTransform(targetCard.originPRS, true, 0.3f);
+
                           
             }
             // 비활성화 카드면 밑으로 내려감
@@ -239,14 +274,15 @@ public class CardManager : Singletone<CardManager>
             Destroy(this.gameObject);
         }
     }
-    void OnDestroy()
-    {
-        SceneManager.sceneLoaded -= OnSceneLoaded;
-    }
     void Start()
     {
         SceneManager.sceneLoaded += OnSceneLoaded;
     }
+    void OnDestroy()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
 
 
 }

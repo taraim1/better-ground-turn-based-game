@@ -7,7 +7,7 @@ using UnityEditor.ShaderGraph.Internal;
 
 public class card : MonoBehaviour
 {
-    [SerializeField] SpriteRenderer illust;
+    public SpriteRenderer illust;
     [SerializeField] TMP_Text nameTMP;
     [SerializeField] TMP_Text costTMP;
     [SerializeField] TMP_Text typeTMP;
@@ -22,6 +22,9 @@ public class card : MonoBehaviour
     public Sprite drag_spr;
 
     public GameObject drag_pointer;
+    public GameObject target;
+
+    public bool isEnemyCard = false;
     private void Awake()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
@@ -30,7 +33,8 @@ public class card : MonoBehaviour
     public enum current_mode 
     { 
         normal,
-        dragging
+        dragging,
+        highlighted_enemy_card
     }
 
     public current_mode state = current_mode.normal;
