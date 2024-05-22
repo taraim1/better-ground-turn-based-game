@@ -38,7 +38,7 @@ public class LevelManager : Singletone<LevelManager>
 
     public int WStatueLevel
     {
-        get { return goldCaveLevel; }
+        get { return wStatueLevel; }
 
         set 
         {
