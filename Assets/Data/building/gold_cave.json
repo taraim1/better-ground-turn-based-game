@@ -1,0 +1,11 @@
+{
+    "first_time_Gold_string": "0001-01-01 00:00:00",
+    "last_time_Gold_string": "0001-01-01 00:00:00",
+    "isFirstClickSetGold": false,
+    "first_time_Gem_string": "",
+    "last_time_Gem_string": "",
+    "isFirstClickSetGem": false,
+    "first_time_Water_string": "",
+    "last_time_Water_string": "",
+    "isFirstClickSetWater": false
+}
