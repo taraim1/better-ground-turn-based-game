@@ -115,6 +115,7 @@ public class Building : MonoBehaviour
             if (buildingDataGem.isFirstClickSetGem == true)
             {
                 CalculateTimeSpanGem();
+                GemImage.SetActive(false);
             }
         }
     }
@@ -166,7 +167,7 @@ public class Building : MonoBehaviour
     }
     void CalculateTimeSpanWater()
     {
-        TimeSpan timeDifferenceWater = lastGoldClickTime - firstGoldClickTime;
+        TimeSpan timeDifferenceWater = lastWaterClickTime - firstWaterClickTime;
         int SpentMinutesWater = (int)timeDifferenceWater.TotalMinutes;
         Debug.Log("Time span in minutes: " + SpentMinutesWater);
 
@@ -220,11 +221,8 @@ public class Building : MonoBehaviour
                 WaterImage.SetActive(true);
             }
         }
-        GoldText.text = "Gold : " +  ResourceManager.instance.Gold;
-        GemText.text = "Gem : " +  ResourceManager.instance.Gem;
-        WaterText.text = "Water : " +  ResourceManager.instance.Water;
     }
-
+    
     void Write_Json_file() 
     {
         buildingDataGold.first_time_Gold_string = firstGoldClickTime.ToString("yyyy-MM-dd HH:mm:ss");
@@ -277,5 +275,8 @@ public class Building : MonoBehaviour
     private void Start()
     {
         Read_Json_file();
+        GoldText.text = "Gold : " +  ResourceManager.instance.Gold;
+        GemText.text = "Gem : " +  ResourceManager.instance.Gem;
+        WaterText.text = "Water : " +  ResourceManager.instance.Water;
     }
 }
