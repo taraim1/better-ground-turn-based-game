@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
@@ -56,10 +57,10 @@ public class CardManager : Singletone<CardManager>
             List<Cards> temp = new List<Cards>();
 
             // 파티의 캐릭터마다의 덱에서 코드를 얻어서 카드 데이터를 불러옴
-            for (int j = 0; j < BattleManager.instance.playable_character_data[i].deck.Length; j++) 
+            for (int j = 0; j < BattleManager.instance.playable_characters[i].GetComponent<Character>().deck.Length; j++) 
             {
                 // 스크립터블 오브젝트에서 데이터를 뽑아옴
-                Cards tempCard = cardsSO.cards[ (int) BattleManager.instance.playable_character_data[i].deck[j] ];
+                Cards tempCard = cardsSO.cards[ (int)BattleManager.instance.playable_characters[i].GetComponent<Character>().deck[j] ];
                 temp.Add(tempCard);
                 
             }
@@ -72,7 +73,7 @@ public class CardManager : Singletone<CardManager>
         {
             for (int j = 0; j < cards_buffer[i].Count; j++)
             {
-                int rand = Random.Range(0, cards_buffer[i].Count);
+                int rand = UnityEngine.Random.Range(0, cards_buffer[i].Count);
                 Cards temp = cards_buffer[i][j];
                 cards_buffer[i][j] = cards_buffer[i][rand];
                 cards_buffer[i][rand] = temp;
@@ -93,22 +94,60 @@ public class CardManager : Singletone<CardManager>
         card card = cardObj.GetComponent<card>();
         // index번째 캐릭터의 덱에서 카드를 뽑아옴
         card.Setup(PopCard(index), index);
+        card.owner = BattleManager.instance.playable_characters[index];
         BattleManager.instance.hand_data[index].Add(card);
 
         Set_origin_order(index);
         Aline_cards(index);
     }
 
-    public GameObject Summon_enemy_card(skillcard_code code) // 적 카드 생성해서 리턴
+    public GameObject Summon_enemy_card(skillcard_code code, GameObject owner) // 적 카드 생성해서 리턴
     {
 
         var cardObj = Instantiate(card_prefab, enemy_card_transform.position, Quaternion.identity);
         card card = cardObj.GetComponent<card>();
+        card.owner = owner;
         card.isEnemyCard = true;
         card.originPRS = new PRS(enemy_card_transform.position, enemy_card_transform.rotation, Vector3.one * 1.5f);
         card.Setup(cardsSO.cards[(int)code], 0);
 
         return cardObj;
+    }
+
+    public void Destroy_card(card card) // 카드 파괴
+    {
+        // 적 카드면
+        if (card.isEnemyCard)
+        {
+            // 적 카드 리스트에서 카드 오브젝트 삭제
+            EnemyAI enemyAI = card.owner.GetComponent<EnemyAI>();
+            enemyAI.using_skill_Objects.Remove(card.gameObject);
+
+            // 스킬카드 슬롯 삭제
+            foreach (GameObject slot in enemyAI.skill_slots) 
+            {
+                if (slot.GetComponent<enemy_skillCard_slot>().enemy_Obj == card.owner) 
+                {
+                    Destroy(slot);
+                }
+            }
+
+        }
+        // 플레이어 카드면
+        else 
+        {
+            BattleManager.instance.hand_data[card.owner.GetComponent<Character_Obj>().Character_index].Remove(card);
+        }
+
+        // 카드 오브젝트 삭제
+        if (card.running_drag != null) 
+        {
+            card.StopCoroutine(card.running_drag);
+        }
+        Destroy(card.gameObject);
+
+        // 카드 정렬
+        CardManager.instance.Aline_cards(CardManager.instance.active_index);
     }
 
     // 적 카드를 강조
@@ -202,6 +241,8 @@ public class CardManager : Singletone<CardManager>
             }
 
         }
+
+        Set_origin_order(index);
     }
 
     List<PRS> set_card_alignment(Transform leftTr, Transform rightTr, int CardCount, float height, Vector3 scale, int index) // 카드들의 PRS값 리스트를 계산해 반환
@@ -252,6 +293,7 @@ public class CardManager : Singletone<CardManager>
         return results;
     }
 
+
     public void Change_active_hand(int index) // index번째 패 활성화
     {
         active_index = index;
@@ -261,12 +303,14 @@ public class CardManager : Singletone<CardManager>
         }
     }
 
-    public void Setup_all() 
+    public void Setup_all() // 처음 세팅
     {
         Setup_cardBuffer();
         active_index = -1;
         highlighted_card = null;
     }
+
+
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         if (scene.name != "Battle") 

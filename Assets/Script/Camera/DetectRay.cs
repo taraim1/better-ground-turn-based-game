@@ -58,7 +58,7 @@ public class DetectRay : MonoBehaviour
                     if (gameObj.GetComponent<card>().isEnemyCard == false)
                     {
                         // 카드 드래그 감지 시작
-                        StartCoroutine(gameObj.GetComponent<card>().detect_drag());
+                        gameObj.GetComponent<card>().running_drag = StartCoroutine(gameObj.GetComponent<card>().detect_drag());
 
                         // 모든 카드를 원래 order로 
                         put_cards_into_origin_order();
@@ -160,6 +160,9 @@ public class DetectRay : MonoBehaviour
                 }
                 
             }
+
+            // 스킬 승패 판정
+            BattleCalcManager.instance.Calc_skill_clash();
         }
     }
 }

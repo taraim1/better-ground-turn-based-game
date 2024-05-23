@@ -300,6 +300,9 @@ MonoBehaviour:
   illust: {fileID: 8073763146575368219}
   card_obj: {fileID: 0}
   lineRenderer: {fileID: 128687339765677932}
+  selected_sprite: {fileID: 21300000, guid: acfdab5698d945a4a80e8f3008e4e083, type: 3}
+  origin_sprite: {fileID: 21300000, guid: f71f3af6942781848b2998de078e71dc, type: 3}
+  frame: {fileID: 468097144048101390}
 --- !u!120 &128687339765677932
 LineRenderer:
   serializedVersion: 2

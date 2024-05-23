@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 6180874969251113131}
   - component: {fileID: 6884878262623141336}
   - component: {fileID: 7536158211691017216}
+  - component: {fileID: 185627442434822042}
   m_Layer: 5
   m_Name: health_bar
   m_TagString: Untagged
@@ -120,6 +121,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   target_object: {fileID: 0}
   offset: {x: 0, y: -0.9, z: 0}
+--- !u!114 &185627442434822042
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 953389889809876917}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5e42710dec93e9448bacc618c2fce2c9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  max_value_tmp: {fileID: 3235431911346895971}
+  slider: {fileID: 6180874969251113131}
 --- !u!1 &3907036922818367598
 GameObject:
   m_ObjectHideFlags: 0
@@ -131,7 +146,6 @@ GameObject:
   - component: {fileID: 6885388498815736823}
   - component: {fileID: 7122581259565154430}
   - component: {fileID: 3235431911346895971}
-  - component: {fileID: 8656004271220272234}
   m_Layer: 0
   m_Name: value_marker
   m_TagString: Untagged
@@ -256,19 +270,6 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
---- !u!114 &8656004271220272234
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3907036922818367598}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5e42710dec93e9448bacc618c2fce2c9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  tmp: {fileID: 3235431911346895971}
 --- !u!1 &7109349729546784895
 GameObject:
   m_ObjectHideFlags: 0

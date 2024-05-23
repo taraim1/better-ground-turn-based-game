@@ -4,6 +4,7 @@ using UnityEngine;
 using TMPro;
 using DG.Tweening;
 using UnityEditor.ShaderGraph.Internal;
+using Unity.VisualScripting;
 
 public class card : MonoBehaviour
 {
@@ -23,6 +24,13 @@ public class card : MonoBehaviour
 
     public GameObject drag_pointer;
     public GameObject target;
+
+    public GameObject owner; // 카드 가지고 있는 캐릭터
+    public int minpower;
+    public int maxpower;
+
+    [DoNotSerialize]
+    public Coroutine running_drag = null;
 
     public bool isEnemyCard = false;
     private void Awake()
@@ -53,7 +61,10 @@ public class card : MonoBehaviour
         costTMP.text = Card.cost.ToString();
         typeTMP.text = Card.type;
         behavior_typeTMP.text = Card.behavior_type;
-        value_rangeTMP.text = string.Format("{0} - {1}", Card.minPowerOfLevel[0], Card.maxPowerOfLevel[0]);
+        // 여기 나중에 레벨 적용해야함
+        minpower = Card.minPowerOfLevel[0];
+        maxpower = Card.maxPowerOfLevel[0];
+        value_rangeTMP.text = string.Format("{0} - {1}", minpower, maxpower); 
         this.index = index;
 
     }
@@ -118,7 +129,7 @@ public class card : MonoBehaviour
         }
     }
 
-    void drag_card() 
+    void drag_card() // 카드 드래그시 실행됨
     {
         state = current_mode.dragging;
         spriteRenderer.sprite = drag_spr;
@@ -127,8 +138,8 @@ public class card : MonoBehaviour
         dragPointer.GetComponent<SpriteRenderer>().sortingOrder = 200;
         // 드래그 포인터로 카드 데이터 넘겨줌
         dragPointer.GetComponent<drag_pointer>().cards = Card;
-        // 카드 판정기로 카드 데이터 넘겨줌
-        BattleCalcManager.set_card(this, 0);
+        // 카드 판정기로 드래그 하는 중이라는 정보, 카드 데이터 넘겨줌
+        BattleCalcManager.instance.Receive_dragging(this);
 
         CardManager.instance.Aline_cards(CardManager.instance.active_index);
     }

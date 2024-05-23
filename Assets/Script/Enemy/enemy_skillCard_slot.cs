@@ -1,14 +1,19 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Reflection;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class enemy_skillCard_slot : MonoBehaviour, IPointerClickHandler, IPointerUpHandler
+public class enemy_skillCard_slot : MonoBehaviour, IPointerDownHandler, IPointerEnterHandler, IPointerExitHandler
 {
     public Image illust;
     public GameObject card_obj;
+    public GameObject enemy_Obj;
     [SerializeField] private LineRenderer lineRenderer;
+    [SerializeField] private Sprite selected_sprite;
+    [SerializeField] private Sprite origin_sprite;
+    [SerializeField] private Image frame;
 
     // 위치 두 개를 주면 라인렌더러를 그려줌
     public IEnumerator Set_line(Vector3 target) 
@@ -28,7 +33,7 @@ public class enemy_skillCard_slot : MonoBehaviour, IPointerClickHandler, IPointe
     }
 
     // 이 UI를 눌렀을 때
-    public void OnPointerClick(PointerEventData eventData) 
+    public void OnPointerDown(PointerEventData eventData) 
     {
         // 왼쪽 클릭을 하면
         if (eventData.button == PointerEventData.InputButton.Left)
@@ -40,23 +45,57 @@ public class enemy_skillCard_slot : MonoBehaviour, IPointerClickHandler, IPointe
         }
     }
 
-    // 이 UI 위에서 마우스 클릭을 해제했을 때
-    public void OnPointerUp(PointerEventData eventData) 
-    { 
-    
+    // 이 UI 위에 마우스를 대면
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        if (BattleCalcManager.instance.IsDraggingCard) // 카드 드래그 중이면
+        {
+            // 이 슬롯의 카드를 카드 판정 대상으로
+            BattleCalcManager.instance.Receive_target(card_obj.GetComponent<card>());
+            // 선택 스프라이트로
+            frame.sprite = selected_sprite;
+            // 적 카드 강조 해제
+            BattleEventManager.Trigger_event("enemy_skill_card_deactivate");
+            // 이 슬롯의 카드를 활성화 위치로
+            CardManager.instance.highlight_enemy_card(card_obj);
+        }
+
     }
+
+    // 이 UI 위에 마우스를 대었다가 나가면
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        if (BattleCalcManager.instance.IsDraggingCard) // 카드 드래그 중이면
+        {
+            // 적 카드 강조 해제
+            BattleEventManager.Trigger_event("enemy_skill_card_deactivate");
+            // 원래 스프라이트로
+            frame.sprite = origin_sprite;
+        }
+
+    }
+
+    // 스킬 판정이 시작되면 실행됨
+    private void skill_clash() 
+    {
+        // 적 카드 강조 해제
+        BattleEventManager.Trigger_event("enemy_skill_card_deactivate");
+        // 원래 스프라이트로
+        frame.sprite = origin_sprite;
+    }
+
 
     private void Awake()
     {
         lineRenderer.enabled = false;
         lineRenderer.startWidth = 0.1f;
         lineRenderer.endWidth = 0.1f;
-        
+        BattleEventManager.skill_clash_started += skill_clash;
     }
 
     private void OnDisable()
     {
         lineRenderer.enabled = false;
-
+        BattleEventManager.skill_clash_started -= skill_clash;
     }
 }

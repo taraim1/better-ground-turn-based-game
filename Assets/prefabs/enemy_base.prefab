@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 7287670621830155501}
   - component: {fileID: -3370651478482805913}
   - component: {fileID: 4474393812117556330}
+  - component: {fileID: 779831556694547243}
   m_Layer: 0
   m_Name: enemy_base
   m_TagString: EnemyCharacter
@@ -159,20 +160,35 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cardsSO: {fileID: 11400000, guid: 3080a6a9f21a05b46bb959639cbd0586, type: 2}
-  enemy:
-    name: 
-    description: 
-    code: 0
-    enemy_code: 0
-    level: 0
-    max_health: 000000001e000000
-    current_health: 0
-    max_willpower: 000000000f000000
-    current_willpower: 0
-    is_character_unlocked: 0
-    deck: 000000000000000000000000000000000000000000000000
+  enemy: {fileID: 0}
   layoutGroup_prefab: {fileID: 3457913086231521101, guid: 56ef78f845a1e4c49a12f8416008f26f,
     type: 3}
   skill_slot_prefab: {fileID: 5858226105626517123, guid: 61a530f18f6294847adc4d56167708f2,
     type: 3}
+  using_skill_Objects: []
   canvas: {fileID: 0}
+--- !u!114 &779831556694547243
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1766090985930963044}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ebf9652bb0adef645872342c722b442e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  character_name: 
+  description: 
+  code: 0
+  enemy_code: 0
+  level: 0
+  max_health: 000000001e000000
+  current_health: 0
+  max_willpower: 000000000f000000
+  current_willpower: 0
+  is_character_unlocked: 0
+  deck: 000000000000000000000000000000000000000000000000
+  health_bar: {fileID: 0}
+  willpower_bar: {fileID: 0}

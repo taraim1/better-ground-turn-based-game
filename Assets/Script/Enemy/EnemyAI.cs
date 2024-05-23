@@ -19,7 +19,7 @@ public class EnemyAI : MonoBehaviour
 
     GameObject layoutGroup;
     // 이번 턴의 스킬 슬롯이 들어가는 리스트
-    List<GameObject> skill_slots = new List<GameObject>();
+    public List<GameObject> skill_slots = new List<GameObject>();
     public GameObject canvas;
 
     // 적이 이번 턴에 쓸 스킬 카드 코드 리스트를 반환하는 메소드
@@ -55,10 +55,10 @@ public class EnemyAI : MonoBehaviour
         {
             // 이번 턴에 쓸 카드와 스킬 슬롯 만듦
             GameObject slot = Instantiate(skill_slot_prefab, layoutGroup.transform);
-            GameObject card_obj = CardManager.instance.Summon_enemy_card(skill_list[i]);
+            GameObject card_obj = CardManager.instance.Summon_enemy_card(skill_list[i], gameObject);
             card card = card_obj.GetComponent<card>();
             slot.GetComponent<enemy_skillCard_slot>().card_obj = card_obj;
-
+            slot.GetComponent<enemy_skillCard_slot>().enemy_Obj = gameObject;
             slot.GetComponent<enemy_skillCard_slot>().illust.sprite = card.illust.sprite;
 
             // 카드 타겟 정하기

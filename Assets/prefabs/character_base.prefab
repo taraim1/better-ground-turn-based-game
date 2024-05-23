@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 5621665748860569226}
   - component: {fileID: -3370651478482805913}
   - component: {fileID: 7287670621830155501}
+  - component: {fileID: 3990429286925742260}
   m_Layer: 0
   m_Name: character_base
   m_TagString: PlayerCharacter
@@ -145,3 +146,28 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
+--- !u!114 &3990429286925742260
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1766090985930963044}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ebf9652bb0adef645872342c722b442e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  character_name: 
+  description: 
+  code: 0
+  enemy_code: 0
+  level: 0
+  max_health: 000000001e000000
+  current_health: 0
+  max_willpower: 000000000f000000
+  current_willpower: 0
+  is_character_unlocked: 0
+  deck: 000000000000000000000000000000000000000000000000
+  health_bar: {fileID: 0}
+  willpower_bar: {fileID: 0}

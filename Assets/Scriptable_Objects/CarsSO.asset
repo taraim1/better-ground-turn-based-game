@@ -26,7 +26,7 @@ MonoBehaviour:
     behavior_type: "\uBC29\uC5B4"
     sprite: {fileID: 21300000, guid: da927cbc7151aa84f851db4e33234bd9, type: 3}
     minPowerOfLevel: 01000000
-    maxPowerOfLevel: 03000000
+    maxPowerOfLevel: 02000000
   - name: "\uAC04\uB2E8\uD55C \uD68C\uD53C"
     cost: 1
     type: "\uBB34"

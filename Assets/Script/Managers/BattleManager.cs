@@ -22,14 +22,10 @@ public class BattleManager : Singletone<BattleManager> // 싱글톤임
 
     // 전투 중인 플레이어블 캐릭터의 게임오브젝트 리스트
     public List<GameObject> playable_characters = new List<GameObject>();
-    // 전투 중인 플레이어블 캐릭터들의 데이터 리스트
-    public List<Character> playable_character_data = new List<Character>();
     // 전투 중인 플레이어블 캐릭터들의 패 리스트
     public List<List<card>> hand_data = new List<List<card>>();
     // 전투 중인 적 캐릭터의 게임오브젝트 리스트
     public List<GameObject> enemy_characters = new List<GameObject>();
-    // 전투 중인 적 캐릭터들의 데이터 리스트
-    public List<Character> enemy_character_data = new List<Character>();
 
     public enum phases // 한 턴의 페이즈 모음
     { 
@@ -45,9 +41,7 @@ public class BattleManager : Singletone<BattleManager> // 싱글톤임
         //변수 초기화
         is_Characters_spawned = false;
         playable_characters.Clear();
-        playable_character_data.Clear();
         enemy_characters.Clear();
-        enemy_character_data.Clear();
         hand_data.Clear();
         current_phase = phases.turn_start_effect_phase;
 
@@ -67,19 +61,20 @@ public class BattleManager : Singletone<BattleManager> // 싱글톤임
         }
 
         // 캐릭터들의 현재 체력, 정신력 초기화
-        for (int i = 0; i < playable_character_data.Count; i++) 
+        for (int i = 0; i < playable_characters.Count; i++) 
         {
-            playable_character_data[i].current_health = playable_character_data[i].get_max_health_of_level(playable_character_data[i].level);
-            playable_character_data[i].current_willpower = playable_character_data[i].get_max_willpower_of_level(playable_character_data[i].level);
+            Character cha = playable_characters[i].GetComponent<Character>();
+            cha.current_health = cha.get_max_health_of_level(cha.level);
+            cha.current_willpower = cha.get_max_willpower_of_level(cha.level);
         }
-        for (int i = 0; i < enemy_character_data.Count; i++)
+        for (int i = 0; i < enemy_characters.Count; i++)
         {
-            enemy_character_data[i].current_health = enemy_character_data[i].get_max_health_of_level(enemy_character_data[i].level);
-            enemy_character_data[i].current_willpower = enemy_character_data[i].get_max_willpower_of_level(enemy_character_data[i].level);
+            Character cha = enemy_characters[i].GetComponent<Character>();
+            cha.current_health = cha.get_max_health_of_level(cha.level);
+            cha.current_willpower = cha.get_max_willpower_of_level(cha.level);
         }
 
-        // 체력바, 정신력바 초기화 및 생성
-        BattleUI_Manager.instance.Setup_health_and_willpower_bars();
+
 
 
         // 턴 시작
@@ -120,10 +115,11 @@ public class BattleManager : Singletone<BattleManager> // 싱글톤임
         {
             if (enemy_skill_set_count == enemy_characters.Count) 
             {
-                yield return new WaitForSeconds(0.02f);
+                StartCoroutine(player_skill_phase());
                 yield break;
             }
-            
+
+            yield return new WaitForSeconds(0.02f);
         }
         
     }

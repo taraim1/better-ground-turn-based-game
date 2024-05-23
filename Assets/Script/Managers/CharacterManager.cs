@@ -101,14 +101,15 @@ public class CharacterManager : Singletone<CharacterManager>
             List<card> hand = new List<card>();
             BattleManager.instance.hand_data.Add(hand);
 
-            // 파티에서 캐릭터 데이터를 불러와 BattleManager의 리스트에 넣기
-            Character character = new Character();
-            character = JsonUtility.FromJson<Character>(load_character_from_json(PartyManager.instance.get_charactor_code(i)));
-            BattleManager.instance.playable_character_data.Add(character);
+            // 캐릭터 데이터 불러옴
+            Character character = obj.GetComponent<Character>();
+            JsonUtility.FromJsonOverwrite(load_character_from_json(PartyManager.instance.get_charactor_code(i)), character);
 
             // 플레이어블 캐릭터 오브젝트를 BattleManager의 리스트에 넣기
             BattleManager.instance.playable_characters.Add(obj);
 
+            // 체력바, 정신력바 생성
+            BattleUI_Manager.instance.summon_UI_bar(obj, false);
         }
 
         // 적 캐릭터 생성
@@ -126,9 +127,9 @@ public class CharacterManager : Singletone<CharacterManager>
             obj.GetComponent<Character_Obj>().Character_index = i;
 
             // 적 데이터를 불러와 BattleManager의 적 리스트에 넣기
-            Character character = new Character();
-            character = JsonUtility.FromJson<Character>(load_character_from_json(enemySettingSO.enemy_Settigs[stage_index].enemy_Codes[i]));
-            BattleManager.instance.enemy_character_data.Add(character);
+            Character character = obj.GetComponent<Character>();
+            JsonUtility.FromJsonOverwrite(load_character_from_json(enemySettingSO.enemy_Settigs[stage_index].enemy_Codes[i]), character);
+            
 
             // 적 데이터를 AI에 연결
             obj.GetComponent<EnemyAI>().enemy = character;
@@ -136,6 +137,8 @@ public class CharacterManager : Singletone<CharacterManager>
             // 적 캐릭터 오브젝트를 BattleManager의 리스트에 넣기
             BattleManager.instance.enemy_characters.Add(obj);
 
+            // 체력바, 정신력바 생성
+            BattleUI_Manager.instance.summon_UI_bar(obj, true);
         }
 
         BattleManager.instance.is_Characters_spawned = true;
