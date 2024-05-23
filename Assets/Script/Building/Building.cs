@@ -22,7 +22,6 @@ public class GoldCave : MonoBehaviour
     public GameObject GoldImage;
     public GameObject Popup;
 
-
     BuildingData buildingData = new BuildingData();
 
     public void OnBuildingClick()
