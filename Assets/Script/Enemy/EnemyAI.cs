@@ -83,6 +83,9 @@ public class EnemyAI : MonoBehaviour
             using_skill_Objects.Add(card_obj);
             skill_slots.Add(slot);
         }
+
+        // 스킬 설정 완료 카운트 증가
+        BattleManager.instance.enemy_skill_set_count += 1;
     }
 
     // 적의 모든 스킬 카드 강조 해제

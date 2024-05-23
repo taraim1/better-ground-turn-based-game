@@ -127,6 +127,8 @@ public class card : MonoBehaviour
         dragPointer.GetComponent<SpriteRenderer>().sortingOrder = 200;
         // 드래그 포인터로 카드 데이터 넘겨줌
         dragPointer.GetComponent<drag_pointer>().cards = Card;
+        // 카드 판정기로 카드 데이터 넘겨줌
+        BattleCalcManager.set_card(this, 0);
 
         CardManager.instance.Aline_cards(CardManager.instance.active_index);
     }

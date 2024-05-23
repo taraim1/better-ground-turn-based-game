@@ -13,6 +13,8 @@ public class BattleManager : Singletone<BattleManager> // 싱글톤임
     public bool battle_start_trigger = false; // 전투를 시작시키는 트리거
     public bool is_Characters_spawned = false; // 전투 시작시 플레이이어와 적 캐릭터가 스폰되었는가?
     public bool is_Characters_loaded = false; // 전투 시작시 캐릭터 데이터가 불러와졌는가?
+    public int enemy_skill_set_count = 0; // 적의 스킬 설정 완료시 늘어남
+
 
     public Vector3[] playable_character_position_settings = new Vector3[4]; //플레이어블 캐릭터 스폰 위치
     public Vector3[] enemy_character_position_settings = new Vector3[4]; //적 캐릭터 스폰 위치
@@ -109,8 +111,27 @@ public class BattleManager : Singletone<BattleManager> // 싱글톤임
     // 적 스킬 설정 페이즈
     IEnumerator enemy_skill_setting_phase() 
     {
+        enemy_skill_set_count = 0;
         current_phase = phases.enemy_skill_setting_phase;
         BattleEventManager.Trigger_event("Enemy_skill_setting_phase");
+
+        // 스킬 설정 끝나는 거 감지
+        while (true) 
+        {
+            if (enemy_skill_set_count == enemy_characters.Count) 
+            {
+                yield return new WaitForSeconds(0.02f);
+                yield break;
+            }
+            
+        }
+        
+    }
+
+    // 플레이어 스킬 사용 페이즈
+    IEnumerator player_skill_phase()
+    {
+        current_phase = phases.player_skill_phase;
         yield break;
     }
 

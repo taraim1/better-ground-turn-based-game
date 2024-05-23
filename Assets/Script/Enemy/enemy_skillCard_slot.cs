@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class enemy_skillCard_slot : MonoBehaviour, IPointerClickHandler
+public class enemy_skillCard_slot : MonoBehaviour, IPointerClickHandler, IPointerUpHandler
 {
     public Image illust;
     public GameObject card_obj;
@@ -38,6 +38,12 @@ public class enemy_skillCard_slot : MonoBehaviour, IPointerClickHandler
             // 이 슬롯의 카드를 활성화 위치로
             CardManager.instance.highlight_enemy_card(card_obj);
         }
+    }
+
+    // 이 UI 위에서 마우스 클릭을 해제했을 때
+    public void OnPointerUp(PointerEventData eventData) 
+    { 
+    
     }
 
     private void Awake()
