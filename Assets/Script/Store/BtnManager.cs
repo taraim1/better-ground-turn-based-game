@@ -31,7 +31,6 @@ public class BtnManager : MonoBehaviour
             //tabs[i].GetPanel.SetActive(isActiveTab);//¸ðµç ÅÇÀ» ´Ù ²¨ÁØ´Ù.
             if (isActiveTab) 
             { 
-                Debug.Log(i);
                 Current_Scene = i;
                 Panel_Change.Invoke();
             }

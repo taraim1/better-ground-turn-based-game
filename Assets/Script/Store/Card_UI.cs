@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Events;
 
 
 public class Card_UI : MonoBehaviour
@@ -56,14 +57,13 @@ public class Card_UI : MonoBehaviour
         {
             Card_Image.sprite = Card_Grade[3];
         }
-        
-
-
 
     }
-    // Update is called once per frame
-    void Update()
+
+    public void Destroy_this()
     {
-        
+        DestroyImmediate(this.gameObject, true);
     }
+
+    // Update is called once per frame
 }

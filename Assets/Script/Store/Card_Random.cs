@@ -1,11 +1,18 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
+using UnityEngine.SceneManagement;
 
 public class Random_Card : MonoBehaviour
 {
-    
+    GameObject Scene_Changer;
+    public GameObject cardPrefab;
+    public Transform Card_Summon;
+    public List<string> Grade_Result;
+    [SerializeField]
+    public List<Card_UI> Card_Prefabs;
     //카드들의 등급
     string[] Card_Grade = new string[]
     {
@@ -30,7 +37,7 @@ public class Random_Card : MonoBehaviour
             total += _Percent[i];
         }
         //무엇이 나올지 랜덤값 결정
-        float randomPoint = Random.value * total;
+        float randomPoint = UnityEngine.Random.value * total;
         //이후 랜덤값을 이용하여 확률을 계산, 어떤 등급인지 결정
         for (int i = 0; i < _Percent.Length; i++)
         {
@@ -47,26 +54,72 @@ public class Random_Card : MonoBehaviour
         return _Chosen_Grade[_Percent.Length - 1];
     }
 
-    public GameObject cardPrefab;
-    public Transform Card_Summon;
-    public List<string> Grade_Result;
     public void Randomizer_1Time()//1회 뽑기 코드
     {
-        Debug.Log(Card_pick(Card_Percent, Card_Grade));
+        Grade_Result = new List<string>();
+        Card_Prefabs = new List<Card_UI>();
+        Grade_Result.Add(Card_pick(Card_Percent, Card_Grade));
+
+        Card_UI card_UI = Instantiate(cardPrefab, Card_Summon).GetComponent<Card_UI>();
+
+        Card_Prefabs.Add(card_UI);
+
+        card_UI.Card_Grade_set(Grade_Result[0]);
     }
-    public void Randomizer_10Time()//1회 뽑기 코드
+    public void Randomizer_10Time()//10회 뽑기 코드
     {
         Grade_Result = new List<string>();
+        Card_Prefabs = new List<Card_UI>();
         for (int i = 0; i < 10;  i++)
         {
             Grade_Result.Add(Card_pick(Card_Percent, Card_Grade));
-            
+
             Card_UI card_UI = Instantiate(cardPrefab, Card_Summon).GetComponent<Card_UI>();
+
+            Card_Prefabs.Add(card_UI);
 
             card_UI.Card_Grade_set(Grade_Result[i]);
         }
         
     }
     
+    
+    public void Change()
+    {
+        Scene_Changer.GetComponent<Scene_Change>().Scene_Active(1);
+    }
+
+    delegate void _Pick_10();
+    _Pick_10 Pick_10;
+    delegate void _Pick_1();
+    _Pick_1 Pick_1;
+
+    private void Start()
+    {
+        Scene_Changer = GameObject.Find("Scene");
+        Pick_10 += new _Pick_10(Change);
+        Pick_10 += new _Pick_10(Randomizer_10Time);
+        Pick_1 += new _Pick_1(Change);
+        Pick_1 += new _Pick_1(Randomizer_1Time);
+
+
+    }
+    public void Pick_10t()
+    {
+        Pick_10();
+    }
+    public void Pick_1t()
+    {
+        Pick_1();
+    }
+
+    public void DestroyCardPrefabs() // 생성된 카드 프리팹들을 제거하는 함수
+    {
+        foreach (var cardPrefab in Card_Prefabs)
+        {
+            if (cardPrefab != null)  Destroy(cardPrefab.gameObject); 
+        }
+        Card_Prefabs.Clear();
+    }
 
 }
