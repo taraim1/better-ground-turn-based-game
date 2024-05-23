@@ -8,14 +8,24 @@ using UnityEngine.UI;
 public class Building : MonoBehaviour
 {
     [System.Serializable]
-    private class BuildingData // �ǹ��� �����͸� �����ϴ� Ŭ����
+    private class BuildingDataGold // �ǹ��� �����͸� �����ϴ� Ŭ����
     {
         public string first_time_Gold_string;
         public string last_time_Gold_string;
-        public bool isFirstClickSetGold = false;
+        public bool isFirstClickSetGold = false;    
+    }
+    
+    [System.Serializable]
+    private class BuildingDataGem
+    {
         public string first_time_Gem_string;
         public string last_time_Gem_string;
-        public bool isFirstClickSetGem = false;        
+        public bool isFirstClickSetGem = false;   
+    }
+
+    [System.Serializable]
+    private class BuildingDataWater
+    {
         public string first_time_Water_string;
         public string last_time_Water_string;
         public bool isFirstClickSetWater = false;
@@ -36,25 +46,28 @@ public class Building : MonoBehaviour
     public Text WaterText;
     public GameObject WaterImage;
     public GameObject WaterPopup;
-    BuildingData buildingData = new BuildingData();
+    BuildingDataGold buildingDataGold = new BuildingDataGold();
+    BuildingDataGem buildingDataGem = new BuildingDataGem();
+    BuildingDataWater buildingDataWater = new BuildingDataWater();
 
     public void OnGoldClick()
     {
-        if (buildingData.isFirstClickSetGold == false)
+        if (buildingDataGold.isFirstClickSetGold == false)
         {
             firstGoldClickTime = DateTime.Now;
-            buildingData.isFirstClickSetGold = true;
+            buildingDataGold.isFirstClickSetGold = true;
             ResourceManager.instance.Gold += 100;
             GoldText.text = "Gold : " +  ResourceManager.instance.Gold;
             Write_Json_file();
             Debug.Log("Gold : " + ResourceManager.instance.Gold);
             Debug.Log("First button clicked at: " + firstGoldClickTime);
+            GoldImage.SetActive(false);
         }
         else
         {
             lastGoldClickTime = DateTime.Now;
             Debug.Log("Last button clicked at: " + lastGoldClickTime);
-            if (buildingData.isFirstClickSetGold == true)
+            if (buildingDataGold.isFirstClickSetGold == true)
             {
                 CalculateTimeSpanGold();
             }
@@ -72,7 +85,6 @@ public class Building : MonoBehaviour
             ResourceManager.instance.Gold = ResourceManager.instance.Gold + SpentMinutesGold*LevelManager.instance.GoldCaveLevel;
             GoldText.text = "Gold : " +  ResourceManager.instance.Gold;
             Debug.Log("Gold : " + ResourceManager.instance.Gold);
-
             firstGoldClickTime = DateTime.Now;
             GoldImage.SetActive(false);
 
@@ -85,21 +97,22 @@ public class Building : MonoBehaviour
     }
     public void OnGemClick()
     {
-        if (buildingData.isFirstClickSetGem == false)
+        if (buildingDataGem.isFirstClickSetGem == false)
         {
             firstGemClickTime = DateTime.Now;
-            buildingData.isFirstClickSetGem = true;
+            buildingDataGem.isFirstClickSetGem = true;
             ResourceManager.instance.Gem += 100;
             GemText.text = "Gem : " +  ResourceManager.instance.Gem;
             Write_Json_file();
             Debug.Log("Gem : " + ResourceManager.instance.Gem);
             Debug.Log("First button clicked at: " + firstGemClickTime);
+            GemImage.SetActive(false);
         }
         else
         {
             lastGemClickTime = DateTime.Now;
             Debug.Log("Last button clicked at: " + lastGemClickTime);
-            if (buildingData.isFirstClickSetGem == true)
+            if (buildingDataGem.isFirstClickSetGem == true)
             {
                 CalculateTimeSpanGem();
             }
@@ -128,11 +141,57 @@ public class Building : MonoBehaviour
             GemPopup.SetActive(true);
         }
     }
+    public void OnWaterClick()
+    {
+        if (buildingDataWater.isFirstClickSetWater == false)
+        {
+            firstWaterClickTime = DateTime.Now;
+            buildingDataWater.isFirstClickSetWater = true;
+            ResourceManager.instance.Water += 100;
+            WaterText.text = "Water : " +  ResourceManager.instance.Water;
+            Write_Json_file();
+            Debug.Log("Water : " + ResourceManager.instance.Water);
+            Debug.Log("First button clicked at: " + firstWaterClickTime);
+            WaterImage.SetActive(false);
+        }
+        else
+        {
+            lastWaterClickTime = DateTime.Now;
+            Debug.Log("Last button clicked at: " + lastWaterClickTime);
+            if (buildingDataWater.isFirstClickSetWater == true)
+            {
+                CalculateTimeSpanWater();
+            }
+        }
+    }
+    void CalculateTimeSpanWater()
+    {
+        TimeSpan timeDifferenceWater = lastGoldClickTime - firstGoldClickTime;
+        int SpentMinutesWater = (int)timeDifferenceWater.TotalMinutes;
+        Debug.Log("Time span in minutes: " + SpentMinutesWater);
+
+        if (SpentMinutesWater >= 5)
+        {
+            if (SpentMinutesWater >= 10){ SpentMinutesWater = 10; }
+            ResourceManager.instance.Water = ResourceManager.instance.Water + SpentMinutesWater*LevelManager.instance.WStatueLevel;
+            WaterText.text = "Water : " +  ResourceManager.instance.Water;
+            Debug.Log("Water : " + ResourceManager.instance.Water);
+
+            firstWaterClickTime = DateTime.Now;
+            WaterImage.SetActive(false);
+
+            Write_Json_file();
+        }
+        else
+        {
+            WaterPopup.SetActive(true);
+        }
+    }
 
     private void Update()
     {
         // ���� �ð��� ������ �ڿ� ȹ�� ���� �˾��� ��
-        if (buildingData.isFirstClickSetGold && GoldImage.activeSelf == false) 
+        if (buildingDataGold.isFirstClickSetGold && GoldImage.activeSelf == false) 
         {
             TimeSpan timeDifferenceGold = DateTime.Now - firstGoldClickTime;
             int SpentMinutesGold = (int)timeDifferenceGold.TotalMinutes;
@@ -142,7 +201,7 @@ public class Building : MonoBehaviour
             }
         }
         
-        if (buildingData.isFirstClickSetGem && GemImage.activeSelf == false) 
+        if (buildingDataGem.isFirstClickSetGem && GemImage.activeSelf == false) 
         {
             TimeSpan timeDifferenceGem = DateTime.Now - firstGoldClickTime;
             int SpentMinutesGem = (int)timeDifferenceGem.TotalMinutes;
@@ -151,18 +210,35 @@ public class Building : MonoBehaviour
                 GemImage.SetActive(true);
             }
         }
+        
+        if (buildingDataWater.isFirstClickSetWater && WaterImage.activeSelf == false) 
+        {
+            TimeSpan timeDifferenceWater = DateTime.Now - firstWaterClickTime;
+            int SpentMinutesWater = (int)timeDifferenceWater.TotalMinutes;
+            if (SpentMinutesWater >= 5) 
+            {
+                WaterImage.SetActive(true);
+            }
+        }
+        GoldText.text = "Gold : " +  ResourceManager.instance.Gold;
+        GemText.text = "Gem : " +  ResourceManager.instance.Gem;
+        WaterText.text = "Water : " +  ResourceManager.instance.Water;
     }
 
     void Write_Json_file() 
     {
-        buildingData.first_time_Gold_string = firstGoldClickTime.ToString("yyyy-MM-dd HH:mm:ss");
-        buildingData.last_time_Gold_string = lastGoldClickTime.ToString("yyyy-MM-dd HH:mm:ss");
-        string outputGold = JsonUtility.ToJson(buildingData, true);
+        buildingDataGold.first_time_Gold_string = firstGoldClickTime.ToString("yyyy-MM-dd HH:mm:ss");
+        buildingDataGold.last_time_Gold_string = lastGoldClickTime.ToString("yyyy-MM-dd HH:mm:ss");
+        string outputGold = JsonUtility.ToJson(buildingDataGold, true);
         File.WriteAllText(Application.dataPath + "/Data/building/gold_cave.json", outputGold);
-        buildingData.first_time_Gem_string = firstGemClickTime.ToString("yyyy-MM-dd HH:mm:ss");
-        buildingData.last_time_Gem_string = lastGemClickTime.ToString("yyyy-MM-dd HH:mm:ss");
-        string outputGem = JsonUtility.ToJson(buildingData, true);
+        buildingDataGem.first_time_Gem_string = firstGemClickTime.ToString("yyyy-MM-dd HH:mm:ss");
+        buildingDataGem.last_time_Gem_string = lastGemClickTime.ToString("yyyy-MM-dd HH:mm:ss");
+        string outputGem = JsonUtility.ToJson(buildingDataGem, true);
         File.WriteAllText(Application.dataPath + "/Data/building/Gem_cave.json", outputGem);
+        buildingDataWater.first_time_Water_string = firstWaterClickTime.ToString("yyyy-MM-dd HH:mm:ss");
+        buildingDataWater.last_time_Water_string = lastWaterClickTime.ToString("yyyy-MM-dd HH:mm:ss");
+        string outputWater = JsonUtility.ToJson(buildingDataWater, true);
+        File.WriteAllText(Application.dataPath + "/Data/building/Water_statue.json", outputWater);
     }
 
     void Read_Json_file() 
@@ -173,9 +249,9 @@ public class Building : MonoBehaviour
             return;
         }
 
-        buildingData = JsonUtility.FromJson<BuildingData>(File.ReadAllText(Application.dataPath + "/Data/building/gold_cave.json"));
-        firstGoldClickTime = DateTime.ParseExact(buildingData.first_time_Gold_string, "yyyy-MM-dd HH:mm:ss", null);
-        lastGoldClickTime = DateTime.ParseExact(buildingData.last_time_Gold_string, "yyyy-MM-dd HH:mm:ss", null);
+        buildingDataGold = JsonUtility.FromJson<BuildingDataGold>(File.ReadAllText(Application.dataPath + "/Data/building/gold_cave.json"));
+        firstGoldClickTime = DateTime.ParseExact(buildingDataGold.first_time_Gold_string, "yyyy-MM-dd HH:mm:ss", null);
+        lastGoldClickTime = DateTime.ParseExact(buildingDataGold.last_time_Gold_string, "yyyy-MM-dd HH:mm:ss", null);
 
         if (!File.Exists(Application.dataPath + "/Data/building/gem_cave.json")) 
         {
@@ -183,14 +259,23 @@ public class Building : MonoBehaviour
             return;
         }
 
-        buildingData = JsonUtility.FromJson<BuildingData>(File.ReadAllText(Application.dataPath + "/Data/building/gem_cave.json"));
-        firstGemClickTime = DateTime.ParseExact(buildingData.first_time_Gem_string, "yyyy-MM-dd HH:mm:ss", null);
-        lastGemClickTime = DateTime.ParseExact(buildingData.last_time_Gem_string, "yyyy-MM-dd HH:mm:ss", null);
+        buildingDataGem = JsonUtility.FromJson<BuildingDataGem>(File.ReadAllText(Application.dataPath + "/Data/building/gem_cave.json"));
+        firstGemClickTime = DateTime.ParseExact(buildingDataGem.first_time_Gem_string, "yyyy-MM-dd HH:mm:ss", null);
+        lastGemClickTime = DateTime.ParseExact(buildingDataGem.last_time_Gem_string, "yyyy-MM-dd HH:mm:ss", null);
+
+        if (!File.Exists(Application.dataPath + "/Data/building/Water_statue.json")) 
+        {
+            Debug.Log("�ǹ� ������ ������ �����ϴ�.");
+            return;
+        }
+
+        buildingDataWater = JsonUtility.FromJson<BuildingDataWater>(File.ReadAllText(Application.dataPath + "/Data/building/Water_statue.json"));
+        firstWaterClickTime = DateTime.ParseExact(buildingDataWater.first_time_Water_string, "yyyy-MM-dd HH:mm:ss", null);
+        lastWaterClickTime = DateTime.ParseExact(buildingDataWater.last_time_Water_string, "yyyy-MM-dd HH:mm:ss", null);
     }
 
     private void Start()
     {
-        Write_Json_file();
         Read_Json_file();
     }
 }
