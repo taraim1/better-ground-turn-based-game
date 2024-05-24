@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/Data/building.meta
 guid: 72fb505f4c518314a87fc5ad84d9d7f3
+========
+guid: 545fedbd828942941aaccd19c5c6199d
+>>>>>>>> d5cc330a9dfee18271679eafc8457305ca59cf0c:Assets/Images/RPG Button 7.meta
 folderAsset: yes
 DefaultImporter:
   externalObjects: {}

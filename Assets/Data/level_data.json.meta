@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/Data/level_data.json.meta
 guid: df77311a577fc194ca9429d20f89a5b9
+========
+guid: fae7026935e6fcc46a3addd42ef35420
+>>>>>>>> d5cc330a9dfee18271679eafc8457305ca59cf0c:Assets/Data/resource_data.json.meta
 TextScriptImporter:
   externalObjects: {}
   userData: 
