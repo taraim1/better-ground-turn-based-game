@@ -3,7 +3,11 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - PlayerCharacter
+  - SkillCard
+  - EnemyCharacter
+  - enemySkillSlot
   layers:
   - Default
   - TransparentFX
@@ -11,7 +15,7 @@ TagManager:
   - Back
   - Water
   - UI
-  - 
+  - SkillCard
   - 
   - 
   - 
@@ -44,7 +48,7 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
-  - name: Layer 1
+  - name: Cards
     uniqueID: 2425651459
     locked: 0
   - name: Layer 2

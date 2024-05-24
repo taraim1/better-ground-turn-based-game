@@ -24,6 +24,8 @@ public class ResourceManager : Singletone<ResourceManager>
     
     }
 
+
+
     public void read_Json_file() //데이터를 Json파일에서 불러옴
     {
         JsonUtility.FromJsonOverwrite(File.ReadAllText(Application.dataPath + "/Data/resource_data.json"), instance);
