@@ -19,6 +19,7 @@ public class BattleManager : Singletone<BattleManager> // 싱글톤임
     public Vector3[] playable_character_position_settings = new Vector3[4]; //플레이어블 캐릭터 스폰 위치
     public Vector3[] enemy_character_position_settings = new Vector3[4]; //적 캐릭터 스폰 위치
 
+    private GameObject cost_meter; // 코스트 양 보여주는 오브젝트
 
     // 전투 중인 플레이어블 캐릭터의 게임오브젝트 리스트
     public List<GameObject> playable_characters = new List<GameObject>();
@@ -59,6 +60,10 @@ public class BattleManager : Singletone<BattleManager> // 싱글톤임
                 CardManager.instance.Summon_card(i);
             }
         }
+
+        // 초기 코스트 설정
+        cost_meter = GameObject.Find("cost_meter");
+        cost_meter.GetComponent<cost_meter>().Setup(4, 4);
 
         // 캐릭터들의 현재 체력, 정신력 초기화
         for (int i = 0; i < playable_characters.Count; i++) 
