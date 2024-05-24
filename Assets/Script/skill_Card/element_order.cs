@@ -20,8 +20,9 @@ public class element_order : MonoBehaviour
         return current_order;
     }
 
-    public void Set_highlighted_order() 
+    public void Set_highlighted_order()
     {
+        Debug.Log("asdf");
         Set_order(100);
     }
 

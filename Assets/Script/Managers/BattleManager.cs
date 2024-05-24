@@ -97,7 +97,7 @@ public class BattleManager : Singletone<BattleManager> // ½Ì±ÛÅæÀÓ
         // Ä«µå 1Àå »ÌÀ½
         for (int i = 0; i < hand_data.Count; i++)
         {
-            for (int j = 0; j < 1; j++)
+            for (int j = 0; j < 2; j++)
             {
                 CardManager.instance.Summon_card(i);
             }

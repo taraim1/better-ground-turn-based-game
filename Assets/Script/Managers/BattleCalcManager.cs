@@ -15,6 +15,9 @@ public class BattleCalcManager : Singletone<BattleCalcManager>
     int card1_power;
     int card2_power;
 
+    // 남은 코스트 표시하는 거
+    [SerializeField]
+    cost_meter cost_Meter;
 
     // 카드 드래그중인지 저장
     private bool isDraggingCard = false;
@@ -47,6 +50,7 @@ public class BattleCalcManager : Singletone<BattleCalcManager>
         // 판정 시작
         BattleEventManager.Trigger_event("skill_clash_started");
         isDraggingCard = false;
+        cost_Meter.Current_cost = cost_Meter.Current_cost - card1.Card.cost;
         card1_power = Random.Range(card1.minpower, card1.maxpower + 1);
         card2_power = Random.Range(card2.minpower, card2.maxpower + 1);
         apply_clash_result(card1, card2, card1_power, card2_power);

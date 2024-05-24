@@ -158,20 +158,24 @@ public class CardManager : Singletone<CardManager>
     public void highlight_enemy_card(GameObject obj) 
     {
         card card = obj.GetComponent<card>();
-        PRS prs = new PRS(enemy_card_highlighted_transform.position, enemy_card_highlighted_transform.rotation, Vector3.one * 2f);
+        PRS prs = new PRS(enemy_card_highlighted_transform.position, enemy_card_highlighted_transform.rotation, Vector3.one * 2.2f);
         card.MoveTransform(prs, true, 0.4f);
         card.state = card.current_mode.highlighted_enemy_card;
 
     }
 
 
-    void Set_origin_order(int index) // 카드 orderInLayer설정
+    public void Set_origin_order(int index) // 카드 orderInLayer설정
     {
+        if (index == -1) { return; }
+
         for (int i = 0; i < BattleManager.instance.hand_data[index].Count; i++) 
         {
             BattleManager.instance.hand_data[index][i].GetComponent<element_order>().Set_origin_order(i);
         }
     }
+
+
 
     public void Aline_cards(int index) // index번째 패의 카드 위치, 회전, 스케일, 순서 등 정렬 
     {
@@ -182,7 +186,7 @@ public class CardManager : Singletone<CardManager>
         }
 
         List<PRS> origin_cards_PRS;
-        origin_cards_PRS = set_card_alignment(left_card_transform, right_card_transform, BattleManager.instance.hand_data[index].Count, 0.5f, Vector3.one * 1.5f, index);
+        origin_cards_PRS = set_card_alignment(left_card_transform, right_card_transform, BattleManager.instance.hand_data[index].Count, 0.5f, Vector3.one * 1.8f, index);
 
         // 드래그 중인 카드가 있는지 검사
         bool isdragging = false;
@@ -226,7 +230,7 @@ public class CardManager : Singletone<CardManager>
                     // 드래그 중인 카드가 없다면
                     if (!isdragging) 
                     {
-                        targetCard.MoveTransform(new PRS(new Vector3(highlighted_card_transform.position.x, highlighted_card_transform.position.y, targetCard.originPRS.pos.z), highlighted_card_transform.rotation, Vector3.one * 2f), true, 0.2f);
+                        targetCard.MoveTransform(new PRS(new Vector3(highlighted_card_transform.position.x, highlighted_card_transform.position.y, targetCard.originPRS.pos.z), highlighted_card_transform.rotation, Vector3.one * 2.2f), true, 0.2f);
                     }
                     
                     continue;
@@ -246,7 +250,7 @@ public class CardManager : Singletone<CardManager>
 
         }
 
-        Set_origin_order(index);
+     
     }
 
     List<PRS> set_card_alignment(Transform leftTr, Transform rightTr, int CardCount, float height, Vector3 scale, int index) // 카드들의 PRS값 리스트를 계산해 반환
