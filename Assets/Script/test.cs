@@ -8,13 +8,11 @@ public class test : MonoBehaviour, IPointerDownHandler
 {
     public TMP_Text tmp;
    	public CardManager.skillcard_code code;
-	[SerializeField] 
-	CardsSO cardso;
 	public Cards carddata;
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        carddata = cardso.cards[(int)code];
+        carddata = CardManager.instance.get_card_by_code(code);
         tmp.text = carddata.name;
     }
     

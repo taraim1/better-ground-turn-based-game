@@ -35,7 +35,11 @@ public class CardManager : Singletone<CardManager>
     // 현재 강조 중인 카드
     public card highlighted_card;
 
-
+    // 카드 코드 주면 카드 데이터 줌
+    public Cards get_card_by_code(skillcard_code code) 
+    {
+        return cardsSO.cards[(int)code];
+    }
 
     // index번째 캐릭터의 덱 버퍼에서 첫 카드 뽑기
     public Cards PopCard(int index) 
@@ -310,22 +314,6 @@ public class CardManager : Singletone<CardManager>
         highlighted_card = null;
     }
 
-
-    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
-    {
-        if (scene.name != "Battle") 
-        {
-            Destroy(this.gameObject);
-        }
-    }
-    void Start()
-    {
-        SceneManager.sceneLoaded += OnSceneLoaded;
-    }
-    void OnDestroy()
-    {
-        SceneManager.sceneLoaded -= OnSceneLoaded;
-    }
 
 
 
