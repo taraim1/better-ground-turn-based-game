@@ -111,8 +111,8 @@ public class CharacterManager : Singletone<CharacterManager>
             // 플레이어블 캐릭터 오브젝트를 BattleManager의 리스트에 넣기
             BattleManager.instance.playable_characters.Add(obj);
 
-            // 체력바, 정신력바 생성
-            BattleUI_Manager.instance.summon_UI_bar(obj, false);
+            // 캐릭터에 붙은 UI들 생성
+            BattleUI_Manager.instance.summon_UI(obj, false);
         }
 
         // 적 캐릭터 생성
@@ -142,8 +142,8 @@ public class CharacterManager : Singletone<CharacterManager>
             // 적 캐릭터 오브젝트를 BattleManager의 리스트에 넣기
             BattleManager.instance.enemy_characters.Add(obj);
 
-            // 체력바, 정신력바 생성
-            BattleUI_Manager.instance.summon_UI_bar(obj, true);
+            // 캐릭터에 붙은 UI들 생성
+            BattleUI_Manager.instance.summon_UI(obj, true);
         }
 
         BattleManager.instance.is_Characters_spawned = true;

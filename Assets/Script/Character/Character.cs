@@ -39,6 +39,7 @@ public class Character : MonoBehaviour
     [DoNotSerialize]
     private UI_bar_slider willpower_slider;
     [DoNotSerialize]
+    public skill_power_meter skill_power_meter;
     public bool isEnemyCharacter;
 
     public int get_max_health_of_level(int level)
@@ -71,8 +72,8 @@ public class Character : MonoBehaviour
     {
         health_slider = health_bar.GetComponent<UI_bar_slider>();
         willpower_slider = willpower_bar.GetComponent<UI_bar_slider>();
-        health_slider.max_value_tmp.text = max_health[level].ToString();
-        willpower_slider.max_value_tmp.text = max_willpower[level].ToString();
+        health_slider.value_tmp.text = max_health[level].ToString();
+        willpower_slider.value_tmp.text = max_willpower[level].ToString();
         health_slider.slider.maxValue = max_health[level];
         willpower_slider.slider.maxValue = max_willpower[level];
         health_slider.slider.value = health_slider.slider.maxValue;
@@ -90,6 +91,7 @@ public class Character : MonoBehaviour
 
         // 체력바 업데이트
         health_slider.slider.value = current_health;
+        health_slider.value_tmp.text = current_health.ToString();
 
     }
 
@@ -105,7 +107,7 @@ public class Character : MonoBehaviour
 
         // 정신력바 업데이트
         willpower_slider.slider.value = current_willpower;
-
+        willpower_slider.value_tmp.text = current_willpower.ToString();
     }
 
     // 카드 사용시 타깃 설정

@@ -1581,7 +1581,7 @@ Canvas:
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
   m_VertexColorAlwaysGammaSpace: 0
-  m_AdditionalShaderChannelsFlag: 0
+  m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
   m_SortingOrder: 0
@@ -1967,6 +1967,10 @@ MonoBehaviour:
   health_bar_prefab: {fileID: 953389889809876917, guid: e0a15ee19bccfee419d609ebeb27ba21,
     type: 3}
   willpower_bar_prefab: {fileID: 953389889809876917, guid: 036998866c0c8fb4d9ac1e6ae5075a2f,
+    type: 3}
+  skill_power_meter_prefab: {fileID: 3271687678273936230, guid: 6923df529ad6cf846a48edd2b2545cad,
+    type: 3}
+  layoutGroup_prefab: {fileID: 3457913086231521101, guid: 56ef78f845a1e4c49a12f8416008f26f,
     type: 3}
 --- !u!1 &1375931199
 GameObject:

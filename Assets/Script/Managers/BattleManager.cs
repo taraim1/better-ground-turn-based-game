@@ -55,7 +55,7 @@ public class BattleManager : Singletone<BattleManager> // ΩÃ±€≈Ê¿”
         // √ ±‚ ∆– ºº∆√ (2¿Â + turn_start_phase 1¿Â ªÃ¿Ω)
         for (int i = 0; i < hand_data.Count; i++) 
         {
-            for (int j = 0; j < 2; j++) 
+            for (int j = 0; j < 1; j++) 
             {
                 CardManager.instance.Summon_card(i);
             }

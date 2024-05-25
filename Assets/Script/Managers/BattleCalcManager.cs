@@ -136,6 +136,10 @@ public class BattleCalcManager : Singletone<BattleCalcManager>
         string los_behavior;
 
 
+        // 스킬 값 보여주기
+        StartCoroutine(using_card.owner.GetComponent<Character>().skill_power_meter.Show(power1.ToString()));
+        StartCoroutine(target_card.owner.GetComponent<Character>().skill_power_meter.Show(power2.ToString()));
+
         // 무승부
         if (power1 == power2)
         {
@@ -146,7 +150,7 @@ public class BattleCalcManager : Singletone<BattleCalcManager>
             return;
         }
 
-        // 카드 1 이김
+        // 사용 카드 이김
         if (power1 > power2)
         {
             winner_char = using_card.owner.GetComponent<Character>();
@@ -158,7 +162,7 @@ public class BattleCalcManager : Singletone<BattleCalcManager>
             win_power = power1;
             lose_power = power2;
         }
-        // 카드 2 이김
+        // 타겟 카드 이김
         else 
         {
             winner_char = target_card.owner.GetComponent<Character>();
@@ -179,19 +183,20 @@ public class BattleCalcManager : Singletone<BattleCalcManager>
         {
             case ("공격"):
                 if (los_behavior == "공격") { loser_char.Damage_health(win_power); loser_char.Damage_willpower(win_power); }
-                else if (los_behavior == "수비") { loser_char.Damage_health(win_power - lose_power); loser_char.Damage_willpower(win_power - lose_power); }
+                else if (los_behavior == "방어") { loser_char.Damage_health(win_power - lose_power); loser_char.Damage_willpower(win_power - lose_power); }
                 else if (los_behavior == "회피") { loser_char.Damage_health(win_power); loser_char.Damage_willpower(win_power); }
-                
                 break;
-            case ("수비"):
+
+            case ("방어"):
                 if (los_behavior == "공격") { }
-                else if (los_behavior == "수비") { winner_char.Damage_willpower(lose_power - win_power); } // 정신력 회복
-                else if (los_behavior == "회피") { winner_char.Damage_willpower(lose_power - win_power); }
+                else if (los_behavior == "방어") { loser_char.Damage_willpower(win_power - lose_power); } // 진 쪽 정신력 감소
+                else if (los_behavior == "회피") { loser_char.Damage_willpower(win_power - lose_power); }
                 break;
+
             case ("회피"):
-                if (los_behavior == "공격") { winner_char.Damage_willpower(lose_power - win_power); }
-                else if (los_behavior == "수비") { winner_char.Damage_willpower(lose_power - win_power); }
-                else if (los_behavior == "회피") { winner_char.Damage_willpower(lose_power - win_power); }
+                if (los_behavior == "공격") { winner_char.Damage_willpower(lose_power - win_power); } // 이긴 쪽 정신력 회복
+                else if (los_behavior == "방어") { loser_char.Damage_willpower(win_power - lose_power); }
+                else if (los_behavior == "회피") { loser_char.Damage_willpower(win_power - lose_power); }
                 break;
         }
 
