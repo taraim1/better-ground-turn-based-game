@@ -10,17 +10,14 @@ public class EnemyAI : MonoBehaviour
 
     // 적의 캐릭터 데이터
     public Character enemy;
-    // 적의 스킬 슬롯 레이아웃그룹 프리팹
-    public GameObject layoutGroup_prefab;
     // 적의 스킬 슬롯 프리팹
     public GameObject skill_slot_prefab;
     // 적이 이턴 턴에 쓸 카드 오브젝트가 들어가는 리스트
     public List<GameObject> using_skill_Objects;
 
-    GameObject layoutGroup;
+    public GameObject layoutGroup;
     // 이번 턴의 스킬 슬롯이 들어가는 리스트
     public List<GameObject> skill_slots = new List<GameObject>();
-    public GameObject canvas;
 
     // 적이 이번 턴에 쓸 스킬 카드 코드 리스트를 반환하는 메소드
     private List<CardManager.skillcard_code> get_action() 
@@ -103,9 +100,6 @@ public class EnemyAI : MonoBehaviour
     {
         BattleEventManager.enemy_skill_setting_phase += set_skill;
         BattleEventManager.enemy_skill_card_deactivate += return_card;
-        canvas = GameObject.Find("Canvas");
-        layoutGroup = Instantiate(layoutGroup_prefab, Vector3.zero, Quaternion.identity, canvas.transform);
-        layoutGroup.GetComponent<UI_hook_up_object>().target_object = gameObject;
     }
 
     private void OnDisable()
