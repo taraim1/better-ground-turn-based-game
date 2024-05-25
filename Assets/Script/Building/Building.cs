@@ -56,7 +56,7 @@ public class Building : MonoBehaviour
         {
             firstGoldClickTime = DateTime.Now;
             buildingDataGold.isFirstClickSetGold = true;
-            ResourceManager.instance.Gold += 100;
+            ResourceManager.instance.Gold += 1000;
             GoldText.text = "Gold : " +  ResourceManager.instance.Gold;
             Write_Json_file();
             Debug.Log("Gold : " + ResourceManager.instance.Gold);
@@ -221,6 +221,9 @@ public class Building : MonoBehaviour
                 WaterImage.SetActive(true);
             }
         }
+        GoldText.text = "Gold : " +  ResourceManager.instance.Gold;
+        GemText.text = "Gem : " +  ResourceManager.instance.Gem;
+        WaterText.text = "Water : " +  ResourceManager.instance.Water;
     }
     
     void Write_Json_file() 
@@ -275,8 +278,5 @@ public class Building : MonoBehaviour
     private void Start()
     {
         Read_Json_file();
-        GoldText.text = "Gold : " +  ResourceManager.instance.Gold;
-        GemText.text = "Gem : " +  ResourceManager.instance.Gem;
-        WaterText.text = "Water : " +  ResourceManager.instance.Water;
     }
 }

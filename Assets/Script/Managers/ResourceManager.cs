@@ -75,6 +75,5 @@ public class ResourceManager : Singletone<ResourceManager>
     private void Start()
     {
         read_Json_file();
-        write_Json_file();
     }
 }

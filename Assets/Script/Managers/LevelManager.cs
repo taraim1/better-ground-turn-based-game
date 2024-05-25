@@ -62,6 +62,7 @@ public class LevelManager : Singletone<LevelManager>
 
     private void Start()
     {
+        write_Json_file();
         read_Json_file();
     }
 }
