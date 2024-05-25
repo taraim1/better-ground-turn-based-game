@@ -136,6 +136,13 @@ public class BattleManager : Singletone<BattleManager> // 싱글톤임
         yield break;
     }
 
+    // 적 스킬 사용 페이즈
+    IEnumerator enemy_skill_phase()
+    {
+        current_phase = phases.enemy_skill_phase;
+        yield break;
+    }
+
     void OnEnable()
     {
         // 델리게이트 체인 추가

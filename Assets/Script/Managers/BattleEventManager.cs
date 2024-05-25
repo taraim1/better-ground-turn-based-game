@@ -10,7 +10,7 @@ public class BattleEventManager : MonoBehaviour
     // πË∆≤ø°º≠ æ∏
     public static Action enemy_skill_setting_phase;
     public static Action enemy_skill_card_deactivate;
-    public static Action skill_clash_started;
+    public static Action skill_used;
 
 
 
@@ -24,8 +24,8 @@ public class BattleEventManager : MonoBehaviour
             case "enemy_skill_card_deactivate":
                 enemy_skill_card_deactivate?.Invoke();
                 break;
-            case "skill_clash_started":
-                skill_clash_started?.Invoke();
+            case "skill_used":
+                skill_used?.Invoke();
                 break;
         }
     }

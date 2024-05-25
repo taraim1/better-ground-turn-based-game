@@ -38,6 +38,9 @@ public class Character : MonoBehaviour
     private UI_bar_slider health_slider;
     [DoNotSerialize]
     private UI_bar_slider willpower_slider;
+    [DoNotSerialize]
+    public bool isEnemyCharacter;
+
     public int get_max_health_of_level(int level)
     {
         if (level > max_health.Count)
@@ -76,7 +79,7 @@ public class Character : MonoBehaviour
         willpower_slider.slider.value = willpower_slider.slider.maxValue;
     }
 
-    public void Damage(int value) // 대미지 주는 메소드
+    public void Damage_health(int value) // 체력 대미지 주는 메소드
     {
         current_health -= value;
         if (current_health <= 0) 
@@ -84,6 +87,15 @@ public class Character : MonoBehaviour
             current_health = 0;
             print("캐릭터 사망");
         }
+
+        // 체력바 업데이트
+        health_slider.slider.value = current_health;
+
+    }
+
+    public void Damage_willpower(int value) // 정신력 대미지 주는 메소드
+    {
+
         current_willpower -= value;
         if (current_willpower <= 0)
         {
@@ -91,9 +103,24 @@ public class Character : MonoBehaviour
             print("캐릭터 패닉");
         }
 
-        // 체력바, 정신력바 업데이트
-        health_slider.slider.value = current_health;
+        // 정신력바 업데이트
         willpower_slider.slider.value = current_willpower;
 
+    }
+
+    // 카드 사용시 타깃 설정
+    private void OnMouseEnter()
+    {
+        if (BattleCalcManager.instance.IsDraggingCard) 
+        {
+            BattleCalcManager.instance.Receive_target(this);
+        }
+    }
+    private void OnMouseExit()
+    {
+        if (BattleCalcManager.instance.IsDraggingCard)
+        {
+            BattleCalcManager.instance.clear_target();
+        }
     }
 }

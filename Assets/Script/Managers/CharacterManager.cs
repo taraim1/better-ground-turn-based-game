@@ -105,6 +105,9 @@ public class CharacterManager : Singletone<CharacterManager>
             Character character = obj.GetComponent<Character>();
             JsonUtility.FromJsonOverwrite(load_character_from_json(PartyManager.instance.get_charactor_code(i)), character);
 
+            // 캐릭터 적 아군 판별하는 변수 설정
+            character.isEnemyCharacter = false;
+
             // 플레이어블 캐릭터 오브젝트를 BattleManager의 리스트에 넣기
             BattleManager.instance.playable_characters.Add(obj);
 
@@ -129,7 +132,9 @@ public class CharacterManager : Singletone<CharacterManager>
             // 적 데이터를 불러와 BattleManager의 적 리스트에 넣기
             Character character = obj.GetComponent<Character>();
             JsonUtility.FromJsonOverwrite(load_character_from_json(enemySettingSO.enemy_Settigs[stage_index].enemy_Codes[i]), character);
-            
+
+            // 캐릭터 적 아군 판별하는 변수 설정
+            character.isEnemyCharacter = true;
 
             // 적 데이터를 AI에 연결
             obj.GetComponent<EnemyAI>().enemy = character;

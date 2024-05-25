@@ -7,12 +7,10 @@ using UnityEngine.UI;
 
 public class enemy_skillCard_slot : MonoBehaviour, IPointerDownHandler, IPointerEnterHandler, IPointerExitHandler
 {
-    public Image illust;
+    public SpriteRenderer illust;
     public GameObject card_obj;
     public GameObject enemy_Obj;
     [SerializeField] private LineRenderer lineRenderer;
-    [SerializeField] private Sprite selected_sprite;
-    [SerializeField] private Sprite origin_sprite;
     [SerializeField] private Image frame;
 
     // 위치 두 개를 주면 라인렌더러를 그려줌
@@ -52,8 +50,6 @@ public class enemy_skillCard_slot : MonoBehaviour, IPointerDownHandler, IPointer
         {
             // 이 슬롯의 카드를 카드 판정 대상으로
             BattleCalcManager.instance.Receive_target(card_obj.GetComponent<card>());
-            // 선택 스프라이트로
-            frame.sprite = selected_sprite;
             // 적 카드 강조 해제
             BattleEventManager.Trigger_event("enemy_skill_card_deactivate");
             // 이 슬롯의 카드를 활성화 위치로
@@ -67,21 +63,18 @@ public class enemy_skillCard_slot : MonoBehaviour, IPointerDownHandler, IPointer
     {
         if (BattleCalcManager.instance.IsDraggingCard) // 카드 드래그 중이면
         {
+            // 타겟 설정 해제
+            BattleCalcManager.instance.clear_target();
             // 적 카드 강조 해제
             BattleEventManager.Trigger_event("enemy_skill_card_deactivate");
-            // 원래 스프라이트로
-            frame.sprite = origin_sprite;
         }
 
     }
 
-    // 스킬 판정이 시작되면 실행됨
-    private void skill_clash() 
+    // 스킬이 사용되면 시작되면 실행됨
+    private void skill_used() 
     {
-        // 적 카드 강조 해제
-        BattleEventManager.Trigger_event("enemy_skill_card_deactivate");
-        // 원래 스프라이트로
-        frame.sprite = origin_sprite;
+        // 나중에 채워질 예정
     }
 
 
@@ -90,12 +83,12 @@ public class enemy_skillCard_slot : MonoBehaviour, IPointerDownHandler, IPointer
         lineRenderer.enabled = false;
         lineRenderer.startWidth = 0.1f;
         lineRenderer.endWidth = 0.1f;
-        BattleEventManager.skill_clash_started += skill_clash;
+        BattleEventManager.skill_used += skill_used;
     }
 
     private void OnDisable()
     {
         lineRenderer.enabled = false;
-        BattleEventManager.skill_clash_started -= skill_clash;
+        BattleEventManager.skill_used -= skill_used;
     }
 }

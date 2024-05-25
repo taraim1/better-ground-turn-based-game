@@ -94,8 +94,8 @@ public class DetectRay : MonoBehaviour
             {
                 GameObject gameObj = clicked_collider.gameObject;
 
-                // 스킬 승패 판정
-                BattleCalcManager.instance.Calc_skill_clash();
+                // 스킬 사용 판정
+                BattleCalcManager.instance.Calc_skill_use();
             }
         }
     }
