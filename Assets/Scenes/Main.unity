@@ -1972,6 +1972,8 @@ MonoBehaviour:
     type: 3}
   layoutGroup_prefab: {fileID: 3457913086231521101, guid: 56ef78f845a1e4c49a12f8416008f26f,
     type: 3}
+  panic_sign_prefab: {fileID: 3271687678273936230, guid: 03168627a369be24785262442d7615a6,
+    type: 3}
 --- !u!1 &1375931199
 GameObject:
   m_ObjectHideFlags: 0

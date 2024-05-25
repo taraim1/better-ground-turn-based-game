@@ -11,6 +11,7 @@ public class BattleUI_Manager : Singletone<BattleUI_Manager>
     public GameObject willpower_bar_prefab;
     public GameObject skill_power_meter_prefab;
     public GameObject layoutGroup_prefab;
+    public GameObject panic_sign_prefab;
 
     GameObject canvas;
 
@@ -42,10 +43,15 @@ public class BattleUI_Manager : Singletone<BattleUI_Manager>
             character.Set_UI_bars();
         }
 
-        // 스킬 파워 표기하는 거
+        // 스킬 파워 표기하는 거 생성
         GameObject skill_meter = Instantiate(skill_power_meter_prefab, new Vector3(0, 0, 0), Quaternion.identity, canvas.transform);
         character.skill_power_meter = skill_meter.GetComponent<skill_power_meter>();
         character.skill_power_meter.Setup(character_obj);
+
+        // 패닉 사인 생성
+        GameObject panic_sign = Instantiate(panic_sign_prefab, new Vector3(0, 0, 0), Quaternion.identity, canvas.transform);
+        character.panic_Sign = panic_sign.GetComponent<panic_sign>();
+        character.panic_Sign.Setup(character_obj);
 
         // 적이면 적의 스킬 슬롯 레이아웃그룹 만듦
         if (isEnemy) 

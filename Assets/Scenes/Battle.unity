@@ -1027,6 +1027,7 @@ GameObject:
   - component: {fileID: 1151857264}
   - component: {fileID: 1151857266}
   - component: {fileID: 1151857265}
+  - component: {fileID: 1151857267}
   m_Layer: 0
   m_Name: turn_end_button
   m_TagString: Untagged
@@ -1093,6 +1094,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1151857263}
   m_CullTransparentMesh: 1
+--- !u!114 &1151857267
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1151857263}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 83ad407af81daf94ba6d2276aca1e176, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1351851579
 GameObject:
   m_ObjectHideFlags: 0

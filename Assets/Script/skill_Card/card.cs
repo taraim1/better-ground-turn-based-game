@@ -112,7 +112,7 @@ public class card : MonoBehaviour
                     CardManager.instance.Aline_cards(CardManager.instance.active_index);
 
                 }
-                // 아니면
+                // 드래그 중이 아니면
                 else 
                 {
                     // 카드 하이라이트 or 하이라이트 해제
@@ -138,8 +138,8 @@ public class card : MonoBehaviour
                 yield break;
             }
             
-            // 마우스를 안 뗀 상태로 일정 시간이 지나면 드래그 기능 시작
-            if (dragging_time >= Util.drag_time_standard && !isDraggingStarted ) 
+            // 마우스를 안 뗀 상태로 일정 시간이 지나면 드래그 기능 시작 (패닉이 아니어야 함)
+            if (dragging_time >= Util.drag_time_standard && !isDraggingStarted && !owner.GetComponent<Character>().isPanic) 
             {
                 // 모든 카드를 원래 order로 
                 CardManager.instance.Set_origin_order(CardManager.instance.active_index);
@@ -147,7 +147,6 @@ public class card : MonoBehaviour
                 // 하이라이트된 카드 해제
                 CardManager.instance.highlighted_card = null;
                 drag_card();
-
             }
 
             dragging_time += 0.01f;
@@ -164,7 +163,7 @@ public class card : MonoBehaviour
         // 드래그 포인터로 카드 데이터 넘겨줌
         dragPointer.GetComponent<drag_pointer>().cards = Card;
         // 카드 판정기로 드래그 하는 중이라는 정보, 카드 데이터 넘겨줌
-        BattleCalcManager.instance.Receive_dragging(this);
+        BattleCalcManager.instance.set_using_card(this);
 
         CardManager.instance.Aline_cards(CardManager.instance.active_index);
     }

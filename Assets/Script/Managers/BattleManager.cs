@@ -19,7 +19,7 @@ public class BattleManager : Singletone<BattleManager> // 싱글톤임
     public Vector3[] playable_character_position_settings = new Vector3[4]; //플레이어블 캐릭터 스폰 위치
     public Vector3[] enemy_character_position_settings = new Vector3[4]; //적 캐릭터 스폰 위치
 
-    private GameObject cost_meter; // 코스트 양 보여주는 오브젝트
+    private cost_meter cost_meter; // 코스트 양 보여주는 오브젝트
 
     // 전투 중인 플레이어블 캐릭터의 게임오브젝트 리스트
     public List<GameObject> playable_characters = new List<GameObject>();
@@ -30,11 +30,11 @@ public class BattleManager : Singletone<BattleManager> // 싱글톤임
 
     public enum phases // 한 턴의 페이즈 모음
     { 
-        turn_start_effect_phase,
+        turn_start_phase,
         enemy_skill_setting_phase,
         player_skill_phase,
         enemy_skill_phase,
-        turn_end_effect_phase
+        turn_end_phase
     }
 
     IEnumerator battle() //전투 코루틴
@@ -44,7 +44,6 @@ public class BattleManager : Singletone<BattleManager> // 싱글톤임
         playable_characters.Clear();
         enemy_characters.Clear();
         hand_data.Clear();
-        current_phase = phases.turn_start_effect_phase;
 
         // 캐릭터 오브젝트 및 Character 인스턴스 생성 (아군 / 적 모두)
         CharacterManager.instance.spawn_character(0);
@@ -52,8 +51,8 @@ public class BattleManager : Singletone<BattleManager> // 싱글톤임
         // 카드 덱 세팅
         CardManager.instance.Setup_all();
 
-        // 초기 패 세팅 (2장 + turn_start_phase 1장 뽑음)
-        for (int i = 0; i < hand_data.Count; i++) 
+        // 초기 패 세팅 (여기서 1장 + turn_start_phase 1장 뽑음)
+        for (int i = 0; i < playable_characters.Count; i++) 
         {
             for (int j = 0; j < 1; j++) 
             {
@@ -62,8 +61,8 @@ public class BattleManager : Singletone<BattleManager> // 싱글톤임
         }
 
         // 초기 코스트 설정
-        cost_meter = GameObject.Find("cost_meter");
-        cost_meter.GetComponent<cost_meter>().Setup(4, 4);
+        cost_meter = GameObject.Find("cost_meter").GetComponent<cost_meter>();
+        cost_meter.Setup(4, 4);
 
         // 캐릭터들의 현재 체력, 정신력 초기화
         for (int i = 0; i < playable_characters.Count; i++) 
@@ -92,20 +91,28 @@ public class BattleManager : Singletone<BattleManager> // 싱글톤임
     // 턴 시작 페이즈
     IEnumerator turn_start_phase() 
     {
-        current_phase = phases.turn_start_effect_phase;
+        current_phase = phases.turn_start_phase;
 
         // 카드 1장 뽑음
-        for (int i = 0; i < hand_data.Count; i++)
+        for (int i = 0; i < playable_characters.Count; i++)
         {
-            for (int j = 0; j < 2; j++)
+            for (int j = 0; j < 1; j++)
             {
                 CardManager.instance.Summon_card(i);
             }
         }
 
+        // 코스트 4 증가
+        cost_meter.Current_cost += 4;
+
         // 적 스킬 설정 시작
         StartCoroutine(enemy_skill_setting_phase());
+
+        // 턴 시작 이벤트 날림
+        BattleEventManager.Trigger_event("turn_start_phase"); 
+
         yield break;
+
     }
 
     // 적 스킬 설정 페이즈
@@ -113,6 +120,8 @@ public class BattleManager : Singletone<BattleManager> // 싱글톤임
     {
         enemy_skill_set_count = 0;
         current_phase = phases.enemy_skill_setting_phase;
+        yield return new WaitForSeconds(0.01f); // 패닉 관련 버그 때문에 잠시 쉼
+
         BattleEventManager.Trigger_event("Enemy_skill_setting_phase");
 
         // 스킬 설정 끝나는 거 감지
@@ -124,7 +133,7 @@ public class BattleManager : Singletone<BattleManager> // 싱글톤임
                 yield break;
             }
 
-            yield return new WaitForSeconds(0.02f);
+            yield return new WaitForSeconds(0.01f);
         }
         
     }
@@ -137,9 +146,52 @@ public class BattleManager : Singletone<BattleManager> // 싱글톤임
     }
 
     // 적 스킬 사용 페이즈
-    IEnumerator enemy_skill_phase()
+    public IEnumerator enemy_skill_phase()
     {
         current_phase = phases.enemy_skill_phase;
+
+        // 카드 하이라이트들 해제
+        CardManager.instance.Change_active_hand(-1);
+        BattleEventManager.Trigger_event("enemy_skill_card_deactivate");
+
+        // 적의 남은 카드들을 순서대로 사용
+        for (int i = 0; i < enemy_characters.Count; i++) 
+        {
+            EnemyAI AI = enemy_characters[i].GetComponent<EnemyAI>();
+
+
+            for (int j = 0; j < AI.using_skill_Objects.Count; j++) 
+            {
+                card card = AI.using_skill_Objects[j].GetComponent<card>();
+
+                if (card.Card.isDirectUsable) // 직접 사용 가능인 카드면 사용
+                {
+                    BattleCalcManager.instance.set_using_card(card);
+                    BattleCalcManager.instance.set_target(card.target.GetComponent<Character>());
+                    BattleCalcManager.instance.Calc_enemy_turn_skill_use();
+                }
+
+                // 카드 파괴
+                CardManager.instance.Destroy_card(card);
+
+
+                yield return new WaitForSeconds(0.5f);
+            }
+        }
+
+        // 스킬 사용 판정 초기화
+        BattleCalcManager.instance.Clear_all();
+
+        // 턴 끝나는 페이즈로
+        StartCoroutine(turn_end_phase());
+
+        yield break;
+    }
+
+    IEnumerator turn_end_phase() 
+    {
+        // 다음 턴 시작 페이즈로
+        StartCoroutine(turn_start_phase());
         yield break;
     }
 

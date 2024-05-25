@@ -22,22 +22,20 @@ public class BattleCalcManager : Singletone<BattleCalcManager>
     [SerializeField]
     cost_meter cost_Meter;
 
-    // 카드 드래그중인지 저장
-    private bool isDraggingCard = false;
-    public bool IsDraggingCard { get { return isDraggingCard; } }
+    // 카드 사용중인지 저장
+    private bool isUsingCard = false;
+    public bool IsUsingCard { get { return isUsingCard; } }
 
-    // 카드 드래그 값 받아서 판정값 초기화하는 메소드
-    public void Receive_dragging(card dragging_card) 
+    // 사용하는 카드값 받아서 판정 시작하는 메소드
+    public void set_using_card(card usinging_card) 
     { 
-        using_card = dragging_card;
-        target_card = null;
-        target_character = null;
-        isDraggingCard = true;
-
+        using_card = usinging_card;
+        clear_target();
+        isUsingCard = true;
     }
 
     // 판정 대상 받는 메소드
-    public void Receive_target<T>(T target)
+    public void set_target<T>(T target)
     {
 
         if (target is card) 
@@ -59,21 +57,27 @@ public class BattleCalcManager : Singletone<BattleCalcManager>
         target_character = null;
     }
 
+    public void Clear_all() // 모두 초기화하는 메소드
+    {
+        clear_target();
+        isUsingCard = false;
+    }
+
     // 카드 사용시 경우의 수 판정함
     public void Calc_skill_use()
     {
         // 카드 드래그 중이 아니면
-        if (!isDraggingCard) { return; }
+        if (!isUsingCard) { return; }
         // 코스트 부족하면
         if (cost_Meter.Current_cost < using_card.Card.cost) { return; }
 
 
-        isDraggingCard = false;
+        isUsingCard = false;
 
         // 스킬 vs 스킬이면
         if (target_card != null)
         {
-            // 판정 시작
+
 
             // 적 카드 강조 해제
             BattleEventManager.Trigger_event("enemy_skill_card_deactivate");
@@ -109,8 +113,26 @@ public class BattleCalcManager : Singletone<BattleCalcManager>
 
     }
 
+    // 적이 턴 끝나고 스킬 사용시 판정
+    public void Calc_enemy_turn_skill_use()
+    {
+        using_card_power = Random.Range(using_card.minpower, using_card.maxpower + 1);
+        apply_direct_use_result(using_card, target_character, using_card_power);
+    }
+
     private void apply_direct_use_result(card using_card, Character target_character, int power) // 캐릭터에 직접 사용한 카드 결과 적용해줌
     {
+        skill_power_meter PWmeter = using_card.owner.GetComponent<Character>().skill_power_meter;
+
+        // 같은 캐릭터가 텀을 적게 두고 사용시 현재 돌아가는 show를 멈춰서 너무 빨리 숫자가 사라지는 현상을 해결
+        if (PWmeter.running_show != null) 
+        {
+            PWmeter.StopCoroutine(PWmeter.running_show);
+        }
+
+        // 스킬 값 보여주기
+        PWmeter.running_show = StartCoroutine(using_card.owner.GetComponent<Character>().skill_power_meter.Show(power.ToString()));
+
         switch (using_card.Card.behavior_type)
         {
             case ("공격"):
@@ -118,6 +140,7 @@ public class BattleCalcManager : Singletone<BattleCalcManager>
                 target_character.Damage_willpower(power);
                 break;
         }
+
 
         // 카드 제거
         CardManager.instance.Destroy_card(using_card);
@@ -135,10 +158,16 @@ public class BattleCalcManager : Singletone<BattleCalcManager>
         string win_behavior;
         string los_behavior;
 
+        skill_power_meter PWmeter1 = using_card.owner.GetComponent<Character>().skill_power_meter;
+        skill_power_meter PWmeter2 = target_card.owner.GetComponent<Character>().skill_power_meter;
+
+        // 같은 캐릭터가 텀을 적게 두고 사용시 현재 돌아가는 show를 멈춰서 너무 빨리 숫자가 사라지는 현상을 해결
+        if (PWmeter1.running_show != null) { PWmeter1.StopCoroutine(PWmeter1.running_show); }
+        if (PWmeter2.running_show != null) { PWmeter2.StopCoroutine(PWmeter2.running_show); }
 
         // 스킬 값 보여주기
-        StartCoroutine(using_card.owner.GetComponent<Character>().skill_power_meter.Show(power1.ToString()));
-        StartCoroutine(target_card.owner.GetComponent<Character>().skill_power_meter.Show(power2.ToString()));
+        PWmeter1.running_show = StartCoroutine(using_card.owner.GetComponent<Character>().skill_power_meter.Show(power1.ToString()));
+        PWmeter2.running_show = StartCoroutine(target_card.owner.GetComponent<Character>().skill_power_meter.Show(power2.ToString()));
 
         // 무승부
         if (power1 == power2)

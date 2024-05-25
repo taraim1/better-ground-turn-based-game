@@ -33,8 +33,8 @@ public class enemy_skillCard_slot : MonoBehaviour, IPointerDownHandler, IPointer
     // 이 UI를 눌렀을 때
     public void OnPointerDown(PointerEventData eventData) 
     {
-        // 왼쪽 클릭을 하면
-        if (eventData.button == PointerEventData.InputButton.Left)
+        // 왼쪽 클릭을 하고 현재 페이즈가 플레이어 스킬 사용 페이즈여만 작동됨
+        if (eventData.button == PointerEventData.InputButton.Left && BattleManager.instance.current_phase == BattleManager.phases.player_skill_phase)
         {
             // 적 카드 강조 해제
             BattleEventManager.Trigger_event("enemy_skill_card_deactivate");
@@ -46,10 +46,10 @@ public class enemy_skillCard_slot : MonoBehaviour, IPointerDownHandler, IPointer
     // 이 UI 위에 마우스를 대면
     public void OnPointerEnter(PointerEventData eventData)
     {
-        if (BattleCalcManager.instance.IsDraggingCard) // 카드 드래그 중이면
+        if (BattleCalcManager.instance.IsUsingCard) // 카드 사용 중이면
         {
             // 이 슬롯의 카드를 카드 판정 대상으로
-            BattleCalcManager.instance.Receive_target(card_obj.GetComponent<card>());
+            BattleCalcManager.instance.set_target(card_obj.GetComponent<card>());
             // 적 카드 강조 해제
             BattleEventManager.Trigger_event("enemy_skill_card_deactivate");
             // 이 슬롯의 카드를 활성화 위치로
@@ -61,7 +61,7 @@ public class enemy_skillCard_slot : MonoBehaviour, IPointerDownHandler, IPointer
     // 이 UI 위에 마우스를 대었다가 나가면
     public void OnPointerExit(PointerEventData eventData)
     {
-        if (BattleCalcManager.instance.IsDraggingCard) // 카드 드래그 중이면
+        if (BattleCalcManager.instance.IsUsingCard) // 카드 사용 중이면
         {
             // 타겟 설정 해제
             BattleCalcManager.instance.clear_target();

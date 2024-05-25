@@ -15,8 +15,8 @@ public class DetectRay : MonoBehaviour
 
             Collider2D clicked_collider = Physics2D.OverlapPoint(pos);
 
-            // 오브젝트 클릭 감지
-            if (clicked_collider != null) 
+            // 오브젝트 누르는 거 감지, 현재 페이즈가 플레이어 스킬 사용 페이즈여만 작동됨
+            if (clicked_collider != null && BattleManager.instance.current_phase == BattleManager.phases.player_skill_phase) 
             {
                 GameObject gameObj = clicked_collider.gameObject;
 
@@ -24,16 +24,18 @@ public class DetectRay : MonoBehaviour
                 if (gameObj.tag == "PlayerCharacter")
                 {
                     CardManager.instance.highlighted_card = null;
-                    CardManager.instance.Change_active_hand(gameObj.GetComponent<Character_Obj>().Character_index);
+                    CardManager.instance.Change_active_hand(gameObj.GetComponent<Character>().Character_index);
+                    CardManager.instance.Set_origin_order(CardManager.instance.active_index);
                 }
                 // 전투에서 카드 클릭 시
                 else if (gameObj.tag == "SkillCard")
                 {
-                    // 아군 카드면
-                    if (gameObj.GetComponent<card>().isEnemyCard == false)
+                    card card = gameObj.GetComponent<card>();
+                    // 아군 카드이면
+                    if (card.isEnemyCard == false)
                     {
                         // 카드 드래그 감지 시작
-                        gameObj.GetComponent<card>().running_drag = StartCoroutine(gameObj.GetComponent<card>().detect_drag());
+                        card.running_drag = StartCoroutine(card.detect_drag());
 
                         // 적 카드 강조 해제
                         BattleEventManager.Trigger_event("enemy_skill_card_deactivate");
@@ -41,7 +43,6 @@ public class DetectRay : MonoBehaviour
                     // 적군 카드면
                     else
                     {
-                        card card = gameObj.GetComponent<card>();
                         // 적 카드 강조 해제
                         if (card.state == card.current_mode.highlighted_enemy_card)
                         {
@@ -84,7 +85,8 @@ public class DetectRay : MonoBehaviour
             }
         }
 
-        if (Input.GetMouseButtonUp(0)) 
+        // 오브젝트 눌렀다 떼는 거 감지, 현재 페이즈가 플레이어 스킬 사용 페이즈여만 작동됨
+        if (Input.GetMouseButtonUp(0) && BattleManager.instance.current_phase == BattleManager.phases.player_skill_phase) 
         {
             Vector2 pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 

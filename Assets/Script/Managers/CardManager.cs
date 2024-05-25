@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
 using UnityEngine;
+using DG.Tweening;
 using UnityEngine.SceneManagement;
 
 public class CardManager : Singletone<CardManager>
@@ -140,14 +141,21 @@ public class CardManager : Singletone<CardManager>
         // 플레이어 카드면
         else 
         {
-            BattleManager.instance.hand_data[card.owner.GetComponent<Character_Obj>().Character_index].Remove(card);
+            BattleManager.instance.hand_data[card.owner.GetComponent<Character>().Character_index].Remove(card);
         }
 
-        // 카드 오브젝트 삭제
+        // 카드 드래그 취소
         if (card.running_drag != null) 
         {
             card.StopCoroutine(card.running_drag);
+            card.running_drag = null;
         }
+
+        // 카드 이동 취소
+        card.transform.DOKill();
+
+
+        // 카드 오브젝트 삭제
         Destroy(card.gameObject);
 
         // 카드 정렬

@@ -95,7 +95,7 @@ public class CharacterManager : Singletone<CharacterManager>
             GameObject obj = Instantiate(playable_character_base, spawn_pos, Quaternion.identity);
 
             // 플레이어블 캐릭터 오브젝트 번호 지정
-            obj.GetComponent<Character_Obj>().Character_index = i;
+            obj.GetComponent<Character>().Character_index = i;
 
             // 패 추가
             List<card> hand = new List<card>();
@@ -127,7 +127,7 @@ public class CharacterManager : Singletone<CharacterManager>
             GameObject obj = Instantiate(enemy_character_base, spawn_pos, Quaternion.identity);
 
             // 적 캐릭터 오브젝트 번호 지정
-            obj.GetComponent<Character_Obj>().Character_index = i;
+            obj.GetComponent<Character>().Character_index = i;
 
             // 적 데이터를 불러와 BattleManager의 적 리스트에 넣기
             Character character = obj.GetComponent<Character>();
@@ -149,5 +149,40 @@ public class CharacterManager : Singletone<CharacterManager>
         BattleManager.instance.is_Characters_spawned = true;
     }
 
+    public void kill_character(Character character) // 캐릭터 죽이는 메소드 
+    {
+        // UI 없애기
+        Destroy(character.health_bar);
+        Destroy(character.willpower_bar);
+        Destroy(character.panic_Sign.gameObject);
 
+        // 아군 캐릭터면
+        if (!character.isEnemyCharacter)
+        {
+            // 캐릭터의 패 없애기
+            for (int i = 0; i < BattleManager.instance.hand_data[character.Character_index].Count; i++)
+            {
+                CardManager.instance.Destroy_card(BattleManager.instance.hand_data[character.Character_index][i]);
+            }
+
+            // 아군 캐릭터 리스트에서 없애기
+            BattleManager.instance.playable_characters.Remove(character.gameObject);
+        }
+
+        else // 적 캐릭터면
+        {
+            // 사용하는 스킬 카드 없애기
+            List<GameObject> enemy_skills = character.gameObject.GetComponent<EnemyAI>().using_skill_Objects;
+            for (int i = 0; i < enemy_skills.Count; i++)
+            {
+                CardManager.instance.Destroy_card(enemy_skills[i].GetComponent<card>());
+            }
+
+            // 적 캐릭터 리스트에서 없애기
+            BattleManager.instance.enemy_characters.Remove(character.gameObject);
+        }
+    
+        // 캐릭터 오브젝트 없애기
+        Destroy(character.gameObject);
+    }
 }

@@ -37,8 +37,7 @@ public class EnemyAI : MonoBehaviour
         return result;
     }
 
-    // 이번 턴의 스킬을 설정하는 총괄 메소드
-    private void set_skill()
+    public void clear_skills() 
     {
         skill_slots.Clear();
         foreach (GameObject card_obj in using_skill_Objects)
@@ -46,7 +45,22 @@ public class EnemyAI : MonoBehaviour
             Destroy(card_obj);
         }
         using_skill_Objects.Clear();
-        List<CardManager.skillcard_code> skill_list = get_action();
+    }
+
+    // 이번 턴의 스킬을 설정하는 총괄 메소드
+    private void set_skill()
+    {
+        List<CardManager.skillcard_code> skill_list = new List<CardManager.skillcard_code>();
+
+        // 이전 턴 스킬 다 삭제
+        clear_skills();
+
+        // 패닉이 아니면 행동함
+        if (!gameObject.GetComponent<Character>().isPanic)
+        {
+            skill_list = get_action();
+        }
+
 
         for (int i = 0; i < skill_list.Count; i++) 
         {

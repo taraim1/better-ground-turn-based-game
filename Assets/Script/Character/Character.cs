@@ -21,15 +21,17 @@ public class Character : MonoBehaviour
     public int level;
     [SerializeField]
     private List<int> max_health = new List<int>() { 0, 30 };
-    public int current_health;
     [SerializeField]
     private List<int> max_willpower = new List<int>() { 0, 15 };
-    public int current_willpower;
     public bool is_character_unlocked;
     [SerializeField]
     public CardManager.skillcard_code[] deck = new CardManager.skillcard_code[6];
 
     // 아래는 게임이 진행되면서 바뀌는 것들
+    [DoNotSerialize]
+    public int current_health;
+    [DoNotSerialize]
+    public int current_willpower;
     [DoNotSerialize]
     public GameObject health_bar;
     [DoNotSerialize]
@@ -40,7 +42,15 @@ public class Character : MonoBehaviour
     private UI_bar_slider willpower_slider;
     [DoNotSerialize]
     public skill_power_meter skill_power_meter;
+    [DoNotSerialize]
     public bool isEnemyCharacter;
+    [DoNotSerialize]
+    // 전투시 캐릭터 오브젝트의 번호
+    public int Character_index;
+    [DoNotSerialize]
+    public panic_sign panic_Sign;
+    public bool isPanic;
+    private int remaining_panic_turn;
 
     public int get_max_health_of_level(int level)
     {
@@ -83,10 +93,10 @@ public class Character : MonoBehaviour
     public void Damage_health(int value) // 체력 대미지 주는 메소드
     {
         current_health -= value;
-        if (current_health <= 0) 
+
+        if (current_health <= 0) // 사망
         {
-            current_health = 0;
-            print("캐릭터 사망");
+            CharacterManager.instance.kill_character(this);
         }
 
         // 체력바 업데이트
@@ -99,10 +109,18 @@ public class Character : MonoBehaviour
     {
 
         current_willpower -= value;
-        if (current_willpower <= 0)
+
+        if (current_willpower <= 0) // 패닉
         {
             current_willpower = 0;
-            print("캐릭터 패닉");
+            isPanic = true;
+            panic_Sign.show();
+            remaining_panic_turn = 1;
+
+            if (isEnemyCharacter) // 적이면 쓰는 스킬 다 제거
+            {
+                gameObject.GetComponent<EnemyAI>().clear_skills();
+            }
         }
 
         // 정신력바 업데이트
@@ -113,16 +131,48 @@ public class Character : MonoBehaviour
     // 카드 사용시 타깃 설정
     private void OnMouseEnter()
     {
-        if (BattleCalcManager.instance.IsDraggingCard) 
+        if (BattleCalcManager.instance.IsUsingCard) 
         {
-            BattleCalcManager.instance.Receive_target(this);
+            BattleCalcManager.instance.set_target(this);
         }
     }
     private void OnMouseExit()
     {
-        if (BattleCalcManager.instance.IsDraggingCard)
+        if (BattleCalcManager.instance.IsUsingCard)
         {
             BattleCalcManager.instance.clear_target();
         }
+    }
+
+    // 턴 시작시 발동되는 메소드
+    private void turn_start() 
+    {
+        // 패닉 해제 or 패닉 턴 감소
+        if (isPanic)
+        {
+
+            if (remaining_panic_turn == 0)
+            {
+                isPanic = false;
+                panic_Sign.hide();
+                Damage_willpower(-((get_max_willpower_of_level(level) + 1) / 2)); // 정신력 회복
+            }
+            else 
+            {
+                remaining_panic_turn -= 1;
+            }
+
+        }
+
+        
+    }
+
+    private void Awake()
+    {
+        BattleEventManager.turn_start_phase += turn_start;
+    }
+    private void OnDisable()
+    {
+        BattleEventManager.turn_start_phase -= turn_start;
     }
 }
