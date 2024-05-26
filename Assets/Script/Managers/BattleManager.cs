@@ -175,6 +175,22 @@ public class BattleManager : Singletone<BattleManager> // 싱글톤임
                 CardManager.instance.Destroy_card(card);
 
 
+                // 남은 스킬 중 대상이 죽은 경우가 있다면 그것도 파괴
+                foreach (GameObject enemy_obj in enemy_characters) 
+                {
+                    EnemyAI ai = enemy_obj.GetComponent<EnemyAI>();
+
+                    foreach (GameObject remain_card_obj in ai.using_skill_Objects) 
+                    {
+                       
+                        if (!remain_card_obj.GetComponent<card>().target) 
+                        {
+                            Debug.Log("작동함");
+                            CardManager.instance.Destroy_card(card); // 여기가 작동을 안함
+                        }
+                    }
+                }
+
                 yield return new WaitForSeconds(0.5f);
             }
         }

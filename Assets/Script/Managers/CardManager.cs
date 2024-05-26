@@ -57,7 +57,7 @@ public class CardManager : Singletone<CardManager>
         cards_buffer.Clear();
 
         // 버퍼에 카드들 추가
-        for (int i = 0; i < BattleManager.instance.hand_data.Count; i++) 
+        for (int i = 0; i < BattleManager.instance.playable_characters.Count; i++) 
         {
             List<Cards> temp = new List<Cards>();
 
