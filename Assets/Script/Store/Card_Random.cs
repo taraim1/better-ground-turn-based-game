@@ -140,16 +140,16 @@ public class Random_Card : MonoBehaviour
         {
             Grade_Result.Add(Card_Grade_pick(Card_Percent, Card_Grade));
 
-            //Card_Results.Add(Card_Pick_Which(Grade_Result[i]));
+            Card_Results.Add(Card_Pick_Which(Grade_Result[i]));
 
             Card_UI card_UI = Instantiate(cardPrefab, Card_Summon).GetComponent<Card_UI>();
 
             Card_Prefabs.Add(card_UI);
 
             card_UI.Card_Grade_set(Grade_Result[i]);
-            if(Grade_Result[i] != null)
+            if(Card_Results[i] != null)
             {
-                card_UI.Card_UI_Set(Card_Pick_Which(Grade_Result[i]));
+                card_UI.Card_UI_Set(Card_Results[i]);
             }
             else
             {
