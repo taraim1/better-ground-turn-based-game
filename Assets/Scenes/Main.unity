@@ -4238,6 +4238,12 @@ MonoBehaviour:
     type: 3}
   willpower_bar_prefab: {fileID: 953389889809876917, guid: 036998866c0c8fb4d9ac1e6ae5075a2f,
     type: 3}
+  skill_power_meter_prefab: {fileID: 3271687678273936230, guid: 6923df529ad6cf846a48edd2b2545cad,
+    type: 3}
+  layoutGroup_prefab: {fileID: 3457913086231521101, guid: 56ef78f845a1e4c49a12f8416008f26f,
+    type: 3}
+  panic_sign_prefab: {fileID: 3271687678273936230, guid: 03168627a369be24785262442d7615a6,
+    type: 3}
 --- !u!1 &1323440088
 GameObject:
   m_ObjectHideFlags: 0
