@@ -172,7 +172,6 @@ public class BattleCalcManager : Singletone<BattleCalcManager>
         // 公铰何
         if (power1 == power2)
         {
-            Debug.Log("公铰何");
             // 墨靛 力芭
             CardManager.instance.Destroy_card(using_card);
             CardManager.instance.Destroy_card(target_card);
