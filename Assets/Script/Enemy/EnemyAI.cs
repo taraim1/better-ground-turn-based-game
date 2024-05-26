@@ -10,17 +10,14 @@ public class EnemyAI : MonoBehaviour
 
     // 적의 캐릭터 데이터
     public Character enemy;
-    // 적의 스킬 슬롯 레이아웃그룹 프리팹
-    public GameObject layoutGroup_prefab;
     // 적의 스킬 슬롯 프리팹
     public GameObject skill_slot_prefab;
     // 적이 이턴 턴에 쓸 카드 오브젝트가 들어가는 리스트
     public List<GameObject> using_skill_Objects;
 
-    GameObject layoutGroup;
+    public GameObject layoutGroup;
     // 이번 턴의 스킬 슬롯이 들어가는 리스트
     public List<GameObject> skill_slots = new List<GameObject>();
-    public GameObject canvas;
 
     // 적이 이번 턴에 쓸 스킬 카드 코드 리스트를 반환하는 메소드
     private List<CardManager.skillcard_code> get_action() 
@@ -40,8 +37,7 @@ public class EnemyAI : MonoBehaviour
         return result;
     }
 
-    // 이번 턴의 스킬을 설정하는 총괄 메소드
-    private void set_skill()
+    public void clear_skills() 
     {
         skill_slots.Clear();
         foreach (GameObject card_obj in using_skill_Objects)
@@ -49,7 +45,22 @@ public class EnemyAI : MonoBehaviour
             Destroy(card_obj);
         }
         using_skill_Objects.Clear();
-        List<CardManager.skillcard_code> skill_list = get_action();
+    }
+
+    // 이번 턴의 스킬을 설정하는 총괄 메소드
+    private void set_skill()
+    {
+        List<CardManager.skillcard_code> skill_list = new List<CardManager.skillcard_code>();
+
+        // 이전 턴 스킬 다 삭제
+        clear_skills();
+
+        // 패닉이 아니면 행동함
+        if (!gameObject.GetComponent<Character>().isPanic)
+        {
+            skill_list = get_action();
+        }
+
 
         for (int i = 0; i < skill_list.Count; i++) 
         {
@@ -103,9 +114,6 @@ public class EnemyAI : MonoBehaviour
     {
         BattleEventManager.enemy_skill_setting_phase += set_skill;
         BattleEventManager.enemy_skill_card_deactivate += return_card;
-        canvas = GameObject.Find("Canvas");
-        layoutGroup = Instantiate(layoutGroup_prefab, Vector3.zero, Quaternion.identity, canvas.transform);
-        layoutGroup.GetComponent<UI_hook_up_object>().target_object = gameObject;
     }
 
     private void OnDisable()

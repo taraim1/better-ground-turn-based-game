@@ -21,6 +21,6 @@ public class PRS
 
 public class Util
 {
-    static public float drag_time_standard = 0.17f;
+    static public float drag_time_standard = 0.13f;
 }
 

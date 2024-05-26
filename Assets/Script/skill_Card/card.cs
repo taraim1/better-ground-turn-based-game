@@ -20,7 +20,6 @@ public class card : MonoBehaviour
 
 
     SpriteRenderer spriteRenderer;
-    public Sprite drag_spr;
 
     public GameObject drag_pointer;
     public GameObject target;
@@ -99,29 +98,55 @@ public class card : MonoBehaviour
         {
             
 
-            // 마우스 떼면 감지 멈춤, 카드 하이라이트 해제, 카드 드래그 해제
+            // 마우스 떼면
             if (Input.GetMouseButton(0) == false) 
             {
-                if (state == current_mode.dragging) 
+                // 모든 카드를 원래 order로 
+                CardManager.instance.Set_origin_order(CardManager.instance.active_index);
+
+                // 드래그 중이었으면
+                if (state == current_mode.dragging)
                 {
                     state = current_mode.normal;
                     CardManager.instance.highlighted_card = null;
                     CardManager.instance.Aline_cards(CardManager.instance.active_index);
-                    spriteRenderer.sprite = origin_sprite;
 
+                }
+                // 드래그 중이 아니면
+                else 
+                {
+                    // 카드 하이라이트 or 하이라이트 해제
+                    if (CardManager.instance.highlighted_card != this)
+                    {
+                        CardManager.instance.highlighted_card = this;
+                    }
+                    else
+                    {
+                        CardManager.instance.highlighted_card = null;
+                    }
+
+                    // 하이라이트된 카드 order설정
+                    if (CardManager.instance.highlighted_card != null)
+                    {
+
+                        CardManager.instance.highlighted_card.gameObject.GetComponent<element_order>().Set_highlighted_order();
+                    }
+
+                    // 카드 위치 계산 및 정렬
+                    CardManager.instance.Aline_cards(CardManager.instance.active_index);
                 }
                 yield break;
             }
             
-            // 마우스를 안 뗀 상태로 일정 시간이 지나면 드래그 기능 시작
-            if (dragging_time >= Util.drag_time_standard && !isDraggingStarted ) 
+            // 마우스를 안 뗀 상태로 일정 시간이 지나면 드래그 기능 시작 (패닉이 아니어야 함)
+            if (dragging_time >= Util.drag_time_standard && !isDraggingStarted && !owner.GetComponent<Character>().isPanic) 
             {
-
+                // 모든 카드를 원래 order로 
+                CardManager.instance.Set_origin_order(CardManager.instance.active_index);
                 isDraggingStarted = true;
                 // 하이라이트된 카드 해제
                 CardManager.instance.highlighted_card = null;
                 drag_card();
-
             }
 
             dragging_time += 0.01f;
@@ -132,14 +157,13 @@ public class card : MonoBehaviour
     void drag_card() // 카드 드래그시 실행됨
     {
         state = current_mode.dragging;
-        spriteRenderer.sprite = drag_spr;
         Vector3 mousepos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         GameObject dragPointer = Instantiate(drag_pointer, new Vector3(mousepos.x, mousepos.y, -2), Quaternion.identity);
         dragPointer.GetComponent<SpriteRenderer>().sortingOrder = 200;
         // 드래그 포인터로 카드 데이터 넘겨줌
         dragPointer.GetComponent<drag_pointer>().cards = Card;
         // 카드 판정기로 드래그 하는 중이라는 정보, 카드 데이터 넘겨줌
-        BattleCalcManager.instance.Receive_dragging(this);
+        BattleCalcManager.instance.set_using_card(this);
 
         CardManager.instance.Aline_cards(CardManager.instance.active_index);
     }

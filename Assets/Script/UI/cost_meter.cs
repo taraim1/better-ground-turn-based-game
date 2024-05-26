@@ -17,11 +17,11 @@ public class cost_meter : MonoBehaviour
         get { return current_cost; }
         set 
         {
-            current_cost += value;
+            current_cost = value;
             if (current_cost > max_cost) { current_cost = max_cost; }
             if (current_cost < 0) { current_cost = 0; }
             fill.fillAmount = ((float)current_cost / (float)max_cost);
-            tmp.text = string.Format("cost\n{0}", current_cost);
+            tmp.text = string.Format("cost\n{0} / {1}", current_cost, max_cost);
         }
             
     }

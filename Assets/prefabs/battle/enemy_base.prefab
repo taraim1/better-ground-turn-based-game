@@ -10,12 +10,12 @@ GameObject:
   m_Component:
   - component: {fileID: 3377405170695446698}
   - component: {fileID: 5621665748860569226}
-  - component: {fileID: -3370651478482805913}
   - component: {fileID: 7287670621830155501}
-  - component: {fileID: 3990429286925742260}
+  - component: {fileID: 4474393812117556330}
+  - component: {fileID: 779831556694547243}
   m_Layer: 0
-  m_Name: character_base
-  m_TagString: PlayerCharacter
+  m_Name: enemy_base
+  m_TagString: EnemyCharacter
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -76,7 +76,8 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
+  m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6,
+    type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -87,19 +88,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &-3370651478482805913
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1766090985930963044}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ccd00e758b7e24648a6d0627d4a5a6dd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Character_index: 0
 --- !u!61 &7287670621830155501
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -145,7 +133,26 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
---- !u!114 &3990429286925742260
+--- !u!114 &4474393812117556330
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1766090985930963044}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3e663e8d4b8a0754eab037738d247296, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cardsSO: {fileID: 11400000, guid: 3080a6a9f21a05b46bb959639cbd0586, type: 2}
+  enemy: {fileID: 0}
+  skill_slot_prefab: {fileID: 5858226105626517123, guid: 61a530f18f6294847adc4d56167708f2,
+    type: 3}
+  using_skill_Objects: []
+  layoutGroup: {fileID: 0}
+  skill_slots: []
+--- !u!114 &779831556694547243
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -170,3 +177,6 @@ MonoBehaviour:
   deck: 000000000000000000000000000000000000000000000000
   health_bar: {fileID: 0}
   willpower_bar: {fileID: 0}
+  skill_power_meter: {fileID: 0}
+  isEnemyCharacter: 0
+  Character_index: 0

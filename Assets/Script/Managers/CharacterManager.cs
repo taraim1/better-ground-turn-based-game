@@ -95,7 +95,7 @@ public class CharacterManager : Singletone<CharacterManager>
             GameObject obj = Instantiate(playable_character_base, spawn_pos, Quaternion.identity);
 
             // 플레이어블 캐릭터 오브젝트 번호 지정
-            obj.GetComponent<Character_Obj>().Character_index = i;
+            obj.GetComponent<Character>().Character_index = i;
 
             // 패 추가
             List<card> hand = new List<card>();
@@ -105,11 +105,14 @@ public class CharacterManager : Singletone<CharacterManager>
             Character character = obj.GetComponent<Character>();
             JsonUtility.FromJsonOverwrite(load_character_from_json(PartyManager.instance.get_charactor_code(i)), character);
 
+            // 캐릭터 적 아군 판별하는 변수 설정
+            character.isEnemyCharacter = false;
+
             // 플레이어블 캐릭터 오브젝트를 BattleManager의 리스트에 넣기
             BattleManager.instance.playable_characters.Add(obj);
 
-            // 체력바, 정신력바 생성
-            BattleUI_Manager.instance.summon_UI_bar(obj, false);
+            // 캐릭터에 붙은 UI들 생성
+            BattleUI_Manager.instance.summon_UI(obj, false);
         }
 
         // 적 캐릭터 생성
@@ -124,12 +127,14 @@ public class CharacterManager : Singletone<CharacterManager>
             GameObject obj = Instantiate(enemy_character_base, spawn_pos, Quaternion.identity);
 
             // 적 캐릭터 오브젝트 번호 지정
-            obj.GetComponent<Character_Obj>().Character_index = i;
+            obj.GetComponent<Character>().Character_index = i;
 
             // 적 데이터를 불러와 BattleManager의 적 리스트에 넣기
             Character character = obj.GetComponent<Character>();
             JsonUtility.FromJsonOverwrite(load_character_from_json(enemySettingSO.enemy_Settigs[stage_index].enemy_Codes[i]), character);
-            
+
+            // 캐릭터 적 아군 판별하는 변수 설정
+            character.isEnemyCharacter = true;
 
             // 적 데이터를 AI에 연결
             obj.GetComponent<EnemyAI>().enemy = character;
@@ -137,12 +142,47 @@ public class CharacterManager : Singletone<CharacterManager>
             // 적 캐릭터 오브젝트를 BattleManager의 리스트에 넣기
             BattleManager.instance.enemy_characters.Add(obj);
 
-            // 체력바, 정신력바 생성
-            BattleUI_Manager.instance.summon_UI_bar(obj, true);
+            // 캐릭터에 붙은 UI들 생성
+            BattleUI_Manager.instance.summon_UI(obj, true);
         }
 
         BattleManager.instance.is_Characters_spawned = true;
     }
 
+    public void kill_character(Character character) // 캐릭터 죽이는 메소드 
+    {
+        // UI 없애기
+        Destroy(character.health_bar);
+        Destroy(character.willpower_bar);
+        Destroy(character.panic_Sign.gameObject);
 
+        // 아군 캐릭터면
+        if (!character.isEnemyCharacter)
+        {
+            // 캐릭터의 패 없애기
+            for (int i = 0; i < BattleManager.instance.hand_data[character.Character_index].Count; i++)
+            {
+                CardManager.instance.Destroy_card(BattleManager.instance.hand_data[character.Character_index][i]);
+            }
+
+            // 아군 캐릭터 리스트에서 없애기
+            BattleManager.instance.playable_characters.Remove(character.gameObject);
+        }
+
+        else // 적 캐릭터면
+        {
+            // 사용하는 스킬 카드 없애기
+            List<GameObject> enemy_skills = character.gameObject.GetComponent<EnemyAI>().using_skill_Objects;
+            for (int i = 0; i < enemy_skills.Count; i++)
+            {
+                CardManager.instance.Destroy_card(enemy_skills[i].GetComponent<card>());
+            }
+
+            // 적 캐릭터 리스트에서 없애기
+            BattleManager.instance.enemy_characters.Remove(character.gameObject);
+        }
+    
+        // 캐릭터 오브젝트 없애기
+        Destroy(character.gameObject);
+    }
 }

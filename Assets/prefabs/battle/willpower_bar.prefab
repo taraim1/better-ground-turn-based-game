@@ -133,7 +133,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e42710dec93e9448bacc618c2fce2c9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  max_value_tmp: {fileID: 3235431911346895971}
+  value_tmp: {fileID: 3235431911346895971}
   slider: {fileID: 6180874969251113131}
 --- !u!1 &3907036922818367598
 GameObject:
