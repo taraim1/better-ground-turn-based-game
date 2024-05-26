@@ -14,24 +14,58 @@ public class ResourceManager : Singletone<ResourceManager>
 
         set 
         {
-            if (value >= 0) // °ñµå°ª¿¡ À½¼ö ¸ø³Ö°Ô ÇÏ±â
+            if (value >= 0) // ï¿½ï¿½å°ªï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ö°ï¿½ ï¿½Ï±ï¿½
             { 
                 gold = value;
                 write_Json_file();
             } 
-            else { Debug.Log("°ñµå´Â À½¼ö°¡ µÉ ¼ö ¾ø½À´Ï´Ù. °ñµå º¯°æÀÌ Ãë¼ÒµÇ¾ú½À´Ï´Ù."); };
+            else { Debug.Log("ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½. ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ÒµÇ¾ï¿½ï¿½ï¿½ï¿½Ï´ï¿½."); };
+        }
+    
+    }
+        [SerializeField]
+    private int gem;
+
+    public int Gem
+    {
+        get { return gem; }
+
+        set 
+        {
+            if (value >= 0) // ï¿½ï¿½å°ªï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ö°ï¿½ ï¿½Ï±ï¿½
+            { 
+                gem = value;
+                write_Json_file();
+            } 
+            else { Debug.Log("ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½. ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ÒµÇ¾ï¿½ï¿½ï¿½ï¿½Ï´ï¿½."); };
+        }
+    
+    }
+        [SerializeField]
+    private int water;
+
+    public int Water
+    {
+        get { return water; }
+
+        set 
+        {
+            if (value >= 0) // ï¿½ï¿½å°ªï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ö°ï¿½ ï¿½Ï±ï¿½
+            { 
+                water = value;
+                write_Json_file();
+            } 
+            else { Debug.Log("ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½. ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ÒµÇ¾ï¿½ï¿½ï¿½ï¿½Ï´ï¿½."); };
         }
     
     }
 
-
-
-    public void read_Json_file() //µ¥ÀÌÅÍ¸¦ JsonÆÄÀÏ¿¡¼­ ºÒ·¯¿È
+    public void read_Json_file() //ï¿½ï¿½ï¿½ï¿½ï¿½Í¸ï¿½ Jsonï¿½ï¿½ï¿½Ï¿ï¿½ï¿½ï¿½ ï¿½Ò·ï¿½ï¿½ï¿½
     {
         JsonUtility.FromJsonOverwrite(File.ReadAllText(Application.dataPath + "/Data/resource_data.json"), instance);
     }
 
-    public void write_Json_file() //µ¥ÀÌÅÍ¸¦ JsonÆÄÀÏ·Î ÀúÀå
+    public void write_Json_file() //ï¿½ï¿½ï¿½ï¿½ï¿½Í¸ï¿½ Jsonï¿½ï¿½ï¿½Ï·ï¿½ ï¿½ï¿½ï¿½ï¿½
     {
         string output = JsonUtility.ToJson(instance, true);
         File.WriteAllText(Application.dataPath + "/Data/resource_data.json", output);
