@@ -18,7 +18,7 @@ public class enemy_skillCard_slot : MonoBehaviour, IPointerDownHandler, IPointer
     {
         yield return new WaitForSeconds(0.001f); // 레이아웃그룹 적용 시간 이슈때문에 약간 지연시킴
         Vector3 objPos = transform.position;
-        lineRenderer.SetPosition(0, new Vector3(objPos.x, objPos.y, 1f));
+        lineRenderer.SetPosition(0, new Vector3(objPos.x, objPos.y, -1f));
         lineRenderer.SetPosition(1, new Vector3(target.x, target.y, 1f));
         lineRenderer.enabled = true;
         yield break;

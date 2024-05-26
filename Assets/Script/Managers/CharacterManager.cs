@@ -113,6 +113,12 @@ public class CharacterManager : Singletone<CharacterManager>
 
             // 캐릭터에 붙은 UI들 생성
             BattleUI_Manager.instance.summon_UI(obj, false);
+
+            // SPUM 데이터 불러오기
+            GameObject spPrefab = Resources.Load<GameObject>(character.SPUM_datapath);
+            character.SPUM_unit_obj = Instantiate(spPrefab, obj.transform);
+            character.SPUM_unit_obj.transform.localPosition = new Vector3(0, -0.4f, 0);
+            character.SPUM_unit_obj.transform.localScale = Vector3.one * 1.3f;
         }
 
         // 적 캐릭터 생성
@@ -144,6 +150,12 @@ public class CharacterManager : Singletone<CharacterManager>
 
             // 캐릭터에 붙은 UI들 생성
             BattleUI_Manager.instance.summon_UI(obj, true);
+
+            // SPUM 데이터 불러오기
+            GameObject spPrefab = Resources.Load<GameObject>(character.SPUM_datapath);
+            character.SPUM_unit_obj = Instantiate(spPrefab, obj.transform);
+            character.SPUM_unit_obj.transform.localPosition = new Vector3(0, -0.4f, 0);
+            character.SPUM_unit_obj.transform.localScale = Vector3.one * 1.3f;
         }
 
         BattleManager.instance.is_Characters_spawned = true;

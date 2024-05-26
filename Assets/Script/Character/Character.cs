@@ -26,6 +26,7 @@ public class Character : MonoBehaviour
     public bool is_character_unlocked;
     [SerializeField]
     public CardManager.skillcard_code[] deck = new CardManager.skillcard_code[6];
+    public string SPUM_datapath;
 
     // 아래는 게임이 진행되면서 바뀌는 것들
     [DoNotSerialize]
@@ -51,7 +52,8 @@ public class Character : MonoBehaviour
     public panic_sign panic_Sign;
     public bool isPanic;
     private int remaining_panic_turn;
-
+    [DoNotSerialize]
+    public GameObject SPUM_unit_obj; // 캐릭터 spum 오브젝트
     public int get_max_health_of_level(int level)
     {
         if (level > max_health.Count)

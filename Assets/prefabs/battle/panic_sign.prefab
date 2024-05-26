@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 3709859773207378191}
   - component: {fileID: 319032845843870400}
   - component: {fileID: 911605540631906299}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: panic_sign
   m_TagString: Untagged
   m_Icon: {fileID: 0}
