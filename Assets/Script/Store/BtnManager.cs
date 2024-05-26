@@ -9,7 +9,7 @@ public class BtnManager : MonoBehaviour
     [SerializeField] Sprite btnNormal; //버튼 비선택시 이미지
     [SerializeField] Sprite btnSelected; //버튼 선택시 이미지
     [SerializeField] Text ExText; //설명창 텍스트
-    [SerializeField] GameObject Img_Panel;// 스트 표시 창
+    [SerializeField] GameObject Img_Panel;// 텍스트 표시 창
     
 
     Shop_Btn[] tabs; //버튼들을 보관해 둘 배열들
