@@ -81,8 +81,8 @@ public class enemy_skillCard_slot : MonoBehaviour, IPointerDownHandler, IPointer
     private void Awake()
     {
         lineRenderer.enabled = false;
-        lineRenderer.startWidth = 0.1f;
-        lineRenderer.endWidth = 0.1f;
+        lineRenderer.startWidth = 0.05f;
+        lineRenderer.endWidth = 0.05f;
         BattleEventManager.skill_used += skill_used;
     }
 

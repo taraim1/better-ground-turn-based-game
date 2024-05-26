@@ -118,7 +118,7 @@ public class CharacterManager : Singletone<CharacterManager>
             GameObject spPrefab = Resources.Load<GameObject>(character.SPUM_datapath);
             character.SPUM_unit_obj = Instantiate(spPrefab, obj.transform);
             character.SPUM_unit_obj.transform.localPosition = new Vector3(0, -0.4f, 0);
-            character.SPUM_unit_obj.transform.localScale = Vector3.one * 1.3f;
+            character.SPUM_unit_obj.transform.localScale = new Vector3(-1.3f, 1.3f, 1);
         }
 
         // 적 캐릭터 생성
@@ -155,7 +155,7 @@ public class CharacterManager : Singletone<CharacterManager>
             GameObject spPrefab = Resources.Load<GameObject>(character.SPUM_datapath);
             character.SPUM_unit_obj = Instantiate(spPrefab, obj.transform);
             character.SPUM_unit_obj.transform.localPosition = new Vector3(0, -0.4f, 0);
-            character.SPUM_unit_obj.transform.localScale = Vector3.one * 1.3f;
+            character.SPUM_unit_obj.transform.localScale = new Vector3(1.3f, 1.3f, 1);
         }
 
         BattleManager.instance.is_Characters_spawned = true;
