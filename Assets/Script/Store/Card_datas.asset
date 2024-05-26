@@ -9,7 +9,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 0}
+  m_Script: {fileID: 11500000, guid: 1c573061334c4e24aa00502c4f5969ff, type: 3}
   m_Name: Card_datas
-  m_EditorClassIdentifier: Assembly-CSharp::Card_DataSO
-  cards: []
+  m_EditorClassIdentifier: 
+  cards:
+  - Card_Name: Gay
+    Card_Image: {fileID: 21300000, guid: b6db2675f41701c41bf79b9954114a6f, type: 3}
+    Card_BackGround: {fileID: 21300000, guid: d3d26a5737d3eb1459d36c532c0ab3b5, type: 3}
+  - Card_Name: Hay
+    Card_Image: {fileID: 21300000, guid: cc207e36df2ed774e9b210dc4a6ab3e1, type: 3}
+    Card_BackGround: {fileID: 21300000, guid: d3d26a5737d3eb1459d36c532c0ab3b5, type: 3}

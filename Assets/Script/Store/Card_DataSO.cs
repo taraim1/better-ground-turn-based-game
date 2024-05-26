@@ -14,6 +14,7 @@ public class Card_Data
     
 }
 
+
 [CreateAssetMenu(fileName ="Card_datas", menuName = "Scriptable_Objects")]
 public class Card_DataSO : ScriptableObject
 {

@@ -15,6 +15,8 @@ public class Random_Card : MonoBehaviour
     public List<Card_UI> Card_Prefabs;
     [SerializeField]
     public List<Card_Data> Card_Results;
+    public Card_Data card_Data;
+    public Card_DataSO card_DataSO;
     //카드들의 등급
     string[] Card_Grade = new string[]
     {
@@ -77,8 +79,7 @@ public class Random_Card : MonoBehaviour
         //랜덤값이 1이 나올경우 확률 계산이 되지 않으므로 최고등급 뽑아주기
         return _Chosen_Grade[_Percent.Length - 1];
     }
-    public Card_Data card_Data;
-    public Card_DataSO card_DataSO;
+    
     public Card_Data Card_Pick_Which(string Grade)
     {
         //card_DataSO = GetComponent<Card_DataSO>();
