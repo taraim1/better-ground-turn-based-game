@@ -4,6 +4,8 @@ using UnityEngine;
 using System;
 using System.IO;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
+using JetBrains.Annotations;
 
 public class Building : MonoBehaviour
 {
@@ -50,6 +52,11 @@ public class Building : MonoBehaviour
     BuildingDataGem buildingDataGem = new BuildingDataGem();
     BuildingDataWater buildingDataWater = new BuildingDataWater();
 
+    public Button GoldButton;
+    public Button GemButton;
+    public Button WaterButton;
+
+    public bool isInMainScene = true;
     public void OnGoldClick()
     {
         if (buildingDataGold.isFirstClickSetGold == false)
@@ -144,6 +151,7 @@ public class Building : MonoBehaviour
     }
     public void OnWaterClick()
     {
+
         if (buildingDataWater.isFirstClickSetWater == false)
         {
             firstWaterClickTime = DateTime.Now;
@@ -191,6 +199,8 @@ public class Building : MonoBehaviour
 
     private void Update()
     {
+        if (!isInMainScene) { return; }
+
         // ���� �ð��� ������ �ڿ� ȹ�� ���� �˾��� ��
         if (buildingDataGold.isFirstClickSetGold && GoldImage.activeSelf == false) 
         {
@@ -275,8 +285,50 @@ public class Building : MonoBehaviour
         lastWaterClickTime = DateTime.ParseExact(buildingDataWater.last_time_Water_string, "yyyy-MM-dd HH:mm:ss", null);
     }
 
+    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        if (scene.name == "Main")
+        {
+            isInMainScene = true;
+
+            Transform canvasTrans = GameObject.Find("Canvas").transform;
+
+            GoldText = canvasTrans.Find("GoldBuilding").gameObject.transform.Find("GoldText").gameObject.GetComponent<Text>();
+            GoldImage = canvasTrans.Find("GoldBuilding").gameObject.transform.Find("GoldImage").gameObject;
+            GoldPopup = canvasTrans.Find("GoldPopup").gameObject;
+            GoldButton = canvasTrans.Find("GoldBuilding").gameObject.GetComponent<Button>();
+            GoldButton.onClick.RemoveAllListeners();
+            GoldButton.onClick.AddListener(OnGoldClick);
+            GemText = canvasTrans.Find("GemBuilding").gameObject.transform.Find("GemText").gameObject.GetComponent<Text>();
+            GemImage = canvasTrans.Find("GemBuilding").gameObject.transform.Find("GemImage").gameObject;
+            GemPopup = canvasTrans.Find("GemPopup").gameObject;
+            GemButton = canvasTrans.Find("GemBuilding").gameObject.GetComponent<Button>();
+            GemButton.onClick.RemoveAllListeners();
+            GemButton.onClick.AddListener(OnGemClick);
+            WaterText = canvasTrans.Find("WaterBuilding").gameObject.transform.Find("WaterText").gameObject.GetComponent<Text>();
+            WaterImage = canvasTrans.Find("WaterBuilding").gameObject.transform.Find("WaterImage").gameObject;
+            WaterPopup = canvasTrans.Find("WaterPopup").gameObject;
+            WaterButton = canvasTrans.Find("WaterBuilding").gameObject.GetComponent<Button>();
+            WaterButton.onClick.RemoveAllListeners();
+            WaterButton.onClick.AddListener(OnWaterClick);
+
+
+        }
+        else
+        {
+            isInMainScene = false;
+        }
+    }
+
     private void Start()
     {
         Read_Json_file();
+        SceneManager.sceneLoaded += OnSceneLoaded;
     }
+
+    void OnDestroy()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
 }

@@ -3541,6 +3541,7 @@ MonoBehaviour:
   GoldWarningText: {fileID: 1872639016}
   GemWarningText: {fileID: 1643697013}
   WaterWarningText: {fileID: 1357801068}
+  isInMainScene: 1
 --- !u!114 &948072117
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3562,6 +3563,10 @@ MonoBehaviour:
   WaterText: {fileID: 1591007580}
   WaterImage: {fileID: 1419453879}
   WaterPopup: {fileID: 30296420}
+  GoldButton: {fileID: 0}
+  GemButton: {fileID: 0}
+  WaterButton: {fileID: 0}
+  isInMainScene: 1
 --- !u!114 &948072118
 MonoBehaviour:
   m_ObjectHideFlags: 0

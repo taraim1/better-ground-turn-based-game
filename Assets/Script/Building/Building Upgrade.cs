@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System;
 using System.IO;
+using UnityEngine.SceneManagement;
 
 
 public class BuildingUpgrade : MonoBehaviour
@@ -14,6 +15,8 @@ public class BuildingUpgrade : MonoBehaviour
     public GameObject GoldWarningText;
     public GameObject GemWarningText;
     public GameObject WaterWarningText;
+
+    public bool isInMainScene = true;
     public void OnGoldClick()
     {
         if(ResourceManager.instance.Gold >= LevelManager.instance.GoldCaveLevel * 100)
@@ -82,6 +85,8 @@ public class BuildingUpgrade : MonoBehaviour
     
     void Update()
     {
+        if (!isInMainScene) { return; }
+
         NeedGold.text = "Gold :" + LevelManager.instance.GoldCaveLevel * 100;
         NeedGem.text = "Gold :" + LevelManager.instance.GemCaveLevel * 100;
         NeedWater.text = "Gold :" + LevelManager.instance.WStatueLevel * 100;
@@ -90,9 +95,36 @@ public class BuildingUpgrade : MonoBehaviour
     {
 
     }
+
+    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        if (scene.name == "Main")
+        {
+            isInMainScene = true;
+            Transform canvasTrans = GameObject.Find("Canvas").transform;
+
+            NeedGold = canvasTrans.Find("GoldPopup").gameObject.transform.Find("Upgrade").gameObject.transform.Find("Text (Legacy)").gameObject.GetComponent<Text>();
+            NeedGem = canvasTrans.Find("GemPopup").gameObject.transform.Find("Upgrade").gameObject.transform.Find("Text (Legacy)").gameObject.GetComponent<Text>();
+            NeedWater = canvasTrans.Find("WaterPopup").gameObject.transform.Find("Upgrade").gameObject.transform.Find("Text (Legacy)").gameObject.GetComponent<Text>();
+            GoldWarningText = canvasTrans.Find("GoldPopup").gameObject.transform.Find("Warning").gameObject;
+            GemWarningText = canvasTrans.Find("GemPopup").gameObject.transform.Find("Warning").gameObject;
+            WaterWarningText = canvasTrans.Find("WaterPopup").gameObject.transform.Find("Warning").gameObject;
+        }
+        else
+        {
+            isInMainScene = false;
+        }
+    }
+
     void Start()
     {
         Read_Json_file();
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    void OnDestroy()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 
 }
