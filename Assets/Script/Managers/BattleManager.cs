@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using System;
+using Unity.VisualScripting;
 
 
 public class BattleManager : Singletone<BattleManager> // 싱글톤임
@@ -54,12 +55,17 @@ public class BattleManager : Singletone<BattleManager> // 싱글톤임
         // 카드 덱 세팅
         CardManager.instance.Setup_all();
 
-        // 초기 패 세팅 (여기서 1장 + turn_start_phase 1장 뽑음)
+        // 초기 패 세팅 (여기서 1장 + turn_start_phase 1장 뽑음) 패 최대 개수 : 7장
         for (int i = 0; i < playable_characters.Count; i++) 
         {
-            for (int j = 0; j < 1; j++) 
+            int card_draw_number_of_times = 1;
+            int character_index = playable_characters[i].GetComponent<Character>().Character_index;
+            for (int j = 0; j < card_draw_number_of_times; j++) 
             {
-                CardManager.instance.Summon_card(i);
+                if (hand_data[character_index].Count < 7) 
+                {
+                    CardManager.instance.Summon_card(character_index);
+                }
             }
         }
 
@@ -99,9 +105,15 @@ public class BattleManager : Singletone<BattleManager> // 싱글톤임
         // 카드 1장 뽑음
         for (int i = 0; i < playable_characters.Count; i++)
         {
-            for (int j = 0; j < 1; j++)
+            int character_index = playable_characters[i].GetComponent<Character>().Character_index;
+            int card_draw_number_of_times = 1;
+
+            for (int j = 0; j < card_draw_number_of_times; j++)
             {
-                CardManager.instance.Summon_card(i);
+                if (hand_data[character_index].Count < 7)
+                {
+                    CardManager.instance.Summon_card(character_index);
+                }
             }
         }
 
@@ -173,23 +185,7 @@ public class BattleManager : Singletone<BattleManager> // 싱글톤임
             // 카드 파괴
             CardManager.instance.Destroy_card(card);
 
-            yield return new WaitForSeconds(0.01f); // 캐릭터 사망 연산을 위해 잠시 기다림
-
-            // 남은 스킬 중 대상이 죽은 경우가 있다면 그것도 파괴
-            for (int i = enemy_cards.Count - 1; i >= 0; i--) 
-            {
-                card remain_card = enemy_cards[i];
-                try
-                {
-                    Transform tmp = remain_card.target.transform;
-                }
-                catch (MissingReferenceException e) 
-                {
-                    CardManager.instance.Destroy_card(remain_card);
-                }
-            }
-
-            yield return new WaitForSeconds(0.49f);
+            yield return new WaitForSeconds(0.5f);
             
         }
 

@@ -9,11 +9,23 @@ public class DetectRay : MonoBehaviour
 
     void Update()
     {
+        Vector2 MousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        Collider2D collider = Physics2D.OverlapPoint(MousePos);
+
+        if (collider != null) 
+        {
+            // 캐릭터 타게팅 설정
+            if (collider.gameObject.tag == "PlayerCharacter" || collider.gameObject.tag == "EnemyCharacter") 
+            { 
+                BattleCalcManager.instance.set_target(collider.gameObject.GetComponent<Character>());
+            }
+        }
+
+
+        // 클릭 or 터치
         if (Input.GetMouseButtonDown(0)) 
         { 
-            Vector2 pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-
-            Collider2D clicked_collider = Physics2D.OverlapPoint(pos);
+            Collider2D clicked_collider = Physics2D.OverlapPoint(MousePos);
 
             // 오브젝트 누르는 거 감지, 현재 페이즈가 플레이어 스킬 사용 페이즈여만 작동됨
             if (clicked_collider != null && BattleManager.instance.current_phase == BattleManager.phases.player_skill_phase) 
@@ -88,9 +100,7 @@ public class DetectRay : MonoBehaviour
         // 오브젝트 눌렀다 떼는 거 감지, 현재 페이즈가 플레이어 스킬 사용 페이즈여만 작동됨
         if (Input.GetMouseButtonUp(0) && BattleManager.instance.current_phase == BattleManager.phases.player_skill_phase) 
         {
-            Vector2 pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-
-            Collider2D clicked_collider = Physics2D.OverlapPoint(pos);
+            Collider2D clicked_collider = Physics2D.OverlapPoint(MousePos);
             
             if (clicked_collider != null)
             {

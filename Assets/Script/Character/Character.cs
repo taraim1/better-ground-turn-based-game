@@ -130,20 +130,12 @@ public class Character : MonoBehaviour
         willpower_slider.value_tmp.text = current_willpower.ToString();
     }
 
-    // 카드 사용시 타깃 설정
-    private void OnMouseEnter()
-    {
-        if (BattleCalcManager.instance.IsUsingCard) 
-        {
-            BattleCalcManager.instance.set_target(this);
-        }
-    }
+    // 카드 사용시 타깃 해제, 타깃 설정은 DetectingRay에 있음
     private void OnMouseExit()
     {
-        if (BattleCalcManager.instance.IsUsingCard)
-        {
-            BattleCalcManager.instance.clear_target();
-        }
+
+        BattleCalcManager.instance.clear_target_character();
+        
     }
 
     // 턴 시작시 발동되는 메소드

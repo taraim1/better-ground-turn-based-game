@@ -12,6 +12,7 @@ public class BattleEventManager : MonoBehaviour
     public static Action enemy_skill_card_deactivate;
     public static Action skill_used;
     public static Action turn_start_phase;
+    public static Action player_character_died;
 
 
     public static void Trigger_event(string type)
@@ -29,6 +30,9 @@ public class BattleEventManager : MonoBehaviour
                 break;
             case "turn_start_phase":
                 turn_start_phase?.Invoke();
+                break;
+            case "player_character_died":
+                player_character_died?.Invoke();
                 break;
         }
     }

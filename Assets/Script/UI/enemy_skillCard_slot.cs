@@ -4,6 +4,7 @@ using System.Reflection;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using System;
 
 public class enemy_skillCard_slot : MonoBehaviour, IPointerDownHandler, IPointerEnterHandler, IPointerExitHandler
 {
@@ -15,6 +16,7 @@ public class enemy_skillCard_slot : MonoBehaviour, IPointerDownHandler, IPointer
 
     // PC환경 때문에 쓰는 변수
     private bool isHighlightedByClick = false;
+    bool isMouseOnThis = false;
 
     // 위치 두 개를 주면 라인렌더러를 그려줌
     public IEnumerator Set_line(Vector3 target) 
@@ -61,6 +63,8 @@ public class enemy_skillCard_slot : MonoBehaviour, IPointerDownHandler, IPointer
             isHighlightedByClick = false;
         }
 
+        isMouseOnThis = true;
+
     }
 
     // 드래그 중 이 UI 위에 들어왔다 나가면
@@ -69,10 +73,12 @@ public class enemy_skillCard_slot : MonoBehaviour, IPointerDownHandler, IPointer
         if (!isHighlightedByClick) // 클릭으로 하이라이트된 게 아니면
         {
             // 타겟 설정 해제
-            BattleCalcManager.instance.clear_target();
+            BattleCalcManager.instance.clear_target_card();
             // 적 카드 강조 해제
             BattleEventManager.Trigger_event("enemy_skill_card_deactivate");
         }
+
+        isMouseOnThis = false;
     }
 
     // 스킬이 사용되면 시작되면 실행됨
@@ -101,5 +107,25 @@ public class enemy_skillCard_slot : MonoBehaviour, IPointerDownHandler, IPointer
         lineRenderer.enabled = false;
         BattleEventManager.skill_used -= skill_used;
         BattleEventManager.enemy_skill_card_deactivate -= Card_diactivated;
+    }
+
+    private void Update()
+    {
+        if (isMouseOnThis && BattleCalcManager.instance.IsUsingCard) 
+        {
+            // 이 슬롯의 카드를 카드 판정 대상으로 (드래그 타이밍 때문에 버그나는거 수정)
+            BattleCalcManager.instance.set_target(card_obj.GetComponent<card>());
+        }
+
+        // 스킬을 썼는데도 슬롯이 안 없어지는 버그 수정
+        try 
+        {
+            Transform trans = card_obj.transform;
+        }
+        catch(MissingReferenceException e) 
+        {
+            Destroy(gameObject);
+        }
+
     }
 }
