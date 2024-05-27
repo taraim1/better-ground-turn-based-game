@@ -128,6 +128,8 @@ public class CardManager : Singletone<CardManager>
             EnemyAI enemyAI = card.owner.GetComponent<EnemyAI>();
             enemyAI.using_skill_Objects.Remove(card.gameObject);
 
+            BattleManager.instance.enemy_cards.Remove(card);
+
             // 스킬카드 슬롯 삭제
             foreach (GameObject slot in enemyAI.skill_slots) 
             {

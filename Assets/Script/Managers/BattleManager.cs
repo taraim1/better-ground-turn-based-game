@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-
+using System;
 
 
 public class BattleManager : Singletone<BattleManager> // 싱글톤임
@@ -27,6 +27,8 @@ public class BattleManager : Singletone<BattleManager> // 싱글톤임
     public List<List<card>> hand_data = new List<List<card>>();
     // 전투 중인 적 캐릭터의 게임오브젝트 리스트
     public List<GameObject> enemy_characters = new List<GameObject>();
+    // 적이 이번 턴에 사용 중인 카드 리스트
+    public List<card> enemy_cards = new List<card>();
 
     public enum phases // 한 턴의 페이즈 모음
     { 
@@ -44,6 +46,7 @@ public class BattleManager : Singletone<BattleManager> // 싱글톤임
         playable_characters.Clear();
         enemy_characters.Clear();
         hand_data.Clear();
+        enemy_cards.Clear();
 
         // 캐릭터 오브젝트 및 Character 인스턴스 생성 (아군 / 적 모두)
         CharacterManager.instance.spawn_character(0);
@@ -155,44 +158,39 @@ public class BattleManager : Singletone<BattleManager> // 싱글톤임
         BattleEventManager.Trigger_event("enemy_skill_card_deactivate");
 
         // 적의 남은 카드들을 순서대로 사용
-        for (int i = 0; i < enemy_characters.Count; i++) 
+        while (enemy_cards.Count > 0) 
         {
-            EnemyAI AI = enemy_characters[i].GetComponent<EnemyAI>();
 
+            card card = enemy_cards[0];
 
-            for (int j = 0; j < AI.using_skill_Objects.Count; j++) 
+            if (card.Card.isDirectUsable) // 직접 사용 가능인 카드면 사용
             {
-                card card = AI.using_skill_Objects[j].GetComponent<card>();
-
-                if (card.Card.isDirectUsable) // 직접 사용 가능인 카드면 사용
-                {
-                    BattleCalcManager.instance.set_using_card(card);
-                    BattleCalcManager.instance.set_target(card.target.GetComponent<Character>());
-                    BattleCalcManager.instance.Calc_enemy_turn_skill_use();
-                }
-
-                // 카드 파괴
-                CardManager.instance.Destroy_card(card);
-
-
-                // 남은 스킬 중 대상이 죽은 경우가 있다면 그것도 파괴
-                foreach (GameObject enemy_obj in enemy_characters) 
-                {
-                    EnemyAI ai = enemy_obj.GetComponent<EnemyAI>();
-
-                    foreach (GameObject remain_card_obj in ai.using_skill_Objects) 
-                    {
-                       
-                        if (!remain_card_obj.GetComponent<card>().target) 
-                        {
-                            Debug.Log("작동함");
-                            CardManager.instance.Destroy_card(card); // 여기가 작동을 안함
-                        }
-                    }
-                }
-
-                yield return new WaitForSeconds(0.5f);
+                BattleCalcManager.instance.set_using_card(card);
+                BattleCalcManager.instance.set_target(card.target.GetComponent<Character>());
+                BattleCalcManager.instance.Calc_enemy_turn_skill_use();
             }
+
+            // 카드 파괴
+            CardManager.instance.Destroy_card(card);
+
+            yield return new WaitForSeconds(0.01f); // 캐릭터 사망 연산을 위해 잠시 기다림
+
+            // 남은 스킬 중 대상이 죽은 경우가 있다면 그것도 파괴
+            for (int i = enemy_cards.Count - 1; i >= 0; i--) 
+            {
+                card remain_card = enemy_cards[i];
+                try
+                {
+                    Transform tmp = remain_card.target.transform;
+                }
+                catch (MissingReferenceException e) 
+                {
+                    CardManager.instance.Destroy_card(remain_card);
+                }
+            }
+
+            yield return new WaitForSeconds(0.49f);
+            
         }
 
         // 스킬 사용 판정 초기화

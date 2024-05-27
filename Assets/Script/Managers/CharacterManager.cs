@@ -177,6 +177,12 @@ public class CharacterManager : Singletone<CharacterManager>
                 CardManager.instance.Destroy_card(BattleManager.instance.hand_data[character.Character_index][i]);
             }
 
+            // 패 보는 중이었으면 패 숨기기
+            if (character.Character_index == CardManager.instance.active_index) 
+            {
+                CardManager.instance.Change_active_hand(-1);
+            }
+
             // 아군 캐릭터 리스트에서 없애기
             BattleManager.instance.playable_characters.Remove(character.gameObject);
         }
@@ -193,6 +199,7 @@ public class CharacterManager : Singletone<CharacterManager>
             // 적 캐릭터 리스트에서 없애기
             BattleManager.instance.enemy_characters.Remove(character.gameObject);
         }
+
     
         // 캐릭터 오브젝트 없애기
         Destroy(character.gameObject);

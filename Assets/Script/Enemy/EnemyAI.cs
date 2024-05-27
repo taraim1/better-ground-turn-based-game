@@ -93,6 +93,8 @@ public class EnemyAI : MonoBehaviour
 
             using_skill_Objects.Add(card_obj);
             skill_slots.Add(slot);
+            // 적이 이번 턴에 쓰는 전체 카드가 들어가게 되는 리스트
+            BattleManager.instance.enemy_cards.Add(card);
         }
 
         // 스킬 설정 완료 카운트 증가

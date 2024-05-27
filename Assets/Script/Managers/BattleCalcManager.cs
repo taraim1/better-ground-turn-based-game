@@ -217,14 +217,14 @@ public class BattleCalcManager : Singletone<BattleCalcManager>
 
             case ("방어"):
                 if (los_behavior == "공격") { }
-                else if (los_behavior == "방어") { loser_char.Damage_willpower(win_power - lose_power); } // 진 쪽 정신력 감소
-                else if (los_behavior == "회피") { loser_char.Damage_willpower(win_power - lose_power); }
+                else if (los_behavior == "방어") { loser_char.Damage_willpower(win_power); } // 진 쪽 정신력 감소
+                else if (los_behavior == "회피") { loser_char.Damage_willpower(win_power); }
                 break;
 
             case ("회피"):
-                if (los_behavior == "공격") { winner_char.Damage_willpower(lose_power - win_power); } // 이긴 쪽 정신력 회복
-                else if (los_behavior == "방어") { loser_char.Damage_willpower(win_power - lose_power); }
-                else if (los_behavior == "회피") { loser_char.Damage_willpower(win_power - lose_power); }
+                if (los_behavior == "공격") { winner_char.Damage_willpower(-win_power); } // 이긴 쪽 정신력 회복
+                else if (los_behavior == "방어") { loser_char.Damage_willpower(win_power); }
+                else if (los_behavior == "회피") { loser_char.Damage_willpower(win_power); }
                 break;
         }
 
