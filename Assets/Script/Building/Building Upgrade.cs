@@ -5,13 +5,14 @@ using UnityEngine.UI;
 using System;
 using System.IO;
 using UnityEngine.SceneManagement;
+using TMPro;
 
 
 public class BuildingUpgrade : MonoBehaviour
 {
-    public Text NeedGold;
-    public Text NeedGem;
-    public Text NeedWater;
+    public TextMeshProUGUI NeedGold;
+    public TextMeshProUGUI NeedGem;
+    public TextMeshProUGUI NeedWater;
     public GameObject GoldWarningText;
     public GameObject GemWarningText;
     public GameObject WaterWarningText;
@@ -103,9 +104,9 @@ public class BuildingUpgrade : MonoBehaviour
             isInMainScene = true;
             Transform canvasTrans = GameObject.Find("Canvas").transform;
 
-            NeedGold = canvasTrans.Find("GoldPopup").gameObject.transform.Find("Upgrade").gameObject.transform.Find("Text (Legacy)").gameObject.GetComponent<Text>();
-            NeedGem = canvasTrans.Find("GemPopup").gameObject.transform.Find("Upgrade").gameObject.transform.Find("Text (Legacy)").gameObject.GetComponent<Text>();
-            NeedWater = canvasTrans.Find("WaterPopup").gameObject.transform.Find("Upgrade").gameObject.transform.Find("Text (Legacy)").gameObject.GetComponent<Text>();
+            NeedGold = canvasTrans.Find("GoldPopup").gameObject.transform.Find("Upgrade").gameObject.transform.Find("Text (Legacy)").gameObject.GetComponent<TextMeshProUGUI>();
+            NeedGem = canvasTrans.Find("GemPopup").gameObject.transform.Find("Upgrade").gameObject.transform.Find("Text (Legacy)").gameObject.GetComponent<TextMeshProUGUI>();
+            NeedWater = canvasTrans.Find("WaterPopup").gameObject.transform.Find("Upgrade").gameObject.transform.Find("Text (Legacy)").gameObject.GetComponent<TextMeshProUGUI>();
             GoldWarningText = canvasTrans.Find("GoldPopup").gameObject.transform.Find("Warning").gameObject;
             GemWarningText = canvasTrans.Find("GemPopup").gameObject.transform.Find("Warning").gameObject;
             WaterWarningText = canvasTrans.Find("WaterPopup").gameObject.transform.Find("Warning").gameObject;

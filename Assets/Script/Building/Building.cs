@@ -6,6 +6,7 @@ using System.IO;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using JetBrains.Annotations;
+using TMPro;
 
 public class Building : MonoBehaviour
 {
@@ -39,13 +40,13 @@ public class Building : MonoBehaviour
     public DateTime lastGemClickTime;
     public DateTime firstWaterClickTime;
     public DateTime lastWaterClickTime;
-    public Text GoldText;
+    public TextMeshProUGUI GoldText;
     public GameObject GoldImage;
     public GameObject GoldPopup;
-    public Text GemText;
+    public TextMeshProUGUI GemText;
     public GameObject GemImage;
     public GameObject GemPopup;    
-    public Text WaterText;
+    public TextMeshProUGUI WaterText;
     public GameObject WaterImage;
     public GameObject WaterPopup;
     BuildingDataGold buildingDataGold = new BuildingDataGold();
@@ -293,19 +294,19 @@ public class Building : MonoBehaviour
 
             Transform canvasTrans = GameObject.Find("Canvas").transform;
 
-            GoldText = canvasTrans.Find("GoldBuilding").gameObject.transform.Find("GoldText").gameObject.GetComponent<Text>();
+            GoldText = canvasTrans.Find("GoldBuilding").gameObject.transform.Find("GoldText").gameObject.GetComponent<TextMeshProUGUI>();
             GoldImage = canvasTrans.Find("GoldBuilding").gameObject.transform.Find("GoldImage").gameObject;
             GoldPopup = canvasTrans.Find("GoldPopup").gameObject;
             GoldButton = canvasTrans.Find("GoldBuilding").gameObject.GetComponent<Button>();
             GoldButton.onClick.RemoveAllListeners();
             GoldButton.onClick.AddListener(OnGoldClick);
-            GemText = canvasTrans.Find("GemBuilding").gameObject.transform.Find("GemText").gameObject.GetComponent<Text>();
+            GemText = canvasTrans.Find("GemBuilding").gameObject.transform.Find("GemText").gameObject.GetComponent<TextMeshProUGUI>();
             GemImage = canvasTrans.Find("GemBuilding").gameObject.transform.Find("GemImage").gameObject;
             GemPopup = canvasTrans.Find("GemPopup").gameObject;
             GemButton = canvasTrans.Find("GemBuilding").gameObject.GetComponent<Button>();
             GemButton.onClick.RemoveAllListeners();
             GemButton.onClick.AddListener(OnGemClick);
-            WaterText = canvasTrans.Find("WaterBuilding").gameObject.transform.Find("WaterText").gameObject.GetComponent<Text>();
+            WaterText = canvasTrans.Find("WaterBuilding").gameObject.transform.Find("WaterText").gameObject.GetComponent<TextMeshProUGUI>();
             WaterImage = canvasTrans.Find("WaterBuilding").gameObject.transform.Find("WaterImage").gameObject;
             WaterPopup = canvasTrans.Find("WaterPopup").gameObject;
             WaterButton = canvasTrans.Find("WaterBuilding").gameObject.GetComponent<Button>();
