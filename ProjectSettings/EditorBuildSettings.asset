@@ -1,0 +1,41 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1045 &1
+EditorBuildSettings:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Scenes/Main.unity
+    guid: 4a238c293e8841f429a50672b3c31613
+  - enabled: 1
+    path: Assets/Scenes/Battle.unity
+    guid: 9b24f4bad6e4a8440a5c5a8b2e121e18
+  - enabled: 1
+    path: Assets/Scenes/Character.unity
+    guid: 6876342b83946c8488f4964999781135
+  - enabled: 1
+    path: Assets/Scenes/Dungeon.unity
+    guid: f70e63da7ce0a9a4186ac014565511d1
+  - enabled: 1
+    path: Assets/Scenes/SampleScene.unity
+    guid: 8c9cfa26abfee488c85f1582747f6a02
+  - enabled: 1
+    path: Assets/Scenes/ScrollTest.unity
+    guid: c040138afa7678142b6ce723e080e743
+  - enabled: 1
+    path: Assets/Scenes/Setting.unity
+    guid: 1ddc39d7397182040aa9a01e00eefffe
+  - enabled: 1
+    path: Assets/Scenes/Skill.unity
+    guid: ce6ced28363c2274ca1b52a2c33aaf16
+  - enabled: 1
+    path: Assets/Scenes/Stage1.unity
+    guid: 6eb8d0ad601917141bded68b4b4dddec
+  - enabled: 1
+    path: Assets/Scenes/Store.unity
+    guid: 721ab8a01cba35a44bf4d8e0248777ea
+  - enabled: 1
+    path: Assets/Scenes/Story.unity
+    guid: 27cb7f7b2a2905d459a7c4dba3f975a1
+  m_configObjects: {}
