@@ -113,6 +113,12 @@ public class CharacterManager : Singletone<CharacterManager>
 
             // 캐릭터에 붙은 UI들 생성
             BattleUI_Manager.instance.summon_UI(obj, false);
+
+            // SPUM 데이터 불러오기
+            GameObject spPrefab = Resources.Load<GameObject>(character.SPUM_datapath);
+            character.SPUM_unit_obj = Instantiate(spPrefab, obj.transform);
+            character.SPUM_unit_obj.transform.localPosition = new Vector3(0, -0.4f, 0);
+            character.SPUM_unit_obj.transform.localScale = new Vector3(-1.3f, 1.3f, 1);
         }
 
         // 적 캐릭터 생성
@@ -144,6 +150,12 @@ public class CharacterManager : Singletone<CharacterManager>
 
             // 캐릭터에 붙은 UI들 생성
             BattleUI_Manager.instance.summon_UI(obj, true);
+
+            // SPUM 데이터 불러오기
+            GameObject spPrefab = Resources.Load<GameObject>(character.SPUM_datapath);
+            character.SPUM_unit_obj = Instantiate(spPrefab, obj.transform);
+            character.SPUM_unit_obj.transform.localPosition = new Vector3(0, -0.4f, 0);
+            character.SPUM_unit_obj.transform.localScale = new Vector3(1.3f, 1.3f, 1);
         }
 
         BattleManager.instance.is_Characters_spawned = true;
@@ -151,22 +163,37 @@ public class CharacterManager : Singletone<CharacterManager>
 
     public void kill_character(Character character) // 캐릭터 죽이는 메소드 
     {
+        bool isEnemy = character.isEnemyCharacter;
+
         // UI 없애기
         Destroy(character.health_bar);
         Destroy(character.willpower_bar);
         Destroy(character.panic_Sign.gameObject);
 
         // 아군 캐릭터면
-        if (!character.isEnemyCharacter)
+        if (!isEnemy)
         {
             // 캐릭터의 패 없애기
             for (int i = 0; i < BattleManager.instance.hand_data[character.Character_index].Count; i++)
             {
                 CardManager.instance.Destroy_card(BattleManager.instance.hand_data[character.Character_index][i]);
             }
+            BattleManager.instance.hand_data.RemoveAt(character.Character_index);
+
+            // 패 보는 중이었으면 패 숨기기
+            if (character.Character_index == CardManager.instance.active_index) 
+            {
+                CardManager.instance.Change_active_hand(-1);
+            }
 
             // 아군 캐릭터 리스트에서 없애기
             BattleManager.instance.playable_characters.Remove(character.gameObject);
+
+            // 남은 캐릭터 인덱스 조정
+            for (int i = 0; i < BattleManager.instance.playable_characters.Count; i++) 
+            {
+                BattleManager.instance.playable_characters[i].GetComponent<Character>().Character_index = i;
+            }
         }
 
         else // 적 캐릭터면
@@ -180,9 +207,22 @@ public class CharacterManager : Singletone<CharacterManager>
 
             // 적 캐릭터 리스트에서 없애기
             BattleManager.instance.enemy_characters.Remove(character.gameObject);
+
+            // 남은 캐릭터 인덱스 조정
+            for (int i = 0; i < BattleManager.instance.enemy_characters.Count; i++)
+            {
+                BattleManager.instance.enemy_characters[i].GetComponent<Character>().Character_index = i;
+            }
         }
+
     
         // 캐릭터 오브젝트 없애기
         Destroy(character.gameObject);
+
+        // 아군이면 사망 이벤트 발동 (적의 스킬 중 이 캐릭터를 타게팅하고 있는 걸 없애줌)
+        if (!isEnemy) 
+        {
+            BattleEventManager.Trigger_event("player_character_died");
+        }
     }
 }

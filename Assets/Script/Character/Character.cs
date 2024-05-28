@@ -26,6 +26,7 @@ public class Character : MonoBehaviour
     public bool is_character_unlocked;
     [SerializeField]
     public CardManager.skillcard_code[] deck = new CardManager.skillcard_code[6];
+    public string SPUM_datapath;
 
     // 아래는 게임이 진행되면서 바뀌는 것들
     [DoNotSerialize]
@@ -51,7 +52,8 @@ public class Character : MonoBehaviour
     public panic_sign panic_Sign;
     public bool isPanic;
     private int remaining_panic_turn;
-
+    [DoNotSerialize]
+    public GameObject SPUM_unit_obj; // 캐릭터 spum 오브젝트
     public int get_max_health_of_level(int level)
     {
         if (level > max_health.Count)
@@ -128,20 +130,12 @@ public class Character : MonoBehaviour
         willpower_slider.value_tmp.text = current_willpower.ToString();
     }
 
-    // 카드 사용시 타깃 설정
-    private void OnMouseEnter()
-    {
-        if (BattleCalcManager.instance.IsUsingCard) 
-        {
-            BattleCalcManager.instance.set_target(this);
-        }
-    }
+    // 카드 사용시 타깃 해제, 타깃 설정은 DetectingRay에 있음
     private void OnMouseExit()
     {
-        if (BattleCalcManager.instance.IsUsingCard)
-        {
-            BattleCalcManager.instance.clear_target();
-        }
+
+        BattleCalcManager.instance.clear_target_character();
+        
     }
 
     // 턴 시작시 발동되는 메소드

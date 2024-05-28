@@ -5,6 +5,8 @@ using System.Threading;
 using UnityEngine;
 using DG.Tweening;
 using UnityEngine.SceneManagement;
+using System.IO;
+using DG.Tweening.Plugins.Core.PathCore;
 
 public class CardManager : Singletone<CardManager>
 {
@@ -25,6 +27,29 @@ public class CardManager : Singletone<CardManager>
         simple_dodge
     }
 
+    // 기타 카드 정보 담은 클래스
+    private class card_data_json 
+    {
+        // 카드 언락 데이터가 들어가는 리스트 (i번은 i번 스킬 언락유무)
+        public List<bool> unlocked_card_checkList;
+
+        // 데이터 불러오기
+        public void read_json() 
+        { 
+            string output = File.ReadAllText(Application.dataPath + "/Data/skillData.json");
+            this.unlocked_card_checkList = JsonUtility.FromJson<card_data_json>(output).unlocked_card_checkList;
+        }
+
+        // 데이터 저장하기
+        public void write_json() 
+        {
+            string output = JsonUtility.ToJson(this, true);
+            File.WriteAllText(Application.dataPath + "/Data/skillData.json", output);
+        }
+    }
+
+    card_data_json JsonCardData = new card_data_json();
+
     // 캐릭터들의 덱이 랜덤으로 섞여 들어가는 버퍼
     List<List<Cards>> cards_buffer = new List<List<Cards>>();
 
@@ -36,10 +61,27 @@ public class CardManager : Singletone<CardManager>
     // 현재 강조 중인 카드
     public card highlighted_card;
 
+    private void Start()
+    {
+        JsonCardData.read_json();
+    }
+
     // 카드 코드 주면 카드 데이터 줌
     public Cards get_card_by_code(skillcard_code code) 
     {
         return cardsSO.cards[(int)code];
+    }
+
+    // 카드 코드 주면 언락된건지 찾아줌
+    public bool check_unlocked(skillcard_code code) 
+    {
+        return JsonCardData.unlocked_card_checkList[(int)code];
+    }
+
+    public void set_unlocked(skillcard_code code, bool value) 
+    {
+        JsonCardData.unlocked_card_checkList[(int)code] = value;
+        JsonCardData.write_json();
     }
 
     // index번째 캐릭터의 덱 버퍼에서 첫 카드 뽑기
@@ -57,7 +99,7 @@ public class CardManager : Singletone<CardManager>
         cards_buffer.Clear();
 
         // 버퍼에 카드들 추가
-        for (int i = 0; i < BattleManager.instance.hand_data.Count; i++) 
+        for (int i = 0; i < BattleManager.instance.playable_characters.Count; i++) 
         {
             List<Cards> temp = new List<Cards>();
 
@@ -127,6 +169,8 @@ public class CardManager : Singletone<CardManager>
             // 적 카드 리스트에서 카드 오브젝트 삭제
             EnemyAI enemyAI = card.owner.GetComponent<EnemyAI>();
             enemyAI.using_skill_Objects.Remove(card.gameObject);
+
+            BattleManager.instance.enemy_cards.Remove(card);
 
             // 스킬카드 슬롯 삭제
             foreach (GameObject slot in enemyAI.skill_slots) 

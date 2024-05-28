@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using System;
 
 public class EnemyAI : MonoBehaviour
 {
@@ -20,7 +21,7 @@ public class EnemyAI : MonoBehaviour
     public List<GameObject> skill_slots = new List<GameObject>();
 
     // 적이 이번 턴에 쓸 스킬 카드 코드 리스트를 반환하는 메소드
-    private List<CardManager.skillcard_code> get_action() 
+    private List<CardManager.skillcard_code> get_action()
     {
         // 이번 턴에 쓸 스킬 개수
         int skill_use_count = 1;
@@ -28,16 +29,16 @@ public class EnemyAI : MonoBehaviour
         List<CardManager.skillcard_code> result = new List<CardManager.skillcard_code>();
 
         // 덱에서 쓸 스킬 랜덤하게 뽑음
-        for (int i = 0; i < skill_use_count; i++) 
+        for (int i = 0; i < skill_use_count; i++)
         {
-            int rand = Random.Range(0, enemy.deck.Length);
+            int rand = UnityEngine.Random.Range(0, enemy.deck.Length);
             result.Add(enemy.deck[rand]);
         }
 
         return result;
     }
 
-    public void clear_skills() 
+    public void clear_skills()
     {
         skill_slots.Clear();
         foreach (GameObject card_obj in using_skill_Objects)
@@ -62,7 +63,7 @@ public class EnemyAI : MonoBehaviour
         }
 
 
-        for (int i = 0; i < skill_list.Count; i++) 
+        for (int i = 0; i < skill_list.Count; i++)
         {
             // 이번 턴에 쓸 카드와 스킬 슬롯 만듦
             GameObject slot = Instantiate(skill_slot_prefab, layoutGroup.transform);
@@ -73,10 +74,10 @@ public class EnemyAI : MonoBehaviour
             slot.GetComponent<enemy_skillCard_slot>().illust.sprite = card.illust.sprite;
 
             // 카드 타겟 정하기
-            switch (card.Card.behavior_type) 
+            switch (card.Card.behavior_type)
             {
                 case "공격":
-                    int rand = Random.Range(0, BattleManager.instance.playable_characters.Count);
+                    int rand = UnityEngine.Random.Range(0, BattleManager.instance.playable_characters.Count);
                     card.target = BattleManager.instance.playable_characters[rand];
                     // 라인렌더러 설정
                     Vector3 targetpos = card.target.transform.position;
@@ -93,6 +94,8 @@ public class EnemyAI : MonoBehaviour
 
             using_skill_Objects.Add(card_obj);
             skill_slots.Add(slot);
+            // 적이 이번 턴에 쓰는 전체 카드가 들어가게 되는 리스트
+            BattleManager.instance.enemy_cards.Add(card);
         }
 
         // 스킬 설정 완료 카운트 증가
@@ -100,9 +103,9 @@ public class EnemyAI : MonoBehaviour
     }
 
     // 적의 모든 스킬 카드 강조 해제
-    private void return_card() 
+    private void return_card()
     {
-        foreach (GameObject card_obj in using_skill_Objects) 
+        foreach (GameObject card_obj in using_skill_Objects)
         {
             card card = card_obj.GetComponent<card>();
             card.MoveTransform(card.originPRS, false, 0f);
@@ -110,15 +113,43 @@ public class EnemyAI : MonoBehaviour
         }
     }
 
+    // 아군 캐릭터가 죽었을 때 그 캐릭터를 타게팅하고 있었던 스킬을 제거
+    private void OnPlayerCharacterDied() 
+    {
+        StartCoroutine(check_dead_target());
+    }
+
+    private IEnumerator check_dead_target() 
+    {
+        yield return new WaitForSeconds(0.01f);// 캐릭터 오브젝트 비활성화를 잠시 기다림
+
+        for (int i = using_skill_Objects.Count - 1; i >= 0; i--)
+        {
+            card card = using_skill_Objects[i].GetComponent<card>();
+
+            try
+            {
+                Transform tmp = card.target.transform;
+            }
+            catch (MissingReferenceException e)
+            {
+                CardManager.instance.Destroy_card(card);
+            }
+        }
+        yield break;
+    }
+
     private void Awake()
     {
         BattleEventManager.enemy_skill_setting_phase += set_skill;
         BattleEventManager.enemy_skill_card_deactivate += return_card;
+        BattleEventManager.player_character_died += OnPlayerCharacterDied;
     }
 
     private void OnDisable()
     {
         BattleEventManager.enemy_skill_setting_phase -= set_skill;
         BattleEventManager.enemy_skill_card_deactivate -= return_card;
+        BattleEventManager.player_character_died -= OnPlayerCharacterDied;
     }
 }

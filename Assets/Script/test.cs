@@ -4,18 +4,17 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using TMPro;
 
-public class test : MonoBehaviour, IPointerDownHandler
+public class test : MonoBehaviour
 {
-    public TMP_Text tmp;
-   	public CardManager.skillcard_code code;
-	public Cards carddata;
-
-    public void OnPointerDown(PointerEventData eventData)
+    private void Start()
     {
-        carddata = CardManager.instance.get_card_by_code(code);
-        tmp.text = carddata.name;
+        // 스킬 언락 확인
+        print(CardManager.instance.check_unlocked(CardManager.skillcard_code.simple_attack));
+
+        // 스킬 언락 설정 (json 자동저장됨, true면 언락된거 false면 언락 안된거)
+        CardManager.instance.set_unlocked(CardManager.skillcard_code.simple_defend, false);
     }
-    
+
 }
 
 

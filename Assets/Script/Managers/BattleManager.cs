@@ -2,7 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-
+using System;
+using Unity.VisualScripting;
 
 
 public class BattleManager : Singletone<BattleManager> // 싱글톤임
@@ -27,6 +28,8 @@ public class BattleManager : Singletone<BattleManager> // 싱글톤임
     public List<List<card>> hand_data = new List<List<card>>();
     // 전투 중인 적 캐릭터의 게임오브젝트 리스트
     public List<GameObject> enemy_characters = new List<GameObject>();
+    // 적이 이번 턴에 사용 중인 카드 리스트
+    public List<card> enemy_cards = new List<card>();
 
     public enum phases // 한 턴의 페이즈 모음
     { 
@@ -44,6 +47,7 @@ public class BattleManager : Singletone<BattleManager> // 싱글톤임
         playable_characters.Clear();
         enemy_characters.Clear();
         hand_data.Clear();
+        enemy_cards.Clear();
 
         // 캐릭터 오브젝트 및 Character 인스턴스 생성 (아군 / 적 모두)
         CharacterManager.instance.spawn_character(0);
@@ -51,12 +55,17 @@ public class BattleManager : Singletone<BattleManager> // 싱글톤임
         // 카드 덱 세팅
         CardManager.instance.Setup_all();
 
-        // 초기 패 세팅 (여기서 1장 + turn_start_phase 1장 뽑음)
+        // 초기 패 세팅 (여기서 1장 + turn_start_phase 1장 뽑음) 패 최대 개수 : 7장
         for (int i = 0; i < playable_characters.Count; i++) 
         {
-            for (int j = 0; j < 1; j++) 
+            int card_draw_number_of_times = 1;
+            int character_index = playable_characters[i].GetComponent<Character>().Character_index;
+            for (int j = 0; j < card_draw_number_of_times; j++) 
             {
-                CardManager.instance.Summon_card(i);
+                if (hand_data[character_index].Count < 7) 
+                {
+                    CardManager.instance.Summon_card(character_index);
+                }
             }
         }
 
@@ -96,9 +105,15 @@ public class BattleManager : Singletone<BattleManager> // 싱글톤임
         // 카드 1장 뽑음
         for (int i = 0; i < playable_characters.Count; i++)
         {
-            for (int j = 0; j < 1; j++)
+            int character_index = playable_characters[i].GetComponent<Character>().Character_index;
+            int card_draw_number_of_times = 1;
+
+            for (int j = 0; j < card_draw_number_of_times; j++)
             {
-                CardManager.instance.Summon_card(i);
+                if (hand_data[character_index].Count < 7)
+                {
+                    CardManager.instance.Summon_card(character_index);
+                }
             }
         }
 
@@ -155,28 +170,23 @@ public class BattleManager : Singletone<BattleManager> // 싱글톤임
         BattleEventManager.Trigger_event("enemy_skill_card_deactivate");
 
         // 적의 남은 카드들을 순서대로 사용
-        for (int i = 0; i < enemy_characters.Count; i++) 
+        while (enemy_cards.Count > 0) 
         {
-            EnemyAI AI = enemy_characters[i].GetComponent<EnemyAI>();
 
+            card card = enemy_cards[0];
 
-            for (int j = 0; j < AI.using_skill_Objects.Count; j++) 
+            if (card.Card.isDirectUsable) // 직접 사용 가능인 카드면 사용
             {
-                card card = AI.using_skill_Objects[j].GetComponent<card>();
-
-                if (card.Card.isDirectUsable) // 직접 사용 가능인 카드면 사용
-                {
-                    BattleCalcManager.instance.set_using_card(card);
-                    BattleCalcManager.instance.set_target(card.target.GetComponent<Character>());
-                    BattleCalcManager.instance.Calc_enemy_turn_skill_use();
-                }
-
-                // 카드 파괴
-                CardManager.instance.Destroy_card(card);
-
-
-                yield return new WaitForSeconds(0.5f);
+                BattleCalcManager.instance.set_using_card(card);
+                BattleCalcManager.instance.set_target(card.target.GetComponent<Character>());
+                BattleCalcManager.instance.Calc_enemy_turn_skill_use();
             }
+
+            // 카드 파괴
+            CardManager.instance.Destroy_card(card);
+
+            yield return new WaitForSeconds(0.5f);
+            
         }
 
         // 스킬 사용 판정 초기화
