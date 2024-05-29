@@ -104,9 +104,9 @@ public class BuildingUpgrade : MonoBehaviour
             isInMainScene = true;
             Transform canvasTrans = GameObject.Find("Canvas").transform;
 
-            NeedGold = canvasTrans.Find("GoldPopup").gameObject.transform.Find("Upgrade").gameObject.transform.Find("Text (Legacy)").gameObject.GetComponent<TextMeshProUGUI>();
-            NeedGem = canvasTrans.Find("GemPopup").gameObject.transform.Find("Upgrade").gameObject.transform.Find("Text (Legacy)").gameObject.GetComponent<TextMeshProUGUI>();
-            NeedWater = canvasTrans.Find("WaterPopup").gameObject.transform.Find("Upgrade").gameObject.transform.Find("Text (Legacy)").gameObject.GetComponent<TextMeshProUGUI>();
+            NeedGold = canvasTrans.Find("GoldPopup").gameObject.transform.Find("Upgrade").gameObject.transform.Find("Text (TMP)").gameObject.GetComponent<TextMeshProUGUI>();
+            NeedGem = canvasTrans.Find("GemPopup").gameObject.transform.Find("Upgrade").gameObject.transform.Find("Text (TMP)").gameObject.GetComponent<TextMeshProUGUI>();
+            NeedWater = canvasTrans.Find("WaterPopup").gameObject.transform.Find("Upgrade").gameObject.transform.Find("Text (TMP)").gameObject.GetComponent<TextMeshProUGUI>();
             GoldWarningText = canvasTrans.Find("GoldPopup").gameObject.transform.Find("Warning").gameObject;
             GemWarningText = canvasTrans.Find("GemPopup").gameObject.transform.Find("Warning").gameObject;
             WaterWarningText = canvasTrans.Find("WaterPopup").gameObject.transform.Find("Warning").gameObject;
