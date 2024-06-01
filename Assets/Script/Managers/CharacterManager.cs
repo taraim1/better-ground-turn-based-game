@@ -147,6 +147,9 @@ public class CharacterManager : Singletone<CharacterManager>
             // 적 AI 제거
             Destroy(obj.GetComponent<EnemyAI>());
 
+            // 캐릭터 리스트에 넣어줌
+            StageManager.instance.characters.Add(obj);
+
             // 캐릭터에 붙은 UI들 생성
             BattleUI_Manager.instance.summon_UI(obj, true);
 
@@ -255,6 +258,7 @@ public class CharacterManager : Singletone<CharacterManager>
         Destroy(character.health_bar);
         Destroy(character.willpower_bar);
         Destroy(character.panic_Sign.gameObject);
+        Destroy(character.skill_power_meter.gameObject);
 
         // 아군 캐릭터면
         if (!isEnemy)
@@ -322,6 +326,7 @@ public class CharacterManager : Singletone<CharacterManager>
         Destroy(character.health_bar);
         Destroy(character.willpower_bar);
         Destroy(character.panic_Sign.gameObject);
+        Destroy(character.skill_power_meter.gameObject);
 
 
         if (isEnemy) // 적 캐릭터면
