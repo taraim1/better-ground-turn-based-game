@@ -50,10 +50,14 @@ public class Character : MonoBehaviour
     public int Character_index;
     [DoNotSerialize]
     public panic_sign panic_Sign;
+    [DoNotSerialize]
+    public GameObject skill_layoutGroup;
+    [DoNotSerialize]
     public bool isPanic;
     private int remaining_panic_turn;
     [DoNotSerialize]
     public GameObject SPUM_unit_obj; // 캐릭터 spum 오브젝트
+    [DoNotSerialize]
     public bool is_in_battle;
 
     public int get_max_health_of_level(int level)

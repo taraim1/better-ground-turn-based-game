@@ -124,7 +124,7 @@ public class BattleManager : Singletone<BattleManager> // 싱글톤임
         StartCoroutine(enemy_skill_setting_phase());
 
         // 턴 시작 이벤트 날림
-        BattleEventManager.Trigger_event("turn_start_phase"); 
+        BattleEventManager.turn_start_phase?.Invoke();
 
         yield break;
 
@@ -137,7 +137,7 @@ public class BattleManager : Singletone<BattleManager> // 싱글톤임
         current_phase = phases.enemy_skill_setting_phase;
         yield return new WaitForSeconds(0.01f); // 패닉 관련 버그 때문에 잠시 쉼
 
-        BattleEventManager.Trigger_event("Enemy_skill_setting_phase");
+        BattleEventManager.enemy_skill_setting_phase?.Invoke();
 
         // 스킬 설정 끝나는 거 감지
         while (true) 
@@ -167,7 +167,7 @@ public class BattleManager : Singletone<BattleManager> // 싱글톤임
 
         // 카드 하이라이트들 해제
         CardManager.instance.Change_active_hand(-1);
-        BattleEventManager.Trigger_event("enemy_skill_card_deactivate");
+        BattleEventManager.enemy_skill_card_deactivate?.Invoke();
 
         // 적의 남은 카드들을 순서대로 사용
         while (enemy_cards.Count > 0) 

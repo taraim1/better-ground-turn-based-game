@@ -9,14 +9,14 @@ public class CharacterManager : Singletone<CharacterManager>
 {
     // 적 데이터가 담긴 스크립터블 오브젝트
     [SerializeField] EnemySettingSO enemySettingSO;
-    public enum character_code 
+    public enum character_code
     {
         not_a_playable_character,
         kimchunsik,
         test
     }
 
-    public enum enemy_code 
+    public enum enemy_code
     {
         not_a_enemy_character,
         test
@@ -59,7 +59,7 @@ public class CharacterManager : Singletone<CharacterManager>
 
         // default
         return "";
-        
+
     }
 
     // 캐릭터를 캐릭터 코드에 해당하는 json 파일에 저장
@@ -81,7 +81,7 @@ public class CharacterManager : Singletone<CharacterManager>
     }
 
     // 전투하기 전 스테이지 보여줄 때 캐릭터 스폰
-    public void spawn_stage_show_character(int stage_index) 
+    public void spawn_stage_show_character(int stage_index)
     {
         // 아군 캐릭터 생성
         int party_member_count = PartyManager.instance.get_party_member_count();
@@ -112,6 +112,15 @@ public class CharacterManager : Singletone<CharacterManager>
             character.SPUM_unit_obj = Instantiate(spPrefab, obj.transform);
             character.SPUM_unit_obj.transform.localPosition = new Vector3(0, -0.4f, 0);
             character.SPUM_unit_obj.transform.localScale = new Vector3(-1.3f, 1.3f, 1);
+
+            // 캐릭터 리스트에 넣어줌
+            StageManager.instance.characters.Add(obj);
+
+            // 캐릭터 번호 설정
+            character.Character_index = i;
+
+            // 스테이지 정보창 전용 스크립트 넣어줌
+            obj.AddComponent<Character_On_stage_show>();
         }
 
         // 적 캐릭터 생성
@@ -156,7 +165,7 @@ public class CharacterManager : Singletone<CharacterManager>
     {
         // 아군 캐릭터 생성
         int party_member_count = PartyManager.instance.get_party_member_count();
-        for (int i = 0; i < party_member_count; i++) 
+        for (int i = 0; i < party_member_count; i++)
         {
 
             // 플레이어블 캐릭터가 소환될 위치를 불러옴
@@ -258,7 +267,7 @@ public class CharacterManager : Singletone<CharacterManager>
             BattleManager.instance.hand_data.RemoveAt(character.Character_index);
 
             // 패 보는 중이었으면 패 숨기기
-            if (character.Character_index == CardManager.instance.active_index) 
+            if (character.Character_index == CardManager.instance.active_index)
             {
                 CardManager.instance.Change_active_hand(-1);
             }
@@ -267,7 +276,7 @@ public class CharacterManager : Singletone<CharacterManager>
             BattleManager.instance.playable_characters.Remove(character.gameObject);
 
             // 남은 캐릭터 인덱스 조정
-            for (int i = 0; i < BattleManager.instance.playable_characters.Count; i++) 
+            for (int i = 0; i < BattleManager.instance.playable_characters.Count; i++)
             {
                 BattleManager.instance.playable_characters[i].GetComponent<Character>().Character_index = i;
             }
@@ -275,6 +284,9 @@ public class CharacterManager : Singletone<CharacterManager>
 
         else // 적 캐릭터면
         {
+            // UI 없애기
+            Destroy(character.skill_layoutGroup);
+
             // 사용하는 스킬 카드 없애기
             List<GameObject> enemy_skills = character.gameObject.GetComponent<EnemyAI>().using_skill_Objects;
             for (int i = 0; i < enemy_skills.Count; i++)
@@ -292,14 +304,35 @@ public class CharacterManager : Singletone<CharacterManager>
             }
         }
 
-    
+
         // 캐릭터 오브젝트 없애기
         Destroy(character.gameObject);
 
         // 아군이면 사망 이벤트 발동 (적의 스킬 중 이 캐릭터를 타게팅하고 있는 걸 없애줌)
-        if (!isEnemy) 
+        if (!isEnemy)
         {
-            BattleEventManager.Trigger_event("player_character_died");
+            BattleEventManager.player_character_died?.Invoke();
         }
     }
+    public void kill_character_in_stage_show(Character character) // 스테이지 보여줄 때 캐릭터 죽이는 메소드 
+    {
+        bool isEnemy = character.isEnemyCharacter;
+
+        // UI 없애기
+        Destroy(character.health_bar);
+        Destroy(character.willpower_bar);
+        Destroy(character.panic_Sign.gameObject);
+
+
+        if (isEnemy) // 적 캐릭터면
+        {
+            // UI 없애기
+            Destroy(character.skill_layoutGroup);
+        }
+
+        // 캐릭터 오브젝트 없애기
+        Destroy(character.gameObject);
+
+    }
+
 }

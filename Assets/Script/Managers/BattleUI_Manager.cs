@@ -15,8 +15,10 @@ public class BattleUI_Manager : Singletone<BattleUI_Manager>
 
     GameObject canvas;
 
+
     public void summon_UI(GameObject character_obj, bool isEnemy) // 캐릭터의 UI요소들 생성
     {
+
         canvas = GameObject.Find("Canvas");
         Character character = character_obj.GetComponent<Character>();
 
@@ -28,6 +30,7 @@ public class BattleUI_Manager : Singletone<BattleUI_Manager>
         // 정신력바
         willpower_bar = Instantiate(willpower_bar_prefab, new Vector3(0, 0, 0), Quaternion.identity, canvas.transform);
         willpower_bar.GetComponent<UI_hook_up_object>().target_object = character_obj;
+
 
         // 바 붙이기
         if (isEnemy)
@@ -59,7 +62,9 @@ public class BattleUI_Manager : Singletone<BattleUI_Manager>
             GameObject layoutGroup = Instantiate(layoutGroup_prefab, new Vector3(0, 0, 0), Quaternion.identity, canvas.transform);
             layoutGroup.GetComponent<UI_hook_up_object>().target_object = character_obj;
             character_obj.GetComponent<EnemyAI>().layoutGroup = layoutGroup;
+            character.skill_layoutGroup = layoutGroup;
         }
 
     }
+
 }

@@ -14,26 +14,9 @@ public class BattleEventManager : MonoBehaviour
     public static Action turn_start_phase;
     public static Action player_character_died;
 
+    // 스테이지 보여줄 때 씀
+    public static Action character_drag_started_on_stageShow;
+    public static Action character_drag_finished_on_stageShow;
 
-    public static void Trigger_event(string type)
-    {
-        switch (type) 
-        { 
-            case "Enemy_skill_setting_phase":
-                enemy_skill_setting_phase?.Invoke();
-                break;
-            case "enemy_skill_card_deactivate":
-                enemy_skill_card_deactivate?.Invoke();
-                break;
-            case "skill_used":
-                skill_used?.Invoke();
-                break;
-            case "turn_start_phase":
-                turn_start_phase?.Invoke();
-                break;
-            case "player_character_died":
-                player_character_died?.Invoke();
-                break;
-        }
-    }
+
 }

@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 3377405170695446698}
   - component: {fileID: 7287670621830155501}
   - component: {fileID: 3990429286925742260}
+  - component: {fileID: 6348628295538272550}
   m_Layer: 0
   m_Name: character_base
   m_TagString: PlayerCharacter
@@ -111,3 +112,30 @@ MonoBehaviour:
   isPanic: 0
   SPUM_unit_obj: {fileID: 0}
   is_in_battle: 0
+--- !u!50 &6348628295538272550
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1766090985930963044}
+  m_BodyType: 1
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0

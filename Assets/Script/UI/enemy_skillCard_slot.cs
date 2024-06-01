@@ -42,7 +42,7 @@ public class enemy_skillCard_slot : MonoBehaviour, IPointerDownHandler, IPointer
         if (eventData.button == PointerEventData.InputButton.Left && BattleManager.instance.current_phase == BattleManager.phases.player_skill_phase)
         {
             // 적 카드 강조 해제
-            BattleEventManager.Trigger_event("enemy_skill_card_deactivate");
+            BattleEventManager.enemy_skill_card_deactivate?.Invoke();
             // 이 슬롯의 카드를 활성화 위치로
             CardManager.instance.highlight_enemy_card(card_obj);
             isHighlightedByClick = true;
@@ -57,7 +57,7 @@ public class enemy_skillCard_slot : MonoBehaviour, IPointerDownHandler, IPointer
             // 이 슬롯의 카드를 카드 판정 대상으로
             BattleCalcManager.instance.set_target(card_obj.GetComponent<card>());
             // 적 카드 강조 해제
-            BattleEventManager.Trigger_event("enemy_skill_card_deactivate");
+            BattleEventManager.enemy_skill_card_deactivate?.Invoke();
             // 이 슬롯의 카드를 활성화 위치로
             CardManager.instance.highlight_enemy_card(card_obj);
             isHighlightedByClick = false;
@@ -75,7 +75,7 @@ public class enemy_skillCard_slot : MonoBehaviour, IPointerDownHandler, IPointer
             // 타겟 설정 해제
             BattleCalcManager.instance.clear_target_card();
             // 적 카드 강조 해제
-            BattleEventManager.Trigger_event("enemy_skill_card_deactivate");
+            BattleEventManager.enemy_skill_card_deactivate?.Invoke();
         }
 
         isMouseOnThis = false;
