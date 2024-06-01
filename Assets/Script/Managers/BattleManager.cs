@@ -40,7 +40,7 @@ public class BattleManager : Singletone<BattleManager> // 싱글톤임
         turn_end_phase
     }
 
-    IEnumerator battle() //전투 코루틴
+    IEnumerator battle(int stage_index) //전투 코루틴
     {
         //변수 초기화
         is_Characters_spawned = false;
@@ -50,7 +50,7 @@ public class BattleManager : Singletone<BattleManager> // 싱글톤임
         enemy_cards.Clear();
 
         // 캐릭터 오브젝트 및 Character 인스턴스 생성 (아군 / 적 모두)
-        CharacterManager.instance.spawn_character(0);
+        CharacterManager.instance.spawn_character(stage_index);
 
         // 카드 덱 세팅
         CardManager.instance.Setup_all();
@@ -211,6 +211,11 @@ public class BattleManager : Singletone<BattleManager> // 싱글톤임
         SceneManager.sceneLoaded += Check_battle_scene_load;
     }
 
+    private void OnDisable()
+    {
+        SceneManager.sceneLoaded -= Check_battle_scene_load;
+    }
+
     //Battle씬 시작시 전투 시작되도록 하기
     private void Check_battle_scene_load(Scene scene, LoadSceneMode mode)
     {
@@ -227,7 +232,7 @@ public class BattleManager : Singletone<BattleManager> // 싱글톤임
         if (battle_start_trigger) 
         {
             battle_start_trigger = false;
-            StartCoroutine(battle());
+            StartCoroutine(battle(StageManager.instance.stage_index));
         }
     }
 }

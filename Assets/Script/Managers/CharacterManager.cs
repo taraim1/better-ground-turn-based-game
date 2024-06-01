@@ -80,7 +80,78 @@ public class CharacterManager : Singletone<CharacterManager>
         return output;
     }
 
+    // 전투하기 전 스테이지 보여줄 때 캐릭터 스폰
+    public void spawn_stage_show_character(int stage_index) 
+    {
+        // 아군 캐릭터 생성
+        int party_member_count = PartyManager.instance.get_party_member_count();
 
+        for (int i = 0; i < party_member_count; i++)
+        {
+            // 플레이어블 캐릭터가 소환될 위치를 불러옴
+            Vector3 spawn_pos = BattleManager.instance.playable_character_position_settings[i];
+
+            // 플레이어블 캐릭터 오브젝트 생성
+            GameObject obj = Instantiate(playable_character_base, spawn_pos, Quaternion.identity);
+
+            // 캐릭터 데이터 불러옴
+            Character character = obj.GetComponent<Character>();
+            JsonUtility.FromJsonOverwrite(load_character_from_json(PartyManager.instance.get_charactor_code(i)), character);
+
+            // 캐릭터 적 아군 판별하는 변수 설정
+            character.isEnemyCharacter = false;
+
+            // 캐릭터가 전투에 쓰려고 만든 건지 설정
+            character.is_in_battle = false;
+
+            // 캐릭터에 붙은 UI들 생성
+            BattleUI_Manager.instance.summon_UI(obj, false);
+
+            // SPUM 데이터 불러오기
+            GameObject spPrefab = Resources.Load<GameObject>(character.SPUM_datapath);
+            character.SPUM_unit_obj = Instantiate(spPrefab, obj.transform);
+            character.SPUM_unit_obj.transform.localPosition = new Vector3(0, -0.4f, 0);
+            character.SPUM_unit_obj.transform.localScale = new Vector3(-1.3f, 1.3f, 1);
+        }
+
+        // 적 캐릭터 생성
+        int enemy_count = enemySettingSO.enemy_Settigs[stage_index].enemy_Codes.Count;
+        for (int i = 0; i < enemy_count; i++)
+        {
+
+            // 적 캐릭터가 소환될 위치를 불러옴
+            Vector3 spawn_pos = BattleManager.instance.enemy_character_position_settings[i];
+
+            // 적 캐릭터 오브젝트 생성
+            GameObject obj = Instantiate(enemy_character_base, spawn_pos, Quaternion.identity);
+
+            // 적 데이터 불러오기
+            Character character = obj.GetComponent<Character>();
+            JsonUtility.FromJsonOverwrite(load_character_from_json(enemySettingSO.enemy_Settigs[stage_index].enemy_Codes[i]), character);
+
+            // 캐릭터 적 아군 판별하는 변수 설정
+            character.isEnemyCharacter = true;
+
+            // 캐릭터가 전투에 쓰려고 만든 건지 설정
+            character.is_in_battle = false;
+
+            // 적 AI 제거
+            Destroy(obj.GetComponent<EnemyAI>());
+
+            // 캐릭터에 붙은 UI들 생성
+            BattleUI_Manager.instance.summon_UI(obj, true);
+
+            // SPUM 데이터 불러오기
+            GameObject spPrefab = Resources.Load<GameObject>(character.SPUM_datapath);
+            character.SPUM_unit_obj = Instantiate(spPrefab, obj.transform);
+            character.SPUM_unit_obj.transform.localPosition = new Vector3(0, -0.4f, 0);
+            character.SPUM_unit_obj.transform.localScale = new Vector3(1.3f, 1.3f, 1);
+        }
+
+    }
+
+
+    // 전투 시 캐릭터 스폰
     public void spawn_character(int stage_index)
     {
         // 아군 캐릭터 생성
@@ -107,6 +178,9 @@ public class CharacterManager : Singletone<CharacterManager>
 
             // 캐릭터 적 아군 판별하는 변수 설정
             character.isEnemyCharacter = false;
+
+            // 캐릭터가 전투에 쓰려고 만든 건지 설정
+            character.is_in_battle = true;
 
             // 플레이어블 캐릭터 오브젝트를 BattleManager의 리스트에 넣기
             BattleManager.instance.playable_characters.Add(obj);
@@ -135,12 +209,15 @@ public class CharacterManager : Singletone<CharacterManager>
             // 적 캐릭터 오브젝트 번호 지정
             obj.GetComponent<Character>().Character_index = i;
 
-            // 적 데이터를 불러와 BattleManager의 적 리스트에 넣기
+            // 적 데이터를 불러오기
             Character character = obj.GetComponent<Character>();
             JsonUtility.FromJsonOverwrite(load_character_from_json(enemySettingSO.enemy_Settigs[stage_index].enemy_Codes[i]), character);
 
             // 캐릭터 적 아군 판별하는 변수 설정
             character.isEnemyCharacter = true;
+
+            // 캐릭터가 전투에 쓰려고 만든 건지 설정
+            character.is_in_battle = true;
 
             // 적 데이터를 AI에 연결
             obj.GetComponent<EnemyAI>().enemy = character;

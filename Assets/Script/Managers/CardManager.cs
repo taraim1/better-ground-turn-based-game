@@ -13,7 +13,9 @@ public class CardManager : Singletone<CardManager>
     [SerializeField] CardsSO cardsSO;
     [SerializeField] Transform card_spawnpoint;
     [SerializeField] Transform left_card_transform;
+    [SerializeField] Transform left_card_over4_transform;
     [SerializeField] Transform right_card_transform;
+    [SerializeField] Transform right_card_over4_transform;
     [SerializeField] Transform diactivated_card_transform;
     [SerializeField] Transform highlighted_card_transform;
     [SerializeField] Transform enemy_card_transform;
@@ -238,7 +240,15 @@ public class CardManager : Singletone<CardManager>
         }
 
         List<PRS> origin_cards_PRS;
-        origin_cards_PRS = set_card_alignment(left_card_transform, right_card_transform, BattleManager.instance.hand_data[index].Count, 0.5f, Vector3.one * 1.8f, index);
+        if (BattleManager.instance.hand_data[index].Count >= 4) 
+        {
+            origin_cards_PRS = set_card_alignment(left_card_over4_transform, right_card_over4_transform, BattleManager.instance.hand_data[index].Count, 0.5f, Vector3.one * 1.8f, index);
+        }
+        else 
+        {
+            origin_cards_PRS = set_card_alignment(left_card_transform, right_card_transform, BattleManager.instance.hand_data[index].Count, 0.5f, Vector3.one * 1.8f, index);
+        }
+        
 
         // 드래그 중인 카드가 있는지 검사
         bool isdragging = false;

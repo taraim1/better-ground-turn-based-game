@@ -54,6 +54,8 @@ public class Character : MonoBehaviour
     private int remaining_panic_turn;
     [DoNotSerialize]
     public GameObject SPUM_unit_obj; // 캐릭터 spum 오브젝트
+    public bool is_in_battle;
+
     public int get_max_health_of_level(int level)
     {
         if (level > max_health.Count)
@@ -133,9 +135,10 @@ public class Character : MonoBehaviour
     // 카드 사용시 타깃 해제, 타깃 설정은 DetectingRay에 있음
     private void OnMouseExit()
     {
-
-        BattleCalcManager.instance.clear_target_character();
-        
+        if (is_in_battle)
+        {
+            BattleCalcManager.instance.clear_target_character();
+        }
     }
 
     // 턴 시작시 발동되는 메소드
