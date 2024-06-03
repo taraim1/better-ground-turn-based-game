@@ -18,5 +18,7 @@ public class BattleEventManager : MonoBehaviour
     public static Action character_drag_started_on_stageShow;
     public static Action character_drag_finished_on_stageShow;
 
+    // °ø¿ë
+    public static Action party_member_changed;
 
 }

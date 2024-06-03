@@ -1,0 +1,30 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class Character_select_manager : MonoBehaviour
+{
+    public List<GameObject> character_select_illusts;
+
+    // 파티에 있는 캐릭터는 캐릭터 선택에서 빠지고 없는 캐릭터는 나오게 함
+    private void Update_character_select_image() 
+    {
+        foreach (GameObject obj in character_select_illusts) 
+        {
+            CharacterManager.character_code code = obj.GetComponent<Character>().code;
+            if (PartyManager.instance.check_character_in_party(code)) { obj.SetActive(true); }
+            else { obj.SetActive(false); }
+        }
+    }
+
+    private void Start()
+    {
+        Update_character_select_image();
+        BattleEventManager.party_member_changed += Update_character_select_image;
+    }
+
+    private void OnDestroy()
+    {
+        BattleEventManager.party_member_changed -= Update_character_select_image;
+    }
+}
