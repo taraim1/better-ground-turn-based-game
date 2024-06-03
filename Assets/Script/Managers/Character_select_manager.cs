@@ -11,9 +11,9 @@ public class Character_select_manager : MonoBehaviour
     {
         foreach (GameObject obj in character_select_illusts) 
         {
-            CharacterManager.character_code code = obj.GetComponent<Character>().code;
-            if (PartyManager.instance.check_character_in_party(code)) { obj.SetActive(true); }
-            else { obj.SetActive(false); }
+            CharacterManager.character_code code = obj.GetComponent<Character_image_on_stageShow>().code;
+            if (PartyManager.instance.check_character_in_party(code)) { obj.SetActive(false); }
+            else { obj.SetActive(true); }
         }
     }
 
