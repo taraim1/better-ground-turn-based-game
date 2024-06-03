@@ -36,6 +36,7 @@ public class PartyManager : Singletone<PartyManager>
     {
         string output = File.ReadAllText(Application.dataPath + "/Data/PartyData.json");
         PartyData = JsonUtility.FromJson<PartyDataContainer>(output);
+        BattleEventManager.party_member_changed?.Invoke();
     }
 
     // 캐릭터 코드를 파티에 추가
@@ -46,9 +47,10 @@ public class PartyManager : Singletone<PartyManager>
             Debug.Log("오류: 파티 최대 인원 수에 도달하여 더 이상 추가가 불가능합니다.");
             return;
         }
- 
+
         PartyData.party_codes.Add(code);
         PartyData.party_member_count++;
+        BattleEventManager.party_member_changed?.Invoke();
         save_party_to_json();
 
     }
@@ -69,6 +71,7 @@ public class PartyManager : Singletone<PartyManager>
         }
 
         PartyData.party_member_count--;
+        BattleEventManager.party_member_changed?.Invoke();
         save_party_to_json();
     }
 
@@ -94,6 +97,12 @@ public class PartyManager : Singletone<PartyManager>
         }
 
         return PartyData.party_codes[index];
+    }
+
+    // 파티에 캐릭터가 있는지 리턴
+    public bool check_character_in_party(CharacterManager.character_code code) 
+    {
+        return PartyData.party_codes.Contains(code);
     }
 
     private void Start()

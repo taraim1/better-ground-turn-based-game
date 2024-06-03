@@ -89,9 +89,9 @@ public class BattleCalcManager : Singletone<BattleCalcManager>
 
 
             // 적 카드 강조 해제
-            BattleEventManager.Trigger_event("enemy_skill_card_deactivate");
+            BattleEventManager.enemy_skill_card_deactivate?.Invoke();
 
-            BattleEventManager.Trigger_event("skill_used");
+            BattleEventManager.skill_used?.Invoke();
             cost_Meter.Current_cost = cost_Meter.Current_cost - using_card.Card.cost;
             using_card_power = Random.Range(using_card.minpower, using_card.maxpower + 1);
             target_card_power = Random.Range(target_card.minpower, target_card.maxpower + 1);
@@ -111,9 +111,9 @@ public class BattleCalcManager : Singletone<BattleCalcManager>
             if (using_card.Card.isDirectUsable) 
             {
                 // 적 카드 강조 해제
-                BattleEventManager.Trigger_event("enemy_skill_card_deactivate");
+                BattleEventManager.enemy_skill_card_deactivate?.Invoke();
 
-                BattleEventManager.Trigger_event("skill_used");
+                BattleEventManager.skill_used?.Invoke();
                 cost_Meter.Current_cost = cost_Meter.Current_cost - using_card.Card.cost;
                 using_card_power = Random.Range(using_card.minpower, using_card.maxpower + 1);
                 apply_direct_use_result(using_card, target_character, using_card_power);
