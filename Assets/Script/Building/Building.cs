@@ -65,7 +65,7 @@ public class Building : MonoBehaviour
             firstGoldClickTime = DateTime.Now;
             buildingDataGold.isFirstClickSetGold = true;
             ResourceManager.instance.Gold += 1000;
-            GoldText.text = "Gold : " +  ResourceManager.instance.Gold;
+            GoldText.text = "골드 : " +  ResourceManager.instance.Gold;
             Write_Json_file();
             Debug.Log("Gold : " + ResourceManager.instance.Gold);
             Debug.Log("First button clicked at: " + firstGoldClickTime);
@@ -91,7 +91,7 @@ public class Building : MonoBehaviour
         {
             if (SpentMinutesGold >= 10){ SpentMinutesGold = 10; }
             ResourceManager.instance.Gold = ResourceManager.instance.Gold + SpentMinutesGold*LevelManager.instance.GoldCaveLevel;
-            GoldText.text = "Gold : " +  ResourceManager.instance.Gold;
+            GoldText.text = "골드 : " +  ResourceManager.instance.Gold;
             Debug.Log("Gold : " + ResourceManager.instance.Gold);
             firstGoldClickTime = DateTime.Now;
             GoldImage.SetActive(false);
@@ -110,7 +110,7 @@ public class Building : MonoBehaviour
             firstGemClickTime = DateTime.Now;
             buildingDataGem.isFirstClickSetGem = true;
             ResourceManager.instance.Gem += 100;
-            GemText.text = "Gem : " +  ResourceManager.instance.Gem;
+            GemText.text = "보석 : " +  ResourceManager.instance.Gem;
             Write_Json_file();
             Debug.Log("Gem : " + ResourceManager.instance.Gem);
             Debug.Log("First button clicked at: " + firstGemClickTime);
@@ -137,7 +137,7 @@ public class Building : MonoBehaviour
         {
             if (SpentMinutesGem >= 10){ SpentMinutesGem = 10; }
             ResourceManager.instance.Gem = ResourceManager.instance.Gem + SpentMinutesGem*LevelManager.instance.GemCaveLevel;
-            GemText.text = "Gem : " +  ResourceManager.instance.Gem;
+            GemText.text = "보석 : " +  ResourceManager.instance.Gem;
             Debug.Log("Gem : " + ResourceManager.instance.Gem);
 
             firstGemClickTime = DateTime.Now;
@@ -158,9 +158,9 @@ public class Building : MonoBehaviour
             firstWaterClickTime = DateTime.Now;
             buildingDataWater.isFirstClickSetWater = true;
             ResourceManager.instance.Water += 100;
-            WaterText.text = "Water : " +  ResourceManager.instance.Water;
+            WaterText.text = "성수 : " +  ResourceManager.instance.Water;
             Write_Json_file();
-            Debug.Log("Water : " + ResourceManager.instance.Water);
+            Debug.Log("성수 : " + ResourceManager.instance.Water);
             Debug.Log("First button clicked at: " + firstWaterClickTime);
             WaterImage.SetActive(false);
         }
@@ -184,7 +184,7 @@ public class Building : MonoBehaviour
         {
             if (SpentMinutesWater >= 10){ SpentMinutesWater = 10; }
             ResourceManager.instance.Water = ResourceManager.instance.Water + SpentMinutesWater*LevelManager.instance.WStatueLevel;
-            WaterText.text = "Water : " +  ResourceManager.instance.Water;
+            WaterText.text = "성수 : " +  ResourceManager.instance.Water;
             Debug.Log("Water : " + ResourceManager.instance.Water);
 
             firstWaterClickTime = DateTime.Now;
@@ -232,9 +232,9 @@ public class Building : MonoBehaviour
                 WaterImage.SetActive(true);
             }
         }
-        GoldText.text = "Gold : " +  ResourceManager.instance.Gold;
-        GemText.text = "Gem : " +  ResourceManager.instance.Gem;
-        WaterText.text = "Water : " +  ResourceManager.instance.Water;
+        GoldText.text = "골드 : " +  ResourceManager.instance.Gold;
+        GemText.text = "보석 : " +  ResourceManager.instance.Gem;
+        WaterText.text = "성수 : " +  ResourceManager.instance.Water;
     }
     
     void Write_Json_file() 

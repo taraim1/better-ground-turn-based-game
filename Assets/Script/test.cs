@@ -8,11 +8,23 @@ public class test : MonoBehaviour
 {
     private void Start()
     {
-        // 스킬 언락 확인
-        print(CardManager.instance.check_unlocked(CardManager.skillcard_code.simple_attack));
+        // 캐릭터 인스턴스 생성
+        Character character = new Character();
 
-        // 스킬 언락 설정 (json 자동저장됨, true면 언락된거 false면 언락 안된거)
-        CardManager.instance.set_unlocked(CardManager.skillcard_code.simple_defend, false);
+        // 캐릭터 코드로 캐릭터 불러오기 (예시는 춘식이)
+        JsonUtility.FromJsonOverwrite(CharacterManager.instance.load_character_from_json(CharacterManager.character_code.kimchunsik), character);
+
+        // 캐릭터에 들어있는 것들 불러오는법
+
+        /*
+        character.character_name
+        character.code
+        character.level 
+        이런식으로 접근하면 됨
+
+        자세히 알고싶으면 Script/Character 폴더에 있는 Character 스크립트 보세요
+
+        */
     }
 
 }
