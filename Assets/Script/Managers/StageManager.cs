@@ -16,6 +16,7 @@ public class StageManager : Singletone<StageManager>
 
     private void Check_scene(Scene scene, LoadSceneMode loadSceneMode)
     {
+        characters.Clear();
         if (scene.name == "Stage_show")
         {
             Reload_characters();

@@ -14,4 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   stage_Settings:
   - enemy_Codes: 01000000010000000100000001000000
-    holy_water_requirement: 10
+    holy_water_requirement: 3
