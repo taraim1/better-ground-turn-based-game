@@ -7380,6 +7380,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   stage_index: 0
   characters: []
+  stageSettingSO: {fileID: 11400000, guid: e3eac6021226d6c47b5983b25e229ef6, type: 2}
 --- !u!1 &2021853150
 GameObject:
   m_ObjectHideFlags: 0
@@ -7869,7 +7870,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 677fe6e6903243b41ba753e72c910d0d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemySettingSO: {fileID: 11400000, guid: 9a36f88f1993930418fa27cd8f29fae0, type: 2}
+  StageSettingSO: {fileID: 11400000, guid: e3eac6021226d6c47b5983b25e229ef6, type: 2}
   playable_character_base: {fileID: 1766090985930963044, guid: 9e25d508eddfdb247a2b34bb19f6cfd8,
     type: 3}
   enemy_character_base: {fileID: 1766090985930963044, guid: abb22a00019844b4e900e11f95b9e7ee,

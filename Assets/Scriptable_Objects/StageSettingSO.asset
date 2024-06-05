@@ -10,7 +10,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8851b8ed313b9fb43a49290be7e83c0e, type: 3}
-  m_Name: EnemySettingSO
+  m_Name: StageSettingSO
   m_EditorClassIdentifier: 
-  enemy_Settigs:
-  - enemy_Codes: 010000000100000001000000
+  stage_Settings:
+  - enemy_Codes: 01000000010000000100000001000000
+    holy_water_requirement: 3
