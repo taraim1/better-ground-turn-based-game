@@ -7,6 +7,9 @@ public class Scene_Change : MonoBehaviour
     [SerializeField]
     public GameObject[] Scene_List;
 
+    
+    
+
     void Start()
     {
         Scene_Active(0);
