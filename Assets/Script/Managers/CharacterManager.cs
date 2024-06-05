@@ -7,8 +7,8 @@ using UnityEngine.TextCore.Text;
 
 public class CharacterManager : Singletone<CharacterManager>
 {
-    // 적 데이터가 담긴 스크립터블 오브젝트
-    [SerializeField] EnemySettingSO enemySettingSO;
+    // 스테이지 데이터가 담긴 스크립터블 오브젝트
+    [SerializeField] StageSettingSO StageSettingSO;
     public enum character_code
     {
         not_a_playable_character,
@@ -124,7 +124,7 @@ public class CharacterManager : Singletone<CharacterManager>
         }
 
         // 적 캐릭터 생성
-        int enemy_count = enemySettingSO.enemy_Settigs[stage_index].enemy_Codes.Count;
+        int enemy_count = StageSettingSO.stage_Settings[stage_index].enemy_Codes.Count;
         for (int i = 0; i < enemy_count; i++)
         {
 
@@ -136,7 +136,7 @@ public class CharacterManager : Singletone<CharacterManager>
 
             // 적 데이터 불러오기
             Character character = obj.GetComponent<Character>();
-            JsonUtility.FromJsonOverwrite(load_character_from_json(enemySettingSO.enemy_Settigs[stage_index].enemy_Codes[i]), character);
+            JsonUtility.FromJsonOverwrite(load_character_from_json(StageSettingSO.stage_Settings[stage_index].enemy_Codes[i]), character);
 
             // 캐릭터 적 아군 판별하는 변수 설정
             character.isEnemyCharacter = true;
@@ -208,7 +208,7 @@ public class CharacterManager : Singletone<CharacterManager>
         }
 
         // 적 캐릭터 생성
-        int enemy_count = enemySettingSO.enemy_Settigs[stage_index].enemy_Codes.Count;
+        int enemy_count = StageSettingSO.stage_Settings[stage_index].enemy_Codes.Count;
         for (int i = 0; i < enemy_count; i++)
         {
 
@@ -223,7 +223,7 @@ public class CharacterManager : Singletone<CharacterManager>
 
             // 적 데이터를 불러오기
             Character character = obj.GetComponent<Character>();
-            JsonUtility.FromJsonOverwrite(load_character_from_json(enemySettingSO.enemy_Settigs[stage_index].enemy_Codes[i]), character);
+            JsonUtility.FromJsonOverwrite(load_character_from_json(StageSettingSO.stage_Settings[stage_index].enemy_Codes[i]), character);
 
             // 캐릭터 적 아군 판별하는 변수 설정
             character.isEnemyCharacter = true;
