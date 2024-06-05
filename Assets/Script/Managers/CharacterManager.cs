@@ -317,6 +317,16 @@ public class CharacterManager : Singletone<CharacterManager>
         {
             BattleEventManager.player_character_died?.Invoke();
         }
+
+        // 전투 끝나는 거 감지
+        if (BattleManager.instance.enemy_characters.Count == 0)
+        {
+            BattleEventManager.battle_ended?.Invoke(true);
+        }
+        else if (BattleManager.instance.playable_characters.Count == 0) 
+        {
+            BattleEventManager.battle_ended?.Invoke(false);
+        }
     }
     public void kill_character_in_stage_show(Character character) // 스테이지 보여줄 때 캐릭터 죽이는 메소드 
     {

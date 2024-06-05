@@ -5,10 +5,28 @@ using UnityEngine;
 
 public class DetectRay : MonoBehaviour
 {
+    private bool isBattleEnded;
 
+    private void Awake()
+    {
+        isBattleEnded = false;
+        BattleEventManager.battle_ended += OnBattleEnd;
+    }
 
+    private void OnDestroy()
+    {
+        BattleEventManager.battle_ended -= OnBattleEnd;
+    }
+
+    private void OnBattleEnd(bool victory) 
+    {
+        isBattleEnded = true;
+    }
     void Update()
     {
+        // 전투 종료 감지
+        if (isBattleEnded) { return; }
+
         Vector2 MousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         Collider2D collider = Physics2D.OverlapPoint(MousePos);
 

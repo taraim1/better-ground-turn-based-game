@@ -18,6 +18,14 @@ public class enemy_skillCard_slot : MonoBehaviour, IPointerDownHandler, IPointer
     private bool isHighlightedByClick = false;
     bool isMouseOnThis = false;
 
+    bool isBattleEnded;
+
+    // 전투 끝났을때
+    private void OnBattleEnd(bool victory) 
+    {
+        isBattleEnded = true;
+    }
+
     // 위치 두 개를 주면 라인렌더러를 그려줌
     public IEnumerator Set_line(Vector3 target) 
     {
@@ -38,6 +46,8 @@ public class enemy_skillCard_slot : MonoBehaviour, IPointerDownHandler, IPointer
     // 이 UI를 눌렀을 때
     public void OnPointerDown(PointerEventData eventData) 
     {
+        if (isBattleEnded) { return; }
+
         // 왼쪽 클릭을 하고 현재 페이즈가 플레이어 스킬 사용 페이즈여만 작동됨
         if (eventData.button == PointerEventData.InputButton.Left && BattleManager.instance.current_phase == BattleManager.phases.player_skill_phase)
         {
@@ -52,6 +62,8 @@ public class enemy_skillCard_slot : MonoBehaviour, IPointerDownHandler, IPointer
     // 이 UI 위에 마우스를 대면 (모바일상에선 드래그 중에)
     public void OnPointerEnter(PointerEventData eventData)
     {
+        if (isBattleEnded) { return; }
+
         if (BattleCalcManager.instance.IsUsingCard) // 카드 사용 중이면
         {
             // 이 슬롯의 카드를 카드 판정 대상으로
@@ -70,6 +82,8 @@ public class enemy_skillCard_slot : MonoBehaviour, IPointerDownHandler, IPointer
     // 드래그 중 이 UI 위에 들어왔다 나가면
     public void OnPointerExit(PointerEventData eventData)
     {
+        if (isBattleEnded) { return; }
+
         if (!isHighlightedByClick) // 클릭으로 하이라이트된 게 아니면
         {
             // 타겟 설정 해제
@@ -100,6 +114,9 @@ public class enemy_skillCard_slot : MonoBehaviour, IPointerDownHandler, IPointer
         lineRenderer.endWidth = 0.05f;
         BattleEventManager.skill_used += skill_used;
         BattleEventManager.enemy_skill_card_deactivate += Card_diactivated;
+        BattleEventManager.battle_ended += OnBattleEnd;
+
+        isBattleEnded = false;
     }
 
     private void OnDisable()
@@ -107,6 +124,7 @@ public class enemy_skillCard_slot : MonoBehaviour, IPointerDownHandler, IPointer
         lineRenderer.enabled = false;
         BattleEventManager.skill_used -= skill_used;
         BattleEventManager.enemy_skill_card_deactivate -= Card_diactivated;
+        BattleEventManager.battle_ended -= OnBattleEnd;
     }
 
     private void Update()
