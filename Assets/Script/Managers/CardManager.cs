@@ -26,7 +26,8 @@ public class CardManager : Singletone<CardManager>
     { 
         simple_attack,
         simple_defend,
-        simple_dodge
+        simple_dodge,
+        powerful_attack
     }
 
     // 기타 카드 정보 담은 클래스

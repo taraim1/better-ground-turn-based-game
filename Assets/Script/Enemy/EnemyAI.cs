@@ -20,6 +20,9 @@ public class EnemyAI : MonoBehaviour
     // 이번 턴의 스킬 슬롯이 들어가는 리스트
     public List<GameObject> skill_slots = new List<GameObject>();
 
+    private bool isBattleEnded;
+
+   
     // 적이 이번 턴에 쓸 스킬 카드 코드 리스트를 반환하는 메소드
     private List<CardManager.skillcard_code> get_action()
     {
@@ -51,6 +54,9 @@ public class EnemyAI : MonoBehaviour
     // 이번 턴의 스킬을 설정하는 총괄 메소드
     private void set_skill()
     {
+        // 전투 끝났으면 작동 X
+        if (isBattleEnded) { return; }
+
         List<CardManager.skillcard_code> skill_list = new List<CardManager.skillcard_code>();
 
         // 이전 턴 스킬 다 삭제
@@ -119,6 +125,12 @@ public class EnemyAI : MonoBehaviour
         StartCoroutine(check_dead_target());
     }
 
+    // 전투 끝나면
+    private void OnBattleEnd(bool victory)
+    {
+        isBattleEnded = true;
+    }
+
     private IEnumerator check_dead_target() 
     {
         yield return new WaitForSeconds(0.01f);// 캐릭터 오브젝트 비활성화를 잠시 기다림
@@ -144,6 +156,9 @@ public class EnemyAI : MonoBehaviour
         BattleEventManager.enemy_skill_setting_phase += set_skill;
         BattleEventManager.enemy_skill_card_deactivate += return_card;
         BattleEventManager.player_character_died += OnPlayerCharacterDied;
+        BattleEventManager.battle_ended += OnBattleEnd;
+
+        isBattleEnded = false;
     }
 
     private void OnDisable()
@@ -151,5 +166,7 @@ public class EnemyAI : MonoBehaviour
         BattleEventManager.enemy_skill_setting_phase -= set_skill;
         BattleEventManager.enemy_skill_card_deactivate -= return_card;
         BattleEventManager.player_character_died -= OnPlayerCharacterDied;
+        BattleEventManager.battle_ended -= OnBattleEnd;
     }
 }
+

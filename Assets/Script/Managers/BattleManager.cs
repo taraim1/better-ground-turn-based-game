@@ -31,6 +31,9 @@ public class BattleManager : Singletone<BattleManager> // 싱글톤임
     // 적이 이번 턴에 사용 중인 카드 리스트
     public List<card> enemy_cards = new List<card>();
 
+    [SerializeField] private GameObject battle_result_canvas;
+
+    public IEnumerator current_phase_coroutine;
     public enum phases // 한 턴의 페이즈 모음
     { 
         turn_start_phase,
@@ -42,12 +45,16 @@ public class BattleManager : Singletone<BattleManager> // 싱글톤임
 
     IEnumerator battle(int stage_index) //전투 코루틴
     {
+
         //변수 초기화
         is_Characters_spawned = false;
         playable_characters.Clear();
         enemy_characters.Clear();
         hand_data.Clear();
         enemy_cards.Clear();
+        battle_result_canvas = GameObject.Find("Battle Result Canvas");
+        battle_result_canvas.SetActive(false);
+
 
         // 캐릭터 오브젝트 및 Character 인스턴스 생성 (아군 / 적 모두)
         CharacterManager.instance.spawn_character(stage_index);
@@ -91,7 +98,8 @@ public class BattleManager : Singletone<BattleManager> // 싱글톤임
 
 
         // 턴 시작
-        StartCoroutine(turn_start_phase());
+        current_phase_coroutine = turn_start_phase();
+        StartCoroutine(current_phase_coroutine);
 
         yield break;
     
@@ -120,11 +128,12 @@ public class BattleManager : Singletone<BattleManager> // 싱글톤임
         // 코스트 4 증가
         cost_meter.Current_cost += 4;
 
-        // 적 스킬 설정 시작
-        StartCoroutine(enemy_skill_setting_phase());
-
         // 턴 시작 이벤트 날림
         BattleEventManager.turn_start_phase?.Invoke();
+
+        // 적 스킬 설정 시작
+        current_phase_coroutine = enemy_skill_setting_phase();
+        StartCoroutine(current_phase_coroutine);
 
         yield break;
 
@@ -144,7 +153,8 @@ public class BattleManager : Singletone<BattleManager> // 싱글톤임
         {
             if (enemy_skill_set_count == enemy_characters.Count) 
             {
-                StartCoroutine(player_skill_phase());
+                current_phase_coroutine = player_skill_phase();
+                StartCoroutine(current_phase_coroutine);
                 yield break;
             }
 
@@ -157,6 +167,7 @@ public class BattleManager : Singletone<BattleManager> // 싱글톤임
     IEnumerator player_skill_phase()
     {
         current_phase = phases.player_skill_phase;
+        current_phase_coroutine = null;
         yield break;
     }
 
@@ -193,7 +204,8 @@ public class BattleManager : Singletone<BattleManager> // 싱글톤임
         BattleCalcManager.instance.Clear_all();
 
         // 턴 끝나는 페이즈로
-        StartCoroutine(turn_end_phase());
+        current_phase_coroutine = turn_end_phase();
+        StartCoroutine(current_phase_coroutine);
 
         yield break;
     }
@@ -201,7 +213,8 @@ public class BattleManager : Singletone<BattleManager> // 싱글톤임
     IEnumerator turn_end_phase() 
     {
         // 다음 턴 시작 페이즈로
-        StartCoroutine(turn_start_phase());
+        current_phase_coroutine = turn_start_phase();
+        StartCoroutine(current_phase_coroutine);
         yield break;
     }
 
@@ -209,11 +222,15 @@ public class BattleManager : Singletone<BattleManager> // 싱글톤임
     {
         // 델리게이트 체인 추가
         SceneManager.sceneLoaded += Check_battle_scene_load;
+
+        // 이벤트 추가
+        BattleEventManager.battle_ended += OnBattleEnd;
     }
 
     private void OnDisable()
     {
         SceneManager.sceneLoaded -= Check_battle_scene_load;
+        BattleEventManager.battle_ended -= OnBattleEnd;
     }
 
     //Battle씬 시작시 전투 시작되도록 하기
@@ -226,13 +243,37 @@ public class BattleManager : Singletone<BattleManager> // 싱글톤임
         
     }
 
+    // 전투 끝나는 거 감지
+    private void OnBattleEnd(bool victory) 
+    {
+        // 패 전부 숨기기
+        CardManager.instance.Change_active_hand(-1);
+        BattleEventManager.enemy_skill_card_deactivate?.Invoke();
 
+        // 진행 중인 전투 중지
+        if (current_phase_coroutine != null) 
+        {
+            StopCoroutine(current_phase_coroutine);
+        }
+
+        // 전투 결과 띄움
+        battle_result_canvas.SetActive(true);
+        Battle_result_canvas canvas_Script = battle_result_canvas.GetComponent<Battle_result_canvas>();
+        canvas_Script.Set_result(victory);
+
+        // 전투 보상 계산 및 띄움
+        if (victory) 
+        {
+            StartCoroutine(StageManager.instance.calc_and_show_battle_loot());
+        }
+    }
     private void Update()
     {
         if (battle_start_trigger) 
         {
             battle_start_trigger = false;
-            StartCoroutine(battle(StageManager.instance.stage_index));
+            current_phase_coroutine = battle(StageManager.instance.stage_index);
+            StartCoroutine(current_phase_coroutine);
         }
     }
 }
