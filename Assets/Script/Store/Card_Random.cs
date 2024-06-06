@@ -3,7 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
-using UnityEngine.SceneManagement;
+using System.IO;
+using static CharacterManager;
+using UnityEngine.TextCore.Text;
 
 public class Random_Card : MonoBehaviour
 {
@@ -11,41 +13,33 @@ public class Random_Card : MonoBehaviour
     public GameObject cardPrefab;
     public Transform Card_Summon;
     public List<string> Grade_Result;
+
     [SerializeField]
     public List<Card_UI> Card_Prefabs;
+
     [SerializeField]
     public List<Card_Data> Card_Results;
+
+    [SerializeField]
+    public List<string> Char_Results;
+
     public Card_Data card_Data;
     public Card_DataSO card_DataSO;
     //카드들의 등급
     string[] Card_Grade = new string[]
-    {
-        "Common",
-        "Rare",
-        "Epic",
-        "Legendary"
-    };
-    //카드 리스트
-    string[] Common_Card =
-    {
-        "Gay",
-        "Hay"
-    };
-    string[] Rare_Card =
-    {
-        "Gay",
-        "Hay"
-    };
-    string[] Epic_Card =
-    {
-        "Gay",
-        "Hay"
-    };
-    string[] Legend_Card =
-    {
-        "Gay",
-        "Hay"
-    };
+    { "Common", "Rare", "Epic","Legendary"};
+    //스킬 카드 리스트
+    readonly string[] Skill_Common_Card = { "Test1", "Test2" };
+    readonly string[] Skill_Rare_Card = { "Test1", "Test2" };
+    readonly string[] Skill_Epic_Card = {"Test1", "Test2" };
+    readonly string[] Skill_Legend_Card = {"Test1", "Test2" };
+    //캐릭터 카드 리스트
+    readonly string[] Char_Common_Card ={ "kimchunsik", "test"};
+    readonly string[] Char_Rare_Card = { "kimchunsik", "test" };
+    readonly string[] Char_Epic_Card = { "kimchunsik", "test" };
+    readonly string[] Char_Legend_Card = { "kimchunsik", "test" };
+
+    
     //각 등급별 확률
     float[] Card_Percent = new float[4]
     {
@@ -80,7 +74,7 @@ public class Random_Card : MonoBehaviour
         return _Chosen_Grade[_Percent.Length - 1];
     }
     
-    public Card_Data Card_Pick_Which(string Grade)
+    public Card_Data Card_Pick_Skill(string Grade)
     {
         //card_DataSO = GetComponent<Card_DataSO>();
         String[] selected_cardlist = null;
@@ -88,18 +82,10 @@ public class Random_Card : MonoBehaviour
         //등급에 따른 카드풀 선택
         switch (Grade)
         {
-            case "Common":
-                selected_cardlist = Common_Card;
-                break;
-            case "Rare":
-                selected_cardlist = Rare_Card;
-                break;
-            case "Epic":
-                selected_cardlist = Epic_Card;
-                break;
-            case "Legendary":
-                selected_cardlist = Legend_Card;
-                break;
+            case "Common": selected_cardlist = Skill_Common_Card; break;
+            case "Rare": selected_cardlist = Skill_Rare_Card; break;
+            case "Epic": selected_cardlist = Skill_Epic_Card; break;
+            case "Legendary": selected_cardlist = Skill_Legend_Card; break;
         }
 
         //고른 카드 풀중에서 하나 무작위 선택
@@ -108,17 +94,41 @@ public class Random_Card : MonoBehaviour
             int randomIndex = UnityEngine.Random.Range(0, selected_cardlist.Length);
             for (int i = 0; i < card_DataSO.cards.Length; i++)
             {
-                if(card_DataSO.cards[i].Card_Name == selected_cardlist[randomIndex])//이름을 대조해요
+                if (card_DataSO.cards[i].Card_Name == selected_cardlist[randomIndex])//이름을 대조해요
                 {
                     return card_DataSO.cards[i];
                 }
-                
+
             }
             return null;
         }
         else return null;
+    }
+
+    public string Card_Pick_Char(string Grade)
+    {
+        String[] selected_cardlist = null;
+        switch (Grade)
+        {
+            case "Common": selected_cardlist = Char_Common_Card; break;
+            case "Rare": selected_cardlist = Char_Rare_Card; break;
+            case "Epic": selected_cardlist = Char_Epic_Card; break;
+            case "Legendary": selected_cardlist = Char_Legend_Card; break;
+        }
+        //고른 카드 풀중에서 하나 무작위 선택
+        if (selected_cardlist != null && selected_cardlist.Length > 0)
+        {
+            int randomIndex = UnityEngine.Random.Range(0, selected_cardlist.Length);
+            return selected_cardlist[randomIndex];
+        }
+        else
+        {
+            Debug.LogError("아니 ㅅㅂ");
+            return null; 
+        }
 
     }
+    
 
     public void Randomizer_1Time()//1회 뽑기 코드
     {
@@ -132,29 +142,44 @@ public class Random_Card : MonoBehaviour
 
         card_UI.Card_Grade_set(Grade_Result[0]);
     }
-    public void Randomizer_10Time()//10회 뽑기 코드
+    public void Randomizer_10Time(string Type)//10회 뽑기 코드
     {
         Grade_Result = new List<string>();
         Card_Results = new List<Card_Data>();
+        Char_Results = new List<string>();
         Card_Prefabs = new List<Card_UI>();
         for (int i = 0; i < 10;  i++)
         {
-            Grade_Result.Add(Card_Grade_pick(Card_Percent, Card_Grade));
-
-            Card_Results.Add(Card_Pick_Which(Grade_Result[i]));
-
             Card_UI card_UI = Instantiate(cardPrefab, Card_Summon).GetComponent<Card_UI>();
-
             Card_Prefabs.Add(card_UI);
-
+            Grade_Result.Add(Card_Grade_pick(Card_Percent, Card_Grade));
             card_UI.Card_Grade_set(Grade_Result[i]);
-            if(Card_Results[i] != null)
+            if (Type == "Skill")
             {
-                card_UI.Card_UI_Set(Card_Results[i]);
+                Card_Results.Add(Card_Pick_Skill(Grade_Result[i]));
+                if (Card_Results[i] != null)
+                {
+                    card_UI.Card_UI_Set(Card_Results[i]);
+                }
+                else
+                {
+                    Debug.LogError("ㅆㅃ");
+                }
+
             }
-            else
+
+            else if (Type == "Char")
             {
-                Debug.LogError("ㅆㅃ");
+                Char_Results.Add(Card_Pick_Char(Grade_Result[i]));
+                if (Char_Results[i] != null)
+                {
+                    card_UI.Char_UI_Set(Char_Results[i]);
+                }
+                else if (Char_Results[i] == null)
+                {
+                    Debug.LogError("List is empty");
+                }
+
             }
         }
         
@@ -166,16 +191,17 @@ public class Random_Card : MonoBehaviour
         Scene_Changer.GetComponent<Scene_Change>().Scene_Active(1);
     }
 
-    delegate void _Pick_10();
+    delegate void _Pick_10(string type);
     _Pick_10 Pick_10;
     delegate void _Pick_1();
     _Pick_1 Pick_1;
 
     private void Start()
     {
+        
         Scene_Changer = GameObject.Find("Scene");
-        Pick_10 += new _Pick_10(Change);
-        Pick_10 += new _Pick_10(Randomizer_10Time);
+        Pick_10 += (string type) => Change();
+        Pick_10 += (string type) => Randomizer_10Time(type);
         Pick_1 += new _Pick_1(Change);
         Pick_1 += new _Pick_1(Randomizer_1Time);
 
@@ -183,7 +209,19 @@ public class Random_Card : MonoBehaviour
     }
     public void Pick_10t()
     {
-        Pick_10();
+        if (BtnManager.Current_Scene == 1)
+        {
+            Pick_10("Skill");
+        }
+        else if (BtnManager.Current_Scene == 0)
+        {
+            Pick_10("Char");
+        }
+        else
+        {
+            Debug.LogError("그없");
+        }
+
     }
     public void Pick_1t()
     {

@@ -10,13 +10,14 @@ public class Card_Data
     //public string Card_Grade;
     public Sprite Card_Image;
     public Sprite Card_BackGround;
-    
-    
+    public GameObject Card_Char;
 }
 
 
-[CreateAssetMenu(fileName ="Card_datas", menuName = "Scriptable_Objects")]
+[CreateAssetMenu(fileName ="Card_datas", menuName = "Scriptable_Objects_Store_CardData")]
 public class Card_DataSO : ScriptableObject
 {
     public Card_Data[] cards;
+    //public Card_Data[] chars; 
 }
+
