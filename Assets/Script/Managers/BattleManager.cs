@@ -260,6 +260,12 @@ public class BattleManager : Singletone<BattleManager> // ½Ì±ÛÅæÀÓ
         battle_result_canvas.SetActive(true);
         Battle_result_canvas canvas_Script = battle_result_canvas.GetComponent<Battle_result_canvas>();
         canvas_Script.Set_result(victory);
+
+        // ÀüÅõ º¸»ó °è»ê ¹× ¶ç¿ò
+        if (victory) 
+        {
+            StartCoroutine(StageManager.instance.calc_and_show_battle_loot());
+        }
     }
     private void Update()
     {

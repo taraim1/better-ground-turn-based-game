@@ -14,12 +14,12 @@ public class Battle_result_canvas : MonoBehaviour
     {
         if (victory)
         {
-            result_text.text = "전투 결과\n\n<size=200%>승리</size>";
+            result_text.text = "<color=#CCCCCC>전투 결과</color>\n\n<size=200%>승리</size>";
         }
 
         else 
         {
-            result_text.text = "전투 결과\n\n<size=200%>패배</size>";
+            result_text.text = "<color=#CCCCCC>전투 결과</color>\n\n<size=200%>패배</size>";
         }
     }
 

@@ -1,7 +1,8 @@
 {
     "unlocked_card_checkList": [
         true,
-        false,
+        true,
+        true,
         true
     ]
 }
