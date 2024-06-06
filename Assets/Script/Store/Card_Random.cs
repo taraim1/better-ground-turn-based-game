@@ -108,8 +108,6 @@ public class Random_Card : MonoBehaviour
     public string Card_Pick_Char(string Grade)
     {
         String[] selected_cardlist = null;
-        Character character = new Character();
-        character_code Char_Code;
         switch (Grade)
         {
             case "Common": selected_cardlist = Char_Common_Card; break;
@@ -121,28 +119,14 @@ public class Random_Card : MonoBehaviour
         if (selected_cardlist != null && selected_cardlist.Length > 0)
         {
             int randomIndex = UnityEngine.Random.Range(0, selected_cardlist.Length);
-            Char_Code = CCFromString(selected_cardlist[randomIndex]);
-            JsonUtility.FromJsonOverwrite(CharacterManager.instance.load_character_from_json(Char_Code), character);
             return selected_cardlist[randomIndex];
         }
         else
         {
-            Debug.LogError("아니 시발");
+            Debug.LogError("아니 ㅅㅂ");
             return null; 
         }
 
-    }
-    //캐릭터 코드를 뽑은 문자열에서 가져와요!
-    public character_code CCFromString(string char_code)
-    {
-        // Enum.TryParse를 사용하여 문자열을 character_code 열거형 값으로 변환 시도
-        if (Enum.TryParse(typeof(character_code), char_code, out var result))
-        {
-            // 변환 성공 시 해당 열거형 값을 반환
-            return (character_code)result;
-        }
-        // 변환 실패 시 춘식이 반환
-        return character_code.kimchunsik;
     }
     
 
