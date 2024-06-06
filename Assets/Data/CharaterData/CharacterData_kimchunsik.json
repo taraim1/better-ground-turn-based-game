@@ -1,0 +1,25 @@
+{
+    "character_name": "김춘식",
+    "description": "김춘식이다",
+    "code": 1,
+    "enemy_code": 0,
+    "level": 1,
+    "max_health": [
+        0,
+        20
+    ],
+    "max_willpower": [
+        0,
+        10
+    ],
+    "is_character_unlocked": true,
+    "deck": [
+        0,
+        0,
+        1,
+        1,
+        2,
+        2
+    ],
+    "SPUM_datapath": "SPUM/SPUM_Units/KimChunSik"
+}

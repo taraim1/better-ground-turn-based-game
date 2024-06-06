@@ -1,0 +1,25 @@
+{
+    "character_name": "테스트용 적",
+    "description": "적이다",
+    "code": 0,
+    "enemy_code": 1,
+    "level": 1,
+    "max_health": [
+        0,
+       10
+    ],
+    "max_willpower": [
+        0,
+        5
+    ],
+    "is_character_unlocked": true,
+    "deck": [
+        0,
+        0,
+        1,
+        1,
+        2,
+        2
+    ],
+    "SPUM_datapath": "SPUM/SPUM_Units/Enemy_base"
+}
