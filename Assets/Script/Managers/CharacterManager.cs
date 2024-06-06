@@ -34,9 +34,9 @@ public class CharacterManager : Singletone<CharacterManager>
         {
             switch (code)
             {
-                case CharacterManager.character_code.kimchunsik:
+                case character_code.kimchunsik:
                     return "/CharaterData/CharacterData_kimchunsik.json";
-                case CharacterManager.character_code.test:
+                case character_code.test:
                     return "/CharaterData/CharacterData_test.json";
                 default:
                     return "";
@@ -49,7 +49,7 @@ public class CharacterManager : Singletone<CharacterManager>
         {
             switch (code)
             {
-                case CharacterManager.enemy_code.test:
+                case enemy_code.test:
                     return "/EnemyData/EnemyData_test.json";
                 default:
                     return "";
