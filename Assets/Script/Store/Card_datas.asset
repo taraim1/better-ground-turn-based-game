@@ -13,9 +13,20 @@ MonoBehaviour:
   m_Name: Card_datas
   m_EditorClassIdentifier: 
   cards:
-  - Card_Name: Gay
+  - Card_Name: Test1
     Card_Image: {fileID: 21300000, guid: b6db2675f41701c41bf79b9954114a6f, type: 3}
     Card_BackGround: {fileID: 21300000, guid: d3d26a5737d3eb1459d36c532c0ab3b5, type: 3}
-  - Card_Name: Hay
+    Card_Char: {fileID: 0}
+  - Card_Name: Test2
     Card_Image: {fileID: 21300000, guid: cc207e36df2ed774e9b210dc4a6ab3e1, type: 3}
     Card_BackGround: {fileID: 21300000, guid: d3d26a5737d3eb1459d36c532c0ab3b5, type: 3}
+    Card_Char: {fileID: 0}
+  chars:
+  - Card_Name: 
+    Card_Image: {fileID: 0}
+    Card_BackGround: {fileID: 0}
+    Card_Char: {fileID: 0}
+  - Card_Name: 
+    Card_Image: {fileID: 0}
+    Card_BackGround: {fileID: 0}
+    Card_Char: {fileID: 0}
