@@ -450,10 +450,12 @@ MonoBehaviour:
   Grade_Result: []
   Card_Prefabs: []
   Card_Results: []
+  Char_Results: []
   card_Data:
     Card_Name: 
     Card_Image: {fileID: 0}
     Card_BackGround: {fileID: 0}
+    Card_Char: {fileID: 0}
   card_DataSO: {fileID: 11400000, guid: e976b00298fe9f245a15b44b6edbf77f, type: 2}
 --- !u!1 &193917006
 GameObject:
@@ -778,7 +780,7 @@ PrefabInstance:
     - target: {fileID: 2949861944005153396, guid: 9768e76ff9f52944d999aec0ffb17858,
         type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2949861944005153396, guid: 9768e76ff9f52944d999aec0ffb17858,
         type: 3}
@@ -788,7 +790,7 @@ PrefabInstance:
     - target: {fileID: 2949861944005153396, guid: 9768e76ff9f52944d999aec0ffb17858,
         type: 3}
       propertyPath: m_AnchorMin.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2949861944005153396, guid: 9768e76ff9f52944d999aec0ffb17858,
         type: 3}
@@ -838,12 +840,12 @@ PrefabInstance:
     - target: {fileID: 2949861944005153396, guid: 9768e76ff9f52944d999aec0ffb17858,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 200.00002
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2949861944005153396, guid: 9768e76ff9f52944d999aec0ffb17858,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -227.5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2949861944005153396, guid: 9768e76ff9f52944d999aec0ffb17858,
         type: 3}
@@ -967,8 +969,8 @@ Camera:
   near clip plane: 0.3
   far clip plane: 1000
   field of view: 60
-  orthographic: 1
-  orthographic size: 5
+  orthographic: 0
+  orthographic size: 73.436584
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -993,7 +995,7 @@ Transform:
   m_GameObject: {fileID: 372211468}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -10}
+  m_LocalPosition: {x: 1000, y: 550, z: -950}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1188,7 +1190,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 579974962}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
@@ -1522,10 +1524,12 @@ MonoBehaviour:
   Grade_Result: []
   Card_Prefabs: []
   Card_Results: []
+  Char_Results: []
   card_Data:
     Card_Name: 
     Card_Image: {fileID: 0}
     Card_BackGround: {fileID: 0}
+    Card_Char: {fileID: 0}
   card_DataSO: {fileID: 0}
 --- !u!1 &982398680
 GameObject:
@@ -2605,7 +2609,7 @@ PrefabInstance:
     - target: {fileID: 2949861944005153396, guid: 9768e76ff9f52944d999aec0ffb17858,
         type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2949861944005153396, guid: 9768e76ff9f52944d999aec0ffb17858,
         type: 3}
@@ -2615,7 +2619,7 @@ PrefabInstance:
     - target: {fileID: 2949861944005153396, guid: 9768e76ff9f52944d999aec0ffb17858,
         type: 3}
       propertyPath: m_AnchorMin.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2949861944005153396, guid: 9768e76ff9f52944d999aec0ffb17858,
         type: 3}
@@ -2665,12 +2669,12 @@ PrefabInstance:
     - target: {fileID: 2949861944005153396, guid: 9768e76ff9f52944d999aec0ffb17858,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 200.00002
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2949861944005153396, guid: 9768e76ff9f52944d999aec0ffb17858,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -82.5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2949861944005153396, guid: 9768e76ff9f52944d999aec0ffb17858,
         type: 3}

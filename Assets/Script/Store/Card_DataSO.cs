@@ -19,4 +19,6 @@ public class Card_Data
 public class Card_DataSO : ScriptableObject
 {
     public Card_Data[] cards;
+    //public Card_Data[] chars; 
 }
+

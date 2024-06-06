@@ -3,9 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using TMPro;
+using System.Runtime.CompilerServices;
 
 public class test : MonoBehaviour
 {
+    [SerializeField]
+    private CardManager.skillcard_code code;
+
     private void Start()
     {
         // 캐릭터 인스턴스 생성
@@ -21,7 +25,7 @@ public class test : MonoBehaviour
         character.code
         character.level 
         이런식으로 접근하면 됨
-
+        
         자세히 알고싶으면 Script/Character 폴더에 있는 Character 스크립트 보세요
 
         */

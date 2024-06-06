@@ -4342,7 +4342,7 @@ Transform:
   m_GameObject: {fileID: 1079312973}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: -0.13052624, w: 0.9914449}
-  m_LocalPosition: {x: 4, y: -3, z: 0}
+  m_LocalPosition: {x: 3.7, y: -3, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -5980,6 +5980,7 @@ MonoBehaviour:
   playable_characters: []
   enemy_characters: []
   enemy_cards: []
+  battle_result_canvas: {fileID: 0}
 --- !u!1 &1500776802
 GameObject:
   m_ObjectHideFlags: 0
@@ -6714,7 +6715,7 @@ Transform:
   m_GameObject: {fileID: 1784582163}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0.13052616, w: 0.9914449}
-  m_LocalPosition: {x: -4, y: -3, z: 0}
+  m_LocalPosition: {x: -3.7, y: -3, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -7381,6 +7382,8 @@ MonoBehaviour:
   stage_index: 0
   characters: []
   stageSettingSO: {fileID: 11400000, guid: e3eac6021226d6c47b5983b25e229ef6, type: 2}
+  loot_prefab: {fileID: 8799339735875882165, guid: 6cc474ff3ad390d45bf752e79cfcca15,
+    type: 3}
 --- !u!1 &2021853150
 GameObject:
   m_ObjectHideFlags: 0

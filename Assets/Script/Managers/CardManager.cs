@@ -26,7 +26,8 @@ public class CardManager : Singletone<CardManager>
     { 
         simple_attack,
         simple_defend,
-        simple_dodge
+        simple_dodge,
+        powerful_attack
     }
 
     // 기타 카드 정보 담은 클래스
@@ -73,6 +74,7 @@ public class CardManager : Singletone<CardManager>
     {
         return cardsSO.cards[(int)code];
     }
+
 
     // 카드 코드 주면 언락된건지 찾아줌
     public bool check_unlocked(skillcard_code code) 
@@ -205,7 +207,7 @@ public class CardManager : Singletone<CardManager>
         Destroy(card.gameObject);
 
         // 카드 정렬
-        CardManager.instance.Aline_cards(CardManager.instance.active_index);
+        Aline_cards(active_index);
     }
 
     // 적 카드를 강조

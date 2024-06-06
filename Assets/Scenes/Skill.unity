@@ -555,6 +555,7 @@ RectTransform:
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 186475622}
   - {fileID: 1142550012}
   - {fileID: 1973249892}
   - {fileID: 1189322385}
@@ -4991,6 +4992,7 @@ SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
   - {fileID: 372211471}
+  - {fileID: 231411385}
   - {fileID: 40365320}
   - {fileID: 2133098078}
   - {fileID: 231411385}

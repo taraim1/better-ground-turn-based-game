@@ -34,9 +34,9 @@ public class CharacterManager : Singletone<CharacterManager>
         {
             switch (code)
             {
-                case CharacterManager.character_code.kimchunsik:
+                case character_code.kimchunsik:
                     return "/CharaterData/CharacterData_kimchunsik.json";
-                case CharacterManager.character_code.test:
+                case character_code.test:
                     return "/CharaterData/CharacterData_test.json";
                 default:
                     return "";
@@ -49,7 +49,7 @@ public class CharacterManager : Singletone<CharacterManager>
         {
             switch (code)
             {
-                case CharacterManager.enemy_code.test:
+                case enemy_code.test:
                     return "/EnemyData/EnemyData_test.json";
                 default:
                     return "";
@@ -316,6 +316,16 @@ public class CharacterManager : Singletone<CharacterManager>
         if (!isEnemy)
         {
             BattleEventManager.player_character_died?.Invoke();
+        }
+
+        // 전투 끝나는 거 감지
+        if (BattleManager.instance.enemy_characters.Count == 0)
+        {
+            BattleEventManager.battle_ended?.Invoke(true);
+        }
+        else if (BattleManager.instance.playable_characters.Count == 0) 
+        {
+            BattleEventManager.battle_ended?.Invoke(false);
         }
     }
     public void kill_character_in_stage_show(Character character) // 스테이지 보여줄 때 캐릭터 죽이는 메소드 
