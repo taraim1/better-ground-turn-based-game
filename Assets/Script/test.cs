@@ -3,19 +3,18 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using TMPro;
+using System.Runtime.CompilerServices;
 
-public class test : MonoBehaviour, IPointerDownHandler
+public class test : MonoBehaviour
 {
-    public TMP_Text tmp;
-   	public CardManager.skillcard_code code;
-	public Cards carddata;
+    [SerializeField]
+    private CardManager.skillcard_code code;
 
-    public void OnPointerDown(PointerEventData eventData)
+    private void Start()
     {
-        carddata = CardManager.instance.get_card_by_code(code);
-        tmp.text = carddata.name;
+        
     }
-    
+
 }
 
 

@@ -10,23 +10,16 @@ public class BattleEventManager : MonoBehaviour
     // 배틀에서 씀
     public static Action enemy_skill_setting_phase;
     public static Action enemy_skill_card_deactivate;
-    public static Action skill_clash_started;
+    public static Action skill_used;
+    public static Action turn_start_phase;
+    public static Action player_character_died; 
+    public static Action<bool> battle_ended; // true값이면 이긴 거, false면 진 거
 
+    // 스테이지 보여줄 때 씀
+    public static Action character_drag_started_on_stageShow;
+    public static Action character_drag_finished_on_stageShow;
 
+    // 공용
+    public static Action party_member_changed;
 
-    public static void Trigger_event(string type)
-    {
-        switch (type) 
-        { 
-            case "Enemy_skill_setting_phase":
-                enemy_skill_setting_phase?.Invoke();
-                break;
-            case "enemy_skill_card_deactivate":
-                enemy_skill_card_deactivate?.Invoke();
-                break;
-            case "skill_clash_started":
-                skill_clash_started?.Invoke();
-                break;
-        }
-    }
 }

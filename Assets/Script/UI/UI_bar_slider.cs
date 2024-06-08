@@ -6,6 +6,6 @@ using UnityEngine.UI;
 
 public class UI_bar_slider : MonoBehaviour
 {
-    public TMP_Text max_value_tmp;
+    public TMP_Text value_tmp;
     public Slider slider;
 }

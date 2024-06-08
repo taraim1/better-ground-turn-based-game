@@ -1,0 +1,25 @@
+{
+    "character_name": "화염 마법사",
+    "description": "중세판 화염방사기(의식있음)",
+    "code": 3,
+    "enemy_code": 0,
+    "level": 1,
+    "max_health": [
+        0,
+        15
+    ],
+    "max_willpower": [
+        0,
+        30
+    ],
+    "is_character_unlocked": true,
+    "deck": [
+        0,
+        0,
+        0,
+        1,
+        2,
+        2
+    ],
+    "SPUM_datapath": "SPUM/SPUM_Units/Fire_Mage"
+}
