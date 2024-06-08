@@ -13,7 +13,8 @@ public class CharacterManager : Singletone<CharacterManager>
     {
         not_a_playable_character,
         kimchunsik,
-        test
+        test,
+        fire_mage
     }
 
     public enum enemy_code
@@ -38,6 +39,8 @@ public class CharacterManager : Singletone<CharacterManager>
                     return "/CharaterData/CharacterData_kimchunsik.json";
                 case character_code.test:
                     return "/CharaterData/CharacterData_test.json";
+                case character_code.fire_mage:
+                    return "/CharaterData/CharacterData_fire_mage.json";
                 default:
                     return "";
 
