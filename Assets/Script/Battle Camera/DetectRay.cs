@@ -53,7 +53,7 @@ public class DetectRay : MonoBehaviour
                 // 전투에서 캐릭터 클릭 시 그 캐릭터의 패 보여줌
                 if (gameObj.tag == "PlayerCharacter")
                 {
-                    CardManager.instance.highlighted_card = null;
+                    CardManager.instance.clear_highlighted_card();
                     CardManager.instance.Change_active_hand(gameObj.GetComponent<Character>().Character_index);
                     CardManager.instance.Set_origin_order(CardManager.instance.active_index);
                 }
@@ -84,7 +84,7 @@ public class DetectRay : MonoBehaviour
                 else if (gameObj.tag == "enemySkillSlot") 
                 {
                     // 아군 카드 강조 해제
-                    CardManager.instance.highlighted_card = null;
+                    CardManager.instance.clear_highlighted_card();
 
                     // 모든 카드를 원래 order로 
                     CardManager.instance.Set_origin_order(CardManager.instance.active_index);
@@ -94,7 +94,7 @@ public class DetectRay : MonoBehaviour
                 }
                 else // 그 이외의 것 클릭시
                 {
-                    CardManager.instance.highlighted_card = null;
+                    CardManager.instance.clear_highlighted_card();
                     CardManager.instance.Change_active_hand(-1);
 
                     // 모든 카드 정렬

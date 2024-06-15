@@ -108,7 +108,7 @@ public class card : MonoBehaviour
                 if (state == current_mode.dragging)
                 {
                     state = current_mode.normal;
-                    CardManager.instance.highlighted_card = null;
+                    CardManager.instance.clear_highlighted_card();
                     CardManager.instance.Aline_cards(CardManager.instance.active_index);
 
                 }
@@ -118,11 +118,11 @@ public class card : MonoBehaviour
                     // 카드 하이라이트 or 하이라이트 해제
                     if (CardManager.instance.highlighted_card != this)
                     {
-                        CardManager.instance.highlighted_card = this;
+                        CardManager.instance.highlight_card(this);
                     }
                     else
                     {
-                        CardManager.instance.highlighted_card = null;
+                        CardManager.instance.clear_highlighted_card();
                     }
 
                     // 하이라이트된 카드 order설정
@@ -145,7 +145,7 @@ public class card : MonoBehaviour
                 CardManager.instance.Set_origin_order(CardManager.instance.active_index);
                 isDraggingStarted = true;
                 // 하이라이트된 카드 해제
-                CardManager.instance.highlighted_card = null;
+                CardManager.instance.clear_highlighted_card();
                 drag_card();
             }
 
