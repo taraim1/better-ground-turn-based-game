@@ -21,6 +21,10 @@ MonoBehaviour:
     minPowerOfLevel: 02000000
     maxPowerOfLevel: 03000000
     isDirectUsable: 1
+    effects:
+    - code: 0
+      timing: 0
+      parameters: []
   - name: "\uAC04\uB2E8\uD55C \uBC29\uC5B4"
     cost: 1
     type: "\uBB34"
@@ -29,6 +33,10 @@ MonoBehaviour:
     minPowerOfLevel: 01000000
     maxPowerOfLevel: 02000000
     isDirectUsable: 0
+    effects:
+    - code: 0
+      timing: 0
+      parameters: []
   - name: "\uAC04\uB2E8\uD55C \uD68C\uD53C"
     cost: 1
     type: "\uBB34"
@@ -37,6 +45,10 @@ MonoBehaviour:
     minPowerOfLevel: 01000000
     maxPowerOfLevel: 03000000
     isDirectUsable: 0
+    effects:
+    - code: 0
+      timing: 0
+      parameters: []
   - name: "\uAC15\uD55C \uACF5\uACA9"
     cost: 2
     type: "\uBB34"
@@ -45,3 +57,20 @@ MonoBehaviour:
     minPowerOfLevel: 05000000
     maxPowerOfLevel: 06000000
     isDirectUsable: 1
+    effects:
+    - code: 0
+      timing: 0
+      parameters: []
+  - name: "\uD30C\uC774\uC5B4\uBCFC"
+    cost: 1
+    type: "\uBD88"
+    behavior_type: "\uACF5\uACA9"
+    sprite: {fileID: 21300000, guid: 13e199fac305f6e4287859e68fcb530c, type: 3}
+    minPowerOfLevel: 04000000
+    maxPowerOfLevel: 05000000
+    isDirectUsable: 1
+    effects:
+    - code: 1
+      timing: 0
+      parameters:
+      - 7

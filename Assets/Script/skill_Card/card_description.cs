@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
+using System;
 
 public class card_description : MonoBehaviour
 {
@@ -9,12 +11,66 @@ public class card_description : MonoBehaviour
     private float target_card_show_elapsed_time = 0; // 카드 설명을 보여주고 지난 시간
     [SerializeField] private Vector3 offset; // 카드와 얼마나 떨어져있어야 하는지 저장
     Vector3 current_offset;
+    [SerializeField] private List<skill_effect_text> EffectTextPool;
 
-    public void Set_target(card target_card) 
-    { 
+    [Serializable]
+    private class skill_effect_text // 스킬 특수효과 보여주는 텍스트 관리 클래스
+    {
+        public GameObject nameTextObj;
+        public GameObject effectTextObj;
+        [SerializeField] private TMP_Text nameTMP;
+        [SerializeField] private TMP_Text effectTMP;
+
+        public void deactivate() // 텍스트 오브젝트 비활성화
+        { 
+            nameTextObj.SetActive(false);
+            effectTextObj.SetActive(false);
+        }
+
+        public void activate() // 텍스트 오브젝트 활성화
+        {
+            nameTextObj.SetActive(true);
+            effectTextObj.SetActive(true);
+        }
+
+        public void set_effect_text(SkillEffect effect) // 스킬 효과 텍스트 설정
+        {
+            switch (effect.code) 
+            {
+                case skill_effect_code.none:
+                    nameTMP.text = "특수 효과 없음";
+                    effectTMP.text = "";
+                    break;
+                case skill_effect_code.willpower_consumption:
+                    nameTMP.text = "정신력 소모";
+                    effectTMP.text = String.Format("사용시 정신력을 {0} 소모한다. 정신력이 {0} 이하일 시 사용되지 않는다.", effect.parameters[0]);
+                    break;
+            }
+        }
+    }
+
+    private void deactivate_all_text() // 모든 텍스트 오브젝트 비활성화
+    {
+        foreach (var text in EffectTextPool) 
+        {
+            text.deactivate();
+        }
+    }
+
+
+    public void Set_target(card target_card)
+    {
+        deactivate_all_text();
         this.target_card = target_card;
         target_card_obj = target_card.gameObject;
         target_card_show_elapsed_time = 0;
+
+        // 텍스트 오브젝트 활성화 및 텍스트 설정
+        for (int i = 0; i < target_card.Card.effects.Count; i++) 
+        {
+            EffectTextPool[i].activate();
+            EffectTextPool[i].set_effect_text(target_card.Card.effects[i]);
+        }
     }
 
     public void Clear_target() 

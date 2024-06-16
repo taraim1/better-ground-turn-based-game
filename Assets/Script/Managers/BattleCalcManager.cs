@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.Tracing;
 using System.Net.NetworkInformation;
+using Unity.Burst;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -75,13 +76,33 @@ public class BattleCalcManager : Singletone<BattleCalcManager>
     // 카드 사용시 경우의 수 판정함
     public void Calc_skill_use()
     {
+
         // 카드 드래그 중이 아니면
         if (!isUsingCard) { return; }
+
+        isUsingCard = false;
+        Character OwnerCharacter = using_card.owner.GetComponent<Character>();
+
         // 코스트 부족하면
         if (cost_Meter.Current_cost < using_card.Card.cost) { return; }
 
+        // 카드 특수효과 판정 (타이밍이 사용시인 것만)
+        foreach (SkillEffect effect in using_card.Card.effects) 
+        {
+            if (effect.timing != skill_effect_timing.immediate) { continue; }
 
-        isUsingCard = false;
+            switch (effect.code) 
+            {
+                case skill_effect_code.willpower_consumption:
+                    // 정신력 부족하면 사용 취소
+                    if (OwnerCharacter.current_willpower <= effect.parameters[0]) { return; }
+
+                    // 정신력 감소
+                    OwnerCharacter.Damage_willpower((int)effect.parameters[0]);
+                    break;
+            }
+        }
+
 
         // 스킬 vs 스킬이면
         if (target_card != null)

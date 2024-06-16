@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: StageSettingSO
   m_EditorClassIdentifier: 
   stage_Settings:
-  - enemy_Codes: 0100000001000000
+  - enemy_Codes: 010000000100000001000000
     holy_water_requirement: 3
     loots: 000000000100000002000000
     minLootNumber: 0a0000000100000003000000
