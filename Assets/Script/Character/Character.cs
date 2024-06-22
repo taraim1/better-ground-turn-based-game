@@ -113,6 +113,14 @@ public class Character : MonoBehaviour
 
     }
 
+    public void Heal_health(int value) 
+    {
+        current_health += value;
+        // 체력바 업데이트
+        health_slider.slider.value = current_health;
+        health_slider.value_tmp.text = current_health.ToString();
+    }
+
     public void Damage_willpower(int value) // 정신력 대미지 주는 메소드
     {
 
@@ -131,6 +139,14 @@ public class Character : MonoBehaviour
             }
         }
 
+        // 정신력바 업데이트
+        willpower_slider.slider.value = current_willpower;
+        willpower_slider.value_tmp.text = current_willpower.ToString();
+    }
+
+    public void Heal_willpower(int value)
+    {
+        current_willpower += value;
         // 정신력바 업데이트
         willpower_slider.slider.value = current_willpower;
         willpower_slider.value_tmp.text = current_willpower.ToString();

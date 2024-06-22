@@ -29,7 +29,7 @@ public class CardManager : Singletone<CardManager>
         simple_dodge,
         powerful_attack,
         fire_ball,
-        meditation
+        concentration
     }
 
     // 기타 카드 정보 담은 클래스

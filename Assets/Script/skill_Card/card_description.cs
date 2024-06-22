@@ -45,6 +45,10 @@ public class card_description : MonoBehaviour
                     nameTMP.text = "정신력 소모";
                     effectTMP.text = String.Format("사용시 정신력을 {0} 소모한다. 정신력이 {0} 이하일 시 사용되지 않는다.", effect.parameters[0]);
                     break;
+                case skill_effect_code.willpower_recovery:
+                    nameTMP.text = "정신력 회복";
+                    effectTMP.text = String.Format("사용시 정신력을 {0} 회복한다. 회복되는 정신력은 정신력 한계치를 넘을 수 없다.", effect.parameters[0]);
+                    break;
             }
         }
     }

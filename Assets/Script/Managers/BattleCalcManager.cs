@@ -77,37 +77,37 @@ public class BattleCalcManager : Singletone<BattleCalcManager>
     public void Calc_skill_use()
     {
 
-        // 카드 드래그 중이 아니면
+        // 카드 드래그 중이 아니면 리턴
         if (!isUsingCard) { return; }
 
         isUsingCard = false;
         Character OwnerCharacter = using_card.owner.GetComponent<Character>();
 
-        // 코스트 부족하면
+        // 코스트 부족하면 리턴
         if (cost_Meter.Current_cost < using_card.Card.cost) { return; }
 
-        // 카드 특수효과 판정 (타이밍이 사용시인 것만)
-        foreach (SkillEffect effect in using_card.Card.effects) 
+        // 자신에게 사용하는 스킬이고 타겟이 자신이면 사용
+        if (using_card.Card.isSelfUsableOnly) 
         {
-            if (effect.timing != skill_effect_timing.immediate) { continue; }
-
-            switch (effect.code) 
+            if (target_character == OwnerCharacter) 
             {
-                case skill_effect_code.willpower_consumption:
-                    // 정신력 부족하면 사용 취소
-                    if (OwnerCharacter.current_willpower <= effect.parameters[0]) { return; }
+                // 카드 사용 시 효과 적용
+                apply_skill_effect(using_card, skill_effect_timing.immediate, OwnerCharacter);
 
-                    // 정신력 감소
-                    OwnerCharacter.Damage_willpower((int)effect.parameters[0]);
-                    break;
+                BattleEventManager.skill_used?.Invoke();
+                cost_Meter.Current_cost = cost_Meter.Current_cost - using_card.Card.cost;
+                using_card_power = Random.Range(using_card.minpower, using_card.maxpower + 1);
+                apply_direct_use_result(using_card, OwnerCharacter, using_card_power);
             }
+            return;
         }
-
 
         // 스킬 vs 스킬이면
         if (target_card != null)
         {
-
+            // 카드 사용 시 효과 적용
+            apply_skill_effect(using_card, skill_effect_timing.immediate, OwnerCharacter);
+            apply_skill_effect(target_card, skill_effect_timing.immediate, target_card.owner.GetComponent<Character>());
 
             // 적 카드 강조 해제
             BattleEventManager.enemy_skill_card_deactivate?.Invoke();
@@ -119,7 +119,7 @@ public class BattleCalcManager : Singletone<BattleCalcManager>
             apply_clash_result(using_card, target_card, using_card_power, target_card_power);
         }
 
-        // 직접 사용이면
+        // 적에게 직접 사용이면
         else if (target_character != null) 
         {
             // 타겟 캐릭터한테 남은 스킬이 있으면 발동 안 됨
@@ -131,6 +131,9 @@ public class BattleCalcManager : Singletone<BattleCalcManager>
             // 직접 사용 가능한 카드면 카드 사용
             if (using_card.Card.isDirectUsable) 
             {
+                // 카드 사용 시 효과 적용
+                apply_skill_effect(using_card, skill_effect_timing.immediate, OwnerCharacter);
+
                 // 적 카드 강조 해제
                 BattleEventManager.enemy_skill_card_deactivate?.Invoke();
 
@@ -143,6 +146,31 @@ public class BattleCalcManager : Singletone<BattleCalcManager>
 
     }
 
+    private void apply_skill_effect(card using_card, skill_effect_timing timing, Character owner) // 특정 타이밍의 카드 특수 효과를 실행시켜줌
+    {
+        foreach (SkillEffect effect in using_card.Card.effects)
+        {
+            if (effect.timing != timing) { continue; } // 타이밍 검사
+
+            switch (effect.code)
+            {
+                case skill_effect_code.willpower_consumption:
+                    // 정신력 부족하면 사용 취소
+                    if (owner.current_willpower <= effect.parameters[0]) { return; }
+
+                    // 정신력 감소
+                    owner.Damage_willpower((int)effect.parameters[0]);
+                    break;
+
+                case skill_effect_code.willpower_recovery:
+                    // 정신력 회복
+                    owner.Heal_willpower((int)effect.parameters[0]);
+                    break;
+            }
+        }
+
+    } 
+
     // 적이 턴 끝나고 스킬 사용시 판정
     public void Calc_enemy_turn_skill_use()
     {
@@ -150,18 +178,23 @@ public class BattleCalcManager : Singletone<BattleCalcManager>
         apply_direct_use_result(using_card, target_character, using_card_power);
     }
 
-    private void apply_direct_use_result(card using_card, Character target_character, int power) // 캐릭터에 직접 사용한 카드 결과 적용해줌
+
+    // 스킬 사용 시 위력 보여주는거
+    private void show_power_roll_result(card card, int power) 
     {
-        skill_power_meter PWmeter = using_card.owner.GetComponent<Character>().skill_power_meter;
+        skill_power_meter PWmeter = card.owner.GetComponent<Character>().skill_power_meter;
 
         // 같은 캐릭터가 텀을 적게 두고 사용시 현재 돌아가는 show를 멈춰서 너무 빨리 숫자가 사라지는 현상을 해결
-        if (PWmeter.running_show != null) 
-        {
-            PWmeter.StopCoroutine(PWmeter.running_show);
-        }
+        if (PWmeter.running_show != null) { PWmeter.StopCoroutine(PWmeter.running_show); }
 
         // 스킬 값 보여주기
-        PWmeter.running_show = StartCoroutine(using_card.owner.GetComponent<Character>().skill_power_meter.Show(power.ToString()));
+        PWmeter.running_show = StartCoroutine(PWmeter.Show(power.ToString()));
+    }
+
+
+    private void apply_direct_use_result(card using_card, Character target_character, int power) // 캐릭터에 직접 사용한 카드 결과 적용해줌
+    {
+        if (!using_card.Card.DontShowPowerRollResult) { show_power_roll_result(using_card, power); } // 위력 판정한 거 보여주기
 
         switch (using_card.Card.behavior_type)
         {
@@ -188,16 +221,10 @@ public class BattleCalcManager : Singletone<BattleCalcManager>
         string win_behavior;
         string los_behavior;
 
-        skill_power_meter PWmeter1 = using_card.owner.GetComponent<Character>().skill_power_meter;
-        skill_power_meter PWmeter2 = target_card.owner.GetComponent<Character>().skill_power_meter;
 
-        // 같은 캐릭터가 텀을 적게 두고 사용시 현재 돌아가는 show를 멈춰서 너무 빨리 숫자가 사라지는 현상을 해결
-        if (PWmeter1.running_show != null) { PWmeter1.StopCoroutine(PWmeter1.running_show); }
-        if (PWmeter2.running_show != null) { PWmeter2.StopCoroutine(PWmeter2.running_show); }
+        if (!using_card.Card.DontShowPowerRollResult) { show_power_roll_result(using_card, power1); }// 위력 판정한 거 보여주기
+        if (!target_card.Card.DontShowPowerRollResult) { show_power_roll_result(target_card, power2); }
 
-        // 스킬 값 보여주기
-        PWmeter1.running_show = StartCoroutine(using_card.owner.GetComponent<Character>().skill_power_meter.Show(power1.ToString()));
-        PWmeter2.running_show = StartCoroutine(target_card.owner.GetComponent<Character>().skill_power_meter.Show(power2.ToString()));
 
         // 무승부
         if (power1 == power2)
@@ -252,7 +279,7 @@ public class BattleCalcManager : Singletone<BattleCalcManager>
                 break;
 
             case ("회피"):
-                if (los_behavior == "공격") { winner_char.Damage_willpower(-win_power); } // 이긴 쪽 정신력 회복
+                if (los_behavior == "공격") { winner_char.Heal_willpower(win_power); } // 이긴 쪽 정신력 회복
                 else if (los_behavior == "방어") { loser_char.Damage_willpower(win_power); }
                 else if (los_behavior == "회피") { loser_char.Damage_willpower(win_power); }
                 break;
