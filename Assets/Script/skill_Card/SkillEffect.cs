@@ -5,7 +5,8 @@ using UnityEngine;
 public enum skill_effect_code
 {
     none,
-    willpower_consumption
+    willpower_consumption,
+    willpower_recovery
 }
 
 public enum skill_effect_timing
