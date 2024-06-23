@@ -116,6 +116,10 @@ public class Character : MonoBehaviour
     public void Heal_health(int value) 
     {
         current_health += value;
+        if (current_health > get_max_health_of_level(level)) 
+        {
+            current_health = get_max_health_of_level(level);
+        }
         // 체력바 업데이트
         health_slider.slider.value = current_health;
         health_slider.value_tmp.text = current_health.ToString();
@@ -147,6 +151,10 @@ public class Character : MonoBehaviour
     public void Heal_willpower(int value)
     {
         current_willpower += value;
+        if (current_willpower > get_max_willpower_of_level(level))
+        {
+            current_willpower = get_max_willpower_of_level(level);
+        }
         // 정신력바 업데이트
         willpower_slider.slider.value = current_willpower;
         willpower_slider.value_tmp.text = current_willpower.ToString();

@@ -76,15 +76,12 @@ public class BattleCalcManager : Singletone<BattleCalcManager>
     // 카드 사용시 경우의 수 판정함
     public void Calc_skill_use()
     {
+        // 스킬 사용 가능한지 판별
+        if (!check_usable(using_card)) { return; }
 
-        // 카드 드래그 중이 아니면 리턴
-        if (!isUsingCard) { return; }
 
         isUsingCard = false;
         Character OwnerCharacter = using_card.owner.GetComponent<Character>();
-
-        // 코스트 부족하면 리턴
-        if (cost_Meter.Current_cost < using_card.Card.cost) { return; }
 
         // 자신에게 사용하는 스킬이고 타겟이 자신이면 사용
         if (using_card.Card.isSelfUsableOnly) 
@@ -155,9 +152,6 @@ public class BattleCalcManager : Singletone<BattleCalcManager>
             switch (effect.code)
             {
                 case skill_effect_code.willpower_consumption:
-                    // 정신력 부족하면 사용 취소
-                    if (owner.current_willpower <= effect.parameters[0]) { return; }
-
                     // 정신력 감소
                     owner.Damage_willpower((int)effect.parameters[0]);
                     break;
@@ -169,7 +163,31 @@ public class BattleCalcManager : Singletone<BattleCalcManager>
             }
         }
 
-    } 
+    }
+
+    private bool check_usable(card card) // 스킬 쓸 수 있는지 판별해서 쓸 수 있으면 true 줌
+    {
+        // 카드 드래그 중이 아니면 못 씀
+        if (!isUsingCard) { return false; }
+
+        // 코스트 부족하면 못 씀
+        if (cost_Meter.Current_cost < card.Card.cost) { return false; }
+
+        // 특수효과 관련해서 못 쓰는 거 검사
+        Character owner_character = card.owner.GetComponent<Character>();
+        foreach (SkillEffect effect in card.Card.effects)
+        {
+            switch (effect.code)
+            {
+                case skill_effect_code.willpower_consumption:
+                    // 현재 정신력이 소모될 정신력 이하면 못 씀
+                    if (owner_character.current_willpower <= effect.parameters[0]) { return false; }
+                    break;
+            }
+        }
+
+        return true;
+    }
 
     // 적이 턴 끝나고 스킬 사용시 판정
     public void Calc_enemy_turn_skill_use()

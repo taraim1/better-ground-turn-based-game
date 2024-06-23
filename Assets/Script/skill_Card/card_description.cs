@@ -77,6 +77,16 @@ public class card_description : MonoBehaviour
         }
     }
 
+    public card get_target() // ≈∏∞Ÿ ∏Æ≈œ«ÿ¡‹
+    {
+        if (target_card != null) 
+        {
+            return target_card;
+        }
+
+        return null;
+    } 
+
     public void Clear_target() 
     {
         target_card = null;

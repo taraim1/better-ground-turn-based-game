@@ -80,8 +80,32 @@ public class DetectRay : MonoBehaviour
                         }
                     }
                 }
+                // 카드 특수효과 설명 클릭시
+                else if (gameObj.tag == "skillDescription")
+                {
+                    card card = gameObj.GetComponent<card_description>().get_target();
+
+                    // 아군 카드이면
+                    if (card.isEnemyCard == false)
+                    {
+                        // 카드 드래그 감지 시작
+                        card.running_drag = StartCoroutine(card.detect_drag());
+
+                        // 적 카드 강조 해제
+                        BattleEventManager.enemy_skill_card_deactivate?.Invoke();
+                    }
+                    // 적군 카드면
+                    else
+                    {
+                        // 적 카드 강조 해제
+                        if (card.state == card.current_mode.highlighted_enemy_card)
+                        {
+                            BattleEventManager.enemy_skill_card_deactivate?.Invoke();
+                        }
+                    }
+                }
                 // 적 스킬 슬롯 클릭시
-                else if (gameObj.tag == "enemySkillSlot") 
+                else if (gameObj.tag == "enemySkillSlot")
                 {
                     // 아군 카드 강조 해제
                     CardManager.instance.clear_highlighted_card();

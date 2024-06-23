@@ -1468,7 +1468,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 125.00003, y: 0}
+  m_AnchoredPosition: {x: 125, y: 0}
   m_SizeDelta: {x: 100, y: 0}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!1 &984992364
@@ -1507,7 +1507,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 125.00003, y: 0}
+  m_AnchoredPosition: {x: 125, y: 0}
   m_SizeDelta: {x: 100, y: 0}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &984992366
@@ -2492,6 +2492,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: card_description_base
       objectReference: {fileID: 0}
+    - target: {fileID: 3273811198982270407, guid: b907ab68715004a4080424e9bad5cf28,
+        type: 3}
+      propertyPath: m_TagString
+      value: skillDescription
+      objectReference: {fileID: 0}
     - target: {fileID: 3953937600349722012, guid: b907ab68715004a4080424e9bad5cf28,
         type: 3}
       propertyPath: m_Name
@@ -3303,7 +3308,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 125.00003, y: 0}
+  m_AnchoredPosition: {x: 125, y: 0}
   m_SizeDelta: {x: 100, y: 0}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &1516510859
