@@ -24,12 +24,12 @@ public class EnemyAI : MonoBehaviour
 
    
     // 적이 이번 턴에 쓸 스킬 카드 코드 리스트를 반환하는 메소드
-    private List<CardManager.skillcard_code> get_action()
+    private List<skillcard_code> get_action()
     {
         // 이번 턴에 쓸 스킬 개수
         int skill_use_count = 1;
 
-        List<CardManager.skillcard_code> result = new List<CardManager.skillcard_code>();
+        List<skillcard_code> result = new List<skillcard_code>();
 
         // 덱에서 쓸 스킬 랜덤하게 뽑음
         for (int i = 0; i < skill_use_count; i++)
@@ -57,7 +57,7 @@ public class EnemyAI : MonoBehaviour
         // 전투 끝났으면 작동 X
         if (isBattleEnded) { return; }
 
-        List<CardManager.skillcard_code> skill_list = new List<CardManager.skillcard_code>();
+        List<skillcard_code> skill_list = new List<skillcard_code>();
 
         // 이전 턴 스킬 다 삭제
         clear_skills();

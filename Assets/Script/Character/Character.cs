@@ -25,7 +25,7 @@ public class Character : MonoBehaviour
     private List<int> max_willpower = new List<int>() { 0, 15 };
     public bool is_character_unlocked;
     [SerializeField]
-    public CardManager.skillcard_code[] deck = new CardManager.skillcard_code[6];
+    public skillcard_code[] deck = new skillcard_code[6];
     public string SPUM_datapath;
     [SerializeField] private GameObject effect_container_prefab;
     [SerializeField] private GameObject effects_layoutGroup_obj;

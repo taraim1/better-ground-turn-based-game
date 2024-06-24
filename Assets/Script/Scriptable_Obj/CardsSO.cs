@@ -24,5 +24,9 @@ public class Cards // 카드 데이터가 스크립터블 오브젝트로 저장되는 클래스
 [CreateAssetMenu(fileName = "CarsSO", menuName = "Scriptable_Objects")]
 public class CardsSO : ScriptableObject 
 {
-    public Cards[] cards;
+    public CardsSoDictonary cards_dict;
 }
+
+
+[System.Serializable]
+public class CardsSoDictonary : SerializableDictionary<skillcard_code, Cards>{}

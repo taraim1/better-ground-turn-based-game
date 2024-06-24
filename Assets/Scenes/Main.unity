@@ -2948,6 +2948,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   character_effect_sprites: []
+  characterEffectSO: {fileID: 11400000, guid: 3f44a4ad1aef3514cae73fc9e7767b15, type: 2}
 --- !u!1 &833380439
 GameObject:
   m_ObjectHideFlags: 0

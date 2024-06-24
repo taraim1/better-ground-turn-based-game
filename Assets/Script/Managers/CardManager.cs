@@ -8,6 +8,17 @@ using UnityEngine.SceneManagement;
 using System.IO;
 using DG.Tweening.Plugins.Core.PathCore;
 
+// 스킬카드 코드
+public enum skillcard_code
+{
+    simple_attack,
+    simple_defend,
+    simple_dodge,
+    powerful_attack,
+    fire_ball,
+    concentration
+}
+
 public class CardManager : Singletone<CardManager>
 {
     [SerializeField] CardsSO cardsSO;
@@ -20,17 +31,6 @@ public class CardManager : Singletone<CardManager>
     [SerializeField] Transform highlighted_card_transform;
     [SerializeField] Transform enemy_card_transform;
     [SerializeField] Transform enemy_card_highlighted_transform;
-
-    // 스킬카드 코드
-    public enum skillcard_code 
-    { 
-        simple_attack,
-        simple_defend,
-        simple_dodge,
-        powerful_attack,
-        fire_ball,
-        concentration
-    }
 
     // 기타 카드 정보 담은 클래스
     private class card_data_json 
@@ -77,7 +77,7 @@ public class CardManager : Singletone<CardManager>
     // 카드 코드 주면 카드 데이터 줌
     public Cards get_card_by_code(skillcard_code code) 
     {
-        return cardsSO.cards[(int)code];
+        return cardsSO.cards_dict[code];
     }
 
 
@@ -116,7 +116,7 @@ public class CardManager : Singletone<CardManager>
             for (int j = 0; j < BattleManager.instance.playable_characters[i].GetComponent<Character>().deck.Length; j++) 
             {
                 // 스크립터블 오브젝트에서 데이터를 뽑아옴
-                Cards tempCard = cardsSO.cards[ (int)BattleManager.instance.playable_characters[i].GetComponent<Character>().deck[j] ];
+                Cards tempCard = get_card_by_code(BattleManager.instance.playable_characters[i].GetComponent<Character>().deck[j]);
                 temp.Add(tempCard);
                 
             }
@@ -165,7 +165,7 @@ public class CardManager : Singletone<CardManager>
         card.owner = owner;
         card.isEnemyCard = true;
         card.originPRS = new PRS(enemy_card_transform.position, enemy_card_transform.rotation, Vector3.one * 1.5f);
-        card.Setup(cardsSO.cards[(int)code], 0);
+        card.Setup(get_card_by_code(code), 0);
 
         return cardObj;
     }
