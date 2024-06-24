@@ -143,7 +143,7 @@ public class BattleCalcManager : Singletone<BattleCalcManager>
 
     }
 
-    private void apply_skill_effect(card using_card, skill_effect_timing timing, Character owner) // 특정 타이밍의 카드 특수 효과를 실행시켜줌
+    private void apply_skill_effect(card using_card, skill_effect_timing timing, Character target) // 특정 타이밍의 카드 특수 효과를 실행시켜줌
     {
         foreach (SkillEffect effect in using_card.Card.effects)
         {
@@ -153,12 +153,16 @@ public class BattleCalcManager : Singletone<BattleCalcManager>
             {
                 case skill_effect_code.willpower_consumption:
                     // 정신력 감소
-                    owner.Damage_willpower((int)effect.parameters[0]);
+                    target.Damage_willpower(effect.parameters[0]);
                     break;
 
                 case skill_effect_code.willpower_recovery:
                     // 정신력 회복
-                    owner.Heal_willpower((int)effect.parameters[0]);
+                    target.Heal_willpower(effect.parameters[0]);
+                    break;
+                case skill_effect_code.ignition:
+                    // 상대에게 화염 부여
+                    target.give_effect(character_effect_code.flame, character_effect_setType.add, effect.parameters[0]);
                     break;
             }
         }
@@ -222,6 +226,8 @@ public class BattleCalcManager : Singletone<BattleCalcManager>
                 break;
         }
 
+        // 카드 사용 시 효과 적용
+        apply_skill_effect(using_card, skill_effect_timing.after_use, target_character);
 
         // 카드 제거
         CardManager.instance.Destroy_card(using_card);
@@ -302,6 +308,9 @@ public class BattleCalcManager : Singletone<BattleCalcManager>
                 else if (los_behavior == "회피") { loser_char.Damage_willpower(win_power); }
                 break;
         }
+
+        // 카드 사용 시 효과 적용
+        apply_skill_effect(winner_card, skill_effect_timing.after_use, loser_char);
 
         // 카드 제거
         CardManager.instance.Destroy_card(using_card);

@@ -35,21 +35,39 @@ public class card_description : MonoBehaviour
 
         public void set_effect_text(SkillEffect effect) // 스킬 효과 텍스트 설정
         {
+            string text = "";
             switch (effect.code) 
             {
                 case skill_effect_code.none:
                     nameTMP.text = "특수 효과 없음";
-                    effectTMP.text = "";
+                    text = "";
                     break;
                 case skill_effect_code.willpower_consumption:
                     nameTMP.text = "정신력 소모";
-                    effectTMP.text = String.Format("사용시 정신력을 {0} 소모한다. 정신력이 {0} 이하일 시 사용되지 않는다.", effect.parameters[0]);
+                    text = String.Format("정신력을 {0} 소모한다. 정신력이 {0} 이하일 시 사용되지 않는다.", effect.parameters[0]);
                     break;
                 case skill_effect_code.willpower_recovery:
                     nameTMP.text = "정신력 회복";
-                    effectTMP.text = String.Format("사용시 정신력을 {0} 회복한다. 회복되는 정신력은 정신력 한계치를 넘을 수 없다.", effect.parameters[0]);
+                    text = String.Format("정신력을 {0} 회복한다. 회복되는 정신력은 정신력 한계치를 넘을 수 없다.", effect.parameters[0]);
+                    break;
+                case skill_effect_code.ignition:
+                    nameTMP.text = "점화";
+                    text = String.Format("적에게 화염을 {0} 부여한다.", effect.parameters[0]);
                     break;
             }
+
+            switch (effect.timing) 
+            {
+                case skill_effect_timing.immediate:
+                    text = "사용 시 " + text;
+                    break;
+                case skill_effect_timing.after_use:
+                    text = "발동 이후 " + text;
+                    break;
+            }
+
+            if (effect.code == skill_effect_code.none) { text = ""; }
+            effectTMP.text = text;
         }
     }
 

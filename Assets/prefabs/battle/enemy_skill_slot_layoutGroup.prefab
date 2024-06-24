@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 8248544669181051223}
   - component: {fileID: 4612618440134376458}
-  - component: {fileID: 3070202598624534999}
   m_Layer: 0
   m_Name: enemy_skill_slot_layoutGroup
   m_TagString: Untagged
@@ -63,17 +62,3 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
---- !u!114 &3070202598624534999
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3457913086231521101}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 74e2e0e2b9fa0134c8a79b54ec947c96, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  target_object: {fileID: 0}
-  offset: {x: 0, y: 1.2, z: 0}

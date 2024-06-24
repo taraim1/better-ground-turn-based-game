@@ -6,14 +6,14 @@ public enum skill_effect_code
 {
     none,
     willpower_consumption,
-    willpower_recovery
+    willpower_recovery,
+    ignition
 }
 
 public enum skill_effect_timing
 {
     immediate,
-    in_clash,
-    after_clash,
+    after_use,
 }
 
 [System.Serializable]
@@ -21,6 +21,6 @@ public struct SkillEffect
 {
     public skill_effect_code code;
     public skill_effect_timing timing;
-    public List<float> parameters;
+    public List<int> parameters;
 
 }
