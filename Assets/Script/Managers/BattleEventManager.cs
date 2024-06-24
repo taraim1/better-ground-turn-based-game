@@ -12,6 +12,7 @@ public class BattleEventManager : MonoBehaviour
     public static Action enemy_skill_card_deactivate;
     public static Action skill_used;
     public static Action turn_start_phase;
+    public static Action turn_end_phase;
     public static Action player_character_died; 
     public static Action<bool> battle_ended; // true값이면 이긴 거, false면 진 거
 

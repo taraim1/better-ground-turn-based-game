@@ -12,7 +12,7 @@ public enum character_effect_timing
     turn_started,
     card_used,
     turn_ended,
-    get_hit
+    get_health_damage
 }
 
 public enum character_effect_setType 

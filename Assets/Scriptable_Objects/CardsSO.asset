@@ -26,7 +26,7 @@ MonoBehaviour:
     effects:
     - code: 0
       timing: 0
-      parameters: []
+      parameters: 
   - name: "\uAC04\uB2E8\uD55C \uBC29\uC5B4"
     cost: 1
     type: "\uBB34"
@@ -40,7 +40,7 @@ MonoBehaviour:
     effects:
     - code: 0
       timing: 0
-      parameters: []
+      parameters: 
   - name: "\uAC04\uB2E8\uD55C \uD68C\uD53C"
     cost: 1
     type: "\uBB34"
@@ -54,7 +54,7 @@ MonoBehaviour:
     effects:
     - code: 0
       timing: 0
-      parameters: []
+      parameters: 
   - name: "\uAC15\uD55C \uACF5\uACA9"
     cost: 2
     type: "\uBB34"
@@ -68,7 +68,7 @@ MonoBehaviour:
     effects:
     - code: 0
       timing: 0
-      parameters: []
+      parameters: 
   - name: "\uD30C\uC774\uC5B4\uBCFC"
     cost: 1
     type: "\uBD88"
@@ -82,8 +82,10 @@ MonoBehaviour:
     effects:
     - code: 1
       timing: 0
-      parameters:
-      - 8
+      parameters: 08000000
+    - code: 3
+      timing: 1
+      parameters: 01000000
   - name: "\uC815\uC2E0 \uC9D1\uC911"
     cost: 1
     type: "\uBB34"
@@ -97,5 +99,4 @@ MonoBehaviour:
     effects:
     - code: 2
       timing: 0
-      parameters:
-      - 10
+      parameters: 0a000000

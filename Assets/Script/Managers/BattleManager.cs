@@ -212,6 +212,9 @@ public class BattleManager : Singletone<BattleManager> // 싱글톤임
 
     IEnumerator turn_end_phase() 
     {
+        // 턴 엔드 페이즈 날림
+        BattleEventManager.turn_end_phase?.Invoke();
+
         // 다음 턴 시작 페이즈로
         current_phase_coroutine = turn_start_phase();
         StartCoroutine(current_phase_coroutine);

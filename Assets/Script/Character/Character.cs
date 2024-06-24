@@ -209,6 +209,8 @@ public class Character : MonoBehaviour
         effects_layoutGroup_obj.GetComponent<effectsLayoutGroup>().set_size(effect_Containers.Count);
     }
 
+
+
     // 턴 시작시 발동되는 메소드
     private void turn_start() 
     {
