@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class buffNdebuffManager : Singletone<buffNdebuffManager>
 {
-    [SerializeField] private List<Sprite> character_effect_sprites;
     [SerializeField] private characterEffectSO characterEffectSO;
 
 
@@ -18,5 +17,10 @@ public class buffNdebuffManager : Singletone<buffNdebuffManager>
         }
 
         return character_effect_timing.turn_started;
+    }
+
+    public Sprite get_icon_by_code(character_effect_code code) 
+    {
+        return characterEffectSO.SpritesDict[code];
     }
 }

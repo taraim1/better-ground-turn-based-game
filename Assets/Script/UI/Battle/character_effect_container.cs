@@ -28,6 +28,9 @@ public class character_effect_container : MonoBehaviour
                 BattleEventManager.turn_end_phase += apply_effect;
                 break;
         }
+
+        // 아이콘 불러오기
+        image.sprite = buffNdebuffManager.instance.get_icon_by_code(effect.code);
     }
 
     public void updateEffect(int power, character_effect_setType type) // 위력 갱신 or 추가

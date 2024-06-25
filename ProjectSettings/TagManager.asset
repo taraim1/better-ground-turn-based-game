@@ -17,8 +17,8 @@ TagManager:
   - Water
   - UI
   - SkillCard
-  - 
-  - 
+  - skillslot
+  - character
   - 
   - 
   - 
@@ -51,6 +51,9 @@ TagManager:
     locked: 0
   - name: UI
     uniqueID: 1543579149
+    locked: 0
+  - name: skillSlot
+    uniqueID: 1785872553
     locked: 0
   - name: Cards
     uniqueID: 2425651459

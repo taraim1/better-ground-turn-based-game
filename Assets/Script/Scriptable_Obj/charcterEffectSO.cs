@@ -6,7 +6,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "charcterEffectSO", menuName = "Scriptable_Objects_characterEffectSO")]
 public class characterEffectSO : ScriptableObject
 {
-    [SerializeField] private characterEffectSpritesDictionary SpritesDict;
+    [SerializeField] public characterEffectSpritesDictionary SpritesDict;
 }
 
 [System.Serializable]

@@ -2947,7 +2947,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 508d0bc8d5b58314795d74231e0e8289, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  character_effect_sprites: []
   characterEffectSO: {fileID: 11400000, guid: 3f44a4ad1aef3514cae73fc9e7767b15, type: 2}
 --- !u!1 &833380439
 GameObject:
@@ -6015,15 +6014,15 @@ MonoBehaviour:
   is_Characters_loaded: 0
   enemy_skill_set_count: 0
   playable_character_position_settings:
-  - {x: -6, y: 3, z: 0}
-  - {x: -6, y: -0.5, z: 0}
-  - {x: -4, y: 3, z: 0}
+  - {x: -7.5, y: -0.5, z: 0}
+  - {x: -6, y: 2, z: 0}
   - {x: -4, y: -0.5, z: 0}
+  - {x: -2.5, y: 2, z: 0}
   enemy_character_position_settings:
-  - {x: 4, y: 3, z: 0}
+  - {x: 7.5, y: -0.5, z: 0}
+  - {x: 6, y: 2, z: 0}
   - {x: 4, y: -0.5, z: 0}
-  - {x: 6, y: 3, z: 0}
-  - {x: 6, y: -0.5, z: 0}
+  - {x: 2.5, y: 2, z: 0}
   playable_characters: []
   enemy_characters: []
   enemy_cards: []
