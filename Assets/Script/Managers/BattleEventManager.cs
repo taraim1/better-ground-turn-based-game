@@ -11,6 +11,7 @@ public class BattleEventManager : MonoBehaviour
     public static Action enemy_skill_setting_phase;
     public static Action enemy_skill_card_deactivate;
     public static Action skill_used;
+    public static Action<Character, List<Character>> attacked; // <공격 주체, 공격 대상들>
     public static Action turn_start_phase;
     public static Action turn_end_phase;
     public static Action player_character_died; 

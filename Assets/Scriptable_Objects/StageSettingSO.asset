@@ -13,8 +13,12 @@ MonoBehaviour:
   m_Name: StageSettingSO
   m_EditorClassIdentifier: 
   stage_Settings:
-  - enemy_Codes: 010000000100000001000000
-    holy_water_requirement: 3
-    loots: 000000000100000002000000
-    minLootNumber: 0a0000000100000003000000
-    maxLootNumber: 0f0000000300000005000000
+    m_keys: 00000000
+    m_values:
+    - enemy_Codes: 010000000100000001000000
+      holy_water_requirement: 3
+      loots: 000000000100000002000000
+      minLootNumber: 050000000100000002000000
+      maxLootNumber: 0a0000000300000004000000
+      background_prefab: {fileID: 304689713889237217, guid: 013d433e6fa52dd46b4c9685aed95af1,
+        type: 3}

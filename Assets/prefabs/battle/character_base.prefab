@@ -104,7 +104,7 @@ MonoBehaviour:
   SPUM_datapath: 
   effect_container_prefab: {fileID: 1635057499907348168, guid: 52f7a33034b380748a2889883939eb55,
     type: 3}
-  effects_layoutGroup_obj: {fileID: 0}
+  effects_layoutGroup_obj: {fileID: 4216838838026281856}
   current_health: 0
   current_willpower: 0
   health_bar: {fileID: 3842456068157947610}

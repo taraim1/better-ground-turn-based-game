@@ -6027,6 +6027,7 @@ MonoBehaviour:
   enemy_characters: []
   enemy_cards: []
   battle_result_canvas: {fileID: 0}
+  StageSettingSO: {fileID: 11400000, guid: e3eac6021226d6c47b5983b25e229ef6, type: 2}
 --- !u!1 &1500776802
 GameObject:
   m_ObjectHideFlags: 0

@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: CardsSO
   m_EditorClassIdentifier: 
   cards_dict:
-    m_keys: 000000000100000002000000030000000400000005000000
+    m_keys: 00000000010000000200000003000000040000000500000006000000
     m_values:
     - name: "\uAC04\uB2E8\uD55C \uACF5\uACA9"
       cost: 1
@@ -24,10 +24,12 @@ MonoBehaviour:
       maxPowerOfLevel: 03000000
       isDirectUsable: 1
       isSelfUsableOnly: 0
+      isFriendlyOnly: 0
       DontShowPowerRollResult: 0
       effects:
       - code: 0
         timing: 0
+        target: 0
         parameters: 
     - name: "\uAC04\uB2E8\uD55C \uBC29\uC5B4"
       cost: 1
@@ -38,10 +40,12 @@ MonoBehaviour:
       maxPowerOfLevel: 02000000
       isDirectUsable: 0
       isSelfUsableOnly: 0
+      isFriendlyOnly: 0
       DontShowPowerRollResult: 0
       effects:
       - code: 0
         timing: 0
+        target: 0
         parameters: 
     - name: "\uAC04\uB2E8\uD55C \uD68C\uD53C"
       cost: 1
@@ -52,10 +56,12 @@ MonoBehaviour:
       maxPowerOfLevel: 03000000
       isDirectUsable: 0
       isSelfUsableOnly: 0
+      isFriendlyOnly: 0
       DontShowPowerRollResult: 0
       effects:
       - code: 0
         timing: 0
+        target: 0
         parameters: 
     - name: "\uAC15\uD55C \uACF5\uACA9"
       cost: 2
@@ -66,27 +72,32 @@ MonoBehaviour:
       maxPowerOfLevel: 06000000
       isDirectUsable: 1
       isSelfUsableOnly: 0
+      isFriendlyOnly: 0
       DontShowPowerRollResult: 0
       effects:
       - code: 0
         timing: 0
+        target: 0
         parameters: 
     - name: "\uD30C\uC774\uC5B4\uBCFC"
       cost: 1
       type: "\uBD88"
       behavior_type: "\uACF5\uACA9"
       sprite: {fileID: 21300000, guid: 13e199fac305f6e4287859e68fcb530c, type: 3}
-      minPowerOfLevel: 04000000
+      minPowerOfLevel: 03000000
       maxPowerOfLevel: 05000000
       isDirectUsable: 1
       isSelfUsableOnly: 0
+      isFriendlyOnly: 0
       DontShowPowerRollResult: 0
       effects:
       - code: 1
         timing: 0
+        target: 0
         parameters: 08000000
       - code: 3
         timing: 1
+        target: 1
         parameters: 01000000
     - name: "\uC815\uC2E0 \uC9D1\uC911"
       cost: 1
@@ -97,8 +108,30 @@ MonoBehaviour:
       maxPowerOfLevel: 00000000
       isDirectUsable: 0
       isSelfUsableOnly: 1
+      isFriendlyOnly: 0
       DontShowPowerRollResult: 1
       effects:
       - code: 2
         timing: 0
+        target: 0
         parameters: 0a000000
+    - name: "\uBC1C\uD654 \uB9C8\uBC95 \uBD80\uC5EC"
+      cost: 0
+      type: "\uBB34"
+      behavior_type: "\uAE30\uD0C0"
+      sprite: {fileID: 21300000, guid: a856cf1c0c2b1504088a4272f0979780, type: 3}
+      minPowerOfLevel: 00000000
+      maxPowerOfLevel: 00000000
+      isDirectUsable: 0
+      isSelfUsableOnly: 0
+      isFriendlyOnly: 1
+      DontShowPowerRollResult: 1
+      effects:
+      - code: 1
+        timing: 0
+        target: 0
+        parameters: 03000000
+      - code: 4
+        timing: 0
+        target: 1
+        parameters: 01000000

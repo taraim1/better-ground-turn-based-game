@@ -189,11 +189,7 @@ public class Character : MonoBehaviour
         GameObject obj = Instantiate(effect_container_prefab, effects_layoutGroup_obj.transform);
         character_effect_container obj_container = obj.GetComponent<character_effect_container>();
         effect_Containers.Add(obj_container);
-        character_effect tmp;
-        tmp.code = code;
-        tmp.power = power;
-        tmp.timing = buffNdebuffManager.instance.get_character_effect_timing_by_code(code);
-        obj_container.Set(tmp, this);
+        obj_container.Set(buffNdebuffManager.instance.get_effect(code, power), this);
 
         // 이펙트 레이아웃그룹 업데이트
         effects_layoutGroup_obj.GetComponent<effectsLayoutGroup>().set_size(effect_Containers.Count);

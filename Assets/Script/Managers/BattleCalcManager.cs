@@ -31,9 +31,9 @@ public class BattleCalcManager : Singletone<BattleCalcManager>
     public bool IsUsingCard { get { return isUsingCard; } }
 
     // 사용하는 카드값 받아서 판정 시작하는 메소드
-    public void set_using_card(card usinging_card) 
+    public void set_using_card(card using_card) 
     { 
-        using_card = usinging_card;
+        this.using_card = using_card;
         clear_target_card();
         clear_target_character();
         isUsingCard = true;
@@ -86,15 +86,31 @@ public class BattleCalcManager : Singletone<BattleCalcManager>
         // 자신에게 사용하는 스킬이고 타겟이 자신이면 사용
         if (using_card.Card.isSelfUsableOnly) 
         {
-            if (target_character == OwnerCharacter) 
+            if (target_character != null && target_character == OwnerCharacter) 
             {
                 // 카드 사용 시 효과 적용
-                apply_skill_effect(using_card, skill_effect_timing.immediate, OwnerCharacter);
+                apply_skill_effect(using_card, skill_effect_timing.immediate, target_character);
 
                 BattleEventManager.skill_used?.Invoke();
                 cost_Meter.Current_cost = cost_Meter.Current_cost - using_card.Card.cost;
                 using_card_power = Random.Range(using_card.minpower, using_card.maxpower + 1);
-                apply_direct_use_result(using_card, OwnerCharacter, using_card_power);
+                apply_direct_use_result(using_card, target_character, using_card_power);
+            }
+            return;
+        }
+
+        // 아군에게 사용하는 스킬이고 타겟이 아군이면 사용
+        if (using_card.Card.isFriendlyOnly)
+        {
+            if (target_character != null && !target_character.isEnemyCharacter)
+            {
+                // 카드 사용 시 효과 적용
+                apply_skill_effect(using_card, skill_effect_timing.immediate, target_character);
+
+                BattleEventManager.skill_used?.Invoke();
+                cost_Meter.Current_cost = cost_Meter.Current_cost - using_card.Card.cost;
+                using_card_power = Random.Range(using_card.minpower, using_card.maxpower + 1);
+                apply_direct_use_result(using_card, target_character, using_card_power);
             }
             return;
         }
@@ -145,24 +161,40 @@ public class BattleCalcManager : Singletone<BattleCalcManager>
 
     private void apply_skill_effect(card using_card, skill_effect_timing timing, Character target) // 특정 타이밍의 카드 특수 효과를 실행시켜줌
     {
+        Character current_target;
+
         foreach (SkillEffect effect in using_card.Card.effects)
         {
             if (effect.timing != timing) { continue; } // 타이밍 검사
+
+            // 타겟 설정
+            if (effect.target == skill_effect_target.owner)
+            {
+                current_target = using_card.owner.GetComponent<Character>();
+            }
+            else 
+            {
+                current_target = target;
+            }
 
             switch (effect.code)
             {
                 case skill_effect_code.willpower_consumption:
                     // 정신력 감소
-                    target.Damage_willpower(effect.parameters[0]);
+                    current_target.Damage_willpower(effect.parameters[0]);
                     break;
 
                 case skill_effect_code.willpower_recovery:
                     // 정신력 회복
-                    target.Heal_willpower(effect.parameters[0]);
+                    current_target.Heal_willpower(effect.parameters[0]);
                     break;
                 case skill_effect_code.ignition:
-                    // 상대에게 화염 부여
-                    target.give_effect(character_effect_code.flame, character_effect_setType.add, effect.parameters[0]);
+                    // 타겟에게 화염 부여
+                    current_target.give_effect(character_effect_code.flame, character_effect_setType.add, effect.parameters[0]);
+                    break;
+                case skill_effect_code.fire_enchantment:
+                    // 타겟에게 화염 공격 부여
+                    current_target.give_effect(character_effect_code.ignition_attack, character_effect_setType.add, effect.parameters[0]);
                     break;
             }
         }
@@ -223,6 +255,7 @@ public class BattleCalcManager : Singletone<BattleCalcManager>
             case ("공격"):
                 target_character.Damage_health(power);
                 target_character.Damage_willpower(power);
+                BattleEventManager.attacked?.Invoke(using_card.owner.GetComponent<Character>(), new List<Character>() { target_character });
                 break;
         }
 
@@ -287,6 +320,9 @@ public class BattleCalcManager : Singletone<BattleCalcManager>
         win_behavior = winner_card.Card.behavior_type;
         los_behavior = loser_card.Card.behavior_type;
 
+        // 카드 사용 시 효과 적용
+        apply_skill_effect(winner_card, skill_effect_timing.after_use, loser_char);
+
         // 카드 행동 타입별 결과 적용
         switch (win_behavior) 
         {
@@ -294,6 +330,7 @@ public class BattleCalcManager : Singletone<BattleCalcManager>
                 if (los_behavior == "공격") { loser_char.Damage_health(win_power); loser_char.Damage_willpower(win_power); }
                 else if (los_behavior == "방어") { loser_char.Damage_health(win_power - lose_power); loser_char.Damage_willpower(win_power - lose_power); }
                 else if (los_behavior == "회피") { loser_char.Damage_health(win_power); loser_char.Damage_willpower(win_power); }
+                BattleEventManager.attacked?.Invoke(winner_char, new List<Character>() { loser_char });
                 break;
 
             case ("방어"):
@@ -308,9 +345,6 @@ public class BattleCalcManager : Singletone<BattleCalcManager>
                 else if (los_behavior == "회피") { loser_char.Damage_willpower(win_power); }
                 break;
         }
-
-        // 카드 사용 시 효과 적용
-        apply_skill_effect(winner_card, skill_effect_timing.after_use, loser_char);
 
         // 카드 제거
         CardManager.instance.Destroy_card(using_card);

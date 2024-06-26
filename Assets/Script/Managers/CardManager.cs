@@ -16,7 +16,8 @@ public enum skillcard_code
     simple_dodge,
     powerful_attack,
     fire_ball,
-    concentration
+    concentration,
+    fire_enchantment
 }
 
 public class CardManager : Singletone<CardManager>

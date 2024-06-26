@@ -3,30 +3,50 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using static UnityEngine.GraphicsBuffer;
 
 public class character_effect_container : MonoBehaviour
 {
 
     [SerializeField] private character_effect effect;
     [SerializeField] private TMP_Text powerTmp;
-    private Character character;
+    private Character owner;
+    private List<Character> targets = new List<Character>();
     [SerializeField] private Image image;
 
-    public void Set(character_effect effect, Character character) // 초기화
+    public void Set(character_effect effect, Character owner) // 초기화
     { 
         this.effect = effect;
-        this.character = character;
+        this.owner = owner;
         powerTmp.text = effect.power.ToString();
 
         // 델리게이트 추가
-        switch (effect.timing) 
+        switch (effect.apply_timing) 
         {
             case character_effect_timing.turn_started:
-                BattleEventManager.turn_start_phase += apply_effect;
+                BattleEventManager.turn_start_phase += use_effect_to_all_targets;
                 break;
             case character_effect_timing.turn_ended:
-                BattleEventManager.turn_end_phase += apply_effect;
+                BattleEventManager.turn_end_phase += use_effect_to_all_targets;
                 break;
+            case character_effect_timing.after_attack:
+                BattleEventManager.attacked += check_attack_effect_use;
+                break;
+        }
+        switch (effect.power_reduce_timing) 
+        {
+            case character_effect_power_reduce_timing.turn_started:
+                BattleEventManager.turn_start_phase += reduce_effect_power;
+                break;
+            case character_effect_power_reduce_timing.turn_ended:
+                BattleEventManager.turn_end_phase += reduce_effect_power;
+                break;
+        }
+
+        // 타겟 설정
+        if (effect.target_type == character_effect_target_type.owner) 
+        {
+            targets.Add(owner);
         }
 
         // 아이콘 불러오기
@@ -49,22 +69,36 @@ public class character_effect_container : MonoBehaviour
         powerTmp.text = effect.power.ToString();
     }
 
-    private void apply_effect() // 효과 발동
+    private void check_attack_effect_use(Character attacker, List<Character> targets) // 공격 시 발동인 효과 사용 검사
     {
-        switch (effect.code) 
+        if (attacker == owner)
+        {
+            if (effect.target_type == character_effect_target_type.attack_target) // 효과 타겟이 공격 대상이면
+            {
+                this.targets = targets; // 공격 대상 받기
+            }
+            use_effect_to_all_targets();
+        }
+
+    }
+
+    // 이펙트 위력 감소
+    private void reduce_effect_power()
+    {
+        switch (effect.code)
         {
             case character_effect_code.flame:
-                // 위력만큼 체력, 정신력 대미지를 입히고 위력은 절반이 됨 (소수점 버림)
-                character.Damage_health(effect.power);
-                character.Damage_willpower(effect.power);
                 effect.power = effect.power / 2;
-                break;    
+                break;
+            case character_effect_code.ignition_attack:
+                effect.power = 0;
+                break;
         }
 
         // 효과 삭제 판정
-        if (effect.power <= 0) 
+        if (effect.power <= 0)
         {
-            character.remove_effect(this);
+            owner.remove_effect(this);
             return;
         }
 
@@ -72,16 +106,62 @@ public class character_effect_container : MonoBehaviour
         powerTmp.text = effect.power.ToString();
     }
 
+    private void use_effect_to_all_targets() // 모든 타겟에게 이펙트 발동 (하나인 것도)
+    {
+        // 모든 타겟에게 이펙트 적용
+        foreach (Character target in targets) 
+        {
+            apply_effect(target);
+        }
+
+        // 위력 감소
+        if (effect.power_reduce_timing == character_effect_power_reduce_timing.used) 
+        {
+            reduce_effect_power();
+        }
+
+    }
+
+
+    private void apply_effect(Character target) // 효과 발동
+    {
+        switch (effect.code) 
+        {
+            case character_effect_code.flame:
+                // 위력만큼 체력, 정신력 대미지를 입힘
+                target.Damage_health(effect.power);
+                target.Damage_willpower(effect.power);
+                break;
+            case character_effect_code.ignition_attack:
+                // 위력만큼 대상에게 화염을 부여함
+                target.give_effect(character_effect_code.flame, character_effect_setType.add, effect.power);
+                break;
+        }
+
+    }
+
     public void clear_delegate_and_destroy() // 액션에 붙에있는 델리게이트 떼고 효과 삭제 및 파괴
     {
         // 델리게이트 삭제
-        switch (effect.timing)
+        switch (effect.apply_timing)
         {
             case character_effect_timing.turn_started:
-                BattleEventManager.turn_start_phase -= apply_effect;
+                BattleEventManager.turn_start_phase -= use_effect_to_all_targets;
                 break;
             case character_effect_timing.turn_ended:
-                BattleEventManager.turn_end_phase -= apply_effect;
+                BattleEventManager.turn_end_phase -= use_effect_to_all_targets;
+                break;
+            case character_effect_timing.after_attack:
+                BattleEventManager.attacked -= check_attack_effect_use;
+                break;
+        }
+        switch (effect.power_reduce_timing)
+        {
+            case character_effect_power_reduce_timing.turn_started:
+                BattleEventManager.turn_start_phase -= reduce_effect_power;
+                break;
+            case character_effect_power_reduce_timing.turn_ended:
+                BattleEventManager.turn_end_phase -= reduce_effect_power;
                 break;
         }
 

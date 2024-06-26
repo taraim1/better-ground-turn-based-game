@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: charcterEffectSO
   m_EditorClassIdentifier: 
   SpritesDict:
-    m_keys: 00000000
+    m_keys: 0000000001000000
     m_values:
+    - {fileID: 21300000, guid: 0c8442b4f4aea7648bd0801838c11c23, type: 3}
     - {fileID: 21300000, guid: 0c8442b4f4aea7648bd0801838c11c23, type: 3}
