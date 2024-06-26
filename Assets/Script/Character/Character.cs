@@ -25,8 +25,10 @@ public class Character : MonoBehaviour
     private List<int> max_willpower = new List<int>() { 0, 15 };
     public bool is_character_unlocked;
     [SerializeField]
-    public CardManager.skillcard_code[] deck = new CardManager.skillcard_code[6];
+    public skillcard_code[] deck = new skillcard_code[6];
     public string SPUM_datapath;
+    [SerializeField] private GameObject effect_container_prefab;
+    [SerializeField] private GameObject effects_layoutGroup_obj;
 
     // 아래는 게임이 진행되면서 바뀌는 것들
     [DoNotSerialize]
@@ -59,6 +61,7 @@ public class Character : MonoBehaviour
     public GameObject SPUM_unit_obj; // 캐릭터 spum 오브젝트
     [DoNotSerialize]
     public bool is_in_battle;
+    private List<character_effect_container> effect_Containers = new List<character_effect_container>(); // 캐릭터가 현재 가지고 있는 효과들 컨테이너 (버프 / 디버프)
 
     public int get_max_health_of_level(int level)
     {
@@ -113,6 +116,18 @@ public class Character : MonoBehaviour
 
     }
 
+    public void Heal_health(int value) 
+    {
+        current_health += value;
+        if (current_health > get_max_health_of_level(level)) 
+        {
+            current_health = get_max_health_of_level(level);
+        }
+        // 체력바 업데이트
+        health_slider.slider.value = current_health;
+        health_slider.value_tmp.text = current_health.ToString();
+    }
+
     public void Damage_willpower(int value) // 정신력 대미지 주는 메소드
     {
 
@@ -136,6 +151,18 @@ public class Character : MonoBehaviour
         willpower_slider.value_tmp.text = current_willpower.ToString();
     }
 
+    public void Heal_willpower(int value)
+    {
+        current_willpower += value;
+        if (current_willpower > get_max_willpower_of_level(level))
+        {
+            current_willpower = get_max_willpower_of_level(level);
+        }
+        // 정신력바 업데이트
+        willpower_slider.slider.value = current_willpower;
+        willpower_slider.value_tmp.text = current_willpower.ToString();
+    }
+
     // 카드 사용시 타깃 해제, 타깃 설정은 DetectingRay에 있음
     private void OnMouseExit()
     {
@@ -144,6 +171,41 @@ public class Character : MonoBehaviour
             BattleCalcManager.instance.clear_target_character();
         }
     }
+
+    // 버프/디버프 추가하는 메소드
+    public void give_effect(character_effect_code code, character_effect_setType type, int power) 
+    {
+        // 이미 가지고 있는 건지 확인
+        foreach (character_effect_container container in effect_Containers) 
+        {
+            if (container.Get_effect_code() == code) 
+            {
+                container.updateEffect(power, type); // 위력 갱신 or 추가
+                return;
+            }
+        }
+
+        // 없는거면 새로 추가
+        GameObject obj = Instantiate(effect_container_prefab, effects_layoutGroup_obj.transform);
+        character_effect_container obj_container = obj.GetComponent<character_effect_container>();
+        effect_Containers.Add(obj_container);
+        obj_container.Set(buffNdebuffManager.instance.get_effect(code, power), this);
+
+        // 이펙트 레이아웃그룹 업데이트
+        effects_layoutGroup_obj.GetComponent<effectsLayoutGroup>().set_size(effect_Containers.Count);
+    }
+
+    // 버프 / 디버프 (컨테이너) 없애는 메소드
+    public void remove_effect(character_effect_container target) 
+    {
+        effect_Containers.Remove(target);
+        target.clear_delegate_and_destroy();
+
+        // 이펙트 레이아웃그룹 업데이트
+        effects_layoutGroup_obj.GetComponent<effectsLayoutGroup>().set_size(effect_Containers.Count);
+    }
+
+
 
     // 턴 시작시 발동되는 메소드
     private void turn_start() 

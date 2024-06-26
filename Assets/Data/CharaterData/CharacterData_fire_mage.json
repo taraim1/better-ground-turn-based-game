@@ -14,12 +14,12 @@
     ],
     "is_character_unlocked": true,
     "deck": [
-        0,
-        0,
-        0,
-        1,
         2,
-        2
+        4,
+        4,
+        5,
+        5,
+        6
     ],
     "SPUM_datapath": "SPUM/SPUM_Units/Fire_Mage"
 }

@@ -8,6 +8,18 @@ using UnityEngine.SceneManagement;
 using System.IO;
 using DG.Tweening.Plugins.Core.PathCore;
 
+// 스킬카드 코드
+public enum skillcard_code
+{
+    simple_attack,
+    simple_defend,
+    simple_dodge,
+    powerful_attack,
+    fire_ball,
+    concentration,
+    fire_enchantment
+}
+
 public class CardManager : Singletone<CardManager>
 {
     [SerializeField] CardsSO cardsSO;
@@ -20,15 +32,6 @@ public class CardManager : Singletone<CardManager>
     [SerializeField] Transform highlighted_card_transform;
     [SerializeField] Transform enemy_card_transform;
     [SerializeField] Transform enemy_card_highlighted_transform;
-
-    // 스킬카드 코드
-    public enum skillcard_code 
-    { 
-        simple_attack,
-        simple_defend,
-        simple_dodge,
-        powerful_attack
-    }
 
     // 기타 카드 정보 담은 클래스
     private class card_data_json 
@@ -64,6 +67,9 @@ public class CardManager : Singletone<CardManager>
     // 현재 강조 중인 카드
     public card highlighted_card;
 
+    // 카드 효과 설명해주는 오브젝트가 가지고 있는 거
+    private card_description card_Description;
+
     private void Start()
     {
         JsonCardData.read_json();
@@ -72,7 +78,7 @@ public class CardManager : Singletone<CardManager>
     // 카드 코드 주면 카드 데이터 줌
     public Cards get_card_by_code(skillcard_code code) 
     {
-        return cardsSO.cards[(int)code];
+        return cardsSO.cards_dict[code];
     }
 
 
@@ -111,7 +117,7 @@ public class CardManager : Singletone<CardManager>
             for (int j = 0; j < BattleManager.instance.playable_characters[i].GetComponent<Character>().deck.Length; j++) 
             {
                 // 스크립터블 오브젝트에서 데이터를 뽑아옴
-                Cards tempCard = cardsSO.cards[ (int)BattleManager.instance.playable_characters[i].GetComponent<Character>().deck[j] ];
+                Cards tempCard = get_card_by_code(BattleManager.instance.playable_characters[i].GetComponent<Character>().deck[j]);
                 temp.Add(tempCard);
                 
             }
@@ -160,7 +166,7 @@ public class CardManager : Singletone<CardManager>
         card.owner = owner;
         card.isEnemyCard = true;
         card.originPRS = new PRS(enemy_card_transform.position, enemy_card_transform.rotation, Vector3.one * 1.5f);
-        card.Setup(cardsSO.cards[(int)code], 0);
+        card.Setup(get_card_by_code(code), 0);
 
         return cardObj;
     }
@@ -294,7 +300,7 @@ public class CardManager : Singletone<CardManager>
                     // 드래그 중인 카드가 없다면
                     if (!isdragging) 
                     {
-                        targetCard.MoveTransform(new PRS(new Vector3(highlighted_card_transform.position.x, highlighted_card_transform.position.y, targetCard.originPRS.pos.z), highlighted_card_transform.rotation, Vector3.one * 2.2f), true, 0.2f);
+                        targetCard.MoveTransform(new PRS(new Vector3(highlighted_card_transform.position.x, highlighted_card_transform.position.y, targetCard.originPRS.pos.z), highlighted_card_transform.rotation, Vector3.one * 2f), true, 0.2f);
                     }
                     
                     continue;
@@ -375,11 +381,24 @@ public class CardManager : Singletone<CardManager>
         }
     }
 
+    public void highlight_card(card card) // 카드 하이라이트
+    {
+        highlighted_card = card;
+        card_Description.Set_target(card);
+    }
+
+    public void clear_highlighted_card() // 카드 하이라이트 해제
+    {
+        highlighted_card = null;
+        card_Description.Clear_target();
+    }
+
     public void Setup_all() // 처음 세팅
     {
         Setup_cardBuffer();
         active_index = -1;
-        highlighted_card = null;
+        card_Description = GameObject.Find("card_description_base").GetComponent<card_description>();
+        clear_highlighted_card();
     }
 
 

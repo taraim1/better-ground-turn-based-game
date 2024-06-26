@@ -107,8 +107,8 @@ public class CharacterManager : Singletone<CharacterManager>
             // 캐릭터가 전투에 쓰려고 만든 건지 설정
             character.is_in_battle = false;
 
-            // 캐릭터에 붙은 UI들 생성
-            BattleUI_Manager.instance.summon_UI(obj, false);
+            // 캐릭터에 붙은 UI들 초기화
+            BattleUI_Manager.instance.Set_UI(obj, false);
 
             // SPUM 데이터 불러오기
             GameObject spPrefab = Resources.Load<GameObject>(character.SPUM_datapath);
@@ -153,8 +153,8 @@ public class CharacterManager : Singletone<CharacterManager>
             // 캐릭터 리스트에 넣어줌
             StageManager.instance.characters.Add(obj);
 
-            // 캐릭터에 붙은 UI들 생성
-            BattleUI_Manager.instance.summon_UI(obj, true);
+            // 캐릭터에 붙은 UI들 초기화
+            BattleUI_Manager.instance.Set_UI(obj, true);
 
             // SPUM 데이터 불러오기
             GameObject spPrefab = Resources.Load<GameObject>(character.SPUM_datapath);
@@ -201,7 +201,7 @@ public class CharacterManager : Singletone<CharacterManager>
             BattleManager.instance.playable_characters.Add(obj);
 
             // 캐릭터에 붙은 UI들 생성
-            BattleUI_Manager.instance.summon_UI(obj, false);
+            BattleUI_Manager.instance.Set_UI(obj, false);
 
             // SPUM 데이터 불러오기
             GameObject spPrefab = Resources.Load<GameObject>(character.SPUM_datapath);
@@ -241,7 +241,7 @@ public class CharacterManager : Singletone<CharacterManager>
             BattleManager.instance.enemy_characters.Add(obj);
 
             // 캐릭터에 붙은 UI들 생성
-            BattleUI_Manager.instance.summon_UI(obj, true);
+            BattleUI_Manager.instance.Set_UI(obj, true);
 
             // SPUM 데이터 불러오기
             GameObject spPrefab = Resources.Load<GameObject>(character.SPUM_datapath);

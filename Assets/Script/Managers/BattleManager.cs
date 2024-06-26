@@ -32,6 +32,7 @@ public class BattleManager : Singletone<BattleManager> // 싱글톤임
     public List<card> enemy_cards = new List<card>();
 
     [SerializeField] private GameObject battle_result_canvas;
+    [SerializeField] private StageSettingSO StageSettingSO;
 
     public IEnumerator current_phase_coroutine;
     public enum phases // 한 턴의 페이즈 모음
@@ -55,6 +56,8 @@ public class BattleManager : Singletone<BattleManager> // 싱글톤임
         battle_result_canvas = GameObject.Find("Battle Result Canvas");
         battle_result_canvas.SetActive(false);
 
+        // 전투 배경 생성
+        Instantiate(StageSettingSO.stage_Settings[stage_index].background_prefab);
 
         // 캐릭터 오브젝트 및 Character 인스턴스 생성 (아군 / 적 모두)
         CharacterManager.instance.spawn_character(stage_index);
@@ -212,6 +215,9 @@ public class BattleManager : Singletone<BattleManager> // 싱글톤임
 
     IEnumerator turn_end_phase() 
     {
+        // 턴 엔드 페이즈 날림
+        BattleEventManager.turn_end_phase?.Invoke();
+
         // 다음 턴 시작 페이즈로
         current_phase_coroutine = turn_start_phase();
         StartCoroutine(current_phase_coroutine);

@@ -8,7 +8,7 @@ using System.Runtime.CompilerServices;
 public class test : MonoBehaviour
 {
     [SerializeField]
-    private CardManager.skillcard_code code;
+    private skillcard_code code;
 
     private void Start()
     {

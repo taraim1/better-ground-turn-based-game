@@ -10,7 +10,7 @@ using Unity.VisualScripting;
 public class CardInfor : MonoBehaviour, IPointerDownHandler
 {
     [SerializeField]
-    private CardManager.skillcard_code code;
+    private skillcard_code code;
     public UnityEngine.UI.Image Card_Image;
     public TMP_Text Card_Name;
     public TMP_Text Card_Cost;

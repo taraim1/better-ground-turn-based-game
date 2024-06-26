@@ -9,14 +9,12 @@ using Unity.VisualScripting;
 public class skill_power_meter : MonoBehaviour
 {
     public TMP_Text tmp;
-    public UI_hook_up_object hook;
 
     [DoNotSerialize]
     public Coroutine running_show = null;
 
     public void Setup(GameObject target_obj) // 처음 생성시 설정용
     {
-        hook.target_object = target_obj;
         tmp.text = "";
     }
 

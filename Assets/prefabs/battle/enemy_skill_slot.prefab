@@ -99,7 +99,7 @@ GameObject:
   - component: {fileID: 6377293548358938856}
   - component: {fileID: 2158523482969391545}
   - component: {fileID: 1819881104243426293}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: hitbox
   m_TagString: enemySkillSlot
   m_Icon: {fileID: 0}

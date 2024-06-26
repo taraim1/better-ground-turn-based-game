@@ -187,7 +187,7 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1.640625, y: 2.34375}
+    oldSize: {x: 1.6666666, y: 2.3809524}
     newSize: {x: 2, y: 2.5}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
@@ -253,7 +253,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 5269440128461588686, guid: 0ab8cad5a38e0894fb3be23837a22254, type: 2}
+  - {fileID: -9036255344000267553, guid: c291b4d71b71cca43b1f7dcb361896c2, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -297,8 +297,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "\uAC04\uB2E8\uD55C \uACF5\uACA9"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 0ab8cad5a38e0894fb3be23837a22254, type: 2}
-  m_sharedMaterial: {fileID: 5269440128461588686, guid: 0ab8cad5a38e0894fb3be23837a22254,
+  m_fontAsset: {fileID: 11400000, guid: c291b4d71b71cca43b1f7dcb361896c2, type: 2}
+  m_sharedMaterial: {fileID: -9036255344000267553, guid: c291b4d71b71cca43b1f7dcb361896c2,
     type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -323,8 +323,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 12
-  m_fontSizeBase: 12
+  m_fontSize: 10
+  m_fontSizeBase: 10
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
