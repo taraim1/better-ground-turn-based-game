@@ -8,7 +8,7 @@ using System;
 
 public class enemy_skillCard_slot : MonoBehaviour, IPointerDownHandler, IPointerEnterHandler, IPointerExitHandler
 {
-    public SpriteRenderer illust;
+    public Image illust;
     public GameObject card_obj;
     public GameObject enemy_Obj;
     [SerializeField] private LineRenderer lineRenderer;
