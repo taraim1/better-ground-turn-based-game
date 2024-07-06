@@ -89,8 +89,8 @@ public class Building : MonoBehaviour
 
         if (SpentMinutesGold >= 5)
         {
-            if (SpentMinutesGold >= 10){ SpentMinutesGold = 10; }
-            ResourceManager.instance.Gold = ResourceManager.instance.Gold + SpentMinutesGold*LevelManager.instance.GoldCaveLevel;
+            if (SpentMinutesGold >= 100){ SpentMinutesGold = 100; }
+            ResourceManager.instance.Gold = ResourceManager.instance.Gold + SpentMinutesGold*5*LevelManager.instance.GoldCaveLevel;
             GoldText.text = "골드 : " +  ResourceManager.instance.Gold;
             Debug.Log("Gold : " + ResourceManager.instance.Gold);
             firstGoldClickTime = DateTime.Now;
@@ -135,7 +135,7 @@ public class Building : MonoBehaviour
 
         if (SpentMinutesGem >= 5)
         {
-            if (SpentMinutesGem >= 10){ SpentMinutesGem = 10; }
+            if (SpentMinutesGem >= 100){ SpentMinutesGem = 100; }
             ResourceManager.instance.Gem = ResourceManager.instance.Gem + SpentMinutesGem*LevelManager.instance.GemCaveLevel;
             GemText.text = "보석 : " +  ResourceManager.instance.Gem;
             Debug.Log("Gem : " + ResourceManager.instance.Gem);
@@ -182,8 +182,8 @@ public class Building : MonoBehaviour
 
         if (SpentMinutesWater >= 5)
         {
-            if (SpentMinutesWater >= 10){ SpentMinutesWater = 10; }
-            ResourceManager.instance.Water = ResourceManager.instance.Water + SpentMinutesWater*LevelManager.instance.WStatueLevel;
+            if (SpentMinutesWater >= 100){ SpentMinutesWater = 100; }
+            ResourceManager.instance.Water = ResourceManager.instance.Water + SpentMinutesWater*3*LevelManager.instance.WStatueLevel;
             WaterText.text = "성수 : " +  ResourceManager.instance.Water;
             Debug.Log("Water : " + ResourceManager.instance.Water);
 
