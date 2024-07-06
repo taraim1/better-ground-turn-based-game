@@ -696,8 +696,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 1068450067615572803, guid: e35db6128c3c08b4c84ab116e62d86c5,
-          type: 3}
+      - m_Target: {fileID: 891357865}
         m_TargetAssemblyTypeName: Card_UI, Assembly-CSharp
         m_MethodName: Destroy_this
         m_Mode: 1
@@ -709,8 +708,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 3874215727435382137, guid: e35db6128c3c08b4c84ab116e62d86c5,
-          type: 3}
+      - m_Target: {fileID: 111476334}
         m_TargetAssemblyTypeName: UnityEngine.CanvasRenderer, UnityEngine
         m_MethodName: Clear
         m_Mode: 1
