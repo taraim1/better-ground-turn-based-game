@@ -153,20 +153,20 @@ public class EnemyAI : MonoBehaviour
 
     private void Awake()
     {
-        BattleEventManager.enemy_skill_setting_phase += set_skill;
-        BattleEventManager.enemy_skill_card_deactivate += return_card;
-        BattleEventManager.player_character_died += OnPlayerCharacterDied;
-        BattleEventManager.battle_ended += OnBattleEnd;
+        ActionManager.enemy_skill_setting_phase += set_skill;
+        ActionManager.enemy_skill_card_deactivate += return_card;
+        ActionManager.player_character_died += OnPlayerCharacterDied;
+        ActionManager.battle_ended += OnBattleEnd;
 
         isBattleEnded = false;
     }
 
     private void OnDisable()
     {
-        BattleEventManager.enemy_skill_setting_phase -= set_skill;
-        BattleEventManager.enemy_skill_card_deactivate -= return_card;
-        BattleEventManager.player_character_died -= OnPlayerCharacterDied;
-        BattleEventManager.battle_ended -= OnBattleEnd;
+        ActionManager.enemy_skill_setting_phase -= set_skill;
+        ActionManager.enemy_skill_card_deactivate -= return_card;
+        ActionManager.player_character_died -= OnPlayerCharacterDied;
+        ActionManager.battle_ended -= OnBattleEnd;
     }
 }
 

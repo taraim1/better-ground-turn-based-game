@@ -36,7 +36,7 @@ public class PartyManager : Singletone<PartyManager>
     {
         string output = File.ReadAllText(Application.dataPath + "/Data/PartyData.json");
         PartyData = JsonUtility.FromJson<PartyDataContainer>(output);
-        BattleEventManager.party_member_changed?.Invoke();
+        ActionManager.party_member_changed?.Invoke();
     }
 
     // 캐릭터 코드를 파티에 추가
@@ -50,7 +50,7 @@ public class PartyManager : Singletone<PartyManager>
 
         PartyData.party_codes.Add(code);
         PartyData.party_member_count++;
-        BattleEventManager.party_member_changed?.Invoke();
+        ActionManager.party_member_changed?.Invoke();
         save_party_to_json();
 
     }
@@ -71,7 +71,7 @@ public class PartyManager : Singletone<PartyManager>
         }
 
         PartyData.party_member_count--;
-        BattleEventManager.party_member_changed?.Invoke();
+        ActionManager.party_member_changed?.Invoke();
         save_party_to_json();
     }
 

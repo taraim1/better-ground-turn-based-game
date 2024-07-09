@@ -318,17 +318,17 @@ public class CharacterManager : Singletone<CharacterManager>
         // 아군이면 사망 이벤트 발동 (적의 스킬 중 이 캐릭터를 타게팅하고 있는 걸 없애줌)
         if (!isEnemy)
         {
-            BattleEventManager.player_character_died?.Invoke();
+            ActionManager.player_character_died?.Invoke();
         }
 
         // 전투 끝나는 거 감지
         if (BattleManager.instance.enemy_characters.Count == 0)
         {
-            BattleEventManager.battle_ended?.Invoke(true);
+            ActionManager.battle_ended?.Invoke(true);
         }
         else if (BattleManager.instance.playable_characters.Count == 0) 
         {
-            BattleEventManager.battle_ended?.Invoke(false);
+            ActionManager.battle_ended?.Invoke(false);
         }
     }
     public void kill_character_in_stage_show(Character character) // 스테이지 보여줄 때 캐릭터 죽이는 메소드 

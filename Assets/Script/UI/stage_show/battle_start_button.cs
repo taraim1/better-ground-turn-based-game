@@ -37,7 +37,7 @@ public class battle_start_button : MonoBehaviour
     {
         holy_water_requirement = StageManager.instance.get_holy_water_requirement();
         Check_empty_party();
-        BattleEventManager.party_member_changed += Check_empty_party;
+        ActionManager.party_member_changed += Check_empty_party;
         holy_water_text.text = string.Format("성수 {0} 소모", holy_water_requirement);
         holy_water_text2.text = string.Format("({0} 보유)", ResourceManager.instance.Water);
         if (ResourceManager.instance.Water < holy_water_requirement) 
@@ -48,6 +48,6 @@ public class battle_start_button : MonoBehaviour
 
     private void OnDestroy()
     {
-        BattleEventManager.party_member_changed -= Check_empty_party;
+        ActionManager.party_member_changed -= Check_empty_party;
     }
 }

@@ -10,12 +10,12 @@ public class DetectRay : MonoBehaviour
     private void Awake()
     {
         isBattleEnded = false;
-        BattleEventManager.battle_ended += OnBattleEnd;
+        ActionManager.battle_ended += OnBattleEnd;
     }
 
     private void OnDestroy()
     {
-        BattleEventManager.battle_ended -= OnBattleEnd;
+        ActionManager.battle_ended -= OnBattleEnd;
     }
 
     private void OnBattleEnd(bool victory) 
@@ -73,7 +73,7 @@ public class DetectRay : MonoBehaviour
                     card.running_drag = StartCoroutine(card.detect_drag());
 
                     // 적 카드 강조 해제
-                    BattleEventManager.enemy_skill_card_deactivate?.Invoke();
+                    ActionManager.enemy_skill_card_deactivate?.Invoke();
                 }
                 // 적군 카드면
                 else
@@ -81,7 +81,7 @@ public class DetectRay : MonoBehaviour
                     // 적 카드 강조 해제
                     if (card.state == card.current_mode.highlighted_enemy_card)
                     {
-                        BattleEventManager.enemy_skill_card_deactivate?.Invoke();
+                        ActionManager.enemy_skill_card_deactivate?.Invoke();
                     }
                 }
                 break;
@@ -97,7 +97,7 @@ public class DetectRay : MonoBehaviour
                     card.running_drag = StartCoroutine(card.detect_drag());
 
                     // 적 카드 강조 해제
-                    BattleEventManager.enemy_skill_card_deactivate?.Invoke();
+                    ActionManager.enemy_skill_card_deactivate?.Invoke();
                 }
                 // 적군 카드면
                 else
@@ -105,7 +105,7 @@ public class DetectRay : MonoBehaviour
                     // 적 카드 강조 해제
                     if (card.state == card.current_mode.highlighted_enemy_card)
                     {
-                        BattleEventManager.enemy_skill_card_deactivate?.Invoke();
+                        ActionManager.enemy_skill_card_deactivate?.Invoke();
                     }
                 }
                 break;
@@ -134,7 +134,7 @@ public class DetectRay : MonoBehaviour
                 }
 
                 // 적 카드 강조 해제
-                BattleEventManager.enemy_skill_card_deactivate?.Invoke();
+                ActionManager.enemy_skill_card_deactivate?.Invoke();
 
                 // 모든 카드를 원래 order로
                 CardManager.instance.Set_origin_order(CardManager.instance.active_index);

@@ -232,10 +232,10 @@ public class Character : MonoBehaviour
 
     private void Awake()
     {
-        BattleEventManager.turn_start_phase += turn_start;
+        ActionManager.turn_start_phase += turn_start;
     }
     private void OnDisable()
     {
-        BattleEventManager.turn_start_phase -= turn_start;
+        ActionManager.turn_start_phase -= turn_start;
     }
 }
