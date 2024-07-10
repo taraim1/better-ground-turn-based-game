@@ -347,8 +347,10 @@ public class BattleCalcManager : Singletone<BattleCalcManager>
         }
 
         // 카드 제거
+
         CardManager.instance.Destroy_card(using_card);
         CardManager.instance.Destroy_card(target_card);
+
     }
 
     

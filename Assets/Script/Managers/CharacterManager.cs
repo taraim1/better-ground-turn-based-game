@@ -266,18 +266,18 @@ public class CharacterManager : Singletone<CharacterManager>
         // 아군 캐릭터면
         if (!isEnemy)
         {
+            // 패 보는 중이었으면 패 숨기기
+            if (character.Character_index == CardManager.instance.active_index)
+            {
+                CardManager.instance.Change_active_hand(-1);
+            }
+
             // 캐릭터의 패 없애기
             for (int i = 0; i < BattleManager.instance.hand_data[character.Character_index].Count; i++)
             {
                 CardManager.instance.Destroy_card(BattleManager.instance.hand_data[character.Character_index][i]);
             }
             BattleManager.instance.hand_data.RemoveAt(character.Character_index);
-
-            // 패 보는 중이었으면 패 숨기기
-            if (character.Character_index == CardManager.instance.active_index)
-            {
-                CardManager.instance.Change_active_hand(-1);
-            }
 
             // 아군 캐릭터 리스트에서 없애기
             BattleManager.instance.playable_characters.Remove(character.gameObject);
