@@ -1,4 +1,3 @@
-/*
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -7,6 +6,7 @@ using UnityEngine.Rendering;
 using System.IO;
 using static CharacterManager;
 using UnityEngine.TextCore.Text;
+using TMPro;
 
 public class Random_Card : MonoBehaviour
 {
@@ -14,6 +14,7 @@ public class Random_Card : MonoBehaviour
     public GameObject cardPrefab;
     public Transform Card_Summon;
     public List<string> Grade_Result;
+    public GameObject NoGem;
 
     [SerializeField]
     public List<Card_UI> Card_Prefabs;
@@ -210,23 +211,38 @@ public class Random_Card : MonoBehaviour
     }
     public void Pick_10t()
     {
-        if (BtnManager.Current_Scene == 1)
+        if(ResourceManager.instance.Gem >= 10)
         {
-            Pick_10("Skill");
-        }
-        else if (BtnManager.Current_Scene == 0)
-        {
-            Pick_10("Char");
+            ResourceManager.instance.Gem -= 10;
+            if (BtnManager.Current_Scene == 1)
+            {
+                Pick_10("Skill");
+            }
+            else if (BtnManager.Current_Scene == 0)
+            {
+                Pick_10("Char");
+            }
+            else
+            {
+                Debug.LogError("�׾�");
+            }
         }
         else
         {
-            Debug.LogError("�׾�");
+            NoGem.SetActive(true);
         }
-
     }
     public void Pick_1t()
     {
-        Pick_1();
+        if(ResourceManager.instance.Gem >= 1)
+        {
+            ResourceManager.instance.Gem -= 1;
+            Pick_1();
+        }
+        else
+        {
+            NoGem.SetActive(true);
+        }
     }
 
     public void DestroyCardPrefabs() // ������ ī�� �����յ��� �����ϴ� �Լ�
@@ -239,4 +255,3 @@ public class Random_Card : MonoBehaviour
     }
 
 }
-*/
