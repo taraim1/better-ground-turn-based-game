@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -22,5 +23,10 @@ public class PRS
 public class Util
 {
     static public float drag_time_standard = 0.13f;
+
+    static public T StringToEnum<T>(string e)
+    {
+        return (T)Enum.Parse(typeof(T), e);
+    }
 }
 

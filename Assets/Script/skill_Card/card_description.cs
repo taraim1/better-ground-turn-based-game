@@ -38,6 +38,7 @@ public class card_description : MonoBehaviour
             string text = "";
             switch (effect.code) 
             {
+                // 여기에 있는 캐릭터 효과의 TMP링크 스트링은 각 효과의 character_effect_code값과 같아야 함
                 case skill_effect_code.none:
                     nameTMP.text = "특수 효과 없음";
                     text = "";
@@ -56,7 +57,7 @@ public class card_description : MonoBehaviour
                     break;
                 case skill_effect_code.fire_enchantment:
                     nameTMP.text = "발화 마법 부여";
-                    text = String.Format("대상에게 <link=\"ignition_attack\"><style=\"Effect_Description\">화염 공격</style></link>을 {0} 부여한다.", effect.parameters[0]);
+                    text = String.Format("대상에게 <link=\"ignition_attack\"><style=\"Effect_Description\">발화 공격</style></link>을 {0} 부여한다.", effect.parameters[0]);
                     break;
             }
 

@@ -110,6 +110,10 @@ public class DetectRay : MonoBehaviour
                 }
                 break;
 
+            // 캐릭터 특수효과 (버프 / 디버프) 설명 클릭시
+            case "effectDescription":
+                break; // 아무 것도 안 함
+
             // 적 스킬 슬롯 클릭시
             case "enemySkillSlot":
                 // 아군 카드 강조 해제

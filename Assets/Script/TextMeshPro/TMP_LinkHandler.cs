@@ -11,7 +11,7 @@ public class TMP_LinkHandler : MonoBehaviour, IPointerClickHandler
 {
     private TMP_Text TMPtext;
     private Canvas canvas;
-    [SerializeField] private Camera cam;
+    public Camera cam;
 
     private void Awake()
     {
@@ -22,23 +22,25 @@ public class TMP_LinkHandler : MonoBehaviour, IPointerClickHandler
         {
             cam = null;
         }
-        else 
+        else
         {
             cam = canvas.worldCamera;
         }
     }
 
-    public void OnPointerClick(PointerEventData eventData) 
+    public void OnPointerClick(PointerEventData eventData)
     {
         Vector3 mousePos = new Vector3(eventData.position.x, eventData.position.y, 0);
 
         int linkTaggedText = TMP_TextUtilities.FindIntersectingLink(TMPtext, mousePos, cam);
 
-        if (linkTaggedText != -1) 
+        if (linkTaggedText != -1)
         {
             TMP_LinkInfo linkInfo = TMPtext.textInfo.linkInfo[linkTaggedText];
             ActionManager.TMP_link_clicked?.Invoke(linkInfo.GetLinkID());
         }
+
+
     }
 
 }
