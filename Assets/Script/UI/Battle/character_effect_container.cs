@@ -24,22 +24,22 @@ public class character_effect_container : MonoBehaviour
         switch (effect.apply_timing) 
         {
             case character_effect_timing.turn_started:
-                BattleEventManager.turn_start_phase += use_effect_to_all_targets;
+                ActionManager.turn_start_phase += use_effect_to_all_targets;
                 break;
             case character_effect_timing.turn_ended:
-                BattleEventManager.turn_end_phase += use_effect_to_all_targets;
+                ActionManager.turn_end_phase += use_effect_to_all_targets;
                 break;
             case character_effect_timing.after_attack:
-                BattleEventManager.attacked += check_attack_effect_use;
+                ActionManager.attacked += check_attack_effect_use;
                 break;
         }
         switch (effect.power_reduce_timing) 
         {
             case character_effect_power_reduce_timing.turn_started:
-                BattleEventManager.turn_start_phase += reduce_effect_power;
+                ActionManager.turn_start_phase += reduce_effect_power;
                 break;
             case character_effect_power_reduce_timing.turn_ended:
-                BattleEventManager.turn_end_phase += reduce_effect_power;
+                ActionManager.turn_end_phase += reduce_effect_power;
                 break;
         }
 
@@ -146,22 +146,22 @@ public class character_effect_container : MonoBehaviour
         switch (effect.apply_timing)
         {
             case character_effect_timing.turn_started:
-                BattleEventManager.turn_start_phase -= use_effect_to_all_targets;
+                ActionManager.turn_start_phase -= use_effect_to_all_targets;
                 break;
             case character_effect_timing.turn_ended:
-                BattleEventManager.turn_end_phase -= use_effect_to_all_targets;
+                ActionManager.turn_end_phase -= use_effect_to_all_targets;
                 break;
             case character_effect_timing.after_attack:
-                BattleEventManager.attacked -= check_attack_effect_use;
+                ActionManager.attacked -= check_attack_effect_use;
                 break;
         }
         switch (effect.power_reduce_timing)
         {
             case character_effect_power_reduce_timing.turn_started:
-                BattleEventManager.turn_start_phase -= reduce_effect_power;
+                ActionManager.turn_start_phase -= reduce_effect_power;
                 break;
             case character_effect_power_reduce_timing.turn_ended:
-                BattleEventManager.turn_end_phase -= reduce_effect_power;
+                ActionManager.turn_end_phase -= reduce_effect_power;
                 break;
         }
 

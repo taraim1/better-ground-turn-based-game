@@ -21,12 +21,12 @@ public class Character_On_stage_show : MonoBehaviour
         Vector2 mousePos = Camera.main.ScreenToWorldPoint(new Vector2(Input.mousePosition.x, Input.mousePosition.y));
         originPos = transform.position;
         offset = new Vector2(transform.position.x - mousePos.x, transform.position.y - mousePos.y);
-        BattleEventManager.character_drag_started_on_stageShow?.Invoke();
+        ActionManager.character_drag_started_on_stageShow?.Invoke();
     }
 
     private void OnMouseUp() 
     {
-        BattleEventManager.character_drag_finished_on_stageShow?.Invoke();
+        ActionManager.character_drag_finished_on_stageShow?.Invoke();
         Collider2D[] colliders = Physics2D.OverlapBoxAll(transform.position, transform.localScale, 0);
 
         transform.position = originPos;

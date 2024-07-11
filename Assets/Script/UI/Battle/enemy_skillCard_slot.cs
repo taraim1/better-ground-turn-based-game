@@ -52,7 +52,7 @@ public class enemy_skillCard_slot : MonoBehaviour, IPointerDownHandler, IPointer
         if (eventData.button == PointerEventData.InputButton.Left && BattleManager.instance.current_phase == BattleManager.phases.player_skill_phase)
         {
             // 적 카드 강조 해제
-            BattleEventManager.enemy_skill_card_deactivate?.Invoke();
+            ActionManager.enemy_skill_card_deactivate?.Invoke();
             // 이 슬롯의 카드를 활성화 위치로
             CardManager.instance.highlight_enemy_card(card_obj);
             isHighlightedByClick = true;
@@ -69,7 +69,7 @@ public class enemy_skillCard_slot : MonoBehaviour, IPointerDownHandler, IPointer
             // 이 슬롯의 카드를 카드 판정 대상으로
             BattleCalcManager.instance.set_target(card_obj.GetComponent<card>());
             // 적 카드 강조 해제
-            BattleEventManager.enemy_skill_card_deactivate?.Invoke();
+            ActionManager.enemy_skill_card_deactivate?.Invoke();
             // 이 슬롯의 카드를 활성화 위치로
             CardManager.instance.highlight_enemy_card(card_obj);
             isHighlightedByClick = false;
@@ -89,7 +89,7 @@ public class enemy_skillCard_slot : MonoBehaviour, IPointerDownHandler, IPointer
             // 타겟 설정 해제
             BattleCalcManager.instance.clear_target_card();
             // 적 카드 강조 해제
-            BattleEventManager.enemy_skill_card_deactivate?.Invoke();
+            ActionManager.enemy_skill_card_deactivate?.Invoke();
         }
 
         isMouseOnThis = false;
@@ -112,9 +112,9 @@ public class enemy_skillCard_slot : MonoBehaviour, IPointerDownHandler, IPointer
         lineRenderer.enabled = false;
         lineRenderer.startWidth = 0.05f;
         lineRenderer.endWidth = 0.05f;
-        BattleEventManager.skill_used += skill_used;
-        BattleEventManager.enemy_skill_card_deactivate += Card_diactivated;
-        BattleEventManager.battle_ended += OnBattleEnd;
+        ActionManager.skill_used += skill_used;
+        ActionManager.enemy_skill_card_deactivate += Card_diactivated;
+        ActionManager.battle_ended += OnBattleEnd;
 
         isBattleEnded = false;
     }
@@ -122,9 +122,9 @@ public class enemy_skillCard_slot : MonoBehaviour, IPointerDownHandler, IPointer
     private void OnDisable()
     {
         lineRenderer.enabled = false;
-        BattleEventManager.skill_used -= skill_used;
-        BattleEventManager.enemy_skill_card_deactivate -= Card_diactivated;
-        BattleEventManager.battle_ended -= OnBattleEnd;
+        ActionManager.skill_used -= skill_used;
+        ActionManager.enemy_skill_card_deactivate -= Card_diactivated;
+        ActionManager.battle_ended -= OnBattleEnd;
     }
 
     private void Update()

@@ -198,8 +198,11 @@ public class Character : MonoBehaviour
     // 버프 / 디버프 (컨테이너) 없애는 메소드
     public void remove_effect(character_effect_container target) 
     {
-        effect_Containers.Remove(target);
-        target.clear_delegate_and_destroy();
+        if (target != null)
+        {
+            effect_Containers.Remove(target);
+            target.clear_delegate_and_destroy();
+        }
 
         // 이펙트 레이아웃그룹 업데이트
         effects_layoutGroup_obj.GetComponent<effectsLayoutGroup>().set_size(effect_Containers.Count);
@@ -232,10 +235,10 @@ public class Character : MonoBehaviour
 
     private void Awake()
     {
-        BattleEventManager.turn_start_phase += turn_start;
+        ActionManager.turn_start_phase += turn_start;
     }
     private void OnDisable()
     {
-        BattleEventManager.turn_start_phase -= turn_start;
+        ActionManager.turn_start_phase -= turn_start;
     }
 }

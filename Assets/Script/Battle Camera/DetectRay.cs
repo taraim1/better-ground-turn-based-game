@@ -10,12 +10,12 @@ public class DetectRay : MonoBehaviour
     private void Awake()
     {
         isBattleEnded = false;
-        BattleEventManager.battle_ended += OnBattleEnd;
+        ActionManager.battle_ended += OnBattleEnd;
     }
 
     private void OnDestroy()
     {
-        BattleEventManager.battle_ended -= OnBattleEnd;
+        ActionManager.battle_ended -= OnBattleEnd;
     }
 
     private void OnBattleEnd(bool victory) 
@@ -26,7 +26,14 @@ public class DetectRay : MonoBehaviour
     private GameObject check_clicked_obj() 
     {
         Vector2 MousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        
+
+        // 스킬카드 레이어 클릭 감지
+        Collider2D skill_collider = Physics2D.OverlapPoint(MousePos, LayerMask.GetMask("SkillCard"));
+        if (skill_collider != null)
+        {
+            return skill_collider.gameObject;
+        }
+
         // 스킬 슬롯 클릭 감지
         Collider2D skill_slot_collider = Physics2D.OverlapPoint(MousePos, LayerMask.GetMask("skillslot"));
         if (skill_slot_collider != null) 
@@ -70,10 +77,10 @@ public class DetectRay : MonoBehaviour
                 if (card.isEnemyCard == false)
                 {
                     // 카드 드래그 감지 시작
-                    card.running_drag = StartCoroutine(card.detect_drag());
+                    card.running_drag = StartCoroutine(card.detect_drag(false));
 
                     // 적 카드 강조 해제
-                    BattleEventManager.enemy_skill_card_deactivate?.Invoke();
+                    ActionManager.enemy_skill_card_deactivate?.Invoke();
                 }
                 // 적군 카드면
                 else
@@ -81,7 +88,7 @@ public class DetectRay : MonoBehaviour
                     // 적 카드 강조 해제
                     if (card.state == card.current_mode.highlighted_enemy_card)
                     {
-                        BattleEventManager.enemy_skill_card_deactivate?.Invoke();
+                        ActionManager.enemy_skill_card_deactivate?.Invoke();
                     }
                 }
                 break;
@@ -94,10 +101,10 @@ public class DetectRay : MonoBehaviour
                 if (card.isEnemyCard == false)
                 {
                     // 카드 드래그 감지 시작
-                    card.running_drag = StartCoroutine(card.detect_drag());
+                    card.running_drag = StartCoroutine(card.detect_drag(true));
 
                     // 적 카드 강조 해제
-                    BattleEventManager.enemy_skill_card_deactivate?.Invoke();
+                    ActionManager.enemy_skill_card_deactivate?.Invoke();
                 }
                 // 적군 카드면
                 else
@@ -105,10 +112,14 @@ public class DetectRay : MonoBehaviour
                     // 적 카드 강조 해제
                     if (card.state == card.current_mode.highlighted_enemy_card)
                     {
-                        BattleEventManager.enemy_skill_card_deactivate?.Invoke();
+                        ActionManager.enemy_skill_card_deactivate?.Invoke();
                     }
                 }
                 break;
+
+            // 캐릭터 특수효과 (버프 / 디버프) 설명 클릭시
+            case "effectDescription":
+                break; // 아무 것도 안 함
 
             // 적 스킬 슬롯 클릭시
             case "enemySkillSlot":
@@ -134,7 +145,7 @@ public class DetectRay : MonoBehaviour
                 }
 
                 // 적 카드 강조 해제
-                BattleEventManager.enemy_skill_card_deactivate?.Invoke();
+                ActionManager.enemy_skill_card_deactivate?.Invoke();
 
                 // 모든 카드를 원래 order로
                 CardManager.instance.Set_origin_order(CardManager.instance.active_index);

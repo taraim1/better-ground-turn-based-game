@@ -20,11 +20,11 @@ public class Character_select_manager : MonoBehaviour
     private void Start()
     {
         Update_character_select_image();
-        BattleEventManager.party_member_changed += Update_character_select_image;
+        ActionManager.party_member_changed += Update_character_select_image;
     }
 
     private void OnDestroy()
     {
-        BattleEventManager.party_member_changed -= Update_character_select_image;
+        ActionManager.party_member_changed -= Update_character_select_image;
     }
 }

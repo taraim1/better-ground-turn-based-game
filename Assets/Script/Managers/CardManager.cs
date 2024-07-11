@@ -173,6 +173,8 @@ public class CardManager : Singletone<CardManager>
 
     public void Destroy_card(card card) // 카드 파괴
     {
+        if (card == null) { return; }
+
         // 적 카드면
         if (card.isEnemyCard)
         {

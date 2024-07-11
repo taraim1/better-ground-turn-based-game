@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public class BattleEventManager : MonoBehaviour
+public class ActionManager : MonoBehaviour
 {
 
 
@@ -23,5 +23,6 @@ public class BattleEventManager : MonoBehaviour
 
     // °ø¿ë
     public static Action party_member_changed;
+    public static Action<string> TMP_link_clicked;
 
 }

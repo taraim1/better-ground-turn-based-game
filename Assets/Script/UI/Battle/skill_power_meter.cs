@@ -35,10 +35,10 @@ public class skill_power_meter : MonoBehaviour
 
     private void Awake()
     {
-        BattleEventManager.turn_start_phase += hide;
+        ActionManager.turn_start_phase += hide;
     }
     private void OnDisable()
     {
-        BattleEventManager.turn_start_phase -= hide;
+        ActionManager.turn_start_phase -= hide;
     }
 }

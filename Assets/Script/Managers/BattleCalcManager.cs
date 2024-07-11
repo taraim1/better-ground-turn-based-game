@@ -91,7 +91,7 @@ public class BattleCalcManager : Singletone<BattleCalcManager>
                 // 카드 사용 시 효과 적용
                 apply_skill_effect(using_card, skill_effect_timing.immediate, target_character);
 
-                BattleEventManager.skill_used?.Invoke();
+                ActionManager.skill_used?.Invoke();
                 cost_Meter.Current_cost = cost_Meter.Current_cost - using_card.Card.cost;
                 using_card_power = Random.Range(using_card.minpower, using_card.maxpower + 1);
                 apply_direct_use_result(using_card, target_character, using_card_power);
@@ -107,7 +107,7 @@ public class BattleCalcManager : Singletone<BattleCalcManager>
                 // 카드 사용 시 효과 적용
                 apply_skill_effect(using_card, skill_effect_timing.immediate, target_character);
 
-                BattleEventManager.skill_used?.Invoke();
+                ActionManager.skill_used?.Invoke();
                 cost_Meter.Current_cost = cost_Meter.Current_cost - using_card.Card.cost;
                 using_card_power = Random.Range(using_card.minpower, using_card.maxpower + 1);
                 apply_direct_use_result(using_card, target_character, using_card_power);
@@ -123,9 +123,9 @@ public class BattleCalcManager : Singletone<BattleCalcManager>
             apply_skill_effect(target_card, skill_effect_timing.immediate, target_card.owner.GetComponent<Character>());
 
             // 적 카드 강조 해제
-            BattleEventManager.enemy_skill_card_deactivate?.Invoke();
+            ActionManager.enemy_skill_card_deactivate?.Invoke();
 
-            BattleEventManager.skill_used?.Invoke();
+            ActionManager.skill_used?.Invoke();
             cost_Meter.Current_cost = cost_Meter.Current_cost - using_card.Card.cost;
             using_card_power = Random.Range(using_card.minpower, using_card.maxpower + 1);
             target_card_power = Random.Range(target_card.minpower, target_card.maxpower + 1);
@@ -148,9 +148,9 @@ public class BattleCalcManager : Singletone<BattleCalcManager>
                 apply_skill_effect(using_card, skill_effect_timing.immediate, OwnerCharacter);
 
                 // 적 카드 강조 해제
-                BattleEventManager.enemy_skill_card_deactivate?.Invoke();
+                ActionManager.enemy_skill_card_deactivate?.Invoke();
 
-                BattleEventManager.skill_used?.Invoke();
+                ActionManager.skill_used?.Invoke();
                 cost_Meter.Current_cost = cost_Meter.Current_cost - using_card.Card.cost;
                 using_card_power = Random.Range(using_card.minpower, using_card.maxpower + 1);
                 apply_direct_use_result(using_card, target_character, using_card_power);
@@ -255,7 +255,7 @@ public class BattleCalcManager : Singletone<BattleCalcManager>
             case ("공격"):
                 target_character.Damage_health(power);
                 target_character.Damage_willpower(power);
-                BattleEventManager.attacked?.Invoke(using_card.owner.GetComponent<Character>(), new List<Character>() { target_character });
+                ActionManager.attacked?.Invoke(using_card.owner.GetComponent<Character>(), new List<Character>() { target_character });
                 break;
         }
 
@@ -330,7 +330,7 @@ public class BattleCalcManager : Singletone<BattleCalcManager>
                 if (los_behavior == "공격") { loser_char.Damage_health(win_power); loser_char.Damage_willpower(win_power); }
                 else if (los_behavior == "방어") { loser_char.Damage_health(win_power - lose_power); loser_char.Damage_willpower(win_power - lose_power); }
                 else if (los_behavior == "회피") { loser_char.Damage_health(win_power); loser_char.Damage_willpower(win_power); }
-                BattleEventManager.attacked?.Invoke(winner_char, new List<Character>() { loser_char });
+                ActionManager.attacked?.Invoke(winner_char, new List<Character>() { loser_char });
                 break;
 
             case ("방어"):
@@ -347,8 +347,10 @@ public class BattleCalcManager : Singletone<BattleCalcManager>
         }
 
         // 카드 제거
+
         CardManager.instance.Destroy_card(using_card);
         CardManager.instance.Destroy_card(target_card);
+
     }
 
     

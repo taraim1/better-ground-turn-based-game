@@ -132,7 +132,7 @@ public class BattleManager : Singletone<BattleManager> // 싱글톤임
         cost_meter.Current_cost += 4;
 
         // 턴 시작 이벤트 날림
-        BattleEventManager.turn_start_phase?.Invoke();
+        ActionManager.turn_start_phase?.Invoke();
 
         // 적 스킬 설정 시작
         current_phase_coroutine = enemy_skill_setting_phase();
@@ -149,7 +149,7 @@ public class BattleManager : Singletone<BattleManager> // 싱글톤임
         current_phase = phases.enemy_skill_setting_phase;
         yield return new WaitForSeconds(0.01f); // 패닉 관련 버그 때문에 잠시 쉼
 
-        BattleEventManager.enemy_skill_setting_phase?.Invoke();
+        ActionManager.enemy_skill_setting_phase?.Invoke();
 
         // 스킬 설정 끝나는 거 감지
         while (true) 
@@ -181,7 +181,7 @@ public class BattleManager : Singletone<BattleManager> // 싱글톤임
 
         // 카드 하이라이트들 해제
         CardManager.instance.Change_active_hand(-1);
-        BattleEventManager.enemy_skill_card_deactivate?.Invoke();
+        ActionManager.enemy_skill_card_deactivate?.Invoke();
 
         // 적의 남은 카드들을 순서대로 사용
         while (enemy_cards.Count > 0) 
@@ -216,7 +216,7 @@ public class BattleManager : Singletone<BattleManager> // 싱글톤임
     IEnumerator turn_end_phase() 
     {
         // 턴 엔드 페이즈 날림
-        BattleEventManager.turn_end_phase?.Invoke();
+        ActionManager.turn_end_phase?.Invoke();
 
         // 다음 턴 시작 페이즈로
         current_phase_coroutine = turn_start_phase();
@@ -230,13 +230,13 @@ public class BattleManager : Singletone<BattleManager> // 싱글톤임
         SceneManager.sceneLoaded += Check_battle_scene_load;
 
         // 이벤트 추가
-        BattleEventManager.battle_ended += OnBattleEnd;
+        ActionManager.battle_ended += OnBattleEnd;
     }
 
     private void OnDisable()
     {
         SceneManager.sceneLoaded -= Check_battle_scene_load;
-        BattleEventManager.battle_ended -= OnBattleEnd;
+        ActionManager.battle_ended -= OnBattleEnd;
     }
 
     //Battle씬 시작시 전투 시작되도록 하기
@@ -254,7 +254,7 @@ public class BattleManager : Singletone<BattleManager> // 싱글톤임
     {
         // 패 전부 숨기기
         CardManager.instance.Change_active_hand(-1);
-        BattleEventManager.enemy_skill_card_deactivate?.Invoke();
+        ActionManager.enemy_skill_card_deactivate?.Invoke();
 
         // 진행 중인 전투 중지
         if (current_phase_coroutine != null) 

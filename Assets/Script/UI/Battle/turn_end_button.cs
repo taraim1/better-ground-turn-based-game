@@ -27,13 +27,13 @@ public class turn_end_button : MonoBehaviour, IPointerDownHandler
 
     private void Awake()
     {
-        BattleEventManager.battle_ended += OnBattleEnd;
+        ActionManager.battle_ended += OnBattleEnd;
 
         isBattleEnded = false;
     }
 
     private void OnDisable()
     {
-        BattleEventManager.battle_ended -= OnBattleEnd;
+        ActionManager.battle_ended -= OnBattleEnd;
     }
 }
