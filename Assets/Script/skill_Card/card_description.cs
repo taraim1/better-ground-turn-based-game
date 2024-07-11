@@ -52,11 +52,11 @@ public class card_description : MonoBehaviour
                     break;
                 case skill_effect_code.ignition:
                     nameTMP.text = "점화";
-                    text = String.Format("대상에게 <style=\"Effect_Description\">화염</style>을 {0} 부여한다.", effect.parameters[0]);
+                    text = String.Format("대상에게 <link=\"flame\"><style=\"Effect_Description\">화염</style></link>을 {0} 부여한다.", effect.parameters[0]);
                     break;
                 case skill_effect_code.fire_enchantment:
                     nameTMP.text = "발화 마법 부여";
-                    text = String.Format("대상에게 <style=\"Effect_Description\">화염 공격</style>을 {0} 부여한다.", effect.parameters[0]);
+                    text = String.Format("대상에게 <link=\"ignition_attack\"><style=\"Effect_Description\">화염 공격</style></link>을 {0} 부여한다.", effect.parameters[0]);
                     break;
             }
 

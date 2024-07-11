@@ -70,7 +70,7 @@ public class DetectRay : MonoBehaviour
                 if (card.isEnemyCard == false)
                 {
                     // 카드 드래그 감지 시작
-                    card.running_drag = StartCoroutine(card.detect_drag());
+                    card.running_drag = StartCoroutine(card.detect_drag(false));
 
                     // 적 카드 강조 해제
                     ActionManager.enemy_skill_card_deactivate?.Invoke();
@@ -94,7 +94,7 @@ public class DetectRay : MonoBehaviour
                 if (card.isEnemyCard == false)
                 {
                     // 카드 드래그 감지 시작
-                    card.running_drag = StartCoroutine(card.detect_drag());
+                    card.running_drag = StartCoroutine(card.detect_drag(true));
 
                     // 적 카드 강조 해제
                     ActionManager.enemy_skill_card_deactivate?.Invoke();

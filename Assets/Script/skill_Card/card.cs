@@ -89,7 +89,7 @@ public class card : MonoBehaviour
 
 
     // 카드 드래그 감지 (일정 시간 이상 잡고 있어야만 드래그로 판별)
-    public IEnumerator detect_drag() 
+    public IEnumerator detect_drag(bool isDescription) 
     {
         float dragging_time = 0;
         bool isDraggingStarted = false;
@@ -98,9 +98,21 @@ public class card : MonoBehaviour
         {
             
 
-            // 마우스 떼면
+            // 마우스 떼면 (스킬카드 설명 누른 경우 드래그중일 때 원위치로만 감)
             if (Input.GetMouseButton(0) == false) 
-            {
+            {   
+                if (isDescription) 
+                {
+                    // 드래그 중이었으면
+                    if (state == current_mode.dragging)
+                    {
+                        state = current_mode.normal;
+                        CardManager.instance.clear_highlighted_card();
+                        CardManager.instance.Aline_cards(CardManager.instance.active_index);
+                    }
+                    yield break; 
+                }
+
                 // 모든 카드를 원래 order로 
                 CardManager.instance.Set_origin_order(CardManager.instance.active_index);
 

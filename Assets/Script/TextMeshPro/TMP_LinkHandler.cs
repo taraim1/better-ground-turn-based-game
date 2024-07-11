@@ -37,7 +37,7 @@ public class TMP_LinkHandler : MonoBehaviour, IPointerClickHandler
         if (linkTaggedText != -1) 
         {
             TMP_LinkInfo linkInfo = TMPtext.textInfo.linkInfo[linkTaggedText];
-            ActionManager.TMP_link_clicked?.Invoke(linkInfo.GetLinkText());
+            ActionManager.TMP_link_clicked?.Invoke(linkInfo.GetLinkID());
         }
     }
 
