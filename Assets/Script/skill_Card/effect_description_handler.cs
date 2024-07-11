@@ -8,7 +8,8 @@ public class effect_description_handler : MonoBehaviour
 {
     [SerializeField] private GameObject effect_description_prefab;
     [SerializeField] private Camera cam;
-    public int description_count = 0; // 현재 켜져있는 설명창 개수
+    private int description_count = 0; // 현재 켜져있는 설명창 개수
+    private int max_description_count = 0; // 현재 켜져있는 설명창 중 가장 나중에 켜진 게 몇 번째로 켜진 건지 저장
 
     // TMP 링크 클릭 받는 메소드
     private void get_click(string TMPlink) 
@@ -33,11 +34,22 @@ public class effect_description_handler : MonoBehaviour
         
         effect_description description = effect_description_obj.GetComponent<effect_description>();
         description.set_effect_text(code, cam);
-        description.set_order(description_count*5);
+        description.set_order(max_description_count*5);
 
         description_count += 1;
+        max_description_count += 1;
 
+    }
 
+    // 설명창 개수 감소시키는 메소드
+    public void reduce_count() 
+    {
+        description_count -= 1;
+
+        if (description_count == 0) 
+        {
+            max_description_count = 0;
+        }
     }
 
     void OnEnable()

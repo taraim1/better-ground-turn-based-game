@@ -9,6 +9,7 @@ TagManager:
   - EnemyCharacter
   - enemySkillSlot
   - skillDescription
+  - effectDescription
   layers:
   - Default
   - TransparentFX

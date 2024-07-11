@@ -45,7 +45,7 @@ public class effect_description : MonoBehaviour
 
     public void Destroy_self() 
     {
-        description_handler.description_count -= 1;
+        description_handler.reduce_count();
         Destroy(gameObject);
     }
 

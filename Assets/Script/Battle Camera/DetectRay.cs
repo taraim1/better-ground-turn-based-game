@@ -26,7 +26,14 @@ public class DetectRay : MonoBehaviour
     private GameObject check_clicked_obj() 
     {
         Vector2 MousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        
+
+        // 스킬카드 레이어 클릭 감지
+        Collider2D skill_collider = Physics2D.OverlapPoint(MousePos, LayerMask.GetMask("SkillCard"));
+        if (skill_collider != null)
+        {
+            return skill_collider.gameObject;
+        }
+
         // 스킬 슬롯 클릭 감지
         Collider2D skill_slot_collider = Physics2D.OverlapPoint(MousePos, LayerMask.GetMask("skillslot"));
         if (skill_slot_collider != null) 
