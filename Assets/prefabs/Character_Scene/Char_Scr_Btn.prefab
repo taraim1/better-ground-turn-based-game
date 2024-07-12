@@ -920,6 +920,7 @@ GameObject:
   - component: {fileID: 6900469662745586000}
   - component: {fileID: 7873539231694018319}
   - component: {fileID: 4443365351724923389}
+  - component: {fileID: 1832563862370080338}
   m_Layer: 5
   m_Name: Char_Scr_Btn
   m_TagString: Untagged
@@ -1096,6 +1097,8 @@ MonoBehaviour:
   is_character_unlocked: 0
   deck: 000000000000000000000000000000000000000000000000
   SPUM_datapath: 
+  effect_container_prefab: {fileID: 0}
+  effects_layoutGroup_obj: {fileID: 0}
   current_health: 0
   current_willpower: 0
   health_bar: {fileID: 0}
@@ -1108,6 +1111,22 @@ MonoBehaviour:
   isPanic: 0
   SPUM_unit_obj: {fileID: 0}
   is_in_battle: 0
+--- !u!114 &1832563862370080338
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7131119360408408915}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 175153ead5aa2c94aa35ce9501b8cc97, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bgPrefab: {fileID: 3197238313427041056, guid: 85eb1513ae4d25645b3ae88fc6c37d8b,
+    type: 3}
+  spawnPosition: {x: 0, y: 0}
+  Content: {fileID: 0}
 --- !u!1 &7963254144751126987
 GameObject:
   m_ObjectHideFlags: 0
