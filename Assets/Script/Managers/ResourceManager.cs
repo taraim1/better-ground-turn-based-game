@@ -17,13 +17,21 @@ public class ResourceManager : Singletone<ResourceManager>
     private int gold;
     public int Gold
     {
-        get { return gold; }
+        get 
+        {
+            if (gold == 0) 
+            {
+                read_Json_file();
+            }
+            return gold; 
+        }
 
         set 
         {
             if (value >= 0) // ��尪�� ���� ���ְ� �ϱ�
             { 
                 gold = value;
+                ActionManager.resource_changed?.Invoke(resource_code.gold);
                 write_Json_file();
             } 
             else { Debug.Log("���� ������ �� �� �����ϴ�. ��� ������ ��ҵǾ����ϴ�."); };
@@ -35,13 +43,21 @@ public class ResourceManager : Singletone<ResourceManager>
     private int gem;
     public int Gem
     {
-        get { return gem; }
+        get
+        {
+            if (gem == 0)
+            {
+                read_Json_file();
+            }
+            return gem; 
+        }
 
         set 
         {
             if (value >= 0) // ��尪�� ���� ���ְ� �ϱ�
             { 
                 gem = value;
+                ActionManager.resource_changed?.Invoke(resource_code.gem);
                 write_Json_file();
             } 
             else { Debug.Log("���� ������ �� �� �����ϴ�. ��� ������ ��ҵǾ����ϴ�."); };
@@ -53,13 +69,21 @@ public class ResourceManager : Singletone<ResourceManager>
     private int water;
     public int Water
     {
-        get { return water; }
+        get 
+        {
+            if (water == 0) 
+            {
+                read_Json_file();
+            }
+            return water; 
+        }
 
         set 
         {
             if (value >= 0) // ��尪�� ���� ���ְ� �ϱ�
             { 
                 water = value;
+                ActionManager.resource_changed?.Invoke(resource_code.water);
                 write_Json_file();
             } 
             else { Debug.Log("���� ������ �� �� �����ϴ�. ��� ������ ��ҵǾ����ϴ�."); };

@@ -33,6 +33,7 @@ public class Character_Pop : MonoBehaviour, IPointerDownHandler
             GameObject bgInstance = Instantiate(bgPrefab, parentCanvas.transform);
             RectTransform rectTransform = bgInstance.GetComponent<RectTransform>();
             rectTransform.anchoredPosition = spawnPosition;
+            bgInstance.GetComponent<Character_popup>().setup(gameObject.GetComponent<Character>());
         }
 
         // Content GameObject 비활성화

@@ -40,13 +40,13 @@ public class Building : MonoBehaviour
     public DateTime lastGemClickTime;
     public DateTime firstWaterClickTime;
     public DateTime lastWaterClickTime;
-    public TextMeshProUGUI GoldText;
+
     public GameObject GoldImage;
     public GameObject GoldPopup;
-    public TextMeshProUGUI GemText;
+
     public GameObject GemImage;
     public GameObject GemPopup;    
-    public TextMeshProUGUI WaterText;
+
     public GameObject WaterImage;
     public GameObject WaterPopup;
     BuildingDataGold buildingDataGold = new BuildingDataGold();
@@ -65,7 +65,7 @@ public class Building : MonoBehaviour
             firstGoldClickTime = DateTime.Now;
             buildingDataGold.isFirstClickSetGold = true;
             ResourceManager.instance.Gold += 1000;
-            GoldText.text = "골드 : " +  ResourceManager.instance.Gold;
+
             Write_Json_file();
             Debug.Log("Gold : " + ResourceManager.instance.Gold);
             Debug.Log("First button clicked at: " + firstGoldClickTime);
@@ -91,7 +91,7 @@ public class Building : MonoBehaviour
         {
             if (SpentMinutesGold >= 100){ SpentMinutesGold = 100; }
             ResourceManager.instance.Gold = ResourceManager.instance.Gold + SpentMinutesGold*5*LevelManager.instance.GoldCaveLevel;
-            GoldText.text = "골드 : " +  ResourceManager.instance.Gold;
+
             Debug.Log("Gold : " + ResourceManager.instance.Gold);
             firstGoldClickTime = DateTime.Now;
             GoldImage.SetActive(false);
@@ -110,7 +110,7 @@ public class Building : MonoBehaviour
             firstGemClickTime = DateTime.Now;
             buildingDataGem.isFirstClickSetGem = true;
             ResourceManager.instance.Gem += 100;
-            GemText.text = "보석 : " +  ResourceManager.instance.Gem;
+
             Write_Json_file();
             Debug.Log("Gem : " + ResourceManager.instance.Gem);
             Debug.Log("First button clicked at: " + firstGemClickTime);
@@ -137,7 +137,7 @@ public class Building : MonoBehaviour
         {
             if (SpentMinutesGem >= 100){ SpentMinutesGem = 100; }
             ResourceManager.instance.Gem = ResourceManager.instance.Gem + SpentMinutesGem*LevelManager.instance.GemCaveLevel;
-            GemText.text = "보석 : " +  ResourceManager.instance.Gem;
+
             Debug.Log("Gem : " + ResourceManager.instance.Gem);
 
             firstGemClickTime = DateTime.Now;
@@ -158,7 +158,7 @@ public class Building : MonoBehaviour
             firstWaterClickTime = DateTime.Now;
             buildingDataWater.isFirstClickSetWater = true;
             ResourceManager.instance.Water += 100;
-            WaterText.text = "성수 : " +  ResourceManager.instance.Water;
+
             Write_Json_file();
             Debug.Log("성수 : " + ResourceManager.instance.Water);
             Debug.Log("First button clicked at: " + firstWaterClickTime);
@@ -184,7 +184,7 @@ public class Building : MonoBehaviour
         {
             if (SpentMinutesWater >= 100){ SpentMinutesWater = 100; }
             ResourceManager.instance.Water = ResourceManager.instance.Water + SpentMinutesWater*3*LevelManager.instance.WStatueLevel;
-            WaterText.text = "성수 : " +  ResourceManager.instance.Water;
+
             Debug.Log("Water : " + ResourceManager.instance.Water);
 
             firstWaterClickTime = DateTime.Now;
@@ -232,9 +232,6 @@ public class Building : MonoBehaviour
                 WaterImage.SetActive(true);
             }
         }
-        GoldText.text = "골드 : " +  ResourceManager.instance.Gold;
-        GemText.text = "보석 : " +  ResourceManager.instance.Gem;
-        WaterText.text = "성수 : " +  ResourceManager.instance.Water;
     }
     
     void Write_Json_file() 
@@ -294,19 +291,16 @@ public class Building : MonoBehaviour
 
             Transform canvasTrans = GameObject.Find("Canvas").transform;
 
-            GoldText = canvasTrans.Find("GoldBuilding").gameObject.transform.Find("GoldText").gameObject.GetComponent<TextMeshProUGUI>();
             GoldImage = canvasTrans.Find("GoldBuilding").gameObject.transform.Find("GoldImage").gameObject;
             GoldPopup = canvasTrans.Find("GoldPopup").gameObject;
             GoldButton = canvasTrans.Find("GoldBuilding").gameObject.GetComponent<Button>();
             GoldButton.onClick.RemoveAllListeners();
             GoldButton.onClick.AddListener(OnGoldClick);
-            GemText = canvasTrans.Find("GemBuilding").gameObject.transform.Find("GemText").gameObject.GetComponent<TextMeshProUGUI>();
             GemImage = canvasTrans.Find("GemBuilding").gameObject.transform.Find("GemImage").gameObject;
             GemPopup = canvasTrans.Find("GemPopup").gameObject;
             GemButton = canvasTrans.Find("GemBuilding").gameObject.GetComponent<Button>();
             GemButton.onClick.RemoveAllListeners();
             GemButton.onClick.AddListener(OnGemClick);
-            WaterText = canvasTrans.Find("WaterBuilding").gameObject.transform.Find("WaterText").gameObject.GetComponent<TextMeshProUGUI>();
             WaterImage = canvasTrans.Find("WaterBuilding").gameObject.transform.Find("WaterImage").gameObject;
             WaterPopup = canvasTrans.Find("WaterPopup").gameObject;
             WaterButton = canvasTrans.Find("WaterBuilding").gameObject.GetComponent<Button>();

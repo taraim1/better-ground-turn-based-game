@@ -4,6 +4,7 @@ using UnityEngine.UI;
 public class BG : MonoBehaviour
 {
     private GameObject contentObject; // Content GameObject에 대한 참조 변수
+    [SerializeField] private GameObject _popup;
 
     void Start()
     {
@@ -23,20 +24,15 @@ public class BG : MonoBehaviour
             }
         }
 
-        // 버튼 찾기 및 클릭 이벤트 연결
-        Button button = GetComponentInChildren<Button>();
-        if (button != null)
-        {
-            button.onClick.AddListener(OnButtonClick);
-        }
     }
 
-    void OnButtonClick()
+    public void OnButtonClick()
     {
         // Content GameObject 활성화
         if (contentObject != null)
         {
             contentObject.SetActive(true);
+            Destroy(_popup);
         }
     }
 }
