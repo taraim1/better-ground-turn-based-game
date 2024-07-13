@@ -17,8 +17,6 @@ public class BattleManager : Singletone<BattleManager> // 싱글톤임
     public int enemy_skill_set_count = 0; // 적의 스킬 설정 완료시 늘어남
 
 
-    public Vector3[] playable_character_position_settings = new Vector3[4]; //플레이어블 캐릭터 스폰 위치
-    public Vector3[] enemy_character_position_settings = new Vector3[4]; //적 캐릭터 스폰 위치
 
     private cost_meter cost_meter; // 코스트 양 보여주는 오브젝트
 

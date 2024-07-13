@@ -32,17 +32,16 @@ public class BattleGridManager : Singletone<BattleGridManager>
     [SerializeField] StageSettingSO _stageSO;
     private Grid _grid;
     private GameObject _gridObj;
-    private List<Tile> _tiles = new List<Tile>();
+    private List<List<Tile>> _tiles = new List<List<Tile>>(); // 타일들, 빈칸엔 null 들어감
     [SerializeField] private GameObject _cell_prefab;
-    [SerializeField] private List<boardRow> _board;
-    // 게임 판
+    [SerializeField] private List<boardRow> _board; // 게임 판
+
 
 
     // 스테이지 보드 값 불러와서 세팅하는 메소드
     public void set_board(int stage_index) 
     {
-        // 타일 초기화
-        _tiles.Clear();
+     
 
         // 보드 값 불러오기
         _board = _stageSO.stage_Settings[stage_index].board.ToList();
@@ -56,21 +55,35 @@ public class BattleGridManager : Singletone<BattleGridManager>
                 max_col_count = Row.row.Count;
             }
         }
-
         _gridObj.transform.position = new Vector3(-0.5f * max_col_count, -0.5f * (_board.Count - 1), 0);
+
+        // 타일 리스트 초기화
+        _tiles.Clear();
+        for (int i = 0; i < _board.Count; i++) 
+        {
+            _tiles.Add(new List<Tile>());
+        }
+
+
 
         // 칸 소환하기
         for (int y = 0; y < _board.Count; y++) 
         {
             for (int x = 0; x < _board[_board.Count - y - 1].row.Count; x++) 
             {
-                if (get_cell(x, y) == boardCell.empty) 
+                boardCell cell = get_cell(x, y);
+
+                if (cell == boardCell.empty)
                 {
                     GameObject obj = Instantiate(_cell_prefab, _gridObj.transform);
                     Tile tile = obj.GetComponent<Tile>();
-                    _tiles.Add(tile);
+                    _tiles[_board.Count - y - 1].Add(tile);
                     tile.set_grid(_grid);
                     tile.set_pos(x, y);
+                }
+                else if (cell == boardCell.NOT_cell) 
+                {
+                    _tiles[_board.Count - y - 1].Add(null);
                 }
             }
         }
@@ -105,7 +118,18 @@ public class BattleGridManager : Singletone<BattleGridManager>
         return _board[cell_ind.Item1].row[cell_ind.Item2];
     }
 
+    // 좌표 주면 해당 칸의 월드상 위치 반환하는 메소드, 유효하지 않은 좌표면 null 반환
+    public List<float> get_cell_pos(int x, int y) 
+    {
+        Tuple<int, int> cell_ind = convert_xy_to_index(x, y);
+        if (cell_ind.Item1 == -1 && cell_ind.Item2 == -1)
+        {
+            return null;
+        }
 
+        Vector3 pos = _tiles[cell_ind.Item1][cell_ind.Item2].get_pos();
+        return new List<float>() { pos.x, pos.y };
+    }
 
     // 그리드 오브젝트 찾는 메소드
     public void find_grid() 
@@ -117,12 +141,13 @@ public class BattleGridManager : Singletone<BattleGridManager>
 
     private void Check_scene(Scene scene, LoadSceneMode loadSceneMode)
     {
-        if (scene.name == "Stage_show")
+        if (scene.name == "Stage_show" || scene.name == "Battle")
         {
             find_grid();
             set_board(StageManager.instance.stage_index);
         }
     }
+
 
     private void OnEnable()
     {

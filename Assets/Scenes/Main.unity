@@ -6014,16 +6014,6 @@ MonoBehaviour:
   is_Characters_spawned: 0
   is_Characters_loaded: 0
   enemy_skill_set_count: 0
-  playable_character_position_settings:
-  - {x: -7.5, y: -0.5, z: 0}
-  - {x: -6, y: 2, z: 0}
-  - {x: -4, y: -0.5, z: 0}
-  - {x: -2.5, y: 2, z: 0}
-  enemy_character_position_settings:
-  - {x: 7.5, y: -0.5, z: 0}
-  - {x: 6, y: 2, z: 0}
-  - {x: 4, y: -0.5, z: 0}
-  - {x: 2.5, y: 2, z: 0}
   playable_characters: []
   enemy_characters: []
   enemy_cards: []

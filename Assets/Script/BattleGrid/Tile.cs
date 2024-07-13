@@ -18,4 +18,9 @@ public class Tile : MonoBehaviour
         transform.position = worldpos;
     }
 
+    public Vector3 get_pos() 
+    {
+        return transform.position;
+    }
+
 }

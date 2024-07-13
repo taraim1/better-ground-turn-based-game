@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
 using UnityEngine.TextCore.Text;
+using JetBrains.Annotations;
 
 public class CharacterManager : Singletone<CharacterManager>
 {
@@ -92,10 +93,12 @@ public class CharacterManager : Singletone<CharacterManager>
         for (int i = 0; i < party_member_count; i++)
         {
             // 플레이어블 캐릭터가 소환될 위치를 불러옴
-            Vector3 spawn_pos = BattleManager.instance.playable_character_position_settings[i];
+            int x = StageSettingSO.stage_Settings[stage_index].player_spawnpoints[i].x;
+            int y = StageSettingSO.stage_Settings[stage_index].player_spawnpoints[i].y;
+            List<float> spawn_pos = BattleGridManager.instance.get_cell_pos(x, y);
 
             // 플레이어블 캐릭터 오브젝트 생성
-            GameObject obj = Instantiate(playable_character_base, spawn_pos, Quaternion.identity);
+            GameObject obj = Instantiate(playable_character_base, new Vector3(spawn_pos[0], spawn_pos[1], 0f), Quaternion.identity);
 
             // 캐릭터 데이터 불러옴
             Character character = obj.GetComponent<Character>();
@@ -132,10 +135,12 @@ public class CharacterManager : Singletone<CharacterManager>
         {
 
             // 적 캐릭터가 소환될 위치를 불러옴
-            Vector3 spawn_pos = BattleManager.instance.enemy_character_position_settings[i];
+            int x = StageSettingSO.stage_Settings[stage_index].enemy_spawnpoints[i].x;
+            int y = StageSettingSO.stage_Settings[stage_index].enemy_spawnpoints[i].y;
+            List<float> spawn_pos = BattleGridManager.instance.get_cell_pos(x, y);
 
             // 적 캐릭터 오브젝트 생성
-            GameObject obj = Instantiate(enemy_character_base, spawn_pos, Quaternion.identity);
+            GameObject obj = Instantiate(enemy_character_base, new Vector3(spawn_pos[0], spawn_pos[1], 0f), Quaternion.identity);
 
             // 적 데이터 불러오기
             Character character = obj.GetComponent<Character>();
@@ -175,10 +180,12 @@ public class CharacterManager : Singletone<CharacterManager>
         {
 
             // 플레이어블 캐릭터가 소환될 위치를 불러옴
-            Vector3 spawn_pos = BattleManager.instance.playable_character_position_settings[i];
+            int x = StageSettingSO.stage_Settings[stage_index].player_spawnpoints[i].x;
+            int y = StageSettingSO.stage_Settings[stage_index].player_spawnpoints[i].y;
+            List<float> spawn_pos = BattleGridManager.instance.get_cell_pos(x, y);
 
             // 플레이어블 캐릭터 오브젝트 생성
-            GameObject obj = Instantiate(playable_character_base, spawn_pos, Quaternion.identity);
+            GameObject obj = Instantiate(playable_character_base, new Vector3(spawn_pos[0], spawn_pos[1], 0f), Quaternion.identity);
 
             // 플레이어블 캐릭터 오브젝트 번호 지정
             obj.GetComponent<Character>().Character_index = i;
@@ -216,10 +223,12 @@ public class CharacterManager : Singletone<CharacterManager>
         {
 
             // 적 캐릭터가 소환될 위치를 불러옴
-            Vector3 spawn_pos = BattleManager.instance.enemy_character_position_settings[i];
+            int x = StageSettingSO.stage_Settings[stage_index].enemy_spawnpoints[i].x;
+            int y = StageSettingSO.stage_Settings[stage_index].enemy_spawnpoints[i].y;
+            List<float> spawn_pos = BattleGridManager.instance.get_cell_pos(x, y);
 
             // 적 캐릭터 오브젝트 생성
-            GameObject obj = Instantiate(enemy_character_base, spawn_pos, Quaternion.identity);
+            GameObject obj = Instantiate(enemy_character_base, new Vector3(spawn_pos[0], spawn_pos[1], 0f), Quaternion.identity);
 
             // 적 캐릭터 오브젝트 번호 지정
             obj.GetComponent<Character>().Character_index = i;
