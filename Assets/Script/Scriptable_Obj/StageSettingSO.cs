@@ -12,6 +12,7 @@ public class Stage_settig // 스테이지별 적 데이터가 스크립터블 오브젝트로 저장되
     public int[] minLootNumber;
     public int[] maxLootNumber;
     public GameObject background_prefab;
+    public List<BattleGridManager.boardRow> board;
 }
 
 [CreateAssetMenu(fileName = "StageSettingSO", menuName = "Scriptable_Objects_StageSetting")]
