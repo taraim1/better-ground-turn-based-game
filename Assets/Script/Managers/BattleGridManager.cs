@@ -7,6 +7,7 @@ using JetBrains.Annotations;
 using Unity.Mathematics;
 using UnityEngine.SceneManagement;
 using UnityEngine.TextCore.Text;
+using Unity.VisualScripting;
 
 public class BattleGridManager : Singletone<BattleGridManager>
 {
@@ -34,17 +35,27 @@ public class BattleGridManager : Singletone<BattleGridManager>
     private GameObject _gridObj;
     private List<List<Tile>> _tiles = new List<List<Tile>>(); // 타일들, 빈칸엔 null 들어감
     [SerializeField] private GameObject _cell_prefab;
-    [SerializeField] private List<boardRow> _board; // 게임 판
+    [SerializeField] private List<boardRow> _board = new List<boardRow>(); // 게임 판
 
 
 
     // 스테이지 보드 값 불러와서 세팅하는 메소드
     public void set_board(int stage_index) 
     {
-     
+
 
         // 보드 값 불러오기
-        _board = _stageSO.stage_Settings[stage_index].board.ToList();
+        _board.Clear();
+        foreach (var row in _stageSO.stage_Settings[stage_index].board) 
+        {
+            boardRow tmp;
+            tmp.row = new List<boardCell>();
+            foreach (var cell in row.row) 
+            { 
+                tmp.row.Add(cell);
+            }
+            _board.Add(tmp);
+        }
 
         // 그리드 오브젝트 이동시키기
         int max_col_count = 0;
@@ -129,6 +140,19 @@ public class BattleGridManager : Singletone<BattleGridManager>
 
         Vector3 pos = _tiles[cell_ind.Item1][cell_ind.Item2].get_pos();
         return new List<float>() { pos.x, pos.y };
+    }
+
+    // 좌표상의 셀 바꾸는 메소드, 유효하지 않은 좌표면 안 바꿈
+    public void change_cell(int x, int y, boardCell cellType) 
+    { 
+        Tuple<int, int> ind = convert_xy_to_index(x, y);
+        if (ind.Item1 == -1 && ind.Item2 == -1) 
+        {
+            return;
+        }
+
+        _board[ind.Item1].row[ind.Item2] = cellType;
+        _tiles[ind.Item1][ind.Item2].change_sprite(cellType);
     }
 
     // 그리드 오브젝트 찾는 메소드

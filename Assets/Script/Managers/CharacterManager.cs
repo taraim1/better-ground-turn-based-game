@@ -127,6 +127,9 @@ public class CharacterManager : Singletone<CharacterManager>
 
             // 스테이지 정보창 전용 스크립트 넣어줌
             obj.AddComponent<Character_On_stage_show>();
+
+            // 셀 타입 변경
+            BattleGridManager.instance.change_cell(x, y, BattleGridManager.boardCell.player);
         }
 
         // 적 캐릭터 생성
@@ -166,6 +169,9 @@ public class CharacterManager : Singletone<CharacterManager>
             character.SPUM_unit_obj = Instantiate(spPrefab, obj.transform);
             character.SPUM_unit_obj.transform.localPosition = new Vector3(0, -0.4f, 0);
             character.SPUM_unit_obj.transform.localScale = new Vector3(1.3f, 1.3f, 1);
+
+            // 셀 타입 변경
+            BattleGridManager.instance.change_cell(x, y, BattleGridManager.boardCell.enemy);
         }
 
     }
@@ -215,6 +221,9 @@ public class CharacterManager : Singletone<CharacterManager>
             character.SPUM_unit_obj = Instantiate(spPrefab, obj.transform);
             character.SPUM_unit_obj.transform.localPosition = new Vector3(0, -0.4f, 0);
             character.SPUM_unit_obj.transform.localScale = new Vector3(-1.3f, 1.3f, 1);
+
+            // 셀 타입 변경
+            BattleGridManager.instance.change_cell(x, y, BattleGridManager.boardCell.player);
         }
 
         // 적 캐릭터 생성
@@ -257,6 +266,9 @@ public class CharacterManager : Singletone<CharacterManager>
             character.SPUM_unit_obj = Instantiate(spPrefab, obj.transform);
             character.SPUM_unit_obj.transform.localPosition = new Vector3(0, -0.4f, 0);
             character.SPUM_unit_obj.transform.localScale = new Vector3(1.3f, 1.3f, 1);
+
+            // 셀 타입 변경
+            BattleGridManager.instance.change_cell(x, y, BattleGridManager.boardCell.enemy);
         }
 
         BattleManager.instance.is_Characters_spawned = true;
