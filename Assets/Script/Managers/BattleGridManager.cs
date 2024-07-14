@@ -82,7 +82,7 @@ public class BattleGridManager : Singletone<BattleGridManager>
         {
             for (int x = 0; x < _board[_board.Count - y - 1].row.Count; x++) 
             {
-                boardCell cell = get_cell(x, y);
+                boardCell cell = get_tile(x, y);
 
                 if (cell == boardCell.empty)
                 {
@@ -117,7 +117,7 @@ public class BattleGridManager : Singletone<BattleGridManager>
 
 
     // 좌표 주면 해당하는 칸의 값 반환하는 메소드, 유효하지 않은 좌표면 NOT_cell 반환
-    public boardCell get_cell(int x, int y) 
+    public boardCell get_tile(int x, int y) 
     {
         Tuple<int, int> cell_ind = convert_xy_to_index(x, y);
 
@@ -130,7 +130,7 @@ public class BattleGridManager : Singletone<BattleGridManager>
     }
 
     // 좌표 주면 해당 칸의 월드상 위치 반환하는 메소드, 유효하지 않은 좌표면 null 반환
-    public List<float> get_cell_pos(int x, int y) 
+    public List<float> get_tile_pos(int x, int y) 
     {
         Tuple<int, int> cell_ind = convert_xy_to_index(x, y);
         if (cell_ind.Item1 == -1 && cell_ind.Item2 == -1)
@@ -142,7 +142,7 @@ public class BattleGridManager : Singletone<BattleGridManager>
         return new List<float>() { pos.x, pos.y };
     }
 
-    // 좌표상의 셀 바꾸는 메소드, 유효하지 않은 좌표면 안 바꿈
+    // 좌표상의 타일 타입 바꾸는 메소드, 유효하지 않은 좌표면 안 바꿈
     public void change_cell(int x, int y, boardCell cellType) 
     { 
         Tuple<int, int> ind = convert_xy_to_index(x, y);
@@ -152,7 +152,32 @@ public class BattleGridManager : Singletone<BattleGridManager>
         }
 
         _board[ind.Item1].row[ind.Item2] = cellType;
-        _tiles[ind.Item1][ind.Item2].change_sprite(cellType);
+        _tiles[ind.Item1][ind.Item2].set_type(cellType);
+    }
+
+    // 월드 좌표와 가장 가까운 셀 찾아주는 메소드
+    public Tuple<int, int> get_nearest_tile(Vector2 pos, List<boardCell> exclude_filter) 
+    {
+        Tuple<int, int> min_coordinate = Tuple.Create(0, 0);
+        float min_distance = 1000000f;
+
+        foreach (List<Tile> row in _tiles) 
+        {
+            foreach (Tile tile in row)
+            { 
+                // 빈 타일 or 예외 리스트에 있는 거 제외
+                if (tile == null || exclude_filter.Contains(tile.get_type())) continue;
+
+                float distance = math.sqrt(math.pow(pos.x - tile.gameObject.transform.position.x, 2) + math.pow(pos.y - tile.gameObject.transform.position.y, 2));
+                if (distance < min_distance) 
+                {
+                    min_distance = distance;
+                    min_coordinate = tile.get_coordinate();
+                }
+            }
+        }
+
+        return min_coordinate;
     }
 
     // 그리드 오브젝트 찾는 메소드

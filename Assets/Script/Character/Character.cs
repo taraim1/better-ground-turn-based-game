@@ -31,37 +31,26 @@ public class Character : MonoBehaviour
     [SerializeField] private GameObject effects_layoutGroup_obj;
 
     // 아래는 게임이 진행되면서 바뀌는 것들
-    [DoNotSerialize]
-    public int current_health;
-    [DoNotSerialize]
-    public int current_willpower;
-    [DoNotSerialize]
-    public GameObject health_bar;
-    [DoNotSerialize]
-    public GameObject willpower_bar;
-    [DoNotSerialize]
-    private UI_bar_slider health_slider;
-    [DoNotSerialize]
-    private UI_bar_slider willpower_slider;
-    [DoNotSerialize]
-    public skill_power_meter skill_power_meter;
-    [DoNotSerialize]
-    public bool isEnemyCharacter;
-    [DoNotSerialize]
+    [DoNotSerialize] public int current_health;
+    [DoNotSerialize] public int current_willpower;
+    [DoNotSerialize] public GameObject health_bar;
+    [DoNotSerialize] public GameObject willpower_bar;
+    [DoNotSerialize] private UI_bar_slider health_slider;
+    [DoNotSerialize] private UI_bar_slider willpower_slider;
+    [DoNotSerialize] public skill_power_meter skill_power_meter;
+    [DoNotSerialize] public bool isEnemyCharacter;
+    [DoNotSerialize] public Coroutine running_drag = null;
     // 전투시 캐릭터 오브젝트의 번호
-    public int Character_index;
-    [DoNotSerialize]
-    public panic_sign panic_Sign;
-    [DoNotSerialize]
-    public GameObject skill_layoutGroup;
+    [DoNotSerialize] public int Character_index;
+    [DoNotSerialize] public panic_sign panic_Sign;
+    [DoNotSerialize] public GameObject skill_layoutGroup;
     [DoNotSerialize]
     public bool isPanic;
     private int remaining_panic_turn;
-    [DoNotSerialize]
-    public GameObject SPUM_unit_obj; // 캐릭터 spum 오브젝트
-    [DoNotSerialize]
-    public bool is_in_battle;
+    [DoNotSerialize] public GameObject SPUM_unit_obj; // 캐릭터 spum 오브젝트
+    [DoNotSerialize] public bool is_in_battle;
     private List<character_effect_container> effect_Containers = new List<character_effect_container>(); // 캐릭터가 현재 가지고 있는 효과들 컨테이너 (버프 / 디버프)
+    private bool isDragging = false;
 
     public int get_max_health_of_level(int level)
     {
@@ -231,6 +220,41 @@ public class Character : MonoBehaviour
         }
 
         
+    }
+
+    // 드래그 감지
+    public IEnumerator detect_drag()
+    {
+        float dragging_time = 0;
+
+        while (true)
+        {
+            
+
+            // 마우스 뗴면
+            if (Input.GetMouseButton(0) == false)
+            {
+                ActionManager.character_drag_ended?.Invoke();
+                isDragging = false;
+                yield break;
+            }
+
+            // 마우스를 안 뗀 상태로 일정 시간이 지나면 드래그 기능 시작 (패닉이 아니어야 함)
+            if (dragging_time >= Util.drag_time_standard && !isPanic && !isDragging)
+            {
+                start_drag();
+            }
+
+            dragging_time += 0.01f;
+            yield return new WaitForSeconds(0.01f);
+
+        }
+    }
+
+    private void start_drag() 
+    {
+        ActionManager.character_drag_started?.Invoke();
+        isDragging = true;
     }
 
     private void Awake()

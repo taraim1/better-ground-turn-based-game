@@ -108,7 +108,7 @@ public class card : MonoBehaviour
                     {
                         state = current_mode.normal;
                         CardManager.instance.clear_highlighted_card();
-                        CardManager.instance.Aline_cards(CardManager.instance.active_index);
+                        CardManager.instance.Align_cards(CardManager.instance.active_index);
                     }
                     yield break; 
                 }
@@ -121,7 +121,7 @@ public class card : MonoBehaviour
                 {
                     state = current_mode.normal;
                     CardManager.instance.clear_highlighted_card();
-                    CardManager.instance.Aline_cards(CardManager.instance.active_index);
+                    CardManager.instance.Align_cards(CardManager.instance.active_index);
 
                 }
                 // 드래그 중이 아니면
@@ -145,7 +145,7 @@ public class card : MonoBehaviour
                     }
 
                     // 카드 위치 계산 및 정렬
-                    CardManager.instance.Aline_cards(CardManager.instance.active_index);
+                    CardManager.instance.Align_cards(CardManager.instance.active_index);
                 }
                 yield break;
             }
@@ -177,7 +177,7 @@ public class card : MonoBehaviour
         // 카드 판정기로 드래그 하는 중이라는 정보, 카드 데이터 넘겨줌
         BattleCalcManager.instance.set_using_card(this);
 
-        CardManager.instance.Aline_cards(CardManager.instance.active_index);
+        CardManager.instance.Align_cards(CardManager.instance.active_index);
     }
 
 }

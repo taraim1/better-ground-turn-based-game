@@ -95,7 +95,7 @@ public class CharacterManager : Singletone<CharacterManager>
             // 플레이어블 캐릭터가 소환될 위치를 불러옴
             int x = StageSettingSO.stage_Settings[stage_index].player_spawnpoints[i].x;
             int y = StageSettingSO.stage_Settings[stage_index].player_spawnpoints[i].y;
-            List<float> spawn_pos = BattleGridManager.instance.get_cell_pos(x, y);
+            List<float> spawn_pos = BattleGridManager.instance.get_tile_pos(x, y);
 
             // 플레이어블 캐릭터 오브젝트 생성
             GameObject obj = Instantiate(playable_character_base, new Vector3(spawn_pos[0], spawn_pos[1], 0f), Quaternion.identity);
@@ -140,7 +140,7 @@ public class CharacterManager : Singletone<CharacterManager>
             // 적 캐릭터가 소환될 위치를 불러옴
             int x = StageSettingSO.stage_Settings[stage_index].enemy_spawnpoints[i].x;
             int y = StageSettingSO.stage_Settings[stage_index].enemy_spawnpoints[i].y;
-            List<float> spawn_pos = BattleGridManager.instance.get_cell_pos(x, y);
+            List<float> spawn_pos = BattleGridManager.instance.get_tile_pos(x, y);
 
             // 적 캐릭터 오브젝트 생성
             GameObject obj = Instantiate(enemy_character_base, new Vector3(spawn_pos[0], spawn_pos[1], 0f), Quaternion.identity);
@@ -188,7 +188,7 @@ public class CharacterManager : Singletone<CharacterManager>
             // 플레이어블 캐릭터가 소환될 위치를 불러옴
             int x = StageSettingSO.stage_Settings[stage_index].player_spawnpoints[i].x;
             int y = StageSettingSO.stage_Settings[stage_index].player_spawnpoints[i].y;
-            List<float> spawn_pos = BattleGridManager.instance.get_cell_pos(x, y);
+            List<float> spawn_pos = BattleGridManager.instance.get_tile_pos(x, y);
 
             // 플레이어블 캐릭터 오브젝트 생성
             GameObject obj = Instantiate(playable_character_base, new Vector3(spawn_pos[0], spawn_pos[1], 0f), Quaternion.identity);
@@ -234,7 +234,7 @@ public class CharacterManager : Singletone<CharacterManager>
             // 적 캐릭터가 소환될 위치를 불러옴
             int x = StageSettingSO.stage_Settings[stage_index].enemy_spawnpoints[i].x;
             int y = StageSettingSO.stage_Settings[stage_index].enemy_spawnpoints[i].y;
-            List<float> spawn_pos = BattleGridManager.instance.get_cell_pos(x, y);
+            List<float> spawn_pos = BattleGridManager.instance.get_tile_pos(x, y);
 
             // 적 캐릭터 오브젝트 생성
             GameObject obj = Instantiate(enemy_character_base, new Vector3(spawn_pos[0], spawn_pos[1], 0f), Quaternion.identity);

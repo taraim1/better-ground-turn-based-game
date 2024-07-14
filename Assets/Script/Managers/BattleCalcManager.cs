@@ -133,7 +133,7 @@ public class BattleCalcManager : Singletone<BattleCalcManager>
         }
 
         // 적에게 직접 사용이면
-        else if (target_character != null) 
+        else if (target_character != null && target_character.isEnemyCharacter) 
         {
             // 타겟 캐릭터한테 남은 스킬이 있으면 발동 안 됨
             if (target_character.gameObject.GetComponent<EnemyAI>().using_skill_Objects.Count != 0) 

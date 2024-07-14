@@ -70,6 +70,8 @@ public class CardManager : Singletone<CardManager>
     // 카드 효과 설명해주는 오브젝트가 가지고 있는 거
     private card_description card_Description;
 
+    private bool _isCharacterDragging = false;
+
     private void Start()
     {
         JsonCardData.read_json();
@@ -155,7 +157,7 @@ public class CardManager : Singletone<CardManager>
         BattleManager.instance.hand_data[index].Add(card);
 
         Set_origin_order(index);
-        Aline_cards(index);
+        Align_cards(index);
     }
 
     public GameObject Summon_enemy_card(skillcard_code code, GameObject owner) // 적 카드 생성해서 리턴
@@ -215,7 +217,7 @@ public class CardManager : Singletone<CardManager>
         Destroy(card.gameObject);
 
         // 카드 정렬
-        Aline_cards(active_index);
+        Align_cards(active_index);
     }
 
     // 적 카드를 강조
@@ -241,7 +243,7 @@ public class CardManager : Singletone<CardManager>
 
 
 
-    public void Aline_cards(int index) // index번째 패의 카드 위치, 회전, 스케일, 순서 등 정렬 
+    public void Align_cards(int index) // index번째 패의 카드 위치, 회전, 스케일, 순서 등 정렬 
     {
         // 현재 보고 있는 패가 없을 때의 active_index
         if (index == -1) 
@@ -279,8 +281,8 @@ public class CardManager : Singletone<CardManager>
             // 카드 겹침 때문에 보정값 넣어줌
             targetCard.originPRS.pos.z -= targetCard.GetComponent<element_order>().Get_order()/100f;
 
-            // 드래그 중인 카드가 있다면 드래그 중이 아닌 카드들을 살짝 아래로 내림
-            if (isdragging) 
+            // 드래그 중인 카드나 캐릭터가 있다면 드래그 중이 아닌 카드들을 살짝 아래로 내림
+            if (isdragging || _isCharacterDragging) 
             {
                 if (targetCard.state != card.current_mode.dragging)
                 {
@@ -379,7 +381,7 @@ public class CardManager : Singletone<CardManager>
         active_index = index;
         for (int i = 0; i < BattleManager.instance.hand_data.Count; i++) 
         {
-                Aline_cards(i);
+                Align_cards(i);
         }
     }
 
@@ -395,6 +397,17 @@ public class CardManager : Singletone<CardManager>
         card_Description.Clear_target();
     }
 
+    private void On_character_drag_start() 
+    {
+        _isCharacterDragging = true;
+        Align_cards(active_index);
+    }
+
+    private void On_character_drag_end()
+    {
+        _isCharacterDragging = false;
+        Align_cards(active_index);
+    }
     public void Setup_all() // 처음 세팅
     {
         Setup_cardBuffer();
@@ -403,7 +416,17 @@ public class CardManager : Singletone<CardManager>
         clear_highlighted_card();
     }
 
+    private void OnEnable()
+    {
+        ActionManager.character_drag_started += On_character_drag_start;
+        ActionManager.character_drag_ended += On_character_drag_end;
+    }
 
+    private void OnDisable()
+    {
+        ActionManager.character_drag_started -= On_character_drag_start;
+        ActionManager.character_drag_ended -= On_character_drag_end;
+    }
 
 
 }
