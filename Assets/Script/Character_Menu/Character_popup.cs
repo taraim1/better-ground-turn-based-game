@@ -9,7 +9,7 @@ public class Character_popup : MonoBehaviour
     [SerializeField] private Character _character;
     [SerializeField] private TMP_Text nameTMP;
 
-    // Ä³¸¯ÅÍ ÆË¾÷ »ý¼º½Ã Á¤º¸ ºÒ·¯¿È
+    // Ä³ï¿½ï¿½ï¿½ï¿½ ï¿½Ë¾ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ò·ï¿½ï¿½ï¿½
     public void setup(Character character) 
     {
         _character = character;
