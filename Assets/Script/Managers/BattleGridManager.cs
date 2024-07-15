@@ -143,7 +143,7 @@ public class BattleGridManager : Singletone<BattleGridManager>
     }
 
     // 좌표상의 타일 타입 바꾸는 메소드, 유효하지 않은 좌표면 안 바꿈
-    public void change_cell(int x, int y, boardCell cellType) 
+    public void set_tile(int x, int y, boardCell cellType) 
     { 
         Tuple<int, int> ind = convert_xy_to_index(x, y);
         if (ind.Item1 == -1 && ind.Item2 == -1) 

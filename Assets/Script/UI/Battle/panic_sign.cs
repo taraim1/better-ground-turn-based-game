@@ -6,7 +6,7 @@ using UnityEngine;
 public class panic_sign : MonoBehaviour
 {
     public TMP_Text tmp;
-
+    [SerializeField] private Character _character;
 
     public void Setup(GameObject target_obj) // 처음 생성시 설정용
     {
@@ -21,5 +21,10 @@ public class panic_sign : MonoBehaviour
     public void hide() 
     {
         tmp.text = "";
+    }
+
+    private void Awake()
+    {
+        _character.data.panic_Sign = this;
     }
 }

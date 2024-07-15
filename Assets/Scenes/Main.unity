@@ -7965,6 +7965,8 @@ MonoBehaviour:
     type: 3}
   enemy_character_base: {fileID: 1766090985930963044, guid: abb22a00019844b4e900e11f95b9e7ee,
     type: 3}
+  effect_container_prefab: {fileID: 1635057499907348168, guid: 52f7a33034b380748a2889883939eb55,
+    type: 3}
 --- !u!1 &2145496547
 GameObject:
   m_ObjectHideFlags: 0

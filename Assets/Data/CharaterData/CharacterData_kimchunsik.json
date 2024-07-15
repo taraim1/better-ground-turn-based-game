@@ -12,6 +12,8 @@
         0,
         10
     ],
+    "current_health": 0,
+    "current_willpower": 0,
     "is_character_unlocked": true,
     "deck": [
         0,
@@ -21,5 +23,7 @@
         3,
         3
     ],
-    "SPUM_datapath": "SPUM/SPUM_Units/KimChunSik"
+    "SPUM_datapath": "SPUM/SPUM_Units/KimChunSik",
+    "move_range_x": [],
+    "move_range_y": []
 }

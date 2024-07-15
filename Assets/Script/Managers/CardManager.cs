@@ -199,7 +199,7 @@ public class CardManager : Singletone<CardManager>
         // 플레이어 카드면
         else 
         {
-            BattleManager.instance.hand_data[card.owner.GetComponent<Character>().Character_index].Remove(card);
+            BattleManager.instance.hand_data[card.owner.GetComponent<Character>().data.Character_index].Remove(card);
         }
 
         // 카드 드래그 취소

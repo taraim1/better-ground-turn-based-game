@@ -63,9 +63,9 @@ public class Card_UI : MonoBehaviour
 
         this.Card_Name.text = character.character_name;
         GameObject spPrefab = Resources.Load<GameObject>(character.SPUM_datapath);
-        character.SPUM_unit_obj = Instantiate(spPrefab, Card_Char);
-        character.SPUM_unit_obj.transform.localPosition = new Vector3(0f, -40f, 1);
-        character.SPUM_unit_obj.transform.localScale = new Vector3(125f, 125f, 1);
+        character.data.SPUM_unit_obj = Instantiate(spPrefab, Card_Char);
+        character.data.SPUM_unit_obj.transform.localPosition = new Vector3(0f, -40f, 1);
+        character.data.SPUM_unit_obj.transform.localScale = new Vector3(125f, 125f, 1);
         
 
     }

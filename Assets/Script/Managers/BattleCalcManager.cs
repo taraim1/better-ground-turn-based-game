@@ -102,7 +102,7 @@ public class BattleCalcManager : Singletone<BattleCalcManager>
         // 아군에게 사용하는 스킬이고 타겟이 아군이면 사용
         if (using_card.Card.isFriendlyOnly)
         {
-            if (target_character != null && !target_character.isEnemyCharacter)
+            if (target_character != null && !target_character.data.isEnemyCharacter)
             {
                 // 카드 사용 시 효과 적용
                 apply_skill_effect(using_card, skill_effect_timing.immediate, target_character);
@@ -133,7 +133,7 @@ public class BattleCalcManager : Singletone<BattleCalcManager>
         }
 
         // 적에게 직접 사용이면
-        else if (target_character != null && target_character.isEnemyCharacter) 
+        else if (target_character != null && target_character.data.isEnemyCharacter) 
         {
             // 타겟 캐릭터한테 남은 스킬이 있으면 발동 안 됨
             if (target_character.gameObject.GetComponent<EnemyAI>().using_skill_Objects.Count != 0) 
@@ -217,7 +217,7 @@ public class BattleCalcManager : Singletone<BattleCalcManager>
             {
                 case skill_effect_code.willpower_consumption:
                     // 현재 정신력이 소모될 정신력 이하면 못 씀
-                    if (owner_character.current_willpower <= effect.parameters[0]) { return false; }
+                    if (owner_character.data.current_willpower <= effect.parameters[0]) { return false; }
                     break;
             }
         }
@@ -236,7 +236,7 @@ public class BattleCalcManager : Singletone<BattleCalcManager>
     // 스킬 사용 시 위력 보여주는거
     private void show_power_roll_result(card card, int power) 
     {
-        skill_power_meter PWmeter = card.owner.GetComponent<Character>().skill_power_meter;
+        skill_power_meter PWmeter = card.owner.GetComponent<Character>().data.skill_power_meter;
 
         // 같은 캐릭터가 텀을 적게 두고 사용시 현재 돌아가는 show를 멈춰서 너무 빨리 숫자가 사라지는 현상을 해결
         if (PWmeter.running_show != null) { PWmeter.StopCoroutine(PWmeter.running_show); }

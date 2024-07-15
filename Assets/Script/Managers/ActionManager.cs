@@ -19,6 +19,7 @@ public class ActionManager : MonoBehaviour
     public static Action character_drag_started;
     public static Action character_drag_ended;
 
+
     // 스테이지 보여줄 때 씀
     public static Action character_drag_started_on_stageShow;
     public static Action character_drag_finished_on_stageShow;

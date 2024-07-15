@@ -5,6 +5,7 @@ using UnityEngine;
 using System.IO;
 using UnityEngine.TextCore.Text;
 using JetBrains.Annotations;
+using UnityEditor.U2D.Animation;
 
 public class CharacterManager : Singletone<CharacterManager>
 {
@@ -27,6 +28,7 @@ public class CharacterManager : Singletone<CharacterManager>
 
     public GameObject playable_character_base;
     public GameObject enemy_character_base;
+    public GameObject effect_container_prefab;
 
     // 캐릭터 코드에 따른 저장 이름 리턴
     public string get_data_path<T>(T code)
@@ -73,6 +75,7 @@ public class CharacterManager : Singletone<CharacterManager>
         path += get_data_path(character.code);
         string output = JsonUtility.ToJson(character, true);
         File.WriteAllText(Application.dataPath + path, output);
+
     }
 
     // 캐릭터를 캐릭터 코드에 해당하는 json 파일에서 불러온 뒤 string으로 리턴
@@ -104,32 +107,35 @@ public class CharacterManager : Singletone<CharacterManager>
             Character character = obj.GetComponent<Character>();
             JsonUtility.FromJsonOverwrite(load_character_from_json(PartyManager.instance.get_charactor_code(i)), character);
 
+            // 캐릭터 좌표 설정
+            character.set_coordinate(x, y);
+
             // 캐릭터 적 아군 판별하는 변수 설정
-            character.isEnemyCharacter = false;
+            character.data.isEnemyCharacter = false;
 
             // 캐릭터가 전투에 쓰려고 만든 건지 설정
-            character.is_in_battle = false;
+            character.data.is_in_battle = false;
 
             // 캐릭터에 붙은 UI들 초기화
             BattleUI_Manager.instance.Set_UI(obj, false);
 
             // SPUM 데이터 불러오기
             GameObject spPrefab = Resources.Load<GameObject>(character.SPUM_datapath);
-            character.SPUM_unit_obj = Instantiate(spPrefab, obj.transform);
-            character.SPUM_unit_obj.transform.localPosition = new Vector3(0, -0.4f, 0);
-            character.SPUM_unit_obj.transform.localScale = new Vector3(-1.3f, 1.3f, 1);
+            character.data.SPUM_unit_obj = Instantiate(spPrefab, obj.transform);
+            character.data.SPUM_unit_obj.transform.localPosition = new Vector3(0, -0.4f, 0);
+            character.data.SPUM_unit_obj.transform.localScale = new Vector3(-1.3f, 1.3f, 1);
 
             // 캐릭터 리스트에 넣어줌
             StageManager.instance.characters.Add(obj);
 
             // 캐릭터 번호 설정
-            character.Character_index = i;
+            character.data.Character_index = i;
 
             // 스테이지 정보창 전용 스크립트 넣어줌
             obj.AddComponent<Character_On_stage_show>();
 
             // 셀 타입 변경
-            BattleGridManager.instance.change_cell(x, y, BattleGridManager.boardCell.player);
+            BattleGridManager.instance.set_tile(x, y, BattleGridManager.boardCell.player);
         }
 
         // 적 캐릭터 생성
@@ -149,11 +155,14 @@ public class CharacterManager : Singletone<CharacterManager>
             Character character = obj.GetComponent<Character>();
             JsonUtility.FromJsonOverwrite(load_character_from_json(StageSettingSO.stage_Settings[stage_index].enemy_Codes[i]), character);
 
+            // 캐릭터 좌표 설정
+            character.set_coordinate(x, y);
+
             // 캐릭터 적 아군 판별하는 변수 설정
-            character.isEnemyCharacter = true;
+            character.data.isEnemyCharacter = true;
 
             // 캐릭터가 전투에 쓰려고 만든 건지 설정
-            character.is_in_battle = false;
+            character.data.is_in_battle = false;
 
             // 적 AI 제거
             Destroy(obj.GetComponent<EnemyAI>());
@@ -166,12 +175,12 @@ public class CharacterManager : Singletone<CharacterManager>
 
             // SPUM 데이터 불러오기
             GameObject spPrefab = Resources.Load<GameObject>(character.SPUM_datapath);
-            character.SPUM_unit_obj = Instantiate(spPrefab, obj.transform);
-            character.SPUM_unit_obj.transform.localPosition = new Vector3(0, -0.4f, 0);
-            character.SPUM_unit_obj.transform.localScale = new Vector3(1.3f, 1.3f, 1);
+            character.data.SPUM_unit_obj = Instantiate(spPrefab, obj.transform);
+            character.data.SPUM_unit_obj.transform.localPosition = new Vector3(0, -0.4f, 0);
+            character.data.SPUM_unit_obj.transform.localScale = new Vector3(1.3f, 1.3f, 1);
 
             // 셀 타입 변경
-            BattleGridManager.instance.change_cell(x, y, BattleGridManager.boardCell.enemy);
+            BattleGridManager.instance.set_tile(x, y, BattleGridManager.boardCell.enemy);
         }
 
     }
@@ -194,7 +203,7 @@ public class CharacterManager : Singletone<CharacterManager>
             GameObject obj = Instantiate(playable_character_base, new Vector3(spawn_pos[0], spawn_pos[1], 0f), Quaternion.identity);
 
             // 플레이어블 캐릭터 오브젝트 번호 지정
-            obj.GetComponent<Character>().Character_index = i;
+            obj.GetComponent<Character>().data.Character_index = i;
 
             // 패 추가
             List<card> hand = new List<card>();
@@ -204,11 +213,14 @@ public class CharacterManager : Singletone<CharacterManager>
             Character character = obj.GetComponent<Character>();
             JsonUtility.FromJsonOverwrite(load_character_from_json(PartyManager.instance.get_charactor_code(i)), character);
 
+            // 캐릭터 좌표 설정
+            character.set_coordinate(x, y);
+
             // 캐릭터 적 아군 판별하는 변수 설정
-            character.isEnemyCharacter = false;
+            character.data.isEnemyCharacter = false;
 
             // 캐릭터가 전투에 쓰려고 만든 건지 설정
-            character.is_in_battle = true;
+            character.data.is_in_battle = true;
 
             // 플레이어블 캐릭터 오브젝트를 BattleManager의 리스트에 넣기
             BattleManager.instance.playable_characters.Add(obj);
@@ -218,12 +230,12 @@ public class CharacterManager : Singletone<CharacterManager>
 
             // SPUM 데이터 불러오기
             GameObject spPrefab = Resources.Load<GameObject>(character.SPUM_datapath);
-            character.SPUM_unit_obj = Instantiate(spPrefab, obj.transform);
-            character.SPUM_unit_obj.transform.localPosition = new Vector3(0, -0.4f, 0);
-            character.SPUM_unit_obj.transform.localScale = new Vector3(-1.3f, 1.3f, 1);
+            character.data.SPUM_unit_obj = Instantiate(spPrefab, obj.transform);
+            character.data.SPUM_unit_obj.transform.localPosition = new Vector3(0, -0.4f, 0);
+            character.data.SPUM_unit_obj.transform.localScale = new Vector3(-1.3f, 1.3f, 1);
 
             // 셀 타입 변경
-            BattleGridManager.instance.change_cell(x, y, BattleGridManager.boardCell.player);
+            BattleGridManager.instance.set_tile(x, y, BattleGridManager.boardCell.player);
         }
 
         // 적 캐릭터 생성
@@ -240,17 +252,20 @@ public class CharacterManager : Singletone<CharacterManager>
             GameObject obj = Instantiate(enemy_character_base, new Vector3(spawn_pos[0], spawn_pos[1], 0f), Quaternion.identity);
 
             // 적 캐릭터 오브젝트 번호 지정
-            obj.GetComponent<Character>().Character_index = i;
+            obj.GetComponent<Character>().data.Character_index = i;
 
             // 적 데이터를 불러오기
             Character character = obj.GetComponent<Character>();
             JsonUtility.FromJsonOverwrite(load_character_from_json(StageSettingSO.stage_Settings[stage_index].enemy_Codes[i]), character);
 
+            // 캐릭터 좌표 설정
+            character.set_coordinate(x, y);
+
             // 캐릭터 적 아군 판별하는 변수 설정
-            character.isEnemyCharacter = true;
+            character.data.isEnemyCharacter = true;
 
             // 캐릭터가 전투에 쓰려고 만든 건지 설정
-            character.is_in_battle = true;
+            character.data.is_in_battle = true;
 
             // 적 데이터를 AI에 연결
             obj.GetComponent<EnemyAI>().enemy = character;
@@ -263,12 +278,12 @@ public class CharacterManager : Singletone<CharacterManager>
 
             // SPUM 데이터 불러오기
             GameObject spPrefab = Resources.Load<GameObject>(character.SPUM_datapath);
-            character.SPUM_unit_obj = Instantiate(spPrefab, obj.transform);
-            character.SPUM_unit_obj.transform.localPosition = new Vector3(0, -0.4f, 0);
-            character.SPUM_unit_obj.transform.localScale = new Vector3(1.3f, 1.3f, 1);
+            character.data.SPUM_unit_obj = Instantiate(spPrefab, obj.transform);
+            character.data.SPUM_unit_obj.transform.localPosition = new Vector3(0, -0.4f, 0);
+            character.data.SPUM_unit_obj.transform.localScale = new Vector3(1.3f, 1.3f, 1);
 
             // 셀 타입 변경
-            BattleGridManager.instance.change_cell(x, y, BattleGridManager.boardCell.enemy);
+            BattleGridManager.instance.set_tile(x, y, BattleGridManager.boardCell.enemy);
         }
 
         BattleManager.instance.is_Characters_spawned = true;
@@ -276,29 +291,29 @@ public class CharacterManager : Singletone<CharacterManager>
 
     public void kill_character(Character character) // 캐릭터 죽이는 메소드 
     {
-        bool isEnemy = character.isEnemyCharacter;
+        bool isEnemy = character.data.isEnemyCharacter;
 
         // UI 없애기
-        Destroy(character.health_bar);
-        Destroy(character.willpower_bar);
-        Destroy(character.panic_Sign.gameObject);
-        Destroy(character.skill_power_meter.gameObject);
+        Destroy(character.data.health_bar);
+        Destroy(character.data.willpower_bar);
+        Destroy(character.data.panic_Sign.gameObject);
+        Destroy(character.data.skill_power_meter.gameObject);
 
         // 아군 캐릭터면
         if (!isEnemy)
         {
             // 패 보는 중이었으면 패 숨기기
-            if (character.Character_index == CardManager.instance.active_index)
+            if (character.data.Character_index == CardManager.instance.active_index)
             {
                 CardManager.instance.Change_active_hand(-1);
             }
 
             // 캐릭터의 패 없애기
-            for (int i = 0; i < BattleManager.instance.hand_data[character.Character_index].Count; i++)
+            for (int i = 0; i < BattleManager.instance.hand_data[character.data.Character_index].Count; i++)
             {
-                CardManager.instance.Destroy_card(BattleManager.instance.hand_data[character.Character_index][i]);
+                CardManager.instance.Destroy_card(BattleManager.instance.hand_data[character.data.Character_index][i]);
             }
-            BattleManager.instance.hand_data.RemoveAt(character.Character_index);
+            BattleManager.instance.hand_data.RemoveAt(character.data.Character_index);
 
             // 아군 캐릭터 리스트에서 없애기
             BattleManager.instance.playable_characters.Remove(character.gameObject);
@@ -306,14 +321,14 @@ public class CharacterManager : Singletone<CharacterManager>
             // 남은 캐릭터 인덱스 조정
             for (int i = 0; i < BattleManager.instance.playable_characters.Count; i++)
             {
-                BattleManager.instance.playable_characters[i].GetComponent<Character>().Character_index = i;
+                BattleManager.instance.playable_characters[i].GetComponent<Character>().data.Character_index = i;
             }
         }
 
         else // 적 캐릭터면
         {
             // UI 없애기
-            Destroy(character.skill_layoutGroup);
+            Destroy(character.data.skill_layoutGroup);
 
             // 사용하는 스킬 카드 없애기
             List<GameObject> enemy_skills = character.gameObject.GetComponent<EnemyAI>().using_skill_Objects;
@@ -328,7 +343,7 @@ public class CharacterManager : Singletone<CharacterManager>
             // 남은 캐릭터 인덱스 조정
             for (int i = 0; i < BattleManager.instance.enemy_characters.Count; i++)
             {
-                BattleManager.instance.enemy_characters[i].GetComponent<Character>().Character_index = i;
+                BattleManager.instance.enemy_characters[i].GetComponent<Character>().data.Character_index = i;
             }
         }
 
@@ -354,19 +369,19 @@ public class CharacterManager : Singletone<CharacterManager>
     }
     public void kill_character_in_stage_show(Character character) // 스테이지 보여줄 때 캐릭터 죽이는 메소드 
     {
-        bool isEnemy = character.isEnemyCharacter;
+        bool isEnemy = character.data.isEnemyCharacter;
 
         // UI 없애기
-        Destroy(character.health_bar);
-        Destroy(character.willpower_bar);
-        Destroy(character.panic_Sign.gameObject);
-        Destroy(character.skill_power_meter.gameObject);
+        Destroy(character.data.health_bar);
+        Destroy(character.data.willpower_bar);
+        Destroy(character.data.panic_Sign.gameObject);
+        Destroy(character.data.skill_power_meter.gameObject);
 
 
         if (isEnemy) // 적 캐릭터면
         {
             // UI 없애기
-            Destroy(character.skill_layoutGroup);
+            Destroy(character.data.skill_layoutGroup);
         }
 
         // 캐릭터 오브젝트 없애기

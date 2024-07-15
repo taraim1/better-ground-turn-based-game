@@ -67,7 +67,7 @@ public class BattleManager : Singletone<BattleManager> // ΩÃ±€≈Ê¿”
         for (int i = 0; i < playable_characters.Count; i++) 
         {
             int card_draw_number_of_times = 1;
-            int character_index = playable_characters[i].GetComponent<Character>().Character_index;
+            int character_index = playable_characters[i].GetComponent<Character>().data.Character_index;
             for (int j = 0; j < card_draw_number_of_times; j++) 
             {
                 if (hand_data[character_index].Count < 7) 
@@ -85,14 +85,14 @@ public class BattleManager : Singletone<BattleManager> // ΩÃ±€≈Ê¿”
         for (int i = 0; i < playable_characters.Count; i++) 
         {
             Character cha = playable_characters[i].GetComponent<Character>();
-            cha.current_health = cha.get_max_health_of_level(cha.level);
-            cha.current_willpower = cha.get_max_willpower_of_level(cha.level);
+            cha.data.current_health = cha.get_max_health_of_level(cha.level);
+            cha.data.current_willpower = cha.get_max_willpower_of_level(cha.level);
         }
         for (int i = 0; i < enemy_characters.Count; i++)
         {
             Character cha = enemy_characters[i].GetComponent<Character>();
-            cha.current_health = cha.get_max_health_of_level(cha.level);
-            cha.current_willpower = cha.get_max_willpower_of_level(cha.level);
+            cha.data.current_health = cha.get_max_health_of_level(cha.level);
+            cha.data.current_willpower = cha.get_max_willpower_of_level(cha.level);
         }
 
 
@@ -114,7 +114,7 @@ public class BattleManager : Singletone<BattleManager> // ΩÃ±€≈Ê¿”
         // ƒ´µÂ 1¿Â ªÃ¿Ω
         for (int i = 0; i < playable_characters.Count; i++)
         {
-            int character_index = playable_characters[i].GetComponent<Character>().Character_index;
+            int character_index = playable_characters[i].GetComponent<Character>().data.Character_index;
             int card_draw_number_of_times = 1;
 
             for (int j = 0; j < card_draw_number_of_times; j++)

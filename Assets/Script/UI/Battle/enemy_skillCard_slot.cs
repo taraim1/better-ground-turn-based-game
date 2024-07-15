@@ -11,6 +11,7 @@ public class enemy_skillCard_slot : MonoBehaviour, IPointerDownHandler, IPointer
     public Image illust;
     public GameObject card_obj;
     public GameObject enemy_Obj;
+    public GameObject target_obj;
     [SerializeField] private LineRenderer lineRenderer;
     [SerializeField] private Image frame;
 
@@ -26,7 +27,7 @@ public class enemy_skillCard_slot : MonoBehaviour, IPointerDownHandler, IPointer
         isBattleEnded = true;
     }
 
-    // 위치 두 개를 주면 라인렌더러를 그려줌
+    // 위치를 라인렌더러를 그려줌
     public IEnumerator Set_line(Vector3 target) 
     {
         yield return new WaitForSeconds(0.001f); // 레이아웃그룹 적용 시간 이슈때문에 약간 지연시킴
@@ -107,6 +108,19 @@ public class enemy_skillCard_slot : MonoBehaviour, IPointerDownHandler, IPointer
         isHighlightedByClick = false;
     }
 
+    private void On_character_drag_started() 
+    {
+        Remove_line();
+    }
+
+    private void On_character_drag_ended() 
+    {
+        if (target_obj != null) 
+        {
+            StartCoroutine(Set_line(target_obj.transform.position));
+        }
+    }
+
     private void Awake()
     {
         lineRenderer.enabled = false;
@@ -115,6 +129,8 @@ public class enemy_skillCard_slot : MonoBehaviour, IPointerDownHandler, IPointer
         ActionManager.skill_used += skill_used;
         ActionManager.enemy_skill_card_deactivate += Card_diactivated;
         ActionManager.battle_ended += OnBattleEnd;
+        ActionManager.character_drag_started += On_character_drag_started;
+        ActionManager.character_drag_ended += On_character_drag_ended;
 
         isBattleEnded = false;
     }
@@ -125,6 +141,8 @@ public class enemy_skillCard_slot : MonoBehaviour, IPointerDownHandler, IPointer
         ActionManager.skill_used -= skill_used;
         ActionManager.enemy_skill_card_deactivate -= Card_diactivated;
         ActionManager.battle_ended -= OnBattleEnd;
+        ActionManager.character_drag_started -= On_character_drag_started;
+        ActionManager.character_drag_ended -= On_character_drag_ended;
     }
 
     private void Update()

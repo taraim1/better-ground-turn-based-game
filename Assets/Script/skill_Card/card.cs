@@ -151,7 +151,7 @@ public class card : MonoBehaviour
             }
             
             // 마우스를 안 뗀 상태로 일정 시간이 지나면 드래그 기능 시작 (패닉이 아니어야 함)
-            if (dragging_time >= Util.drag_time_standard && !isDraggingStarted && !owner.GetComponent<Character>().isPanic) 
+            if (dragging_time >= Util.drag_time_standard && !isDraggingStarted && !owner.GetComponent<Character>().data.isPanic) 
             {
                 // 모든 카드를 원래 order로 
                 CardManager.instance.Set_origin_order(CardManager.instance.active_index);
