@@ -143,7 +143,7 @@ public class BattleGridManager : Singletone<BattleGridManager>
     }
 
     // 좌표상의 타일 타입 바꾸는 메소드, 유효하지 않은 좌표면 안 바꿈
-    public void set_tile(int x, int y, boardCell cellType) 
+    public void set_tile_type(int x, int y, boardCell cellType) 
     { 
         Tuple<int, int> ind = convert_xy_to_index(x, y);
         if (ind.Item1 == -1 && ind.Item2 == -1) 
@@ -155,8 +155,21 @@ public class BattleGridManager : Singletone<BattleGridManager>
         _tiles[ind.Item1][ind.Item2].set_type(cellType);
     }
 
-    // 월드 좌표와 가장 가까운 셀 찾아주는 메소드
-    public Tuple<int, int> get_nearest_tile(Vector2 pos, List<boardCell> exclude_filter) 
+    // 좌표상의 타일 컬러 바꾸는 메소드, 유효하지 않은 좌표면 안 바꿈
+    public void set_tile_color(int x, int y, Tile.TileColor color)
+    {
+        Tuple<int, int> ind = convert_xy_to_index(x, y);
+        if (ind.Item1 == -1 && ind.Item2 == -1)
+        {
+            return;
+        }
+
+        _tiles[ind.Item1][ind.Item2].set_color(color);
+    }
+
+
+    // 월드 좌표와 가장 가까운 셀 찾아주는 메소드 (exclude_filter에 들어간 타입은 제외, include_filter에 들어간 칸이 있으면 그 칸 중에서만 찾음)
+    public Tuple<int, int> get_nearest_tile(Vector2 pos, List<boardCell> exclude_filter, List<Tuple<int, int>> include_filter) 
     {
         Tuple<int, int> min_coordinate = Tuple.Create(0, 0);
         float min_distance = 1000000f;

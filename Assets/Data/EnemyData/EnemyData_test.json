@@ -21,5 +21,8 @@
         2,
         2
     ],
-    "SPUM_datapath": "SPUM/SPUM_Units/Enemy_base"
+    "SPUM_datapath": "SPUM/SPUM_Units/Enemy_base",
+    "move_range": [
+
+    ]
 }

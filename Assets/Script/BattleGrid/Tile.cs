@@ -76,7 +76,7 @@ public class Tile : MonoBehaviour
         }
     }
 
-    public void change_tile_color(TileColor color) 
+    public void set_color(TileColor color) 
     {
         switch (color) 
         {

@@ -14,6 +14,12 @@ public class Character : MonoBehaviour
         캐릭터 데이터를 json 파일로 저장하는 역할도 함
     */
 
+    [System.Serializable]
+    private struct coordinate 
+    { 
+        public int x, y;
+    }
+
     public string character_name;
     public string description;
     public CharacterManager.character_code code;
@@ -29,8 +35,8 @@ public class Character : MonoBehaviour
     [SerializeField]
     public skillcard_code[] deck = new skillcard_code[6];
     public string SPUM_datapath;
-    [SerializeField] private List<int> move_range_x;
-    [SerializeField] private List<int> move_range_y;
+    [SerializeField] private List<coordinate> move_range = new List<coordinate>();
+
 
 
     public class CharacterData_NOT_use_JSON
@@ -59,6 +65,7 @@ public class Character : MonoBehaviour
         public GameObject effects_layoutGroup_obj;
         public Tuple<int, int> _coordinate = Tuple.Create(0, 0);
         public List<BattleGridManager.boardCell> _moveFilter = new List<BattleGridManager.boardCell> { BattleGridManager.boardCell.enemy, BattleGridManager.boardCell.player, BattleGridManager.boardCell.obstacle };
+        public List<Tuple<int, int>> current_movable_tiles;
     }
 
     public CharacterData_NOT_use_JSON data = new CharacterData_NOT_use_JSON();
@@ -239,6 +246,8 @@ public class Character : MonoBehaviour
     public IEnumerator detect_drag()
     {
         float dragging_time = 0;
+        
+
 
         while (true)
         {
@@ -250,11 +259,20 @@ public class Character : MonoBehaviour
                 // 드래그 중이면
                 if (data.isDragging) 
                 {
+                    // 이동 가능한 칸들을 원래 색으로 표시
+                    foreach (Tuple<int, int> coordinate in data.current_movable_tiles)
+                    {
+                        BattleGridManager.instance.set_tile_color(coordinate.Item1, coordinate.Item2, Tile.TileColor.original);
+                    }
+
+                    // 현재 칸을 원래 색으로 표시
+                    BattleGridManager.instance.set_tile_color(data._coordinate.Item1, data._coordinate.Item2, Tile.TileColor.original);
+
                     // 가장 가까운 빈 칸 좌표를 찾음 (원래 칸 포함)
-                    Tuple<int, int> nearest_tile = BattleGridManager.instance.get_nearest_tile(gameObject.transform.position, data._moveFilter);
+                    Tuple<int, int> nearest_tile = BattleGridManager.instance.get_nearest_tile(gameObject.transform.position, data._moveFilter, null);
 
                     // 그 칸을 캐릭터 칸으로
-                    BattleGridManager.instance.set_tile(nearest_tile.Item1, nearest_tile.Item2, BattleGridManager.boardCell.player);
+                    BattleGridManager.instance.set_tile_type(nearest_tile.Item1, nearest_tile.Item2, BattleGridManager.boardCell.player);
 
                     // 현재 칸 변경
                     data._coordinate = Tuple.Create(nearest_tile.Item1, nearest_tile.Item2);
@@ -268,9 +286,21 @@ public class Character : MonoBehaviour
             // 마우스를 안 뗀 상태로 일정 시간이 지나면 드래그 기능 시작 (패닉이 아니어야 함)
             if (dragging_time >= Util.drag_time_standard && !data.isPanic && !data.isDragging)
             {
-                // 현재 칸을 빈 칸으로
-                BattleGridManager.instance.set_tile(data._coordinate.Item1, data._coordinate.Item2, BattleGridManager.boardCell.empty);
                 data.isDragging = true;
+
+                // 이동 가능한 칸 갱신
+                data.current_movable_tiles = get_movable_tiles();
+
+                // 이동 가능한 칸들을 초록색으로 표시
+                foreach (Tuple<int, int> coordinate in data.current_movable_tiles) 
+                {
+                    BattleGridManager.instance.set_tile_color(coordinate.Item1, coordinate.Item2, Tile.TileColor.green);
+                }
+                
+
+                // 현재 칸을 빈 칸으로 만들고 초록색으로
+                BattleGridManager.instance.set_tile_type(data._coordinate.Item1, data._coordinate.Item2, BattleGridManager.boardCell.empty);
+                BattleGridManager.instance.set_tile_color(data._coordinate.Item1, data._coordinate.Item2, Tile.TileColor.green);
                 ActionManager.character_drag_started?.Invoke();
 
             }
@@ -293,13 +323,36 @@ public class Character : MonoBehaviour
         return data._coordinate;
     }
 
+    // 이동 가능한 칸 리스트 반환하는 메소드
+    public List<Tuple<int, int>> get_movable_tiles() 
+    { 
+        List<Tuple<int, int>> result = new List<Tuple<int, int>>();
+
+        foreach (coordinate coordinate in move_range) 
+        {
+
+            int absolute_x = data._coordinate.Item1 + coordinate.x;
+            int absolute_y = data._coordinate.Item2 + coordinate.y;
+
+            // 유효한 칸인지 검사
+            BattleGridManager.boardCell type = BattleGridManager.instance.get_tile(absolute_x, absolute_y);
+            if (type == BattleGridManager.boardCell.empty) 
+            {
+                result.Add(Tuple.Create(absolute_x, absolute_y));
+            }
+
+        }
+
+        return result;
+    }
+
     private void Update()
     {
-        // 배틀에서 드래그중인 경우 마우스 포인터에 가장 가까운 타일로 이동
+        // 배틀에서 드래그중인 경우 마우스 포인터에 가장 가까운 타일로 이동 (이동할 수 있는 칸들 중에서)
         if (data.is_in_battle && data.isDragging) 
         {
             Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            Tuple<int, int> nearest_tile = BattleGridManager.instance.get_nearest_tile(mousePos, data._moveFilter);
+            Tuple<int, int> nearest_tile = BattleGridManager.instance.get_nearest_tile(mousePos, data._moveFilter, null);
             var tileCoor = BattleGridManager.instance.get_tile_pos(nearest_tile.Item1, nearest_tile.Item2);
             transform.position = new Vector3(tileCoor[0], tileCoor[1], transform.position.z);
         }
@@ -311,6 +364,9 @@ public class Character : MonoBehaviour
         data.effect_container_prefab = CharacterManager.instance.effect_container_prefab;
         ActionManager.turn_start_phase += turn_start;
     }
+
+
+
     private void OnDisable()
     {
         ActionManager.turn_start_phase -= turn_start;

@@ -13,7 +13,6 @@ public class test : MonoBehaviour
     {
         JsonUtility.FromJsonOverwrite(CharacterManager.instance.load_character_from_json(CharacterManager.character_code.kimchunsik), _character);
 
-
         CharacterManager.instance.save_character_to_json(_character);
 
     }

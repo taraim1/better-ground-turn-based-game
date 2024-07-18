@@ -135,7 +135,7 @@ public class CharacterManager : Singletone<CharacterManager>
             obj.AddComponent<Character_On_stage_show>();
 
             // 셀 타입 변경
-            BattleGridManager.instance.set_tile(x, y, BattleGridManager.boardCell.player);
+            BattleGridManager.instance.set_tile_type(x, y, BattleGridManager.boardCell.player);
         }
 
         // 적 캐릭터 생성
@@ -180,7 +180,7 @@ public class CharacterManager : Singletone<CharacterManager>
             character.data.SPUM_unit_obj.transform.localScale = new Vector3(1.3f, 1.3f, 1);
 
             // 셀 타입 변경
-            BattleGridManager.instance.set_tile(x, y, BattleGridManager.boardCell.enemy);
+            BattleGridManager.instance.set_tile_type(x, y, BattleGridManager.boardCell.enemy);
         }
 
     }
@@ -235,7 +235,7 @@ public class CharacterManager : Singletone<CharacterManager>
             character.data.SPUM_unit_obj.transform.localScale = new Vector3(-1.3f, 1.3f, 1);
 
             // 셀 타입 변경
-            BattleGridManager.instance.set_tile(x, y, BattleGridManager.boardCell.player);
+            BattleGridManager.instance.set_tile_type(x, y, BattleGridManager.boardCell.player);
         }
 
         // 적 캐릭터 생성
@@ -283,7 +283,7 @@ public class CharacterManager : Singletone<CharacterManager>
             character.data.SPUM_unit_obj.transform.localScale = new Vector3(1.3f, 1.3f, 1);
 
             // 셀 타입 변경
-            BattleGridManager.instance.set_tile(x, y, BattleGridManager.boardCell.enemy);
+            BattleGridManager.instance.set_tile_type(x, y, BattleGridManager.boardCell.enemy);
         }
 
         BattleManager.instance.is_Characters_spawned = true;
