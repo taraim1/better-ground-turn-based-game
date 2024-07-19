@@ -269,7 +269,7 @@ public class Character : MonoBehaviour
                     BattleGridManager.instance.set_tile_color(data._coordinate.Item1, data._coordinate.Item2, Tile.TileColor.original);
 
                     // 가장 가까운 빈 칸 좌표를 찾음 (원래 칸 포함)
-                    Tuple<int, int> nearest_tile = BattleGridManager.instance.get_nearest_tile(gameObject.transform.position, data._moveFilter, null);
+                    Tuple<int, int> nearest_tile = BattleGridManager.instance.get_nearest_tile(gameObject.transform.position, data._moveFilter, data.current_movable_tiles);
 
                     // 그 칸을 캐릭터 칸으로
                     BattleGridManager.instance.set_tile_type(nearest_tile.Item1, nearest_tile.Item2, BattleGridManager.boardCell.player);
@@ -290,6 +290,7 @@ public class Character : MonoBehaviour
 
                 // 이동 가능한 칸 갱신
                 data.current_movable_tiles = get_movable_tiles();
+                data.current_movable_tiles.Add(get_coordinate());
 
                 // 이동 가능한 칸들을 초록색으로 표시
                 foreach (Tuple<int, int> coordinate in data.current_movable_tiles) 
@@ -352,7 +353,7 @@ public class Character : MonoBehaviour
         if (data.is_in_battle && data.isDragging) 
         {
             Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            Tuple<int, int> nearest_tile = BattleGridManager.instance.get_nearest_tile(mousePos, data._moveFilter, null);
+            Tuple<int, int> nearest_tile = BattleGridManager.instance.get_nearest_tile(mousePos, data._moveFilter, data.current_movable_tiles);
             var tileCoor = BattleGridManager.instance.get_tile_pos(nearest_tile.Item1, nearest_tile.Item2);
             transform.position = new Vector3(tileCoor[0], tileCoor[1], transform.position.z);
         }

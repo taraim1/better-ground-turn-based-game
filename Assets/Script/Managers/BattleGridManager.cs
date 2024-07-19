@@ -181,6 +181,12 @@ public class BattleGridManager : Singletone<BattleGridManager>
                 // 빈 타일 or 예외 리스트에 있는 거 제외
                 if (tile == null || exclude_filter.Contains(tile.get_type())) continue;
 
+                // 필수 포함 리스트에 들어가있는지 검사
+                if (include_filter != null) 
+                {
+                    if (!include_filter.Contains(tile.get_coordinate())) continue;
+                }
+
                 float distance = math.sqrt(math.pow(pos.x - tile.gameObject.transform.position.x, 2) + math.pow(pos.y - tile.gameObject.transform.position.y, 2));
                 if (distance < min_distance) 
                 {
