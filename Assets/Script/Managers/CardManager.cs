@@ -177,6 +177,15 @@ public class CardManager : Singletone<CardManager>
     {
         if (card == null) { return; }
 
+        // 범위를 보여주는 중이었다면 원래 색으로
+        if (card._isShowingRange) 
+        {
+            foreach (Tuple<int, int> coordinate in card.usable_tiles)
+            {
+                BattleGridManager.instance.set_tile_color(coordinate.Item1, coordinate.Item2, Tile.TileColor.original);
+            }
+        }
+
         // 적 카드면
         if (card.isEnemyCard)
         {

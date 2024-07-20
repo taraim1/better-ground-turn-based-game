@@ -33,8 +33,9 @@ public class card : MonoBehaviour
     public Coroutine running_drag = null;
 
     public bool isEnemyCard = false;
+    public bool _isShowingRange = false;
 
-    List<Tuple<int, int>> usable_tiles;
+    public List<Tuple<int, int>> usable_tiles;
     private void Awake()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
@@ -190,6 +191,7 @@ public class card : MonoBehaviour
             {
                 BattleGridManager.instance.set_tile_color(coordinate.Item1, coordinate.Item2, Tile.TileColor.green);
             }
+            _isShowingRange = true;
         }
     }
 
@@ -203,7 +205,7 @@ public class card : MonoBehaviour
             {
                 BattleGridManager.instance.set_tile_color(coordinate.Item1, coordinate.Item2, Tile.TileColor.original);
             }
-
+            _isShowingRange = false;
         }
 
             state = current_mode.normal;

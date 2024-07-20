@@ -367,6 +367,7 @@ public class CharacterManager : Singletone<CharacterManager>
             ActionManager.player_character_died?.Invoke();
         }
 
+
         // 전투 끝나는 거 감지
         if (BattleManager.instance.enemy_characters.Count == 0)
         {
