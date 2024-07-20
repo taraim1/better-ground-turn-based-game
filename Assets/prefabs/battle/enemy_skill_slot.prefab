@@ -86,6 +86,7 @@ GameObject:
   - component: {fileID: 6377293548358938856}
   - component: {fileID: 2158523482969391545}
   - component: {fileID: 1819881104243426293}
+  - component: {fileID: 4947050423924000672}
   m_Layer: 7
   m_Name: hitbox
   m_TagString: enemySkillSlot
@@ -206,6 +207,19 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
+--- !u!114 &4947050423924000672
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3787915588632638929}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0d6e6ef252de0ff4bb6fc806b142a1a7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _slot: {fileID: 899707436375417153}
 --- !u!1 &5244731783984257528
 GameObject:
   m_ObjectHideFlags: 0
@@ -345,6 +359,7 @@ MonoBehaviour:
   illust: {fileID: 3443290912605978679}
   card_obj: {fileID: 0}
   enemy_Obj: {fileID: 0}
+  target_obj: {fileID: 0}
   lineRenderer: {fileID: 128687339765677932}
   frame: {fileID: 3081685233403993950}
 --- !u!120 &128687339765677932

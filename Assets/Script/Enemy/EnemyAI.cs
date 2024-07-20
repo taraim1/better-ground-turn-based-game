@@ -63,7 +63,7 @@ public class EnemyAI : MonoBehaviour
         clear_skills();
 
         // 패닉이 아니면 행동함
-        if (!gameObject.GetComponent<Character>().isPanic)
+        if (!gameObject.GetComponent<Character>().data.isPanic)
         {
             skill_list = get_action();
         }
@@ -80,7 +80,7 @@ public class EnemyAI : MonoBehaviour
             slot.GetComponent<enemy_skillCard_slot>().illust.sprite = card.illust.sprite;
 
             // 카드 타겟 정하기
-            switch (card.Card.behavior_type)
+            switch (card._Card.behavior_type)
             {
                 case "공격":
                     int rand = UnityEngine.Random.Range(0, BattleManager.instance.playable_characters.Count);
@@ -88,6 +88,8 @@ public class EnemyAI : MonoBehaviour
                     // 라인렌더러 설정
                     Vector3 targetpos = card.target.transform.position;
                     StartCoroutine(slot.GetComponent<enemy_skillCard_slot>().Set_line(new Vector3(targetpos.x, targetpos.y, -2f)));
+                    // 타겟 오브젝트 설정
+                    slot.GetComponent<enemy_skillCard_slot>().target_obj = card.target;
                     break;
                 case "방어":
                     card.target = gameObject;

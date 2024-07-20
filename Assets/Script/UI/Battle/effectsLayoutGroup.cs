@@ -9,6 +9,7 @@ public class effectsLayoutGroup : MonoBehaviour
     [SerializeField] private int icon_height;
     [SerializeField] private int gap_height;
     [SerializeField] private int icon_per_row;
+    [SerializeField] private Character _character;
     public void set_size(int effect_count) 
     {
         Vector2 size = new Vector2(width, 0);
@@ -25,5 +26,10 @@ public class effectsLayoutGroup : MonoBehaviour
         }
         
         rectTransform.sizeDelta = size;
+    }
+
+    private void Awake()
+    {
+        _character.data.effects_layoutGroup_obj = gameObject;
     }
 }

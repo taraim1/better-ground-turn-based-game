@@ -10,6 +10,7 @@ TagManager:
   - enemySkillSlot
   - skillDescription
   - effectDescription
+  - BattleGrid
   layers:
   - Default
   - TransparentFX

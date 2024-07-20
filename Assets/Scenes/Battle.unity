@@ -1186,6 +1186,50 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 789895345}
   m_CullTransparentMesh: 1
+--- !u!1 &841975156
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 841975158}
+  - component: {fileID: 841975157}
+  m_Layer: 0
+  m_Name: BattleGrid
+  m_TagString: BattleGrid
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!156049354 &841975157
+Grid:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 841975156}
+  m_Enabled: 1
+  m_CellSize: {x: 1, y: 1, z: 1}
+  m_CellGap: {x: 0, y: 0, z: 0}
+  m_CellLayout: 0
+  m_CellSwizzle: 0
+--- !u!4 &841975158
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 841975156}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &849728729
 GameObject:
   m_ObjectHideFlags: 0
@@ -3356,7 +3400,6 @@ MonoBehaviour:
   effect_description_prefab: {fileID: 3273811198982270407, guid: 23525e1b2f158f84295d416b98973849,
     type: 3}
   cam: {fileID: 742288449}
-  description_count: 0
 --- !u!4 &1496538077
 Transform:
   m_ObjectHideFlags: 0
@@ -4096,3 +4139,4 @@ SceneRoots:
   - {fileID: 288670434}
   - {fileID: 1179736365}
   - {fileID: 1496538077}
+  - {fileID: 841975158}

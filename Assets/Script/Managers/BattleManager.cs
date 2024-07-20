@@ -17,8 +17,6 @@ public class BattleManager : Singletone<BattleManager> // 싱글톤임
     public int enemy_skill_set_count = 0; // 적의 스킬 설정 완료시 늘어남
 
 
-    public Vector3[] playable_character_position_settings = new Vector3[4]; //플레이어블 캐릭터 스폰 위치
-    public Vector3[] enemy_character_position_settings = new Vector3[4]; //적 캐릭터 스폰 위치
 
     private cost_meter cost_meter; // 코스트 양 보여주는 오브젝트
 
@@ -69,7 +67,7 @@ public class BattleManager : Singletone<BattleManager> // 싱글톤임
         for (int i = 0; i < playable_characters.Count; i++) 
         {
             int card_draw_number_of_times = 1;
-            int character_index = playable_characters[i].GetComponent<Character>().Character_index;
+            int character_index = playable_characters[i].GetComponent<Character>().data.Character_index;
             for (int j = 0; j < card_draw_number_of_times; j++) 
             {
                 if (hand_data[character_index].Count < 7) 
@@ -87,14 +85,14 @@ public class BattleManager : Singletone<BattleManager> // 싱글톤임
         for (int i = 0; i < playable_characters.Count; i++) 
         {
             Character cha = playable_characters[i].GetComponent<Character>();
-            cha.current_health = cha.get_max_health_of_level(cha.level);
-            cha.current_willpower = cha.get_max_willpower_of_level(cha.level);
+            cha.data.current_health = cha.get_max_health_of_level(cha.level);
+            cha.data.current_willpower = cha.get_max_willpower_of_level(cha.level);
         }
         for (int i = 0; i < enemy_characters.Count; i++)
         {
             Character cha = enemy_characters[i].GetComponent<Character>();
-            cha.current_health = cha.get_max_health_of_level(cha.level);
-            cha.current_willpower = cha.get_max_willpower_of_level(cha.level);
+            cha.data.current_health = cha.get_max_health_of_level(cha.level);
+            cha.data.current_willpower = cha.get_max_willpower_of_level(cha.level);
         }
 
 
@@ -116,7 +114,7 @@ public class BattleManager : Singletone<BattleManager> // 싱글톤임
         // 카드 1장 뽑음
         for (int i = 0; i < playable_characters.Count; i++)
         {
-            int character_index = playable_characters[i].GetComponent<Character>().Character_index;
+            int character_index = playable_characters[i].GetComponent<Character>().data.Character_index;
             int card_draw_number_of_times = 1;
 
             for (int j = 0; j < card_draw_number_of_times; j++)
@@ -189,7 +187,7 @@ public class BattleManager : Singletone<BattleManager> // 싱글톤임
 
             card card = enemy_cards[0];
 
-            if (card.Card.isDirectUsable) // 직접 사용 가능인 카드면 사용
+            if (card._Card.isDirectUsable) // 직접 사용 가능인 카드면 사용
             {
                 BattleCalcManager.instance.set_using_card(card);
                 BattleCalcManager.instance.set_target(card.target.GetComponent<Character>());

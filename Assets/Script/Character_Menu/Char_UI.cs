@@ -27,9 +27,9 @@ public class Char_UI : MonoBehaviour
         health.text = "체력 : " + character.get_max_health_of_level(character.level).ToString();
         willpower.text = "정신력 : " + character.get_max_willpower_of_level(character.level).ToString();
         GameObject spPrefab = Resources.Load<GameObject>(character.SPUM_datapath);
-        character.SPUM_unit_obj = Instantiate(spPrefab, Character_port.transform);
-        character.SPUM_unit_obj.transform.localPosition = new Vector3(0f, 0f, 1);//알맞게 조정해 주세요
-        character.SPUM_unit_obj.transform.localScale = new Vector3(300f, 300f, 1);
+        character.data.SPUM_unit_obj = Instantiate(spPrefab, Character_port.transform);
+        character.data.SPUM_unit_obj.transform.localPosition = new Vector3(0f, 0f, 1);//알맞게 조정해 주세요
+        character.data.SPUM_unit_obj.transform.localScale = new Vector3(300f, 300f, 1);
 
 
     }

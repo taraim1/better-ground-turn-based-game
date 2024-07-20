@@ -16,6 +16,9 @@ public class ActionManager : MonoBehaviour
     public static Action turn_end_phase;
     public static Action player_character_died; 
     public static Action<bool> battle_ended; // true값이면 이긴 거, false면 진 거
+    public static Action character_drag_started;
+    public static Action character_drag_ended;
+
 
     // 스테이지 보여줄 때 씀
     public static Action character_drag_started_on_stageShow;

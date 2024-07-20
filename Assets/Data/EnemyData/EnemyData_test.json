@@ -6,11 +6,11 @@
     "level": 1,
     "max_health": [
         0,
-       80
+       12
     ],
     "max_willpower": [
         0,
-        4
+        6
     ],
     "is_character_unlocked": true,
     "deck": [
@@ -21,5 +21,8 @@
         2,
         2
     ],
-    "SPUM_datapath": "SPUM/SPUM_Units/Enemy_base"
+    "SPUM_datapath": "SPUM/SPUM_Units/Enemy_base",
+    "move_range": [
+
+    ]
 }

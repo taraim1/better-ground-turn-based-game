@@ -10,6 +10,8 @@ public class skill_power_meter : MonoBehaviour
 {
     public TMP_Text tmp;
 
+    [SerializeField] private Character _character;
+
     [DoNotSerialize]
     public Coroutine running_show = null;
 
@@ -35,6 +37,7 @@ public class skill_power_meter : MonoBehaviour
 
     private void Awake()
     {
+        _character.data.skill_power_meter = this;
         ActionManager.turn_start_phase += hide;
     }
     private void OnDisable()

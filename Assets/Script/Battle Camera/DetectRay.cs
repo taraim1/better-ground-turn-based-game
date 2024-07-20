@@ -63,11 +63,16 @@ public class DetectRay : MonoBehaviour
     {
         switch (obj.tag) 
         {
-            // 아군 캐릭터 클릭 시 그 캐릭터의 패 보여줌
+            // 아군 캐릭터 클릭 시 
             case "PlayerCharacter":
+                Character character = obj.GetComponent<Character>();
+                // 그 캐릭터의 패 보여줌
                 CardManager.instance.clear_highlighted_card();
-                CardManager.instance.Change_active_hand(obj.GetComponent<Character>().Character_index);
+                CardManager.instance.Change_active_hand(character.data.Character_index);
                 CardManager.instance.Set_origin_order(CardManager.instance.active_index);
+
+                // 드래그 감지 시작
+                character.data.running_drag = StartCoroutine(character.detect_drag());
                 break;
 
             // 카드 클릭 시
@@ -123,6 +128,8 @@ public class DetectRay : MonoBehaviour
 
             // 적 스킬 슬롯 클릭시
             case "enemySkillSlot":
+                enemy_skillCard_slot slot = obj.GetComponent<skillslotHitbox>()._slot;
+
                 // 아군 카드 강조 해제
                 CardManager.instance.clear_highlighted_card();
 
@@ -130,7 +137,10 @@ public class DetectRay : MonoBehaviour
                 CardManager.instance.Set_origin_order(CardManager.instance.active_index);
 
                 // 카드 위치 계산 및 정렬
-                CardManager.instance.Aline_cards(CardManager.instance.active_index);
+                CardManager.instance.Align_cards(CardManager.instance.active_index);
+
+                // 드래그 감지 시작
+                slot.running_drag = StartCoroutine(slot.detect_drag());
                 break;
 
             // 그 외의 것 클릭시
@@ -141,7 +151,7 @@ public class DetectRay : MonoBehaviour
                 // 모든 카드 정렬
                 for (int i = 0; i < BattleManager.instance.hand_data.Count; i++)
                 {
-                    CardManager.instance.Aline_cards(i);
+                    CardManager.instance.Align_cards(i);
                 }
 
                 // 적 카드 강조 해제
@@ -151,7 +161,7 @@ public class DetectRay : MonoBehaviour
                 CardManager.instance.Set_origin_order(CardManager.instance.active_index);
 
                 // 카드 위치 계산 및 정렬
-                CardManager.instance.Aline_cards(CardManager.instance.active_index);
+                CardManager.instance.Align_cards(CardManager.instance.active_index);
                 break;
 
         }     

@@ -26,10 +26,10 @@ public class BattleUI_Manager : Singletone<BattleUI_Manager>
         character.Set_UI_bars();
         
         // 스킬 파워 표기하는 거 초기화
-        character.skill_power_meter.Setup(character_obj);
+        character.data.skill_power_meter.Setup(character_obj);
 
         // 패닉 사인 초기화
-        character.panic_Sign.Setup(character_obj);
+        character.data.panic_Sign.Setup(character_obj);
 
     }
 
