@@ -128,6 +128,8 @@ public class DetectRay : MonoBehaviour
 
             // 적 스킬 슬롯 클릭시
             case "enemySkillSlot":
+                enemy_skillCard_slot slot = obj.GetComponent<skillslotHitbox>()._slot;
+
                 // 아군 카드 강조 해제
                 CardManager.instance.clear_highlighted_card();
 
@@ -136,6 +138,9 @@ public class DetectRay : MonoBehaviour
 
                 // 카드 위치 계산 및 정렬
                 CardManager.instance.Align_cards(CardManager.instance.active_index);
+
+                // 드래그 감지 시작
+                slot.running_drag = StartCoroutine(slot.detect_drag());
                 break;
 
             // 그 외의 것 클릭시

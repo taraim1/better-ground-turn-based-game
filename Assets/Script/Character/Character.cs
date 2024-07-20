@@ -51,8 +51,7 @@ public class Character : MonoBehaviour
         public skill_power_meter skill_power_meter;
         public bool isEnemyCharacter;
         public Coroutine running_drag = null;
-        // 전투시 캐릭터 오브젝트의 번호
-        public int Character_index;
+        public int Character_index; // 전투시 캐릭터 오브젝트의 번호
         public panic_sign panic_Sign;
         public GameObject skill_layoutGroup;
         public bool isPanic;

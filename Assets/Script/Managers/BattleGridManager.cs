@@ -91,6 +91,7 @@ public class BattleGridManager : Singletone<BattleGridManager>
                     _tiles[_board.Count - y - 1].Add(tile);
                     tile.set_grid(_grid);
                     tile.set_pos(x, y);
+                    set_tile_type(x, y, boardCell.empty);
                 }
                 else if (cell == boardCell.NOT_cell) 
                 {

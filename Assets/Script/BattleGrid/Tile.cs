@@ -81,7 +81,7 @@ public class Tile : MonoBehaviour
         switch (color) 
         {
             case TileColor.original:
-                _renderer.sprite = _normal_sprite;
+                _renderer.sprite = _origin_sprite;
                 break;
             case TileColor.red:
                 _renderer.sprite = _enemy_sprite;
