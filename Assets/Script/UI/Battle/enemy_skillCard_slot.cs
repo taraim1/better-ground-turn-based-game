@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using System;
+using UnityEditor;
 
 public class enemy_skillCard_slot : MonoBehaviour, IPointerDownHandler, IPointerEnterHandler, IPointerExitHandler
 {
@@ -14,6 +15,10 @@ public class enemy_skillCard_slot : MonoBehaviour, IPointerDownHandler, IPointer
     public GameObject target_obj;
     [SerializeField] private LineRenderer lineRenderer;
     [SerializeField] private Image frame;
+
+    Color red = new Color(1f, 0f, 0f, 1f);
+    Color grey = new Color(0.7f, 0.7f, 0.7f, 1f);
+
 
     // PC환경 때문에 쓰는 변수
     private bool isHighlightedByClick = false;
@@ -27,15 +32,38 @@ public class enemy_skillCard_slot : MonoBehaviour, IPointerDownHandler, IPointer
         isBattleEnded = true;
     }
 
-    // 위치를 라인렌더러를 그려줌
+    // 위치를 주면 라인렌더러를 그려줌
     public IEnumerator Set_line(Vector3 target) 
     {
         yield return new WaitForSeconds(0.001f); // 레이아웃그룹 적용 시간 이슈때문에 약간 지연시킴
+
+        card using_card = card_obj.GetComponent<card>();
+        Character target_character = target_obj.GetComponent<Character>();
+        Character using_character = using_card.owner.GetComponent<Character>();
+
+        // 색상 설정
+        set_lineRenderer_color(red);
+        if (using_card._Card.rangeType == CardRangeType.limited) 
+        {
+
+            if (!BattleCalcManager.instance.check_limited_range_usable(target_character.get_coordinate(), using_card.get_use_range(using_character.get_coordinate()))) 
+            {
+                set_lineRenderer_color(grey);
+            }
+        }
+        
+
         Vector3 objPos = transform.position;
         lineRenderer.SetPosition(0, new Vector3(objPos.x, objPos.y, -1f));
         lineRenderer.SetPosition(1, new Vector3(target.x, target.y, 1f));
         lineRenderer.enabled = true;
         yield break;
+    }
+
+    // 라인렌더러 색 설정
+    private void set_lineRenderer_color(Color color) 
+    {
+        lineRenderer.material.color = color;
     }
 
     // 라인렌더러 지움

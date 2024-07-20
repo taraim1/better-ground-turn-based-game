@@ -93,10 +93,10 @@ public class card_description : MonoBehaviour
         target_card_show_elapsed_time = 0;
 
         // 텍스트 오브젝트 활성화 및 텍스트 설정
-        for (int i = 0; i < target_card.Card.effects.Count; i++) 
+        for (int i = 0; i < target_card._Card.effects.Count; i++) 
         {
             EffectTextPool[i].activate();
-            EffectTextPool[i].set_effect_text(target_card.Card.effects[i]);
+            EffectTextPool[i].set_effect_text(target_card._Card.effects[i]);
         }
     }
 

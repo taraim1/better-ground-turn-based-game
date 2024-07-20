@@ -26,6 +26,56 @@ MonoBehaviour:
       isSelfUsableOnly: 0
       isFriendlyOnly: 0
       DontShowPowerRollResult: 0
+      rangeType: 1
+      use_range:
+      - x: -2
+        y: 2
+      - x: -1
+        y: 2
+      - x: 0
+        y: 2
+      - x: 1
+        y: 2
+      - x: 2
+        y: 2
+      - x: -2
+        y: 1
+      - x: -1
+        y: 1
+      - x: 0
+        y: 1
+      - x: 1
+        y: 1
+      - x: 2
+        y: 1
+      - x: -2
+        y: 0
+      - x: -1
+        y: 0
+      - x: 1
+        y: 0
+      - x: 2
+        y: 0
+      - x: -2
+        y: -1
+      - x: -1
+        y: -1
+      - x: 0
+        y: -1
+      - x: 1
+        y: -1
+      - x: 2
+        y: -1
+      - x: -2
+        y: -2
+      - x: -1
+        y: -2
+      - x: 0
+        y: -2
+      - x: 1
+        y: -2
+      - x: 2
+        y: -2
       effects:
       - code: 0
         timing: 0
@@ -42,6 +92,56 @@ MonoBehaviour:
       isSelfUsableOnly: 0
       isFriendlyOnly: 0
       DontShowPowerRollResult: 0
+      rangeType: 1
+      use_range:
+      - x: -2
+        y: 2
+      - x: -1
+        y: 2
+      - x: 0
+        y: 2
+      - x: 1
+        y: 2
+      - x: 2
+        y: 2
+      - x: -2
+        y: 1
+      - x: -1
+        y: 1
+      - x: 0
+        y: 1
+      - x: 1
+        y: 1
+      - x: 2
+        y: 1
+      - x: -2
+        y: 0
+      - x: -1
+        y: 0
+      - x: 1
+        y: 0
+      - x: 2
+        y: 0
+      - x: -2
+        y: -1
+      - x: -1
+        y: -1
+      - x: 0
+        y: -1
+      - x: 1
+        y: -1
+      - x: 2
+        y: -1
+      - x: -2
+        y: -2
+      - x: -1
+        y: -2
+      - x: 0
+        y: -2
+      - x: 1
+        y: -2
+      - x: 2
+        y: -2
       effects:
       - code: 0
         timing: 0
@@ -58,6 +158,56 @@ MonoBehaviour:
       isSelfUsableOnly: 0
       isFriendlyOnly: 0
       DontShowPowerRollResult: 0
+      rangeType: 1
+      use_range:
+      - x: -2
+        y: 2
+      - x: -1
+        y: 2
+      - x: 0
+        y: 2
+      - x: 1
+        y: 2
+      - x: 2
+        y: 2
+      - x: -2
+        y: 1
+      - x: -1
+        y: 1
+      - x: 0
+        y: 1
+      - x: 1
+        y: 1
+      - x: 2
+        y: 1
+      - x: -2
+        y: 0
+      - x: -1
+        y: 0
+      - x: 1
+        y: 0
+      - x: 2
+        y: 0
+      - x: -2
+        y: -1
+      - x: -1
+        y: -1
+      - x: 0
+        y: -1
+      - x: 1
+        y: -1
+      - x: 2
+        y: -1
+      - x: -2
+        y: -2
+      - x: -1
+        y: -2
+      - x: 0
+        y: -2
+      - x: 1
+        y: -2
+      - x: 2
+        y: -2
       effects:
       - code: 0
         timing: 0
@@ -74,6 +224,32 @@ MonoBehaviour:
       isSelfUsableOnly: 0
       isFriendlyOnly: 0
       DontShowPowerRollResult: 0
+      rangeType: 1
+      use_range:
+      - x: 0
+        y: 2
+      - x: -1
+        y: 1
+      - x: 0
+        y: 1
+      - x: 1
+        y: 1
+      - x: -2
+        y: 0
+      - x: -1
+        y: 0
+      - x: 1
+        y: 0
+      - x: 2
+        y: 0
+      - x: -1
+        y: -1
+      - x: 0
+        y: -1
+      - x: 1
+        y: -1
+      - x: 0
+        y: -2
       effects:
       - code: 0
         timing: 0
@@ -90,6 +266,8 @@ MonoBehaviour:
       isSelfUsableOnly: 0
       isFriendlyOnly: 0
       DontShowPowerRollResult: 0
+      rangeType: 0
+      use_range: []
       effects:
       - code: 1
         timing: 0
@@ -110,6 +288,8 @@ MonoBehaviour:
       isSelfUsableOnly: 1
       isFriendlyOnly: 0
       DontShowPowerRollResult: 1
+      rangeType: 0
+      use_range: []
       effects:
       - code: 2
         timing: 0
@@ -126,6 +306,8 @@ MonoBehaviour:
       isSelfUsableOnly: 0
       isFriendlyOnly: 1
       DontShowPowerRollResult: 1
+      rangeType: 0
+      use_range: []
       effects:
       - code: 1
         timing: 0

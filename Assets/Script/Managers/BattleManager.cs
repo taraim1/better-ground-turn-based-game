@@ -187,7 +187,7 @@ public class BattleManager : Singletone<BattleManager> // 싱글톤임
 
             card card = enemy_cards[0];
 
-            if (card.Card.isDirectUsable) // 직접 사용 가능인 카드면 사용
+            if (card._Card.isDirectUsable) // 직접 사용 가능인 카드면 사용
             {
                 BattleCalcManager.instance.set_using_card(card);
                 BattleCalcManager.instance.set_target(card.target.GetComponent<Character>());

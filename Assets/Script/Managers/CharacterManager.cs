@@ -321,7 +321,17 @@ public class CharacterManager : Singletone<CharacterManager>
             // 남은 캐릭터 인덱스 조정
             for (int i = 0; i < BattleManager.instance.playable_characters.Count; i++)
             {
-                BattleManager.instance.playable_characters[i].GetComponent<Character>().data.Character_index = i;
+                Character remianing_character = BattleManager.instance.playable_characters[i].GetComponent<Character>();
+                if (remianing_character.data.Character_index == CardManager.instance.active_index) 
+                {
+                    remianing_character.data.Character_index = i;
+                    CardManager.instance.Change_active_hand(i);
+
+                }
+                else 
+                {
+                    remianing_character.data.Character_index = i;
+                }
             }
         }
 

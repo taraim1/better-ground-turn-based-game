@@ -6,11 +6,11 @@
     "level": 1,
     "max_health": [
         0,
-       80
+       12
     ],
     "max_willpower": [
         0,
-        4
+        6
     ],
     "is_character_unlocked": true,
     "deck": [

@@ -5,6 +5,7 @@ using TMPro;
 using DG.Tweening;
 using UnityEditor.ShaderGraph.Internal;
 using Unity.VisualScripting;
+using System;
 
 public class card : MonoBehaviour
 {
@@ -32,6 +33,8 @@ public class card : MonoBehaviour
     public Coroutine running_drag = null;
 
     public bool isEnemyCard = false;
+
+    List<Tuple<int, int>> usable_tiles;
     private void Awake()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
@@ -49,20 +52,20 @@ public class card : MonoBehaviour
     // 카드의 원래 위치, 회전, 스케일을 저장
     public PRS originPRS;
 
-    public Cards Card;
+    public Cards _Card;
 
     public void Setup(Cards card, int index) 
     {
-        Card = card;
+        _Card = card;
 
-        illust.sprite = Card.sprite;
-        nameTMP.text = Card.name;
-        costTMP.text = Card.cost.ToString();
-        typeTMP.text = Card.type;
-        behavior_typeTMP.text = Card.behavior_type;
+        illust.sprite = _Card.sprite;
+        nameTMP.text = _Card.name;
+        costTMP.text = _Card.cost.ToString();
+        typeTMP.text = _Card.type;
+        behavior_typeTMP.text = _Card.behavior_type;
         // 여기 나중에 레벨 적용해야함
-        minpower = Card.minPowerOfLevel[0];
-        maxpower = Card.maxPowerOfLevel[0];
+        minpower = _Card.minPowerOfLevel[0];
+        maxpower = _Card.maxPowerOfLevel[0];
         value_rangeTMP.text = string.Format("{0} - {1}", minpower, maxpower); 
         this.index = index;
 
@@ -106,9 +109,7 @@ public class card : MonoBehaviour
                     // 드래그 중이었으면
                     if (state == current_mode.dragging)
                     {
-                        state = current_mode.normal;
-                        CardManager.instance.clear_highlighted_card();
-                        CardManager.instance.Align_cards(CardManager.instance.active_index);
+                        OnDragEnd();
                     }
                     yield break; 
                 }
@@ -119,9 +120,7 @@ public class card : MonoBehaviour
                 // 드래그 중이었으면
                 if (state == current_mode.dragging)
                 {
-                    state = current_mode.normal;
-                    CardManager.instance.clear_highlighted_card();
-                    CardManager.instance.Align_cards(CardManager.instance.active_index);
+                    OnDragEnd();
 
                 }
                 // 드래그 중이 아니면
@@ -173,11 +172,56 @@ public class card : MonoBehaviour
         GameObject dragPointer = Instantiate(drag_pointer, new Vector3(mousepos.x, mousepos.y, -2), Quaternion.identity);
         dragPointer.GetComponent<SpriteRenderer>().sortingOrder = 200;
         // 드래그 포인터로 카드 데이터 넘겨줌
-        dragPointer.GetComponent<drag_pointer>().cards = Card;
+        dragPointer.GetComponent<drag_pointer>().cards = _Card;
         // 카드 판정기로 드래그 하는 중이라는 정보, 카드 데이터 넘겨줌
         BattleCalcManager.instance.set_using_card(this);
 
         CardManager.instance.Align_cards(CardManager.instance.active_index);
+
+        // 사용 범위가 있는 스킬이면
+        if (_Card.rangeType == CardRangeType.limited)
+        {
+            // 쓸 수 있는 타일 판별
+            Character using_character = BattleManager.instance.playable_characters[CardManager.instance.active_index].GetComponent<Character>();
+            usable_tiles = get_use_range(using_character.get_coordinate());
+
+            // 그 타일들을 초록색으로
+            foreach (Tuple<int, int> coordinate in usable_tiles) 
+            {
+                BattleGridManager.instance.set_tile_color(coordinate.Item1, coordinate.Item2, Tile.TileColor.green);
+            }
+        }
+    }
+
+    void OnDragEnd() 
+    {
+        // 사용 범위가 있는 스킬이면
+        if (_Card.rangeType == CardRangeType.limited)
+        {
+            // 사용 범위 타일들을 원래 색으로
+            foreach (Tuple<int, int> coordinate in usable_tiles)
+            {
+                BattleGridManager.instance.set_tile_color(coordinate.Item1, coordinate.Item2, Tile.TileColor.original);
+            }
+
+        }
+
+            state = current_mode.normal;
+        CardManager.instance.clear_highlighted_card();
+        CardManager.instance.Align_cards(CardManager.instance.active_index);
+    }
+
+    public List<Tuple<int, int>> get_use_range(Tuple<int, int> character_coordinate) 
+    {
+        List<Tuple<int, int>> relative_coors = _Card.get_use_range();
+        List<Tuple<int, int>> result = new List<Tuple<int, int>>();
+
+        foreach (Tuple<int, int> coor in relative_coors) 
+        {
+            result.Add(Tuple.Create(coor.Item1 + character_coordinate.Item1, coor.Item2 + character_coordinate.Item2));
+        }
+
+        return result;
     }
 
 }

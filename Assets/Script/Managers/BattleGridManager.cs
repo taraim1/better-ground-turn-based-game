@@ -164,7 +164,10 @@ public class BattleGridManager : Singletone<BattleGridManager>
             return;
         }
 
-        _tiles[ind.Item1][ind.Item2].set_color(color);
+        if (_tiles[ind.Item1][ind.Item2] != null) 
+        {
+            _tiles[ind.Item1][ind.Item2].set_color(color);
+        }
     }
 
 

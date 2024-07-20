@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.Tracing;
@@ -79,12 +80,28 @@ public class BattleCalcManager : Singletone<BattleCalcManager>
         // 스킬 사용 가능한지 판별
         if (!check_usable(using_card)) { return; }
 
-
-        isUsingCard = false;
         Character OwnerCharacter = using_card.owner.GetComponent<Character>();
 
+        // 스킬 사용 가능 범위가 있을 시 사용 가능 검사
+        if (target_character != null && using_card._Card.rangeType == CardRangeType.limited) 
+        {
+            if (!check_limited_range_usable(target_character.get_coordinate(), using_card.get_use_range(OwnerCharacter.get_coordinate()))) 
+            {
+                return;
+            }
+        }
+        if (target_card != null && using_card._Card.rangeType == CardRangeType.limited) 
+        {
+            if (!check_limited_range_usable(target_card.owner.GetComponent<Character>().get_coordinate(), using_card.get_use_range(OwnerCharacter.get_coordinate()))) 
+            {
+                return;
+            }
+        }
+
+        isUsingCard = false;
+
         // 자신에게 사용하는 스킬이고 타겟이 자신이면 사용
-        if (using_card.Card.isSelfUsableOnly) 
+        if (using_card._Card.isSelfUsableOnly) 
         {
             if (target_character != null && target_character == OwnerCharacter) 
             {
@@ -92,15 +109,15 @@ public class BattleCalcManager : Singletone<BattleCalcManager>
                 apply_skill_effect(using_card, skill_effect_timing.immediate, target_character);
 
                 ActionManager.skill_used?.Invoke();
-                cost_Meter.Current_cost = cost_Meter.Current_cost - using_card.Card.cost;
-                using_card_power = Random.Range(using_card.minpower, using_card.maxpower + 1);
+                cost_Meter.Current_cost = cost_Meter.Current_cost - using_card._Card.cost;
+                using_card_power = UnityEngine.Random.Range(using_card.minpower, using_card.maxpower + 1);
                 apply_direct_use_result(using_card, target_character, using_card_power);
             }
             return;
         }
 
         // 아군에게 사용하는 스킬이고 타겟이 아군이면 사용
-        if (using_card.Card.isFriendlyOnly)
+        if (using_card._Card.isFriendlyOnly)
         {
             if (target_character != null && !target_character.data.isEnemyCharacter)
             {
@@ -108,8 +125,8 @@ public class BattleCalcManager : Singletone<BattleCalcManager>
                 apply_skill_effect(using_card, skill_effect_timing.immediate, target_character);
 
                 ActionManager.skill_used?.Invoke();
-                cost_Meter.Current_cost = cost_Meter.Current_cost - using_card.Card.cost;
-                using_card_power = Random.Range(using_card.minpower, using_card.maxpower + 1);
+                cost_Meter.Current_cost = cost_Meter.Current_cost - using_card._Card.cost;
+                using_card_power = UnityEngine.Random.Range(using_card.minpower, using_card.maxpower + 1);
                 apply_direct_use_result(using_card, target_character, using_card_power);
             }
             return;
@@ -126,9 +143,9 @@ public class BattleCalcManager : Singletone<BattleCalcManager>
             ActionManager.enemy_skill_card_deactivate?.Invoke();
 
             ActionManager.skill_used?.Invoke();
-            cost_Meter.Current_cost = cost_Meter.Current_cost - using_card.Card.cost;
-            using_card_power = Random.Range(using_card.minpower, using_card.maxpower + 1);
-            target_card_power = Random.Range(target_card.minpower, target_card.maxpower + 1);
+            cost_Meter.Current_cost = cost_Meter.Current_cost - using_card._Card.cost;
+            using_card_power = UnityEngine.Random.Range(using_card.minpower, using_card.maxpower + 1);
+            target_card_power = UnityEngine.Random.Range(target_card.minpower, target_card.maxpower + 1);
             apply_clash_result(using_card, target_card, using_card_power, target_card_power);
         }
 
@@ -142,7 +159,7 @@ public class BattleCalcManager : Singletone<BattleCalcManager>
             }
 
             // 직접 사용 가능한 카드면 카드 사용
-            if (using_card.Card.isDirectUsable) 
+            if (using_card._Card.isDirectUsable) 
             {
                 // 카드 사용 시 효과 적용
                 apply_skill_effect(using_card, skill_effect_timing.immediate, OwnerCharacter);
@@ -151,8 +168,8 @@ public class BattleCalcManager : Singletone<BattleCalcManager>
                 ActionManager.enemy_skill_card_deactivate?.Invoke();
 
                 ActionManager.skill_used?.Invoke();
-                cost_Meter.Current_cost = cost_Meter.Current_cost - using_card.Card.cost;
-                using_card_power = Random.Range(using_card.minpower, using_card.maxpower + 1);
+                cost_Meter.Current_cost = cost_Meter.Current_cost - using_card._Card.cost;
+                using_card_power = UnityEngine.Random.Range(using_card.minpower, using_card.maxpower + 1);
                 apply_direct_use_result(using_card, target_character, using_card_power);
             }
         }
@@ -163,7 +180,7 @@ public class BattleCalcManager : Singletone<BattleCalcManager>
     {
         Character current_target;
 
-        foreach (SkillEffect effect in using_card.Card.effects)
+        foreach (SkillEffect effect in using_card._Card.effects)
         {
             if (effect.timing != timing) { continue; } // 타이밍 검사
 
@@ -207,11 +224,11 @@ public class BattleCalcManager : Singletone<BattleCalcManager>
         if (!isUsingCard) { return false; }
 
         // 코스트 부족하면 못 씀
-        if (cost_Meter.Current_cost < card.Card.cost) { return false; }
+        if (cost_Meter.Current_cost < card._Card.cost) { return false; }
 
         // 특수효과 관련해서 못 쓰는 거 검사
         Character owner_character = card.owner.GetComponent<Character>();
-        foreach (SkillEffect effect in card.Card.effects)
+        foreach (SkillEffect effect in card._Card.effects)
         {
             switch (effect.code)
             {
@@ -228,7 +245,21 @@ public class BattleCalcManager : Singletone<BattleCalcManager>
     // 적이 턴 끝나고 스킬 사용시 판정
     public void Calc_enemy_turn_skill_use()
     {
-        using_card_power = Random.Range(using_card.minpower, using_card.maxpower + 1);
+        Character OwnerCharacter = using_card.owner.GetComponent<Character>();
+
+        if (using_card._Card.rangeType == CardRangeType.limited) 
+        {
+
+            if (!check_limited_range_usable(target_character.get_coordinate(), using_card.get_use_range(OwnerCharacter.get_coordinate())))
+            {
+                // 카드 제거
+                CardManager.instance.Destroy_card(using_card);
+                return;
+            }
+            
+        }
+
+        using_card_power = UnityEngine.Random.Range(using_card.minpower, using_card.maxpower + 1);
         apply_direct_use_result(using_card, target_character, using_card_power);
     }
 
@@ -248,9 +279,9 @@ public class BattleCalcManager : Singletone<BattleCalcManager>
 
     private void apply_direct_use_result(card using_card, Character target_character, int power) // 캐릭터에 직접 사용한 카드 결과 적용해줌
     {
-        if (!using_card.Card.DontShowPowerRollResult) { show_power_roll_result(using_card, power); } // 위력 판정한 거 보여주기
+        if (!using_card._Card.DontShowPowerRollResult) { show_power_roll_result(using_card, power); } // 위력 판정한 거 보여주기
 
-        switch (using_card.Card.behavior_type)
+        switch (using_card._Card.behavior_type)
         {
             case ("공격"):
                 target_character.Damage_health(power);
@@ -266,6 +297,12 @@ public class BattleCalcManager : Singletone<BattleCalcManager>
         CardManager.instance.Destroy_card(using_card);
     }
 
+    // 사용 가능 범위가 있는 스킬을 쓸 수 있는지 판별하는 메소드
+    public bool check_limited_range_usable(Tuple<int, int> target_coordinate, List<Tuple<int, int>> usable_tiles)
+    {
+        return usable_tiles.Contains(target_coordinate);
+    }
+
     private void apply_clash_result(card using_card, card target_card, int power1, int power2) // 카드 둘 주면 캐릭터에 결과 적용해줌
     {
 
@@ -279,8 +316,8 @@ public class BattleCalcManager : Singletone<BattleCalcManager>
         string los_behavior;
 
 
-        if (!using_card.Card.DontShowPowerRollResult) { show_power_roll_result(using_card, power1); }// 위력 판정한 거 보여주기
-        if (!target_card.Card.DontShowPowerRollResult) { show_power_roll_result(target_card, power2); }
+        if (!using_card._Card.DontShowPowerRollResult) { show_power_roll_result(using_card, power1); }// 위력 판정한 거 보여주기
+        if (!target_card._Card.DontShowPowerRollResult) { show_power_roll_result(target_card, power2); }
 
 
         // 무승부
@@ -317,8 +354,8 @@ public class BattleCalcManager : Singletone<BattleCalcManager>
             lose_power = power1;
         }
 
-        win_behavior = winner_card.Card.behavior_type;
-        los_behavior = loser_card.Card.behavior_type;
+        win_behavior = winner_card._Card.behavior_type;
+        los_behavior = loser_card._Card.behavior_type;
 
         // 카드 사용 시 효과 적용
         apply_skill_effect(winner_card, skill_effect_timing.after_use, loser_char);

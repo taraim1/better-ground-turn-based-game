@@ -61,7 +61,7 @@ public class CardManager : Singletone<CardManager>
 
     public GameObject card_prefab;
 
-    // 현재 보는 중인 카드패의 인덱스, 안 보는 중이면 -1
+    // 현재 보는 중인 캐릭터 카드패의 인덱스, 안 보는 중이면 -1
     public int active_index;
 
     // 현재 강조 중인 카드

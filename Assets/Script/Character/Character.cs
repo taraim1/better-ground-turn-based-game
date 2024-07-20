@@ -66,6 +66,7 @@ public class Character : MonoBehaviour
         public Tuple<int, int> _coordinate = Tuple.Create(0, 0);
         public List<BattleGridManager.boardCell> _moveFilter = new List<BattleGridManager.boardCell> { BattleGridManager.boardCell.enemy, BattleGridManager.boardCell.player, BattleGridManager.boardCell.obstacle };
         public List<Tuple<int, int>> current_movable_tiles;
+        public bool isMovable;
     }
 
     public CharacterData_NOT_use_JSON data = new CharacterData_NOT_use_JSON();
@@ -230,7 +231,7 @@ public class Character : MonoBehaviour
             {
                 data.isPanic = false;
                 data.panic_Sign.hide();
-                Damage_willpower(-((get_max_willpower_of_level(level) + 1) / 2)); // 정신력 회복
+                Heal_willpower((get_max_willpower_of_level(level) + 1) / 2); // 정신력 회복
             }
             else 
             {
@@ -238,6 +239,9 @@ public class Character : MonoBehaviour
             }
 
         }
+
+        // 이동 가능 상태로 전환
+        data.isMovable = true;
 
         
     }
@@ -274,7 +278,11 @@ public class Character : MonoBehaviour
                     // 그 칸을 캐릭터 칸으로
                     BattleGridManager.instance.set_tile_type(nearest_tile.Item1, nearest_tile.Item2, BattleGridManager.boardCell.player);
 
-                    // 현재 칸 변경
+                    // 현재 칸 변경 (원래 칸과 다르면 이동 불가 상태로)
+                    if (data._coordinate.Item1 != nearest_tile.Item1 || data._coordinate.Item2 != nearest_tile.Item2) 
+                    {
+                        data.isMovable = false;
+                    }
                     data._coordinate = Tuple.Create(nearest_tile.Item1, nearest_tile.Item2);
 
                     data.isDragging = false;
@@ -283,10 +291,11 @@ public class Character : MonoBehaviour
                 yield break;
             }
 
-            // 마우스를 안 뗀 상태로 일정 시간이 지나면 드래그 기능 시작 (패닉이 아니어야 함)
-            if (dragging_time >= Util.drag_time_standard && !data.isPanic && !data.isDragging)
+            // 마우스를 안 뗀 상태로 일정 시간이 지나면 드래그 기능 시작 (패닉이 아니어야 함, 이동 가능 상태여야 함)
+            if (dragging_time >= Util.drag_time_standard && !data.isPanic && !data.isDragging && data.isMovable)
             {
                 data.isDragging = true;
+                
 
                 // 이동 가능한 칸 갱신
                 data.current_movable_tiles = get_movable_tiles();

@@ -80,7 +80,7 @@ public class EnemyAI : MonoBehaviour
             slot.GetComponent<enemy_skillCard_slot>().illust.sprite = card.illust.sprite;
 
             // 카드 타겟 정하기
-            switch (card.Card.behavior_type)
+            switch (card._Card.behavior_type)
             {
                 case "공격":
                     int rand = UnityEngine.Random.Range(0, BattleManager.instance.playable_characters.Count);
