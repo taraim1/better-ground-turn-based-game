@@ -22,23 +22,31 @@ public class EnemyAI : MonoBehaviour
 
     private bool isBattleEnded;
 
+    // 현재 턴에 사용할 스킬카드 코드가 들어가는 리스트
+    List<skillcard_code> current_turn_use_cards = new List<skillcard_code>();
+
+    // 행동트리들
+
+    // Process시 카드 하나를 정해서 current_turn_use_cards에 넣어주는 트리
+    private BehaviorTree.BehaviorTree CardSelectTree;
    
-    // 적이 이번 턴에 쓸 스킬 카드 코드 리스트를 반환하는 메소드
-    private List<skillcard_code> get_action()
+
+    // 적이 이번 턴에 쓸 스킬 카드를 정함
+    private void select_skillCard(int skill_use_count)
     {
-        // 이번 턴에 쓸 스킬 개수
-        int skill_use_count = 1;
-
-        List<skillcard_code> result = new List<skillcard_code>();
-
-        // 덱에서 쓸 스킬 랜덤하게 뽑음
+        
         for (int i = 0; i < skill_use_count; i++)
         {
-            int rand = UnityEngine.Random.Range(0, enemy.deck.Length);
-            result.Add(enemy.deck[rand]);
+            // 스킬 하나 추가
+            CardSelectTree.Reset();
+            BehaviorTree.Node.Status status = CardSelectTree.Process();
+
+            if (status == BehaviorTree.Node.Status.Failure) 
+            {
+                print("스킬카드 선택 과정에서 오류 발생");
+            }
         }
 
-        return result;
     }
 
     public void clear_skills()
@@ -57,23 +65,23 @@ public class EnemyAI : MonoBehaviour
         // 전투 끝났으면 작동 X
         if (isBattleEnded) { return; }
 
-        List<skillcard_code> skill_list = new List<skillcard_code>();
+        current_turn_use_cards.Clear();
 
         // 이전 턴 스킬 다 삭제
         clear_skills();
 
-        // 패닉이 아니면 행동함
-        if (!gameObject.GetComponent<Character>().data.isPanic)
+        // 패닉이 아니면 스킬카드 사용할 거 고름
+        if (!enemy.data.isPanic)
         {
-            skill_list = get_action();
+            select_skillCard(1);
         }
 
 
-        for (int i = 0; i < skill_list.Count; i++)
+        for (int i = 0; i < current_turn_use_cards.Count; i++)
         {
             // 이번 턴에 쓸 카드와 스킬 슬롯 만듦
             GameObject slot = Instantiate(skill_slot_prefab, layoutGroup.transform);
-            GameObject card_obj = CardManager.instance.Summon_enemy_card(skill_list[i], gameObject);
+            GameObject card_obj = CardManager.instance.Summon_enemy_card(current_turn_use_cards[i], gameObject);
             card card = card_obj.GetComponent<card>();
             slot.GetComponent<enemy_skillCard_slot>().card_obj = card_obj;
             slot.GetComponent<enemy_skillCard_slot>().enemy_Obj = gameObject;
@@ -161,6 +169,9 @@ public class EnemyAI : MonoBehaviour
         ActionManager.battle_ended += OnBattleEnd;
 
         isBattleEnded = false;
+
+        CardSelectTree = new BehaviorTree.BehaviorTree("CardSelectTree");
+        CardSelectTree.AddChild(new BehaviorTree.Leaf("RandomSelect", new BehaviorTree.Random_Card_Pick_Strategy(enemy, current_turn_use_cards)));
     }
 
     private void OnDisable()

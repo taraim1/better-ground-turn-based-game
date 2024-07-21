@@ -267,9 +267,6 @@ public class CharacterManager : Singletone<CharacterManager>
             // 캐릭터가 전투에 쓰려고 만든 건지 설정
             character.data.is_in_battle = true;
 
-            // 적 데이터를 AI에 연결
-            obj.GetComponent<EnemyAI>().enemy = character;
-
             // 적 캐릭터 오브젝트를 BattleManager의 리스트에 넣기
             BattleManager.instance.enemy_characters.Add(obj);
 
