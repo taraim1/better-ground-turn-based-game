@@ -6,11 +6,17 @@
     "level": 1,
     "max_health": [
         0,
-        15
+      15,
+      15,
+      15,
+      15
     ],
     "max_willpower": [
         0,
-        30
+      30,
+      30,
+      30,
+      30
     ],
     "is_character_unlocked": true,
     "deck": [
@@ -21,5 +27,35 @@
         5,
         6
     ],
-    "SPUM_datapath": "SPUM/SPUM_Units/Fire_Mage"
+    "SPUM_datapath": "SPUM/SPUM_Units/Fire_Mage",
+    "effect_container_prefab": {
+        "instanceID": 0
+    },
+    "effects_layoutGroup_obj": {
+        "instanceID": 0
+    },
+    "current_health": 0,
+    "current_willpower": 0,
+    "health_bar": {
+        "instanceID": 0
+    },
+    "willpower_bar": {
+        "instanceID": 0
+    },
+    "skill_power_meter": {
+        "instanceID": 0
+    },
+    "isEnemyCharacter": false,
+    "Character_index": 0,
+    "panic_Sign": {
+        "instanceID": 0
+    },
+    "skill_layoutGroup": {
+        "instanceID": 0
+    },
+    "isPanic": false,
+    "SPUM_unit_obj": {
+        "instanceID": -32474
+    },
+    "is_in_battle": false
 }
