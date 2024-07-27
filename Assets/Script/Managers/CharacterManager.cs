@@ -11,20 +11,6 @@ public class CharacterManager : Singletone<CharacterManager>
 {
     // 스테이지 데이터가 담긴 스크립터블 오브젝트
     [SerializeField] StageSettingSO StageSettingSO;
-    public enum character_code
-    {
-        not_a_playable_character,
-        kimchunsik,
-        test,
-        fire_mage
-    }
-
-    public enum enemy_code
-    {
-        not_a_enemy_character,
-        test
-    }
-
 
     public GameObject playable_character_base;
     public GameObject enemy_character_base;

@@ -8,6 +8,8 @@ using System;
 [CustomPropertyDrawer(typeof(CardsSoDictonary))]
 [CustomPropertyDrawer(typeof(characterEffectSpritesDictionary))]
 [CustomPropertyDrawer(typeof(StageSettingSO_dictionary))]
+[CustomPropertyDrawer(typeof(BasicCharacterData_dictionary))]
+[CustomPropertyDrawer(typeof(PlayableCharacterData_dictionary))]
 public class SerializableDictionaryPropertyDrawer : PropertyDrawer
 {
 	const string KeysFieldName = "m_keys";

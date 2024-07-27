@@ -14,7 +14,7 @@ public class ActionManager : MonoBehaviour
     public static Action<Character, List<Character>> attacked; // <공격 주체, 공격 대상들>
     public static Action turn_start_phase;
     public static Action turn_end_phase;
-    public static Action player_character_died; 
+    public static Action<Character> character_going_to_die; 
     public static Action<bool> battle_ended; // true값이면 이긴 거, false면 진 거
     public static Action character_drag_started;
     public static Action character_drag_ended;
