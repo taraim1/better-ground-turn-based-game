@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using System.IO;
+using UnityEditor.Experimental.GraphView;
 
 public enum character_code
 {
@@ -77,10 +78,10 @@ public abstract class Character : MonoBehaviour
             character_index = value; 
         }
     }
-    private bool isPanic;
+    protected bool isPanic;
     public bool IsPanic {  get { return isPanic; } }
     private int remaining_panic_turn;
-    private Tuple<int, int> coordinate;
+    protected Tuple<int, int> coordinate;
     public Tuple<int, int> Coordinate 
     { 
         get { return coordinate; } 
@@ -93,12 +94,15 @@ public abstract class Character : MonoBehaviour
             coordinate = Tuple.Create(value.Item1, value.Item2);
         } 
     }
-    public List<BattleGridManager.boardCell> moveFilter = new List<BattleGridManager.boardCell> 
+    protected List<BattleGridManager.boardCell> moveFilter = new List<BattleGridManager.boardCell> 
     { 
         BattleGridManager.boardCell.enemy, 
         BattleGridManager.boardCell.player, 
         BattleGridManager.boardCell.obstacle 
     };
+    protected bool isMovable;
+    public bool IsMovable { get { return isMovable; } }
+    protected List<Tuple<int, int>> current_movable_tiles;
 
     protected CharacterDataSO DataSO;
 
@@ -111,11 +115,14 @@ public abstract class Character : MonoBehaviour
     public Action health_healed;
     public Action willpower_damaged;
     public Action willpower_healed;
+    public Action<character_effect_code, character_effect_setType, int> got_effect;
+    public Action<character_effect_code> destroy_effect;
 
 
     /* 
      * 생성자 및 메소드
      */
+
 
     public Character(character_code code, CharacterDataSO DataSO) 
     { 
@@ -243,6 +250,53 @@ public abstract class Character : MonoBehaviour
         willpower_changed?.Invoke(current_willpower);
     }
 
+    // 버프 / 디버프 추가하는 메소드
+    public void give_effect(character_effect_code code, character_effect_setType type, int power)
+    {
+        got_effect?.Invoke(code, type, power);
+    }
+
+    // 버프 / 디버프 (컨테이너) 없애는 메소드
+    public void remove_effect(character_effect_code code)
+    {
+        destroy_effect?.Invoke(code);
+    }
+
+    // 턴 시작시 발동되는 메소드
+    protected virtual void turn_start()
+    {
+        // 패닉 해제 or 패닉 턴 감소
+        if (isPanic)
+        {
+
+            if (remaining_panic_turn <= 0)
+            {
+                isPanic = false;
+                Heal_willpower((get_max_willpower(level) + 1) / 2); // 정신력 회복
+                out_of_panic?.Invoke();
+            }
+            else
+            {
+                remaining_panic_turn -= 1;
+            }
+
+        }
+
+
+    }
+
+    // 좌표 설정하는 메소드
+    public void set_coordinate(int x, int y)
+    {
+        coordinate = Tuple.Create(x, y);
+    }
+
+    // 좌표 알아내는 메소드
+    public Tuple<int, int> get_coordinate()
+    {
+        return Tuple.Create(coordinate.Item1, coordinate.Item2);
+    }
+
     // 카드 사용시 타깃 해제, 타깃 설정은 DetectingRay에 있음
     private void OnMouseExit()
     {
@@ -250,6 +304,12 @@ public abstract class Character : MonoBehaviour
     }
 
     public virtual bool check_enemy() { return false; }
+
+    private void Awake()
+    {
+        ActionManager.turn_start_phase += turn_start;
+    }
+
 }
 
 
@@ -263,7 +323,6 @@ public class PlayableCharacter : Character
 
     private bool is_character_unlocked;
     public bool Is_character_unlocked { get { return is_character_unlocked; } }
-    private bool isDragging = false;
 
     /* 
     * 생성자 및 메소드
@@ -288,9 +347,102 @@ public class PlayableCharacter : Character
         is_character_unlocked = playableData.is_character_unlocked;
     }
 
+    protected override void turn_start()
+    {
+        base.turn_start();
+        isMovable = true;
+    }
+
     public override bool check_enemy()
     {
         return false;
+    }
+
+    public void start_drag_detecting()
+    {
+        StartCoroutine(detect_drag_start());
+    }
+
+    private void On_drag_end() 
+    {
+        // 이동 가능한 칸들을 원래 색으로 표시
+        foreach (Tuple<int, int> coordinate in current_movable_tiles)
+        {
+            BattleGridManager.instance.set_tile_color(coordinate.Item1, coordinate.Item2, Tile.TileColor.original);
+        }
+
+        // 현재 칸을 원래 색으로 표시
+        BattleGridManager.instance.set_tile_color(coordinate.Item1, coordinate.Item2, Tile.TileColor.original);
+
+        // 가장 가까운 빈 칸 좌표를 찾음 (원래 칸 포함)
+        Tuple<int, int> nearest_tile = BattleGridManager.instance.get_nearest_tile(gameObject.transform.position, moveFilter, current_movable_tiles);
+
+        // 그 칸을 캐릭터 칸으로
+        BattleGridManager.instance.set_tile_type(nearest_tile.Item1, nearest_tile.Item2, BattleGridManager.boardCell.player);
+
+        // 현재 칸 변경 (원래 칸과 다르면 이동 불가 상태로)
+        if (coordinate.Item1 != nearest_tile.Item1 || coordinate.Item2 != nearest_tile.Item2)
+        {
+            isMovable = false;
+        }
+        coordinate = Tuple.Create(nearest_tile.Item1, nearest_tile.Item2);
+
+        ActionManager.character_drag_ended?.Invoke();
+    }
+
+    // 드래그 감지
+    private IEnumerator detect_drag_start()
+    {
+        float dragging_time = 0;
+
+        if (isPanic) { yield break; } // 패닉이면 멈춤
+        if (!isMovable) { yield break; } // 이동 불가면 멈춤
+
+        while (true)
+        {
+            // 마우스 떼면 멈춤 (프레임이 안 맞을 수 있어서 getmousebutton으로 함)
+            if (!Input.GetMouseButton(0))
+            {
+                yield break;
+            }
+
+            // 마우스를 안 뗀 상태로 일정 시간이 지나면 드래그 기능 시작
+            if (dragging_time >= Util.drag_time_standard)
+            {
+                // 이동 가능한 칸 갱신
+                current_movable_tiles = get_movable_tiles();
+                current_movable_tiles.Add(get_coordinate());
+
+                // 이동 가능한 칸들을 초록색으로 표시
+                foreach (Tuple<int, int> coordinate in current_movable_tiles)
+                {
+                    BattleGridManager.instance.set_tile_color(coordinate.Item1, coordinate.Item2, Tile.TileColor.green);
+                }
+
+
+                // 현재 칸을 빈 칸으로 만들고 초록색으로
+                BattleGridManager.instance.set_tile_type(coordinate.Item1, coordinate.Item2, BattleGridManager.boardCell.empty);
+                BattleGridManager.instance.set_tile_color(coordinate.Item1, coordinate.Item2, Tile.TileColor.green);
+                ActionManager.character_drag_started?.Invoke();
+
+                yield break;
+            }
+
+            dragging_time += 0.01f;
+            yield return new WaitForSeconds(0.01f);
+
+        }
+    }
+
+    // 드래그 해제 감지
+    private IEnumerator detect_drag_end()
+    {
+        // 드래그 중에 마우스 떼면 (프레임이 안 맞을 수 있어서 getmousebutton으로 함)
+        if (!Input.GetMouseButton(0))
+        {
+            On_drag_end();
+            yield break;
+        }
     }
 }
 
