@@ -10,7 +10,7 @@ public class EnemyAI : MonoBehaviour
     [SerializeField] CardsSO cardsSO;
 
     // 적의 캐릭터 데이터
-    public Character enemy;
+    public EnemyCharacter enemy;
     // 적의 스킬 슬롯 프리팹
     public GameObject skill_slot_prefab;
     // 적이 이턴 턴에 쓸 카드 오브젝트가 들어가는 리스트
@@ -71,7 +71,7 @@ public class EnemyAI : MonoBehaviour
         clear_skills();
 
         // 패닉이 아니면 스킬카드 사용할 거 고름
-        if (!enemy.data.isPanic)
+        if (!enemy.IsPanic)
         {
             select_skillCard(1);
         }
@@ -130,7 +130,7 @@ public class EnemyAI : MonoBehaviour
     }
 
     // 아군 캐릭터가 죽었을 때 그 캐릭터를 타게팅하고 있었던 스킬을 제거
-    private void OnPlayerCharacterDied() 
+    private void OnCharacterDied(Character character) 
     {
         StartCoroutine(check_dead_target());
     }
@@ -143,14 +143,13 @@ public class EnemyAI : MonoBehaviour
 
     private IEnumerator check_dead_target() 
     {
-        yield return new WaitForSeconds(0.01f);// 캐릭터 오브젝트 비활성화를 잠시 기다림
-
         for (int i = using_skill_Objects.Count - 1; i >= 0; i--)
         {
             card card = using_skill_Objects[i].GetComponent<card>();
 
             try
             {
+                // 죽은 타겟은 트랜스폼을 못 얻어오는 원리
                 Transform tmp = card.target.transform;
             }
             catch (MissingReferenceException e)
@@ -165,7 +164,7 @@ public class EnemyAI : MonoBehaviour
     {
         ActionManager.enemy_skill_setting_phase += set_skill;
         ActionManager.enemy_skill_card_deactivate += return_card;
-        ActionManager.player_character_died += OnPlayerCharacterDied;
+        ActionManager.character_kill_complete += OnCharacterDied;
         ActionManager.battle_ended += OnBattleEnd;
 
         isBattleEnded = false;
@@ -178,7 +177,7 @@ public class EnemyAI : MonoBehaviour
     {
         ActionManager.enemy_skill_setting_phase -= set_skill;
         ActionManager.enemy_skill_card_deactivate -= return_card;
-        ActionManager.player_character_died -= OnPlayerCharacterDied;
+        ActionManager.character_kill_complete -= OnCharacterDied;
         ActionManager.battle_ended -= OnBattleEnd;
     }
 }

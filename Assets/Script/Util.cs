@@ -28,5 +28,12 @@ public class Util
     {
         return (T)Enum.Parse(typeof(T), e);
     }
+
+    [System.Serializable]
+    public struct coordinate
+    {
+        public int x, y;
+    }
 }
+
 

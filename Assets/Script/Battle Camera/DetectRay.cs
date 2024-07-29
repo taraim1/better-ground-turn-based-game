@@ -65,14 +65,14 @@ public class DetectRay : MonoBehaviour
         {
             // 아군 캐릭터 클릭 시 
             case "PlayerCharacter":
-                Character character = obj.GetComponent<Character>();
+                PlayableCharacter character = obj.GetComponent<PlayableCharacter>();
                 // 그 캐릭터의 패 보여줌
                 CardManager.instance.clear_highlighted_card();
-                CardManager.instance.Change_active_hand(character.data.Character_index);
+                CardManager.instance.Change_active_hand(character.Character_index);
                 CardManager.instance.Set_origin_order(CardManager.instance.active_index);
 
                 // 드래그 감지 시작
-                character.data.running_drag = StartCoroutine(character.detect_drag());
+                character.start_drag_detection();
                 break;
 
             // 카드 클릭 시

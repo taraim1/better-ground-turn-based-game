@@ -19,9 +19,9 @@ namespace BehaviorTree
 
     public class Random_Card_Pick_Strategy : IStrategy
     {
-        Character enemyCharacter;
+        EnemyCharacter enemyCharacter;
         List<skillcard_code> resultList;
-        public Random_Card_Pick_Strategy(Character enemyCharacter, List<skillcard_code> resultList) 
+        public Random_Card_Pick_Strategy(EnemyCharacter enemyCharacter, List<skillcard_code> resultList) 
         {
             this.enemyCharacter = enemyCharacter;
             this.resultList = resultList;
@@ -33,8 +33,9 @@ namespace BehaviorTree
             // µ¦¿¡¼­ ¾µ ½ºÅ³ ·£´ýÇÏ°Ô »ÌÀ½
             try
             {
-                int rand = UnityEngine.Random.Range(0, enemyCharacter.deck.Length);
-                resultList.Add(enemyCharacter.deck[rand]);
+                List<skillcard_code> deck_copy = enemyCharacter.Get_deck_copy();
+                int rand = UnityEngine.Random.Range(0, deck_copy.Count);
+                resultList.Add(deck_copy[rand]);
                 return Node.Status.Sucess;
             }
             catch (Exception e)

@@ -8,10 +8,13 @@ using UnityEditor.Experimental.GraphView;
 
 public enum character_code
 {
-    not_a_playable_character,
+    // 플레이어블 캐릭터
     kimchunsik,
     test,
-    fire_mage
+    fire_mage,
+
+    // 적
+    test_enemy
 }
 
 public abstract class Character : MonoBehaviour
@@ -61,9 +64,15 @@ public abstract class Character : MonoBehaviour
         return max_willpowers_of_level[level];
     }
     private List<skillcard_code> deck;
+    public List<skillcard_code> Get_deck_copy() 
+    { 
+        List<skillcard_code> deck_copy = new List<skillcard_code>();
+        foreach (skillcard_code code in deck) { deck_copy.Add(code); }
+        return deck_copy;
+    }
     private string SPUM_datapath;
     public string SPUM_Datapath { get { return SPUM_datapath; } }
-    private List<BasicCharacterData.coordinate> move_range;
+    private List<Util.coordinate> move_range;
     private int current_health;
     public int Current_health { get { return current_health; } }
     private int current_willpower;
@@ -105,7 +114,6 @@ public abstract class Character : MonoBehaviour
     protected List<Tuple<int, int>> current_movable_tiles;
 
     protected CharacterDataSO DataSO;
-
     public Action<int> health_changed;
     public Action<int> willpower_changed;
     public Action<skillcard_code> skill_card_used;
@@ -115,6 +123,7 @@ public abstract class Character : MonoBehaviour
     public Action health_healed;
     public Action willpower_damaged;
     public Action willpower_healed;
+    public Action<int> show_power_meter;
     public Action<character_effect_code, character_effect_setType, int> got_effect;
     public Action<character_effect_code> destroy_effect;
 
@@ -157,7 +166,9 @@ public abstract class Character : MonoBehaviour
     public virtual void Kill() 
     {
         ActionManager.character_going_to_die?.Invoke(this);
+        /* 캐릭터 디스트로이어를 만들어야함
         Destroy(gameObject);
+        */
     }
 
     public void Damage_health(int value) // 체력 대미지 주는 메소드
@@ -303,6 +314,29 @@ public abstract class Character : MonoBehaviour
         BattleCalcManager.instance.clear_target_character();
     }
 
+    // 이동 가능한 칸 리스트 반환하는 메소드
+    public List<Tuple<int, int>> get_movable_tiles()
+    {
+        List<Tuple<int, int>> result = new List<Tuple<int, int>>();
+
+        foreach (Util.coordinate coord in move_range)
+        {
+
+            int absolute_x = coordinate.Item1 + coord.x;
+            int absolute_y = coordinate.Item2 + coord.y;
+
+            // 유효한 칸인지 검사
+            BattleGridManager.boardCell type = BattleGridManager.instance.get_tile(absolute_x, absolute_y);
+            if (type == BattleGridManager.boardCell.empty)
+            {
+                result.Add(Tuple.Create(absolute_x, absolute_y));
+            }
+
+        }
+
+        return result;
+    }
+
     public virtual bool check_enemy() { return false; }
 
     private void Awake()
@@ -310,6 +344,10 @@ public abstract class Character : MonoBehaviour
         ActionManager.turn_start_phase += turn_start;
     }
 
+    private void OnDisable()
+    {
+        ActionManager.turn_start_phase -= turn_start;
+    }
 }
 
 
@@ -358,7 +396,7 @@ public class PlayableCharacter : Character
         return false;
     }
 
-    public void start_drag_detecting()
+    public void start_drag_detection()
     {
         StartCoroutine(detect_drag_start());
     }
@@ -425,6 +463,10 @@ public class PlayableCharacter : Character
                 BattleGridManager.instance.set_tile_color(coordinate.Item1, coordinate.Item2, Tile.TileColor.green);
                 ActionManager.character_drag_started?.Invoke();
 
+
+                // 드래그 시작
+                StartCoroutine(Ondrag());
+
                 yield break;
             }
 
@@ -435,13 +477,24 @@ public class PlayableCharacter : Character
     }
 
     // 드래그 해제 감지
-    private IEnumerator detect_drag_end()
+    private IEnumerator Ondrag()
     {
-        // 드래그 중에 마우스 떼면 (프레임이 안 맞을 수 있어서 getmousebutton으로 함)
-        if (!Input.GetMouseButton(0))
+        while (true) 
         {
-            On_drag_end();
-            yield break;
+            // 마우스 포인터에 가장 가까운 타일로 이동 (이동할 수 있는 칸들 중에서)
+            Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            Tuple<int, int> nearest_tile = BattleGridManager.instance.get_nearest_tile(mousePos, moveFilter, current_movable_tiles);
+            var tileCoor = BattleGridManager.instance.get_tile_pos(nearest_tile.Item1, nearest_tile.Item2);
+            transform.position = new Vector3(tileCoor[0], tileCoor[1], transform.position.z);
+
+            // 드래그 해제 감지
+            if (Input.GetMouseButtonUp(0))
+            {
+                On_drag_end();
+                yield break;
+            }
+
+            yield return new WaitForEndOfFrame();
         }
     }
 }

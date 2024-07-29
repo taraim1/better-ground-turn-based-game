@@ -5,11 +5,6 @@ using UnityEngine;
 
 public class BasicCharacterData
 {
-    [System.Serializable]
-    public struct coordinate
-    {
-        public int x, y;
-    }
 
     public string character_name;
     public string description;
@@ -18,7 +13,7 @@ public class BasicCharacterData
     public List<int> max_willpowers_of_level;
     public List<skillcard_code> deck;
     public string SPUM_datapath;
-    public List<coordinate> move_range;
+    public List<Util.coordinate> move_range;
 }
 
 public class PlayableCharacterData 
