@@ -13,7 +13,7 @@ public class BasicCharacterData
     public List<int> max_willpowers_of_level;
     public List<skillcard_code> deck;
     public string SPUM_datapath;
-    public List<Util.coordinate> move_range;
+    public List<coordinate> move_range;
 }
 
 public class PlayableCharacterData 

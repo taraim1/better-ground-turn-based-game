@@ -11,12 +11,19 @@ namespace BehaviorTree
         void Reset();
     }
 
+    public interface IMoveStrategy : IStrategy
+    { 
+        void Move();
+    }
+
+    public interface ISkillUseStrategy : IStrategy 
+    {
+        void Use_skill();
+    }
 
 
     // 덱에서 랜덤한 카드 한 장을 고르는 전략
     // 지정한 스킬카드 코드 리스트에 코드 하나를 넣어준다.
-
-
     public class Random_Card_Pick_Strategy : IStrategy
     {
         EnemyCharacter enemyCharacter;

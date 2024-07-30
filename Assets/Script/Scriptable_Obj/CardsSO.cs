@@ -14,12 +14,6 @@ public enum CardRangeType
 [System.Serializable]
 public class Cards // 카드 데이터가 스크립터블 오브젝트로 저장되는 클래스
 {
-    [System.Serializable]
-    private struct coordinate
-    {
-        public int x, y;
-    }
-
     public string name;
     public int cost;
     public string type;
@@ -36,13 +30,13 @@ public class Cards // 카드 데이터가 스크립터블 오브젝트로 저장되는 클래스
     public CardRangeType rangeType;
     [SerializeField] private List<coordinate> use_range; // 사용 범위
 
-    public List<Tuple<int, int>> get_use_range() 
+    public List<coordinate> get_copy_of_use_range() 
     {
-        List<Tuple<int, int>> result = new List<Tuple<int, int>>();
+        List<coordinate> result = new List<coordinate>();
 
         foreach (coordinate coordinate in use_range) 
         {
-            result.Add(Tuple.Create(coordinate.x, coordinate.y));
+            result.Add(coordinate);
         }
 
         return result;

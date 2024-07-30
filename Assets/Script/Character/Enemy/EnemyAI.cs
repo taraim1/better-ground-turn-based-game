@@ -4,17 +4,42 @@ using System.Linq;
 using UnityEngine;
 using System;
 
-public class EnemyAI : MonoBehaviour
+public enum EnemyAiType
 {
-    // 카드 데이터가 담긴 스크립터블 오브젝트
-    [SerializeField] CardsSO cardsSO;
+    NoAI
+}
 
-    // 적의 캐릭터 데이터
-    public EnemyCharacter enemy;
-    // 적의 스킬 슬롯 프리팹
-    public GameObject skill_slot_prefab;
-    // 적이 이턴 턴에 쓸 카드 오브젝트가 들어가는 리스트
-    public List<GameObject> using_skill_Objects;
+public class EnemyAI
+{
+    protected EnemyCharacter character;
+
+    private BehaviorTree.BehaviorTree MoveTree;
+    private BehaviorTree.BehaviorTree SkillUseTree;
+
+    // 적이 이번 턴에 쓸 카드 오브젝트가 들어가는 리스트
+    private List<GameObject> using_skill_Objects;
+
+    public int get_remaining_skill_count() 
+    { 
+        return using_skill_Objects.Count;
+    }
+
+    public Action<skillcard_code> skill_reserved;
+
+    public EnemyAI(EnemyCharacter character)
+    {
+        this.character = character;
+    }
+
+    public virtual void Move() { }
+    public virtual void Set_skills() { }
+}
+
+
+
+public class temp : MonoBehaviour
+{
+    /*
 
     public GameObject layoutGroup;
     // 이번 턴의 스킬 슬롯이 들어가는 리스트
@@ -180,5 +205,7 @@ public class EnemyAI : MonoBehaviour
         ActionManager.character_kill_complete -= OnCharacterDied;
         ActionManager.battle_ended -= OnBattleEnd;
     }
+
+    */
 }
 

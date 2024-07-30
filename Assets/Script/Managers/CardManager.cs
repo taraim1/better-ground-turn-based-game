@@ -114,12 +114,13 @@ public class CardManager : Singletone<CardManager>
         for (int i = 0; i < BattleManager.instance.playable_characters.Count; i++) 
         {
             List<Cards> temp = new List<Cards>();
+            List<skillcard_code> deck = BattleManager.instance.playable_characters[i].GetComponent<Character>().Get_deck_copy();
 
             // 파티의 캐릭터마다의 덱에서 코드를 얻어서 카드 데이터를 불러옴
-            for (int j = 0; j < BattleManager.instance.playable_characters[i].GetComponent<Character>().deck.Length; j++) 
+            for (int j = 0; j < deck.Count; j++) 
             {
                 // 스크립터블 오브젝트에서 데이터를 뽑아옴
-                Cards tempCard = get_card_by_code(BattleManager.instance.playable_characters[i].GetComponent<Character>().deck[j]);
+                Cards tempCard = get_card_by_code(deck[j]);
                 temp.Add(tempCard);
                 
             }
@@ -180,9 +181,9 @@ public class CardManager : Singletone<CardManager>
         // 범위를 보여주는 중이었다면 원래 색으로
         if (card._isShowingRange) 
         {
-            foreach (Tuple<int, int> coordinate in card.usable_tiles)
+            foreach (coordinate coordinate in card.usable_tiles)
             {
-                BattleGridManager.instance.set_tile_color(coordinate.Item1, coordinate.Item2, Tile.TileColor.original);
+                BattleGridManager.instance.set_tile_color(coordinate, Tile.TileColor.original);
             }
         }
 
@@ -208,7 +209,7 @@ public class CardManager : Singletone<CardManager>
         // 플레이어 카드면
         else 
         {
-            BattleManager.instance.hand_data[card.owner.GetComponent<Character>().data.Character_index].Remove(card);
+            BattleManager.instance.hand_data[card.owner.GetComponent<Character>().Character_index].Remove(card);
         }
 
         // 카드 드래그 취소

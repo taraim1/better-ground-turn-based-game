@@ -85,14 +85,14 @@ public class BattleCalcManager : Singletone<BattleCalcManager>
         // 스킬 사용 가능 범위가 있을 시 사용 가능 검사
         if (target_character != null && using_card._Card.rangeType == CardRangeType.limited) 
         {
-            if (!check_limited_range_usable(target_character.get_coordinate(), using_card.get_use_range(OwnerCharacter.get_coordinate()))) 
+            if (!check_limited_range_usable(target_character.Coordinate, using_card.get_use_range(OwnerCharacter.Coordinate))) 
             {
                 return;
             }
         }
         if (target_card != null && using_card._Card.rangeType == CardRangeType.limited) 
         {
-            if (!check_limited_range_usable(target_card.owner.GetComponent<Character>().get_coordinate(), using_card.get_use_range(OwnerCharacter.get_coordinate()))) 
+            if (!check_limited_range_usable(target_card.owner.GetComponent<Character>().Coordinate, using_card.get_use_range(OwnerCharacter.Coordinate))) 
             {
                 return;
             }
@@ -250,7 +250,7 @@ public class BattleCalcManager : Singletone<BattleCalcManager>
         if (using_card._Card.rangeType == CardRangeType.limited) 
         {
 
-            if (!check_limited_range_usable(target_character.get_coordinate(), using_card.get_use_range(OwnerCharacter.get_coordinate())))
+            if (!check_limited_range_usable(target_character.Coordinate, using_card.get_use_range(OwnerCharacter.Coordinate)))
             {
                 // 카드 제거
                 CardManager.instance.Destroy_card(using_card);
@@ -292,7 +292,7 @@ public class BattleCalcManager : Singletone<BattleCalcManager>
     }
 
     // 사용 가능 범위가 있는 스킬을 쓸 수 있는지 판별하는 메소드
-    public bool check_limited_range_usable(Tuple<int, int> target_coordinate, List<Tuple<int, int>> usable_tiles)
+    public bool check_limited_range_usable(coordinate target_coordinate, List<coordinate> usable_tiles)
     {
         return usable_tiles.Contains(target_coordinate);
     }

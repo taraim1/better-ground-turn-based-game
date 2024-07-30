@@ -16,62 +16,6 @@ public class CharacterManager : Singletone<CharacterManager>
     public GameObject enemy_character_base;
     public GameObject effect_container_prefab;
 
-    // 캐릭터 코드에 따른 저장 이름 리턴
-    public string get_data_path<T>(T code)
-    {
-        // 캐릭터 코드면
-        if (code.GetType() == typeof(character_code))
-        {
-            switch (code)
-            {
-                case character_code.kimchunsik:
-                    return "/CharaterData/CharacterData_kimchunsik.json";
-                case character_code.test:
-                    return "/CharaterData/CharacterData_test.json";
-                case character_code.fire_mage:
-                    return "/CharaterData/CharacterData_fire_mage.json";
-                default:
-                    return "";
-
-            }
-        }
-
-        // 적 코드면
-        if (code.GetType() == typeof(enemy_code))
-        {
-            switch (code)
-            {
-                case enemy_code.test:
-                    return "/EnemyData/EnemyData_test.json";
-                default:
-                    return "";
-
-            }
-        }
-
-        // default
-        return "";
-
-    }
-
-    // 캐릭터를 캐릭터 코드에 해당하는 json 파일에 저장
-    public void save_character_to_json(Character character)
-    {
-        string path = "/Data";
-        path += get_data_path(character.code);
-        string output = JsonUtility.ToJson(character, true);
-        File.WriteAllText(Application.dataPath + path, output);
-
-    }
-
-    // 캐릭터를 캐릭터 코드에 해당하는 json 파일에서 불러온 뒤 string으로 리턴
-    public string load_character_from_json<T>(T code)
-    {
-        string path = "/Data";
-        path += get_data_path(code);
-        string output = File.ReadAllText(Application.dataPath + path);
-        return output;
-    }
 
     // 전투하기 전 스테이지 보여줄 때 캐릭터 스폰
     public void spawn_stage_show_character(int stage_index)
@@ -82,91 +26,57 @@ public class CharacterManager : Singletone<CharacterManager>
         for (int i = 0; i < party_member_count; i++)
         {
             // 플레이어블 캐릭터가 소환될 위치를 불러옴
-            int x = StageSettingSO.stage_Settings[stage_index].player_spawnpoints[i].x;
-            int y = StageSettingSO.stage_Settings[stage_index].player_spawnpoints[i].y;
-            List<float> spawn_pos = BattleGridManager.instance.get_tile_pos(x, y);
+            coordinate coordinate = StageSettingSO.stage_Settings[stage_index].player_spawnpoints[i];
+            Vector2 spawn_pos = BattleGridManager.instance.get_tile_pos(coordinate);
 
             // 플레이어블 캐릭터 오브젝트 생성
-            GameObject obj = Instantiate(playable_character_base, new Vector3(spawn_pos[0], spawn_pos[1], 0f), Quaternion.identity);
+            GameObject obj = CharacterBuilder.instance.
+                IsEnemy(false).
+                Code(PartyManager.instance.get_charactor_code(i)).
+                Coordinate(coordinate).
+                MakeSpumObjFlag(true).
+                Index(i).
+                build();
 
-            // 캐릭터 데이터 불러옴
-            Character character = obj.GetComponent<Character>();
-            JsonUtility.FromJsonOverwrite(load_character_from_json(PartyManager.instance.get_charactor_code(i)), character);
-
-            // 캐릭터 좌표 설정
-            character.set_coordinate(x, y);
-
-            // 캐릭터 적 아군 판별하는 변수 설정
-            character.data.isEnemyCharacter = false;
-
-            // 캐릭터가 전투에 쓰려고 만든 건지 설정
-            character.data.is_in_battle = false;
-
-            // 캐릭터에 붙은 UI들 초기화
-            BattleUI_Manager.instance.Set_UI(obj, false);
-
-            // SPUM 데이터 불러오기
-            GameObject spPrefab = Resources.Load<GameObject>(character.SPUM_datapath);
-            character.data.SPUM_unit_obj = Instantiate(spPrefab, obj.transform);
-            character.data.SPUM_unit_obj.transform.localPosition = new Vector3(0, -0.4f, 0);
-            character.data.SPUM_unit_obj.transform.localScale = new Vector3(-1.3f, 1.3f, 1);
+            // 좌표 설정
+            obj.transform.position = spawn_pos;
 
             // 캐릭터 리스트에 넣어줌
             StageManager.instance.characters.Add(obj);
-
-            // 캐릭터 번호 설정
-            character.data.Character_index = i;
 
             // 스테이지 정보창 전용 스크립트 넣어줌
             obj.AddComponent<Character_On_stage_show>();
 
             // 셀 타입 변경
-            BattleGridManager.instance.set_tile_type(x, y, BattleGridManager.boardCell.player);
+            BattleGridManager.instance.set_tile_type(coordinate, BattleGridManager.boardCell.player);
         }
 
         // 적 캐릭터 생성
-        int enemy_count = StageSettingSO.stage_Settings[stage_index].enemy_Codes.Count;
+        int enemy_count = StageSettingSO.stage_Settings[stage_index].enemy_codes.Count;
         for (int i = 0; i < enemy_count; i++)
         {
 
             // 적 캐릭터가 소환될 위치를 불러옴
-            int x = StageSettingSO.stage_Settings[stage_index].enemy_spawnpoints[i].x;
-            int y = StageSettingSO.stage_Settings[stage_index].enemy_spawnpoints[i].y;
-            List<float> spawn_pos = BattleGridManager.instance.get_tile_pos(x, y);
+            coordinate coordinate = StageSettingSO.stage_Settings[stage_index].enemy_spawnpoints[i];
+            Vector2 spawn_pos = BattleGridManager.instance.get_tile_pos(coordinate);
 
             // 적 캐릭터 오브젝트 생성
-            GameObject obj = Instantiate(enemy_character_base, new Vector3(spawn_pos[0], spawn_pos[1], 0f), Quaternion.identity);
+             GameObject obj = CharacterBuilder.instance.
+                IsEnemy(false).
+                Code(StageSettingSO.stage_Settings[stage_index].enemy_codes[i]).
+                Coordinate(coordinate).
+                MakeSpumObjFlag(true).
+                Index(i).
+                build();
 
-            // 적 데이터 불러오기
-            Character character = obj.GetComponent<Character>();
-            JsonUtility.FromJsonOverwrite(load_character_from_json(StageSettingSO.stage_Settings[stage_index].enemy_Codes[i]), character);
-
-            // 캐릭터 좌표 설정
-            character.set_coordinate(x, y);
-
-            // 캐릭터 적 아군 판별하는 변수 설정
-            character.data.isEnemyCharacter = true;
-
-            // 캐릭터가 전투에 쓰려고 만든 건지 설정
-            character.data.is_in_battle = false;
-
-            // 적 AI 제거
-            Destroy(obj.GetComponent<EnemyAI>());
+            // 좌표 설정
+            obj.transform.position = spawn_pos;
 
             // 캐릭터 리스트에 넣어줌
             StageManager.instance.characters.Add(obj);
 
-            // 캐릭터에 붙은 UI들 초기화
-            BattleUI_Manager.instance.Set_UI(obj, true);
-
-            // SPUM 데이터 불러오기
-            GameObject spPrefab = Resources.Load<GameObject>(character.SPUM_datapath);
-            character.data.SPUM_unit_obj = Instantiate(spPrefab, obj.transform);
-            character.data.SPUM_unit_obj.transform.localPosition = new Vector3(0, -0.4f, 0);
-            character.data.SPUM_unit_obj.transform.localScale = new Vector3(1.3f, 1.3f, 1);
-
             // 셀 타입 변경
-            BattleGridManager.instance.set_tile_type(x, y, BattleGridManager.boardCell.enemy);
+            BattleGridManager.instance.set_tile_type(coordinate, BattleGridManager.boardCell.enemy);
         }
 
     }

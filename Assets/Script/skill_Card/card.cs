@@ -35,7 +35,7 @@ public class card : MonoBehaviour
     public bool isEnemyCard = false;
     public bool _isShowingRange = false;
 
-    public List<Tuple<int, int>> usable_tiles;
+    public List<coordinate> usable_tiles;
     private void Awake()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
@@ -151,7 +151,7 @@ public class card : MonoBehaviour
             }
             
             // 마우스를 안 뗀 상태로 일정 시간이 지나면 드래그 기능 시작 (패닉이 아니어야 함)
-            if (dragging_time >= Util.drag_time_standard && !isDraggingStarted && !owner.GetComponent<Character>().data.isPanic) 
+            if (dragging_time >= Util.drag_time_standard && !isDraggingStarted && !owner.GetComponent<Character>().IsPanic) 
             {
                 // 모든 카드를 원래 order로 
                 CardManager.instance.Set_origin_order(CardManager.instance.active_index);
@@ -184,12 +184,12 @@ public class card : MonoBehaviour
         {
             // 쓸 수 있는 타일 판별
             Character using_character = BattleManager.instance.playable_characters[CardManager.instance.active_index].GetComponent<Character>();
-            usable_tiles = get_use_range(using_character.get_coordinate());
+            usable_tiles = get_use_range(using_character.Coordinate);
 
             // 그 타일들을 초록색으로
-            foreach (Tuple<int, int> coordinate in usable_tiles) 
+            foreach (coordinate coordinate in usable_tiles) 
             {
-                BattleGridManager.instance.set_tile_color(coordinate.Item1, coordinate.Item2, Tile.TileColor.green);
+                BattleGridManager.instance.set_tile_color(coordinate, Tile.TileColor.green);
             }
             _isShowingRange = true;
         }
@@ -201,9 +201,9 @@ public class card : MonoBehaviour
         if (_Card.rangeType == CardRangeType.limited)
         {
             // 사용 범위 타일들을 원래 색으로
-            foreach (Tuple<int, int> coordinate in usable_tiles)
+            foreach (coordinate coordinate in usable_tiles)
             {
-                BattleGridManager.instance.set_tile_color(coordinate.Item1, coordinate.Item2, Tile.TileColor.original);
+                BattleGridManager.instance.set_tile_color(coordinate, Tile.TileColor.original);
             }
             _isShowingRange = false;
         }
@@ -213,14 +213,14 @@ public class card : MonoBehaviour
         CardManager.instance.Align_cards(CardManager.instance.active_index);
     }
 
-    public List<Tuple<int, int>> get_use_range(Tuple<int, int> character_coordinate) 
+    public List<coordinate> get_use_range(coordinate character_coordinate) 
     {
-        List<Tuple<int, int>> relative_coors = _Card.get_use_range();
-        List<Tuple<int, int>> result = new List<Tuple<int, int>>();
+        List<coordinate> relative_coors = _Card.get_copy_of_use_range();
+        List<coordinate> result = new List<coordinate>();
 
-        foreach (Tuple<int, int> coor in relative_coors) 
+        foreach (coordinate coor in relative_coors) 
         {
-            result.Add(Tuple.Create(coor.Item1 + character_coordinate.Item1, coor.Item2 + character_coordinate.Item2));
+            result.Add(character_coordinate + coor);
         }
 
         return result;

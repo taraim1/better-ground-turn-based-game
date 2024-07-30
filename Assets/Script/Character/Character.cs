@@ -5,6 +5,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using System.IO;
 using UnityEditor.Experimental.GraphView;
+using JetBrains.Annotations;
 
 public enum character_code
 {
@@ -28,7 +29,7 @@ public abstract class Character : MonoBehaviour
     private string description;
     public string Description { get { return description; } }
     protected character_code code;
-    public character_code Code { get { return code; } }
+    public character_code Code { get { return code; } set { code = value; } }
     private int level;
     public int Level
     {
@@ -72,7 +73,7 @@ public abstract class Character : MonoBehaviour
     }
     private string SPUM_datapath;
     public string SPUM_Datapath { get { return SPUM_datapath; } }
-    private List<Util.coordinate> move_range;
+    private List<coordinate> move_range;
     private int current_health;
     public int Current_health { get { return current_health; } }
     private int current_willpower;
@@ -90,17 +91,17 @@ public abstract class Character : MonoBehaviour
     protected bool isPanic;
     public bool IsPanic {  get { return isPanic; } }
     private int remaining_panic_turn;
-    protected Tuple<int, int> coordinate;
-    public Tuple<int, int> Coordinate 
+    protected coordinate coordinate;
+    public coordinate Coordinate 
     { 
         get { return coordinate; } 
         set 
         {
-            if (value.Item1 < 0 || value.Item2 < 0) 
+            if (value.x < 0 || value.y < 0) 
             {
                 print("오류 : 캐릭터 좌표에 음수 대입이 발생했습니다");
             }
-            coordinate = Tuple.Create(value.Item1, value.Item2);
+            coordinate = value;
         } 
     }
     protected List<BattleGridManager.boardCell> moveFilter = new List<BattleGridManager.boardCell> 
@@ -111,9 +112,10 @@ public abstract class Character : MonoBehaviour
     };
     protected bool isMovable;
     public bool IsMovable { get { return isMovable; } }
-    protected List<Tuple<int, int>> current_movable_tiles;
+    protected List<coordinate> current_movable_tiles;
 
     protected CharacterDataSO DataSO;
+    public CharacterDataSO Data_SO { set { DataSO = value; } }
     public Action<int> health_changed;
     public Action<int> willpower_changed;
     public Action<skillcard_code> skill_card_used;
@@ -129,16 +131,8 @@ public abstract class Character : MonoBehaviour
 
 
     /* 
-     * 생성자 및 메소드
+     * 메소드
      */
-
-
-    public Character(character_code code, CharacterDataSO DataSO) 
-    { 
-        this.code = code;
-        this.DataSO = DataSO;
-        Load_data();
-    }
 
     public virtual void Save_data() 
     {
@@ -296,18 +290,6 @@ public abstract class Character : MonoBehaviour
 
     }
 
-    // 좌표 설정하는 메소드
-    public void set_coordinate(int x, int y)
-    {
-        coordinate = Tuple.Create(x, y);
-    }
-
-    // 좌표 알아내는 메소드
-    public Tuple<int, int> get_coordinate()
-    {
-        return Tuple.Create(coordinate.Item1, coordinate.Item2);
-    }
-
     // 카드 사용시 타깃 해제, 타깃 설정은 DetectingRay에 있음
     private void OnMouseExit()
     {
@@ -315,21 +297,22 @@ public abstract class Character : MonoBehaviour
     }
 
     // 이동 가능한 칸 리스트 반환하는 메소드
-    public List<Tuple<int, int>> get_movable_tiles()
+    public List<coordinate> get_movable_tiles()
     {
-        List<Tuple<int, int>> result = new List<Tuple<int, int>>();
+        List<coordinate> result = new List<coordinate>();
 
-        foreach (Util.coordinate coord in move_range)
+        foreach (coordinate coord in move_range)
         {
 
-            int absolute_x = coordinate.Item1 + coord.x;
-            int absolute_y = coordinate.Item2 + coord.y;
-
+            int absolute_x = coordinate.x + coord.x;
+            int absolute_y = coordinate.y + coord.y;
+            coordinate absolute_coordinate = new coordinate { x = absolute_x, y = absolute_y };
             // 유효한 칸인지 검사
-            BattleGridManager.boardCell type = BattleGridManager.instance.get_tile(absolute_x, absolute_y);
+            
+            BattleGridManager.boardCell type = BattleGridManager.instance.get_tile(absolute_coordinate);
             if (type == BattleGridManager.boardCell.empty)
             {
-                result.Add(Tuple.Create(absolute_x, absolute_y));
+                result.Add(new coordinate(absolute_x, absolute_y));
             }
 
         }
@@ -341,6 +324,8 @@ public abstract class Character : MonoBehaviour
 
     private void Awake()
     {
+        current_health = get_max_health(level);
+        current_willpower = get_max_willpower(level);
         ActionManager.turn_start_phase += turn_start;
     }
 
@@ -363,13 +348,9 @@ public class PlayableCharacter : Character
     public bool Is_character_unlocked { get { return is_character_unlocked; } }
 
     /* 
-    * 생성자 및 메소드
+    * 메소드
     */
 
-    public PlayableCharacter(character_code code, CharacterDataSO DataSO) : base(code, DataSO)
-    {
-        Load_data();
-    }
 
     public override void Save_data()
     {
@@ -404,26 +385,26 @@ public class PlayableCharacter : Character
     private void On_drag_end() 
     {
         // 이동 가능한 칸들을 원래 색으로 표시
-        foreach (Tuple<int, int> coordinate in current_movable_tiles)
+        foreach (coordinate coordinate in current_movable_tiles)
         {
-            BattleGridManager.instance.set_tile_color(coordinate.Item1, coordinate.Item2, Tile.TileColor.original);
+            BattleGridManager.instance.set_tile_color(coordinate, Tile.TileColor.original);
         }
 
         // 현재 칸을 원래 색으로 표시
-        BattleGridManager.instance.set_tile_color(coordinate.Item1, coordinate.Item2, Tile.TileColor.original);
+        BattleGridManager.instance.set_tile_color(coordinate, Tile.TileColor.original);
 
         // 가장 가까운 빈 칸 좌표를 찾음 (원래 칸 포함)
-        Tuple<int, int> nearest_tile = BattleGridManager.instance.get_nearest_tile(gameObject.transform.position, moveFilter, current_movable_tiles);
+        coordinate nearest_tile = BattleGridManager.instance.get_nearest_tile(gameObject.transform.position, moveFilter, current_movable_tiles);
 
         // 그 칸을 캐릭터 칸으로
-        BattleGridManager.instance.set_tile_type(nearest_tile.Item1, nearest_tile.Item2, BattleGridManager.boardCell.player);
+        BattleGridManager.instance.set_tile_type(nearest_tile, BattleGridManager.boardCell.player);
 
         // 현재 칸 변경 (원래 칸과 다르면 이동 불가 상태로)
-        if (coordinate.Item1 != nearest_tile.Item1 || coordinate.Item2 != nearest_tile.Item2)
+        if (coordinate != nearest_tile)
         {
             isMovable = false;
         }
-        coordinate = Tuple.Create(nearest_tile.Item1, nearest_tile.Item2);
+        coordinate = nearest_tile;
 
         ActionManager.character_drag_ended?.Invoke();
     }
@@ -449,18 +430,18 @@ public class PlayableCharacter : Character
             {
                 // 이동 가능한 칸 갱신
                 current_movable_tiles = get_movable_tiles();
-                current_movable_tiles.Add(get_coordinate());
+                current_movable_tiles.Add(coordinate);
 
                 // 이동 가능한 칸들을 초록색으로 표시
-                foreach (Tuple<int, int> coordinate in current_movable_tiles)
+                foreach (coordinate coordinate in current_movable_tiles)
                 {
-                    BattleGridManager.instance.set_tile_color(coordinate.Item1, coordinate.Item2, Tile.TileColor.green);
+                    BattleGridManager.instance.set_tile_color(coordinate, Tile.TileColor.green);
                 }
 
 
                 // 현재 칸을 빈 칸으로 만들고 초록색으로
-                BattleGridManager.instance.set_tile_type(coordinate.Item1, coordinate.Item2, BattleGridManager.boardCell.empty);
-                BattleGridManager.instance.set_tile_color(coordinate.Item1, coordinate.Item2, Tile.TileColor.green);
+                BattleGridManager.instance.set_tile_type(coordinate, BattleGridManager.boardCell.empty);
+                BattleGridManager.instance.set_tile_color(coordinate, Tile.TileColor.green);
                 ActionManager.character_drag_started?.Invoke();
 
 
@@ -483,8 +464,8 @@ public class PlayableCharacter : Character
         {
             // 마우스 포인터에 가장 가까운 타일로 이동 (이동할 수 있는 칸들 중에서)
             Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            Tuple<int, int> nearest_tile = BattleGridManager.instance.get_nearest_tile(mousePos, moveFilter, current_movable_tiles);
-            var tileCoor = BattleGridManager.instance.get_tile_pos(nearest_tile.Item1, nearest_tile.Item2);
+            coordinate nearest_tile = BattleGridManager.instance.get_nearest_tile(mousePos, moveFilter, current_movable_tiles);
+            var tileCoor = BattleGridManager.instance.get_tile_pos(nearest_tile);
             transform.position = new Vector3(tileCoor[0], tileCoor[1], transform.position.z);
 
             // 드래그 해제 감지
@@ -506,14 +487,13 @@ public class EnemyCharacter : Character
      * 필드 및 접근용 메소드들
      */
 
-    public Action<skillcard_code> skill_reserved;
+    private EnemyAI AI;
+    public void SetAI(EnemyAI AI) 
+    {
+        this.AI = AI;
+    }
 
     /* 
-    * 생성자 및 메소드
+    * 메소드
     */
-
-    public EnemyCharacter(character_code code, CharacterDataSO DataSO) : base(code, DataSO)
-    {
-        Load_data();
-    }
 }

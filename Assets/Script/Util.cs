@@ -27,13 +27,33 @@ public class Util
     static public T StringToEnum<T>(string e)
     {
         return (T)Enum.Parse(typeof(T), e);
-    }
-
-    [System.Serializable]
-    public struct coordinate
-    {
-        public int x, y;
-    }
+    } 
 }
 
+[System.Serializable]
+public struct coordinate
+{
+    public static bool operator != (coordinate c1, coordinate c2) 
+    {
+        if (c1.x != c2.x || c1.y != c2.y) { return true; }
+        else { return false; }
+    }
+    public static bool operator == (coordinate c1, coordinate c2) 
+    {
+        if (c1.x == c2.x && c1.y == c2.y) { return true; }
+        else { return false; }
+    }
+
+    public static coordinate operator + (coordinate c1, coordinate c2)
+    {
+        return new coordinate(c1.x + c2.x, c1.y + c2.y);
+    }
+
+    public coordinate(int x = 0, int y = 0)
+    {
+        this.x = x;
+        this.y = y;
+    }
+    public int x, y;
+}
 
