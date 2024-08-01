@@ -159,7 +159,7 @@ public class BattleManager : Singletone<BattleManager> // 싱글톤임
 
         // 카드 하이라이트들 해제
         CardManager.instance.Change_active_hand(-1);
-        ActionManager.enemy_skillData_deactivate?.Invoke();
+        ActionManager.enemy_skillcard_deactivate?.Invoke();
 
         // 적의 남은 카드들을 순서대로 사용
         while (enemy_cards.Count > 0) 
@@ -218,7 +218,7 @@ public class BattleManager : Singletone<BattleManager> // 싱글톤임
     {
         // 패 전부 숨기기
         CardManager.instance.Change_active_hand(-1);
-        ActionManager.enemy_skillData_deactivate?.Invoke();
+        ActionManager.enemy_skillcard_deactivate?.Invoke();
 
         // 진행 중인 전투 중지
         if (current_phase_coroutine != null) 

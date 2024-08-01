@@ -9,7 +9,7 @@ public class ActionManager : MonoBehaviour
 
     // 배틀에서 씀
     public static Action enemy_skill_setting_phase;
-    public static Action enemy_skillData_deactivate;
+    public static Action enemy_skillcard_deactivate;
     public static Action<Character, skillcard_code> skill_used;
     public static Action<Character, List<Character>> attacked; // <공격 주체, 공격 대상들>
     public static Action turn_start_phase;

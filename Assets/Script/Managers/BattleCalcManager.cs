@@ -140,7 +140,7 @@ public class BattleCalcManager : Singletone<BattleCalcManager>
             apply_skill_effect(target_card, skill_effect_timing.immediate, target_card.owner.GetComponent<Character>());
 
             // 적 카드 강조 해제
-            ActionManager.enemy_skillData_deactivate?.Invoke();
+            ActionManager.enemy_skillcard_deactivate?.Invoke();
 
             ActionManager.skill_used?.Invoke(OwnerCharacter, using_card.Data.Code);
             cost_Meter.Current_cost = cost_Meter.Current_cost - using_card.Data.Cost;
@@ -167,7 +167,7 @@ public class BattleCalcManager : Singletone<BattleCalcManager>
                 apply_skill_effect(using_card, skill_effect_timing.immediate, OwnerCharacter);
 
                 // 적 카드 강조 해제
-                ActionManager.enemy_skillData_deactivate?.Invoke();
+                ActionManager.enemy_skillcard_deactivate?.Invoke();
 
                 ActionManager.skill_used?.Invoke(OwnerCharacter, using_card.Data.Code);
                 cost_Meter.Current_cost = cost_Meter.Current_cost - using_card.Data.Cost;
@@ -255,7 +255,7 @@ public class BattleCalcManager : Singletone<BattleCalcManager>
             if (!check_limited_range_usable(target_character.Coordinate, using_card.get_use_range(OwnerCharacter.Coordinate)))
             {
                 // 카드 제거
-                CardManager.instance.DestroyData(using_card);
+                using_card.Destroy_card();
                 return;
             }
             
@@ -290,7 +290,7 @@ public class BattleCalcManager : Singletone<BattleCalcManager>
         apply_skill_effect(using_card, skill_effect_timing.after_use, target_character);
 
         // 카드 제거
-        CardManager.instance.DestroyData(using_card);
+        using_card.Destroy_card();
     }
 
     // 사용 가능 범위가 있는 스킬을 쓸 수 있는지 판별하는 메소드
@@ -320,8 +320,8 @@ public class BattleCalcManager : Singletone<BattleCalcManager>
         if (power1 == power2)
         {
             // 카드 제거
-            CardManager.instance.DestroyData(using_card);
-            CardManager.instance.DestroyData(target_card);
+            using_card.Destroy_card();
+            target_card.Destroy_card();
             return;
         }
 
@@ -381,8 +381,8 @@ public class BattleCalcManager : Singletone<BattleCalcManager>
 
         // 카드 제거
 
-        CardManager.instance.DestroyData(using_card);
-        CardManager.instance.DestroyData(target_card);
+        using_card.Destroy_card();
+        target_card.Destroy_card();
 
     }
 

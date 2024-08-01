@@ -34,8 +34,9 @@ public class CharacterManager : Singletone<CharacterManager>
                 IsEnemy(false).
                 Code(PartyManager.instance.get_charactor_code(i)).
                 Coordinate(coordinate).
-                MakeSpumObjFlag(true).
+                MakeSpumObj(true).
                 Index(i).
+                MakeHealthAndWillpowerBar(true).
                 build();
 
             // ÁÂÇ¥ ¼³Á¤
@@ -65,8 +66,9 @@ public class CharacterManager : Singletone<CharacterManager>
                 IsEnemy(true).
                 Code(StageSettingSO.stage_Settings[stage_index].enemy_codes[i]).
                 Coordinate(coordinate).
-                MakeSpumObjFlag(true).
+                MakeSpumObj(true).
                 Index(i).
+                MakeHealthAndWillpowerBar(true).
                 build();
 
             // ÁÂÇ¥ ¼³Á¤
@@ -99,8 +101,10 @@ public class CharacterManager : Singletone<CharacterManager>
                 IsEnemy(false).
                 Code(PartyManager.instance.get_charactor_code(i)).
                 Coordinate(coordinate).
-                MakeSpumObjFlag(true).
                 Index(i).
+                MakeSpumObj(true).
+                MakePanicSign(true).
+                MakeHealthAndWillpowerBar(true).
                 build();
 
             // ÆÐ Ãß°¡
@@ -131,8 +135,10 @@ public class CharacterManager : Singletone<CharacterManager>
                 IsEnemy(true).
                 Code(StageSettingSO.stage_Settings[stage_index].enemy_codes[i]).
                 Coordinate(coordinate).
-                MakeSpumObjFlag(true).
                 Index(i).
+                MakeSpumObj(true).
+                MakePanicSign(true).
+                MakeHealthAndWillpowerBar(true).
                 build();
 
             // ÁÂÇ¥ ¼³Á¤

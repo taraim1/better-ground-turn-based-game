@@ -3,21 +3,17 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using static UnityEngine.GraphicsBuffer;
 
-public class character_effect_container : MonoBehaviour
-{
-
+public class character_effect_container : BattleUI.CharacterUI
+{ 
     [SerializeField] private character_effect effect;
     [SerializeField] private TMP_Text powerTmp;
-    private Character owner;
     private List<Character> targets = new List<Character>();
     [SerializeField] private Image image;
 
-    public void Set(character_effect effect, Character owner) // 초기화
+    public void SetEffect(character_effect effect) // 이펙트 초기화
     { 
         this.effect = effect;
-        this.owner = owner;
         powerTmp.text = effect.power.ToString();
 
         // 델리게이트 추가
@@ -46,7 +42,7 @@ public class character_effect_container : MonoBehaviour
         // 타겟 설정
         if (effect.target_type == character_effect_target_type.owner) 
         {
-            targets.Add(owner);
+            targets.Add(character);
         }
 
         // 아이콘 불러오기
@@ -71,7 +67,7 @@ public class character_effect_container : MonoBehaviour
 
     private void check_attack_effect_use(Character attacker, List<Character> targets) // 공격 시 발동인 효과 사용 검사
     {
-        if (attacker == owner)
+        if (attacker == character)
         {
             if (effect.target_type == character_effect_target_type.attack_target) // 효과 타겟이 공격 대상이면
             {
@@ -98,7 +94,7 @@ public class character_effect_container : MonoBehaviour
         // 효과 삭제 판정
         if (effect.power <= 0)
         {
-            owner.remove_effect(this);
+            character.remove_effect(effect.code);
             return;
         }
 
@@ -174,6 +170,22 @@ public class character_effect_container : MonoBehaviour
         return effect.code;
     }
 
+    private void OneffectRemove(character_effect_code code) 
+    {
+        if (effect.code == code) 
+        {
+            Destroy(gameObject);
+        }
+    }
 
+    private void Awake()
+    {
+        character.destroy_effect += OneffectRemove;
+    }
+
+    private void OnDestroy()
+    {
+        character.destroy_effect -= OneffectRemove;
+    }
 
 }

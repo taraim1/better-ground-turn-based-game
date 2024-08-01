@@ -141,7 +141,7 @@ public class card : MonoBehaviour
                     }
                     else
                     {
-                        CardManager.instance.clear_highlightedData();
+                        CardManager.instance.clear_highlighted_card();
                     }
 
                     // 하이라이트된 카드 order설정
@@ -164,7 +164,7 @@ public class card : MonoBehaviour
                 CardManager.instance.Set_origin_order(CardManager.instance.active_index);
                 isDraggingStarted = true;
                 // 하이라이트된 카드 해제
-                CardManager.instance.clear_highlightedData();
+                CardManager.instance.clear_highlighted_card();
                 dragData();
             }
 
@@ -214,7 +214,7 @@ public class card : MonoBehaviour
         }
 
             state = current_mode.normal;
-        CardManager.instance.clear_highlightedData();
+        CardManager.instance.clear_highlighted_card();
         CardManager.instance.Align_cards(CardManager.instance.active_index);
     }
 

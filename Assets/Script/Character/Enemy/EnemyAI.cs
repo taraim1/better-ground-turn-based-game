@@ -216,7 +216,7 @@ public class temp : MonoBehaviour
     private void Awake()
     {
         ActionManager.enemy_skill_setting_phase += set_skill;
-        ActionManager.enemy_skillData_deactivate += returnData;
+        ActionManager.enemy_skillcard_deactivate += returnData;
         ActionManager.character_kill_complete += OnCharacterDied;
         ActionManager.battle_ended += OnBattleEnd;
 
@@ -229,7 +229,7 @@ public class temp : MonoBehaviour
     private void OnDisable()
     {
         ActionManager.enemy_skill_setting_phase -= set_skill;
-        ActionManager.enemy_skillData_deactivate -= returnData;
+        ActionManager.enemy_skillcard_deactivate -= returnData;
         ActionManager.character_kill_complete -= OnCharacterDied;
         ActionManager.battle_ended -= OnBattleEnd;
     }

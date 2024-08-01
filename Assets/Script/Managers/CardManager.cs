@@ -351,7 +351,7 @@ public class CardManager : Singletone<CardManager>
         card_Description.Set_target(card);
     }
 
-    public void clear_highlightedData() // 카드 하이라이트 해제
+    public void clear_highlighted_card() // 카드 하이라이트 해제
     {
         highlightedData = null;
         card_Description.Clear_target();
@@ -379,7 +379,7 @@ public class CardManager : Singletone<CardManager>
         SetupDataBuffer();
         active_index = -1;
         card_Description = GameObject.Find("card_description_base").GetComponent<card_description>();
-        clear_highlightedData();
+        clear_highlighted_card();
     }
 
     private void OnEnable()

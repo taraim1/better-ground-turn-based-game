@@ -45,23 +45,13 @@ public abstract class Character : MonoBehaviour
         }
     }
     private List<int> max_healthes_of_level;
-    public int get_max_health(int level)
+    public int get_max_health()
     {
-        if (level <= 0 || level >= max_healthes_of_level.Count)
-        {
-            print("오류 : 최대 체력 리스트 인덱스 에러가 발생했습니다");
-            return -1;
-        }
         return max_healthes_of_level[level];
     }
     private List<int> max_willpowers_of_level;
-    public int get_max_willpower(int level)
+    public int get_max_willpower()
     {
-        if (level <= 0 || level >= max_willpowers_of_level.Count)
-        {
-            print("오류 : 최대 정신력 리스트 인덱스 에러가 발생했습니다");
-            return -1;
-        }
         return max_willpowers_of_level[level];
     }
     private List<skillcard_code> deck;
@@ -155,6 +145,9 @@ public abstract class Character : MonoBehaviour
         deck = data.deck;
         SPUM_datapath = data.SPUM_datapath;
         move_range = data.move_range;
+
+        current_health = get_max_health();
+        current_willpower = get_max_willpower();
     }
 
     public virtual void Kill() 
@@ -196,9 +189,9 @@ public abstract class Character : MonoBehaviour
         current_health += value;
 
         // 최대 체력 넘기 방지
-        if (current_health > get_max_health(level))
+        if (current_health > get_max_health())
         {
-            current_health = get_max_health(level);
+            current_health = get_max_health();
         }
 
         health_healed?.Invoke();
@@ -243,9 +236,9 @@ public abstract class Character : MonoBehaviour
         current_willpower += value;
 
         // 최대 정신력 넘기 방지
-        if (current_willpower > get_max_willpower(level))
+        if (current_willpower > get_max_willpower())
         {
-            current_willpower = get_max_willpower(level);
+            current_willpower = get_max_willpower();
         }
 
         // 정신력바 업데이트
@@ -275,7 +268,7 @@ public abstract class Character : MonoBehaviour
             if (remaining_panic_turn <= 0)
             {
                 isPanic = false;
-                Heal_willpower((get_max_willpower(level) + 1) / 2); // 정신력 회복
+                Heal_willpower((get_max_willpower() + 1) / 2); // 정신력 회복
                 out_of_panic?.Invoke();
             }
             else
@@ -322,8 +315,8 @@ public abstract class Character : MonoBehaviour
 
     private void Awake()
     {
-        current_health = get_max_health(level);
-        current_willpower = get_max_willpower(level);
+        current_health = get_max_health();
+        current_willpower = get_max_willpower();
         ActionManager.turn_start_phase += turn_start;
     }
 
