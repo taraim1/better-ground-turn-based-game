@@ -24,11 +24,11 @@ namespace BehaviorTree
 
     // 덱에서 랜덤한 카드 한 장을 고르는 전략
     // 지정한 스킬카드 코드 리스트에 코드 하나를 넣어준다.
-    public class Random_Card_Pick_Strategy : IStrategy
+    public class RandomData_Pick_Strategy : IStrategy
     {
         EnemyCharacter enemyCharacter;
         List<skillcard_code> resultList;
-        public Random_Card_Pick_Strategy(EnemyCharacter enemyCharacter, List<skillcard_code> resultList) 
+        public RandomData_Pick_Strategy(EnemyCharacter enemyCharacter, List<skillcard_code> resultList) 
         {
             this.enemyCharacter = enemyCharacter;
             this.resultList = resultList;

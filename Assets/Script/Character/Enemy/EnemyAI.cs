@@ -3,36 +3,64 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using System;
+using BehaviorTree;
 
 public enum EnemyAiType
 {
     NoAI
 }
 
+namespace BehaviorTree 
+{
+    public abstract class MoveTree : BehaviorTree 
+    {
+        protected EnemyCharacter character; 
+        public MoveTree(string name, EnemyCharacter character) : base(name) 
+        {
+            this.character = character;
+        }
+
+        public virtual void Move() { }
+    }
+
+    public abstract class SkillSelectTree : BehaviorTree
+    {
+        protected EnemyCharacter character;
+        public SkillSelectTree(string name, EnemyCharacter character) : base(name)
+        {
+            this.character = character;
+        }
+
+        public virtual List<skillcard_code> Get_skills_for_current_turn() { return new List<skillcard_code>(); }
+    }
+
+    public class MoveTree_NoAI : MoveTree 
+    {
+        public MoveTree_NoAI(string name, EnemyCharacter character) : base(name, character) { }
+    }
+
+    public class SkillSelectTree_NoAI : SkillSelectTree 
+    {
+        public SkillSelectTree_NoAI(string name, EnemyCharacter character) : base(name, character) { }
+    }
+}
+
 public class EnemyAI
 {
     protected EnemyCharacter character;
 
-    private BehaviorTree.BehaviorTree MoveTree;
-    private BehaviorTree.BehaviorTree SkillUseTree;
+    private MoveTree MoveTree;
+    private SkillSelectTree SkillUseTree;
 
-    // 적이 이번 턴에 쓸 카드 오브젝트가 들어가는 리스트
-    private List<GameObject> using_skill_Objects;
-
-    public int get_remaining_skill_count() 
-    { 
-        return using_skill_Objects.Count;
-    }
-
-    public Action<skillcard_code> skill_reserved;
-
-    public EnemyAI(EnemyCharacter character)
+    public EnemyAI(EnemyCharacter character, MoveTree moveTree, SkillSelectTree skillSelectTree)
     {
         this.character = character;
+        MoveTree = moveTree;
+        SkillUseTree = skillSelectTree;
     }
 
-    public virtual void Move() { }
-    public virtual void Set_skills() { }
+    public void Move() => MoveTree.Move();
+    public List<skillcard_code> Get_skills_for_current_turn() => SkillUseTree.Get_skills_for_current_turn();
 }
 
 
@@ -48,12 +76,12 @@ public class temp : MonoBehaviour
     private bool isBattleEnded;
 
     // 현재 턴에 사용할 스킬카드 코드가 들어가는 리스트
-    List<skillcard_code> current_turn_use_cards = new List<skillcard_code>();
+    List<skillcard_code> current_turn_useDatas = new List<skillcard_code>();
 
     // 행동트리들
 
-    // Process시 카드 하나를 정해서 current_turn_use_cards에 넣어주는 트리
-    private BehaviorTree.BehaviorTree CardSelectTree;
+    // Process시 카드 하나를 정해서 current_turn_useDatas에 넣어주는 트리
+    private BehaviorTree.BehaviorTree CardDataelectTree;
    
 
     // 적이 이번 턴에 쓸 스킬 카드를 정함
@@ -63,8 +91,8 @@ public class temp : MonoBehaviour
         for (int i = 0; i < skill_use_count; i++)
         {
             // 스킬 하나 추가
-            CardSelectTree.Reset();
-            BehaviorTree.Node.Status status = CardSelectTree.Process();
+            CardDataelectTree.Reset();
+            BehaviorTree.Node.Status status = CardDataelectTree.Process();
 
             if (status == BehaviorTree.Node.Status.Failure) 
             {
@@ -90,7 +118,7 @@ public class temp : MonoBehaviour
         // 전투 끝났으면 작동 X
         if (isBattleEnded) { return; }
 
-        current_turn_use_cards.Clear();
+        current_turn_useDatas.Clear();
 
         // 이전 턴 스킬 다 삭제
         clear_skills();
@@ -102,18 +130,18 @@ public class temp : MonoBehaviour
         }
 
 
-        for (int i = 0; i < current_turn_use_cards.Count; i++)
+        for (int i = 0; i < current_turn_useDatas.Count; i++)
         {
             // 이번 턴에 쓸 카드와 스킬 슬롯 만듦
             GameObject slot = Instantiate(skill_slot_prefab, layoutGroup.transform);
-            GameObject card_obj = CardManager.instance.Summon_enemy_card(current_turn_use_cards[i], gameObject);
+            GameObject card_obj = CardManager.instance.Summon_enemyData(current_turn_useDatas[i], gameObject);
             card card = card_obj.GetComponent<card>();
             slot.GetComponent<enemy_skillCard_slot>().card_obj = card_obj;
             slot.GetComponent<enemy_skillCard_slot>().enemy_Obj = gameObject;
             slot.GetComponent<enemy_skillCard_slot>().illust.sprite = card.illust.sprite;
 
             // 카드 타겟 정하기
-            switch (card._Card.behavior_type)
+            switch (card.Data.BehaviorType)
             {
                 case "공격":
                     int rand = UnityEngine.Random.Range(0, BattleManager.instance.playable_characters.Count);
@@ -144,7 +172,7 @@ public class temp : MonoBehaviour
     }
 
     // 적의 모든 스킬 카드 강조 해제
-    private void return_card()
+    private void returnData()
     {
         foreach (GameObject card_obj in using_skill_Objects)
         {
@@ -179,7 +207,7 @@ public class temp : MonoBehaviour
             }
             catch (MissingReferenceException e)
             {
-                CardManager.instance.Destroy_card(card);
+                CardManager.instance.DestroyData(card);
             }
         }
         yield break;
@@ -188,20 +216,20 @@ public class temp : MonoBehaviour
     private void Awake()
     {
         ActionManager.enemy_skill_setting_phase += set_skill;
-        ActionManager.enemy_skill_card_deactivate += return_card;
+        ActionManager.enemy_skillData_deactivate += returnData;
         ActionManager.character_kill_complete += OnCharacterDied;
         ActionManager.battle_ended += OnBattleEnd;
 
         isBattleEnded = false;
 
-        CardSelectTree = new BehaviorTree.BehaviorTree("CardSelectTree");
-        CardSelectTree.AddChild(new BehaviorTree.Leaf("RandomSelect", new BehaviorTree.Random_Card_Pick_Strategy(enemy, current_turn_use_cards)));
+        CardDataelectTree = new BehaviorTree.BehaviorTree("CardDataelectTree");
+        CardDataelectTree.AddChild(new BehaviorTree.Leaf("RandomSelect", new BehaviorTree.RandomData_Pick_Strategy(enemy, current_turn_useDatas)));
     }
 
     private void OnDisable()
     {
         ActionManager.enemy_skill_setting_phase -= set_skill;
-        ActionManager.enemy_skill_card_deactivate -= return_card;
+        ActionManager.enemy_skillData_deactivate -= returnData;
         ActionManager.character_kill_complete -= OnCharacterDied;
         ActionManager.battle_ended -= OnBattleEnd;
     }

@@ -22,28 +22,28 @@ public enum skillcard_code
 
 public class CardManager : Singletone<CardManager>
 {
-    [SerializeField] CardsSO cardsSO;
+    [SerializeField] CardDataSO CardDataSO;
     [SerializeField] Transform card_spawnpoint;
-    [SerializeField] Transform left_card_transform;
-    [SerializeField] Transform left_card_over4_transform;
-    [SerializeField] Transform right_card_transform;
-    [SerializeField] Transform right_card_over4_transform;
-    [SerializeField] Transform diactivated_card_transform;
-    [SerializeField] Transform highlighted_card_transform;
-    [SerializeField] Transform enemy_card_transform;
-    [SerializeField] Transform enemy_card_highlighted_transform;
+    [SerializeField] Transform leftData_transform;
+    [SerializeField] Transform leftData_over4_transform;
+    [SerializeField] Transform rightData_transform;
+    [SerializeField] Transform rightData_over4_transform;
+    [SerializeField] Transform diactivatedData_transform;
+    [SerializeField] Transform highlightedData_transform;
+    [SerializeField] Transform enemyData_transform;
+    [SerializeField] Transform enemyData_highlighted_transform;
 
     // 기타 카드 정보 담은 클래스
     private class card_data_json 
     {
         // 카드 언락 데이터가 들어가는 리스트 (i번은 i번 스킬 언락유무)
-        public List<bool> unlocked_card_checkList;
+        public List<bool> unlockedData_checkList;
 
         // 데이터 불러오기
         public void read_json() 
         { 
             string output = File.ReadAllText(Application.dataPath + "/Data/skillData.json");
-            this.unlocked_card_checkList = JsonUtility.FromJson<card_data_json>(output).unlocked_card_checkList;
+            this.unlockedData_checkList = JsonUtility.FromJson<card_data_json>(output).unlockedData_checkList;
         }
 
         // 데이터 저장하기
@@ -57,7 +57,7 @@ public class CardManager : Singletone<CardManager>
     card_data_json JsonCardData = new card_data_json();
 
     // 캐릭터들의 덱이 랜덤으로 섞여 들어가는 버퍼
-    List<List<Cards>> cards_buffer = new List<List<Cards>>();
+    List<List<CardData>> CardData_buffer = new List<List<CardData>>();
 
     public GameObject card_prefab;
 
@@ -65,7 +65,7 @@ public class CardManager : Singletone<CardManager>
     public int active_index;
 
     // 현재 강조 중인 카드
-    public card highlighted_card;
+    public card highlightedData;
 
     // 카드 효과 설명해주는 오브젝트가 가지고 있는 거
     private card_description card_Description;
@@ -78,78 +78,78 @@ public class CardManager : Singletone<CardManager>
     }
 
     // 카드 코드 주면 카드 데이터 줌
-    public Cards get_card_by_code(skillcard_code code) 
+    public CardData getData_by_code(skillcard_code code) 
     {
-        return cardsSO.cards_dict[code];
+        return CardDataSO.CardData_dict[code];
     }
 
 
     // 카드 코드 주면 언락된건지 찾아줌
     public bool check_unlocked(skillcard_code code) 
     {
-        return JsonCardData.unlocked_card_checkList[(int)code];
+        return JsonCardData.unlockedData_checkList[(int)code];
     }
 
     public void set_unlocked(skillcard_code code, bool value) 
     {
-        JsonCardData.unlocked_card_checkList[(int)code] = value;
+        JsonCardData.unlockedData_checkList[(int)code] = value;
         JsonCardData.write_json();
     }
 
     // index번째 캐릭터의 덱 버퍼에서 첫 카드 뽑기
-    public Cards PopCard(int index) 
+    public CardData PopCard(int index) 
     {
-        if (cards_buffer[index].Count == 0) Setup_cardBuffer();
+        if (CardData_buffer[index].Count == 0) SetupDataBuffer();
 
-        Cards card = cards_buffer[index][0];
-        cards_buffer[index].RemoveAt(0);
+        CardData card = CardData_buffer[index][0];
+        CardData_buffer[index].RemoveAt(0);
         return card;
     }
 
-    void Setup_cardBuffer() // 버퍼 초기화
+    void SetupDataBuffer() // 버퍼 초기화
     { 
-        cards_buffer.Clear();
+        CardData_buffer.Clear();
 
         // 버퍼에 카드들 추가
         for (int i = 0; i < BattleManager.instance.playable_characters.Count; i++) 
         {
-            List<Cards> temp = new List<Cards>();
+            List<CardData> temp = new List<CardData>();
             List<skillcard_code> deck = BattleManager.instance.playable_characters[i].GetComponent<Character>().Get_deck_copy();
 
             // 파티의 캐릭터마다의 덱에서 코드를 얻어서 카드 데이터를 불러옴
             for (int j = 0; j < deck.Count; j++) 
             {
                 // 스크립터블 오브젝트에서 데이터를 뽑아옴
-                Cards tempCard = get_card_by_code(deck[j]);
+                CardData tempCard = getData_by_code(deck[j]);
                 temp.Add(tempCard);
                 
             }
 
-            cards_buffer.Add(temp);
+            CardData_buffer.Add(temp);
         }
 
         // 덱 버퍼 섞기
-        for (int i = 0; i < cards_buffer.Count; i++) 
+        for (int i = 0; i < CardData_buffer.Count; i++) 
         {
-            for (int j = 0; j < cards_buffer[i].Count; j++)
+            for (int j = 0; j < CardData_buffer[i].Count; j++)
             {
-                int rand = UnityEngine.Random.Range(0, cards_buffer[i].Count);
-                Cards temp = cards_buffer[i][j];
-                cards_buffer[i][j] = cards_buffer[i][rand];
-                cards_buffer[i][rand] = temp;
+                int rand = UnityEngine.Random.Range(0, CardData_buffer[i].Count);
+                CardData temp = CardData_buffer[i][j];
+                CardData_buffer[i][j] = CardData_buffer[i][rand];
+                CardData_buffer[i][rand] = temp;
             }
         }
 
         
     }
 
-    public void Summon_card(int index) // 카드 생성 후 index번째의 패에 추가
+    public void SummonData(int index) // 카드 생성 후 index번째의 패에 추가
     {
      
         var cardObj = Instantiate(card_prefab, card_spawnpoint.position, Quaternion.identity);
         if (index != active_index)
         {
-            cardObj.transform.position = diactivated_card_transform.position;
+            cardObj.transform.position = diactivatedData_transform.position;
         }
         card card = cardObj.GetComponent<card>();
         // index번째 캐릭터의 덱에서 카드를 뽑아옴
@@ -161,82 +161,32 @@ public class CardManager : Singletone<CardManager>
         Align_cards(index);
     }
 
-    public GameObject Summon_enemy_card(skillcard_code code, GameObject owner) // 적 카드 생성해서 리턴
+    public GameObject Summon_enemyData(skillcard_code code, GameObject owner) // 적 카드 생성해서 리턴
     {
 
-        var cardObj = Instantiate(card_prefab, enemy_card_transform.position, Quaternion.identity);
+        var cardObj = Instantiate(card_prefab, enemyData_transform.position, Quaternion.identity);
         card card = cardObj.GetComponent<card>();
         card.owner = owner;
         card.isEnemyCard = true;
-        card.originPRS = new PRS(enemy_card_transform.position, enemy_card_transform.rotation, Vector3.one * 1.5f);
-        card.Setup(get_card_by_code(code), 0);
+        card.originPRS = new PRS(enemyData_transform.position, enemyData_transform.rotation, Vector3.one * 1.5f);
+        card.Setup(getData_by_code(code), 0);
 
         return cardObj;
     }
 
-    public void Destroy_card(card card) // 카드 파괴
+    public void OnCardDestroyed(card card)
     {
-        if (card == null) { return; }
-
-        // 범위를 보여주는 중이었다면 원래 색으로
-        if (card._isShowingRange) 
-        {
-            foreach (coordinate coordinate in card.usable_tiles)
-            {
-                BattleGridManager.instance.set_tile_color(coordinate, Tile.TileColor.original);
-            }
-        }
-
-        // 적 카드면
-        if (card.isEnemyCard)
-        {
-            // 적 카드 리스트에서 카드 오브젝트 삭제
-            EnemyAI enemyAI = card.owner.GetComponent<EnemyAI>();
-            enemyAI.using_skill_Objects.Remove(card.gameObject);
-
-            BattleManager.instance.enemy_cards.Remove(card);
-
-            // 스킬카드 슬롯 삭제
-            foreach (GameObject slot in enemyAI.skill_slots) 
-            {
-                if (slot.GetComponent<enemy_skillCard_slot>().enemy_Obj == card.owner) 
-                {
-                    Destroy(slot);
-                }
-            }
-
-        }
-        // 플레이어 카드면
-        else 
-        {
-            BattleManager.instance.hand_data[card.owner.GetComponent<Character>().Character_index].Remove(card);
-        }
-
-        // 카드 드래그 취소
-        if (card.running_drag != null) 
-        {
-            card.StopCoroutine(card.running_drag);
-            card.running_drag = null;
-        }
-
-        // 카드 이동 취소
-        card.transform.DOKill();
-
-
-        // 카드 오브젝트 삭제
-        Destroy(card.gameObject);
-
         // 카드 정렬
         Align_cards(active_index);
     }
 
     // 적 카드를 강조
-    public void highlight_enemy_card(GameObject obj) 
+    public void highlight_enemyData(GameObject obj) 
     {
         card card = obj.GetComponent<card>();
-        PRS prs = new PRS(enemy_card_highlighted_transform.position, enemy_card_highlighted_transform.rotation, Vector3.one * 2.2f);
+        PRS prs = new PRS(enemyData_highlighted_transform.position, enemyData_highlighted_transform.rotation, Vector3.one * 2.2f);
         card.MoveTransform(prs, true, 0.4f);
-        card.state = card.current_mode.highlighted_enemy_card;
+        card.state = card.current_mode.highlighted_enemyData;
 
     }
 
@@ -261,14 +211,14 @@ public class CardManager : Singletone<CardManager>
             return;
         }
 
-        List<PRS> origin_cards_PRS;
+        List<PRS> originDatas_PRS;
         if (BattleManager.instance.hand_data[index].Count >= 4) 
         {
-            origin_cards_PRS = set_card_alignment(left_card_over4_transform, right_card_over4_transform, BattleManager.instance.hand_data[index].Count, 0.5f, Vector3.one * 1.8f, index);
+            originDatas_PRS = setData_alignment(leftData_over4_transform, rightData_over4_transform, BattleManager.instance.hand_data[index].Count, 0.5f, Vector3.one * 1.8f, index);
         }
         else 
         {
-            origin_cards_PRS = set_card_alignment(left_card_transform, right_card_transform, BattleManager.instance.hand_data[index].Count, 0.5f, Vector3.one * 1.8f, index);
+            originDatas_PRS = setData_alignment(leftData_transform, rightData_transform, BattleManager.instance.hand_data[index].Count, 0.5f, Vector3.one * 1.8f, index);
         }
         
 
@@ -286,7 +236,7 @@ public class CardManager : Singletone<CardManager>
         {
             card targetCard = BattleManager.instance.hand_data[index][i];
 
-            targetCard.originPRS = origin_cards_PRS[i];
+            targetCard.originPRS = originDatas_PRS[i];
             
             // 카드 겹침 때문에 보정값 넣어줌
             targetCard.originPRS.pos.z -= targetCard.GetComponent<element_order>().Get_order()/100f;
@@ -309,12 +259,12 @@ public class CardManager : Singletone<CardManager>
             {
 
                 // 하이라이트된 카드면
-                if (targetCard == highlighted_card)
+                if (targetCard == highlightedData)
                 {
                     // 드래그 중인 카드가 없다면
                     if (!isdragging) 
                     {
-                        targetCard.MoveTransform(new PRS(new Vector3(highlighted_card_transform.position.x, highlighted_card_transform.position.y, targetCard.originPRS.pos.z), highlighted_card_transform.rotation, Vector3.one * 2f), true, 0.2f);
+                        targetCard.MoveTransform(new PRS(new Vector3(highlightedData_transform.position.x, highlightedData_transform.position.y, targetCard.originPRS.pos.z), highlightedData_transform.rotation, Vector3.one * 2f), true, 0.2f);
                     }
                     
                     continue;
@@ -337,7 +287,7 @@ public class CardManager : Singletone<CardManager>
      
     }
 
-    List<PRS> set_card_alignment(Transform leftTr, Transform rightTr, int CardCount, float height, Vector3 scale, int index) // 카드들의 PRS값 리스트를 계산해 반환
+    List<PRS> setData_alignment(Transform leftTr, Transform rightTr, int CardCount, float height, Vector3 scale, int index) // 카드들의 PRS값 리스트를 계산해 반환
     {
         float[] objLerps = new float[CardCount];
         List<PRS> results = new List<PRS>(CardCount);
@@ -347,7 +297,7 @@ public class CardManager : Singletone<CardManager>
         {
             for (int i = 0; i < CardCount; i++) 
             {
-                results.Add(new PRS(diactivated_card_transform.position, diactivated_card_transform.rotation, scale));
+                results.Add(new PRS(diactivatedData_transform.position, diactivatedData_transform.rotation, scale));
             }
             return results;
         }
@@ -395,15 +345,15 @@ public class CardManager : Singletone<CardManager>
         }
     }
 
-    public void highlight_card(card card) // 카드 하이라이트
+    public void highlightData(card card) // 카드 하이라이트
     {
-        highlighted_card = card;
+        highlightedData = card;
         card_Description.Set_target(card);
     }
 
-    public void clear_highlighted_card() // 카드 하이라이트 해제
+    public void clear_highlightedData() // 카드 하이라이트 해제
     {
-        highlighted_card = null;
+        highlightedData = null;
         card_Description.Clear_target();
     }
 
@@ -418,24 +368,34 @@ public class CardManager : Singletone<CardManager>
         _isCharacterDragging = false;
         Align_cards(active_index);
     }
+
+    private void OnCharacterDied(Character character) 
+    {
+        // 패 숨기기
+        Change_active_hand(-1);
+    }
     public void Setup_all() // 처음 세팅
     {
-        Setup_cardBuffer();
+        SetupDataBuffer();
         active_index = -1;
         card_Description = GameObject.Find("card_description_base").GetComponent<card_description>();
-        clear_highlighted_card();
+        clear_highlightedData();
     }
 
     private void OnEnable()
     {
         ActionManager.character_drag_started += On_character_drag_start;
         ActionManager.character_drag_ended += On_character_drag_end;
+        ActionManager.character_died += OnCharacterDied;
+        ActionManager.card_destroyed += OnCardDestroyed;
     }
 
     private void OnDisable()
     {
         ActionManager.character_drag_started -= On_character_drag_start;
         ActionManager.character_drag_ended -= On_character_drag_end;
+        ActionManager.character_died -= OnCharacterDied;
+        ActionManager.card_destroyed -= OnCardDestroyed;
     }
 
 

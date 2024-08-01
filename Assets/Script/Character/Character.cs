@@ -118,7 +118,7 @@ public abstract class Character : MonoBehaviour
     public CharacterDataSO Data_SO { set { DataSO = value; } }
     public Action<int> health_changed;
     public Action<int> willpower_changed;
-    public Action<skillcard_code> skill_card_used;
+    public Action<skillcard_code> skillData_used;
     public Action panicked;
     public Action out_of_panic;
     public Action health_damaged;
@@ -159,10 +159,8 @@ public abstract class Character : MonoBehaviour
 
     public virtual void Kill() 
     {
-        ActionManager.character_going_to_die?.Invoke(this);
-        /* 캐릭터 디스트로이어를 만들어야함
+        ActionManager.character_died?.Invoke(this);
         Destroy(gameObject);
-        */
     }
 
     public void Damage_health(int value) // 체력 대미지 주는 메소드
@@ -486,6 +484,12 @@ public class EnemyCharacter : Character
     /* 
      * 필드 및 접근용 메소드들
      */
+    private int remaining_skill_count = 0;
+    public int Remaining_skill_count { get { return remaining_skill_count; } }
+
+    private List<skillcard_code> reserved_skills;
+
+    public Action<skillcard_code> skill_reserved;
 
     private EnemyAI AI;
     public void SetAI(EnemyAI AI) 
@@ -496,4 +500,38 @@ public class EnemyCharacter : Character
     /* 
     * 메소드
     */
-}
+
+    private void OnSkillReserved(skillcard_code code) 
+    {
+        remaining_skill_count += 1;
+    }
+
+    private void OnSkillUsed(Character character, skillcard_code code) 
+    {
+        if (character == this && remaining_skill_count >= 0) 
+        {
+            remaining_skill_count -= 1;
+        }
+    }
+
+    private void OnEnemySkillSettingPhase() 
+    {
+        AI.Move();
+        reserved_skills = AI.Get_skills_for_current_turn();
+    }
+
+    private void Awake()
+    {
+        skill_reserved += OnSkillReserved;
+        ActionManager.skill_used += OnSkillUsed;
+        ActionManager.enemy_skill_setting_phase += OnEnemySkillSettingPhase;
+    }
+
+    private void OnDestroy()
+    {
+        skill_reserved -= OnSkillReserved;
+        ActionManager.skill_used -= OnSkillUsed;
+        ActionManager.enemy_skill_setting_phase -= OnEnemySkillSettingPhase;
+    
+    }
+}   

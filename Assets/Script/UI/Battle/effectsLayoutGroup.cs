@@ -30,6 +30,6 @@ public class effectsLayoutGroup : MonoBehaviour
 
     private void Awake()
     {
-        _character.data.effects_layoutGroup_obj = gameObject;
+        _character.Data.Effects_layoutGroup_obj = gameObject;
     }
 }

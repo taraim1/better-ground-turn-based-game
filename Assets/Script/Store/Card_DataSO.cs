@@ -14,10 +14,10 @@ public class Card_Data
 }
 
 
-[CreateAssetMenu(fileName ="Card_datas", menuName = "Scriptable_Objects_Store_CardData")]
+[CreateAssetMenu(fileName ="Card_datas", menuName = "Scriptable_Objects_StoreDataData")]
 public class Card_DataSO : ScriptableObject
 {
-    public Card_Data[] cards;
+    public Card_Data[] CardData;
     //public Card_Data[] chars; 
 }
 

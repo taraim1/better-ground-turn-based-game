@@ -12,8 +12,6 @@ public class BattleManager : Singletone<BattleManager> // 싱글톤임
     public int current_turn = 0; // 현재 턴
     public phases current_phase; // 현재 페이즈
     public bool battle_start_trigger = false; // 전투를 시작시키는 트리거
-    public bool is_Characters_spawned = false; // 전투 시작시 플레이이어와 적 캐릭터가 스폰되었는가?
-    public bool is_Characters_loaded = false; // 전투 시작시 캐릭터 데이터가 불러와졌는가?
     public int enemy_skill_set_count = 0; // 적의 스킬 설정 완료시 늘어남
 
 
@@ -46,7 +44,6 @@ public class BattleManager : Singletone<BattleManager> // 싱글톤임
     {
 
         //변수 초기화
-        is_Characters_spawned = false;
         playable_characters.Clear();
         enemy_characters.Clear();
         hand_data.Clear();
@@ -72,7 +69,7 @@ public class BattleManager : Singletone<BattleManager> // 싱글톤임
             {
                 if (hand_data[character_index].Count < 7) 
                 {
-                    CardManager.instance.Summon_card(character_index);
+                    CardManager.instance.SummonData(character_index);
                 }
             }
         }
@@ -104,7 +101,7 @@ public class BattleManager : Singletone<BattleManager> // 싱글톤임
             {
                 if (hand_data[character_index].Count < 7)
                 {
-                    CardManager.instance.Summon_card(character_index);
+                    CardManager.instance.SummonData(character_index);
                 }
             }
         }
@@ -162,7 +159,7 @@ public class BattleManager : Singletone<BattleManager> // 싱글톤임
 
         // 카드 하이라이트들 해제
         CardManager.instance.Change_active_hand(-1);
-        ActionManager.enemy_skill_card_deactivate?.Invoke();
+        ActionManager.enemy_skillData_deactivate?.Invoke();
 
         // 적의 남은 카드들을 순서대로 사용
         while (enemy_cards.Count > 0) 
@@ -170,7 +167,7 @@ public class BattleManager : Singletone<BattleManager> // 싱글톤임
 
             card card = enemy_cards[0];
 
-            if (card._Card.isDirectUsable) // 직접 사용 가능인 카드면 사용
+            if (card.Data.IsDirectUsable) // 직접 사용 가능인 카드면 사용
             {
                 BattleCalcManager.instance.set_using_card(card);
                 BattleCalcManager.instance.set_target(card.target.GetComponent<Character>());
@@ -178,7 +175,7 @@ public class BattleManager : Singletone<BattleManager> // 싱글톤임
             }
 
             // 카드 파괴
-            CardManager.instance.Destroy_card(card);
+            card.Destroy_card();
 
             yield return new WaitForSeconds(0.5f);
             
@@ -205,20 +202,6 @@ public class BattleManager : Singletone<BattleManager> // 싱글톤임
         yield break;
     }
 
-    void OnEnable()
-    {
-        // 델리게이트 체인 추가
-        SceneManager.sceneLoaded += Check_battle_scene_load;
-
-        // 이벤트 추가
-        ActionManager.battle_ended += OnBattleEnd;
-    }
-
-    private void OnDisable()
-    {
-        SceneManager.sceneLoaded -= Check_battle_scene_load;
-        ActionManager.battle_ended -= OnBattleEnd;
-    }
 
     //Battle씬 시작시 전투 시작되도록 하기
     private void Check_battle_scene_load(Scene scene, LoadSceneMode mode)
@@ -235,7 +218,7 @@ public class BattleManager : Singletone<BattleManager> // 싱글톤임
     {
         // 패 전부 숨기기
         CardManager.instance.Change_active_hand(-1);
-        ActionManager.enemy_skill_card_deactivate?.Invoke();
+        ActionManager.enemy_skillData_deactivate?.Invoke();
 
         // 진행 중인 전투 중지
         if (current_phase_coroutine != null) 
@@ -254,6 +237,65 @@ public class BattleManager : Singletone<BattleManager> // 싱글톤임
             StartCoroutine(StageManager.instance.calc_and_show_battle_loot());
         }
     }
+
+    private void OnCardDestroyed(card card) 
+    {
+        // 적 카드면
+        if (card.isEnemyCard)
+        {
+            enemy_cards.Remove(card);
+        }
+        // 플레이어 카드면
+        else
+        {
+            hand_data[card.owner.GetComponent<Character>().Character_index].Remove(card);
+        }
+    }
+
+    private void OnCharacterDied(Character character) 
+    {
+        // 아군이면
+        if (!character.check_enemy()) 
+        {
+            // 캐릭터의 패 없애기
+            for (int i = 0; i < hand_data[character.Character_index].Count; i++)
+            {
+                hand_data[character.Character_index][i].Destroy_card();
+            }
+           hand_data.RemoveAt(character.Character_index);
+
+            // 아군 캐릭터 리스트에서 없애기
+           playable_characters.Remove(character.gameObject);
+
+            // 남은 캐릭터 인덱스 조정
+            for (int i = 0; i < playable_characters.Count; i++)
+            {
+                Character remianing_character = playable_characters[i].GetComponent<Character>();
+                remianing_character.Character_index = i;
+            }
+        }
+        else // 적 캐릭터면
+        {
+            // 적 캐릭터 리스트에서 없애기
+            enemy_characters.Remove(character.gameObject);
+
+            // 남은 캐릭터 인덱스 조정
+            for (int i = 0; i < enemy_characters.Count; i++)
+            {
+                enemy_characters[i].GetComponent<Character>().Character_index = i;
+            }
+        }
+
+        // 전투 끝나는 거 감지
+        if (enemy_characters.Count == 0)
+        {
+            ActionManager.battle_ended?.Invoke(true);
+        }
+        else if (playable_characters.Count == 0)
+        {
+            ActionManager.battle_ended?.Invoke(false);
+        }
+    }
     private void Update()
     {
         if (battle_start_trigger) 
@@ -262,5 +304,24 @@ public class BattleManager : Singletone<BattleManager> // 싱글톤임
             current_phase_coroutine = battle(StageManager.instance.stage_index);
             StartCoroutine(current_phase_coroutine);
         }
+    }
+
+    void OnEnable()
+    {
+        // 델리게이트 체인 추가
+        SceneManager.sceneLoaded += Check_battle_scene_load;
+
+        // 이벤트 추가
+        ActionManager.battle_ended += OnBattleEnd;
+        ActionManager.card_destroyed += OnCardDestroyed;
+        ActionManager.character_died += OnCharacterDied;
+    }
+
+    private void OnDisable()
+    {
+        SceneManager.sceneLoaded -= Check_battle_scene_load;
+        ActionManager.battle_ended -= OnBattleEnd;
+        ActionManager.card_destroyed -= OnCardDestroyed;
+        ActionManager.character_died -= OnCharacterDied;
     }
 }

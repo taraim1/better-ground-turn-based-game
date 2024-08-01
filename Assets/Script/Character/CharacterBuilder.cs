@@ -44,7 +44,11 @@ public class CharacterBuilder : Singletone<CharacterBuilder>
             switch (aiType)
             {
                 case EnemyAiType.NoAI:
-                    enemy_character.SetAI(new Dummy_Ai(enemy_character));
+                    enemy_character.SetAI(new EnemyAI(
+                        enemy_character, 
+                        new BehaviorTree.MoveTree_NoAI("NoMove", enemy_character),
+                        new BehaviorTree.SkillSelectTree_NoAI("NoSkillSelect", enemy_character)
+                    ));
                     break;
             }
         }

@@ -39,7 +39,7 @@ public class StageManager : Singletone<StageManager>
 
         foreach (GameObject obj in characters) 
         {
-            CharacterManager.instance.kill_character_in_stage_show(obj.GetComponent<Character>());
+           obj.GetComponent<Character>().Kill();
         }
         characters.Clear();
         CharacterManager.instance.spawn_stage_show_character(stage_index);

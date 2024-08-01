@@ -224,14 +224,26 @@ public class BattleGridManager : Singletone<BattleGridManager>
         }
     }
 
-
+    private void OnCardDestoryed(card card) 
+    {
+        // 범위를 보여주는 중이었다면 원래 색으로
+        if (card._isShowingRange)
+        {
+            foreach (coordinate coordinate in card.usable_tiles)
+            {
+                set_tile_color(coordinate, Tile.TileColor.original);
+            }
+        }
+    }
     private void OnEnable()
     {
         SceneManager.sceneLoaded += Check_scene;
+        ActionManager.card_destroyed += OnCardDestoryed;
     }
 
     private void OnDisable()
     {
         SceneManager.sceneLoaded -= Check_scene;
+        ActionManager.card_destroyed -= OnCardDestoryed;
     }
 }
