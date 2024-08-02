@@ -73,6 +73,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3377405170695446698}
   - component: {fileID: 7287670621830155501}
+  - component: {fileID: 6449006251238364949}
   m_Layer: 8
   m_Name: character_base
   m_TagString: EnemyCharacter
@@ -142,6 +143,22 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1.1}
   m_EdgeRadius: 0
+--- !u!114 &6449006251238364949
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1766090985930963044}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 76e1c7e487164c14d869870a84842a13, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SkillSlotCanvas: {fileID: 7623142772000228205}
+  CharacterCanvas: {fileID: 7622053783487941877}
+  MasterLayoutGroup: {fileID: 1714221190398063929}
+  effectLayoutGroup: {fileID: 8808020952768244704}
 --- !u!1 &7622053783487941877
 GameObject:
   m_ObjectHideFlags: 0

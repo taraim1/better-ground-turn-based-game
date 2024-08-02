@@ -22,6 +22,8 @@ public class CharacterBuilder : Singletone<CharacterBuilder>
     [SerializeField] private GameObject health_bar_prefab;
     [SerializeField] private GameObject willpower_bar_prefab;
 
+    [SerializeField] private CharacterDataSO DataSO;
+
     private void Reset_builder() // 싱글톤이라 하나 만들때마다 리셋해줘야함
     {
         IsEnemy(false).
@@ -65,6 +67,7 @@ public class CharacterBuilder : Singletone<CharacterBuilder>
         }
         else { character = rootObj.AddComponent<PlayableCharacter>(); }
 
+        character.Data_SO = DataSO;
         character.Code = code;
         character.Load_data();
         character.Coordinate = coordinate;
@@ -79,17 +82,26 @@ public class CharacterBuilder : Singletone<CharacterBuilder>
             SPUM_unit_obj.transform.localScale = new Vector3(-1.3f, 1.3f, 1);
         }
 
+        List<BattleUI.CharacterUI> characterUIs = new List<BattleUI.CharacterUI>();
+        GameObject Temp_obj;
         if (makePanicSign) 
         {
-            character_base.Attach(character_base.location.Middle_canvas, panic_sign_prefab);
+            Temp_obj = character_base.Attach(character_base.location.Middle_canvas, panic_sign_prefab);
+            characterUIs.Add(Temp_obj.GetComponent<BattleUI.CharacterUI>());
         }
 
         if (makeHealthAndWillpowerBar) 
         {
-            character_base.Attach(character_base.location.Bottom_layoutGroup, health_bar_prefab);
-            character_base.Attach(character_base.location.Bottom_layoutGroup, willpower_bar_prefab);
+            Temp_obj = character_base.Attach(character_base.location.Bottom_layoutGroup, health_bar_prefab);
+            characterUIs.Add(Temp_obj.GetComponent<BattleUI.CharacterUI>());
+            Temp_obj = character_base.Attach(character_base.location.Bottom_layoutGroup, willpower_bar_prefab);
+            characterUIs.Add(Temp_obj.GetComponent<BattleUI.CharacterUI>());
         }
 
+        foreach (BattleUI.CharacterUI characterUI in characterUIs) 
+        {
+            characterUI.Initialize(character);
+        }
 
         Reset_builder();
         return character;

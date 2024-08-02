@@ -314,9 +314,7 @@ public abstract class Character : MonoBehaviour
     public virtual bool check_enemy() { return false; }
 
     private void Awake()
-    {
-        current_health = get_max_health();
-        current_willpower = get_max_willpower();
+    { 
         ActionManager.turn_start_phase += turn_start;
     }
 

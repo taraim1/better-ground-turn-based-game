@@ -1686,7 +1686,6 @@ Transform:
   - {fileID: 1485318639}
   - {fileID: 2111067821}
   - {fileID: 293010030}
-  - {fileID: 1267649768}
   - {fileID: 772207835}
   - {fileID: 1538594533}
   - {fileID: 1665656115}
@@ -2755,20 +2754,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4f83729e5c834e479fabd80265d9a4c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cardsSO: {fileID: 11400000, guid: 3080a6a9f21a05b46bb959639cbd0586, type: 2}
+  CardDataSO: {fileID: 0}
   card_spawnpoint: {fileID: 1101494328}
-  left_card_transform: {fileID: 1023100748}
-  left_card_over4_transform: {fileID: 1784582164}
-  right_card_transform: {fileID: 1222665003}
-  right_card_over4_transform: {fileID: 1079312974}
-  diactivated_card_transform: {fileID: 1242286862}
-  highlighted_card_transform: {fileID: 494003142}
+  leftData_transform: {fileID: 0}
+  leftData_over4_transform: {fileID: 0}
+  rightData_transform: {fileID: 0}
+  rightData_over4_transform: {fileID: 0}
+  diactivatedData_transform: {fileID: 0}
+  highlightedData_transform: {fileID: 0}
   enemy_card_transform: {fileID: 624573120}
   enemy_card_highlighted_transform: {fileID: 1126709295}
   card_prefab: {fileID: 3273811198982270407, guid: 4c5547a8f3f819b4b8cbbebefa4d2f34,
     type: 3}
   active_index: 0
-  highlighted_card: {fileID: 0}
+  highlightedData: {fileID: 0}
 --- !u!1 &777273755
 GameObject:
   m_ObjectHideFlags: 0
@@ -4394,7 +4393,7 @@ GameObject:
   - component: {fileID: 1267649768}
   - component: {fileID: 1267649769}
   m_Layer: 0
-  m_Name: BattleUI_Manager
+  m_Name: CharacterBuilder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4413,7 +4412,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 368447970}
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1267649769
 MonoBehaviour:
@@ -4424,19 +4423,18 @@ MonoBehaviour:
   m_GameObject: {fileID: 1267649767}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6a80fef0580c4a04c81e159a235fd6cf, type: 3}
+  m_Script: {fileID: 11500000, guid: 5d3acfbaf3286894687fb4b19bd1de1f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  character_base_prefab: {fileID: 1766090985930963044, guid: abb22a00019844b4e900e11f95b9e7ee,
+    type: 3}
+  panic_sign_prefab: {fileID: 3271687678273936230, guid: 03168627a369be24785262442d7615a6,
+    type: 3}
   health_bar_prefab: {fileID: 953389889809876917, guid: e0a15ee19bccfee419d609ebeb27ba21,
     type: 3}
   willpower_bar_prefab: {fileID: 953389889809876917, guid: 036998866c0c8fb4d9ac1e6ae5075a2f,
     type: 3}
-  skill_power_meter_prefab: {fileID: 3271687678273936230, guid: 6923df529ad6cf846a48edd2b2545cad,
-    type: 3}
-  layoutGroup_prefab: {fileID: 3457913086231521101, guid: 56ef78f845a1e4c49a12f8416008f26f,
-    type: 3}
-  panic_sign_prefab: {fileID: 3271687678273936230, guid: 03168627a369be24785262442d7615a6,
-    type: 3}
+  DataSO: {fileID: 11400000, guid: e54cf04d81f8ab142a80f91a0a8e393e, type: 2}
 --- !u!1 &1291836879
 GameObject:
   m_ObjectHideFlags: 0
@@ -5875,8 +5873,6 @@ MonoBehaviour:
   current_turn: 0
   current_phase: 0
   battle_start_trigger: 0
-  is_Characters_spawned: 0
-  is_Characters_loaded: 0
   enemy_skill_set_count: 0
   playable_characters: []
   enemy_characters: []
@@ -8029,3 +8025,4 @@ SceneRoots:
   - {fileID: 920713638}
   - {fileID: 344220073}
   - {fileID: 368447970}
+  - {fileID: 1267649768}
