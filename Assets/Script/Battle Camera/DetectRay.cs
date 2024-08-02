@@ -91,7 +91,7 @@ public class DetectRay : MonoBehaviour
                 else
                 {
                     // 적 카드 강조 해제
-                    if (card.state == card.current_mode.highlighted_enemyData)
+                    if (card.state == card.current_mode.highlighted_enemy_card)
                     {
                         ActionManager.enemy_skillcard_deactivate?.Invoke();
                     }
@@ -115,7 +115,7 @@ public class DetectRay : MonoBehaviour
                 else
                 {
                     // 적 카드 강조 해제
-                    if (card.state == card.current_mode.highlighted_enemyData)
+                    if (card.state == card.current_mode.highlighted_enemy_card)
                     {
                         ActionManager.enemy_skillcard_deactivate?.Invoke();
                     }

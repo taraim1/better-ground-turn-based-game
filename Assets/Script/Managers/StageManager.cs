@@ -9,8 +9,8 @@ using Unity.PlasticSCM.Editor.WebApi;
 public class StageManager : Singletone<StageManager>
 {
     public int stage_index;
-    // 스테이지 정보 보여줄 때의 모든 캐릭터 오브젝트가 들어감
-    public List<GameObject> characters = new List<GameObject>();
+    // 스테이지 정보 보여줄 때의 모든 캐릭터가 들어감
+    public List<Character> characters = new List<Character>();
 
     [SerializeField]
     private StageSettingSO stageSettingSO;
@@ -37,9 +37,9 @@ public class StageManager : Singletone<StageManager>
     public void Reload_characters() 
     {
 
-        foreach (GameObject obj in characters) 
+        foreach (Character character in characters) 
         {
-           obj.GetComponent<Character>().Kill();
+            character.Kill();
         }
         characters.Clear();
         CharacterManager.instance.spawn_stage_show_character(stage_index);

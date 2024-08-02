@@ -42,7 +42,7 @@ public class CharacterBuilder : Singletone<CharacterBuilder>
     public CharacterBuilder MakeSpumObj(bool flag) { makeSpumObj = flag; return this; }
     public CharacterBuilder MakePanicSign(bool flag) { makePanicSign = flag; return this; }
     public CharacterBuilder MakeHealthAndWillpowerBar(bool flag) { makeHealthAndWillpowerBar = flag; return this; }
-    public GameObject build() 
+    public Character build() 
     {
         GameObject rootObj = Instantiate(character_base_prefab);
         Character character;
@@ -92,6 +92,6 @@ public class CharacterBuilder : Singletone<CharacterBuilder>
 
 
         Reset_builder();
-        return rootObj;
+        return character;
     }
 }

@@ -18,12 +18,12 @@ public class BattleManager : Singletone<BattleManager> // 싱글톤임
 
     private cost_meter cost_meter; // 코스트 양 보여주는 오브젝트
 
-    // 전투 중인 플레이어블 캐릭터의 게임오브젝트 리스트
-    public List<GameObject> playable_characters = new List<GameObject>();
+    // 전투 중인 플레이어블 캐릭터 리스트
+    public List<Character> playable_characters = new List<Character>();
     // 전투 중인 플레이어블 캐릭터들의 패 리스트
     public List<List<card>> hand_data = new List<List<card>>();
-    // 전투 중인 적 캐릭터의 게임오브젝트 리스트
-    public List<GameObject> enemy_characters = new List<GameObject>();
+    // 전투 중인 적 캐릭터 리스트
+    public List<Character> enemy_characters = new List<Character>();
     // 적이 이번 턴에 사용 중인 카드 리스트
     public List<card> enemy_cards = new List<card>();
 
@@ -265,7 +265,7 @@ public class BattleManager : Singletone<BattleManager> // 싱글톤임
            hand_data.RemoveAt(character.Character_index);
 
             // 아군 캐릭터 리스트에서 없애기
-           playable_characters.Remove(character.gameObject);
+           playable_characters.Remove(character);
 
             // 남은 캐릭터 인덱스 조정
             for (int i = 0; i < playable_characters.Count; i++)
@@ -277,7 +277,7 @@ public class BattleManager : Singletone<BattleManager> // 싱글톤임
         else // 적 캐릭터면
         {
             // 적 캐릭터 리스트에서 없애기
-            enemy_characters.Remove(character.gameObject);
+            enemy_characters.Remove(character);
 
             // 남은 캐릭터 인덱스 조정
             for (int i = 0; i < enemy_characters.Count; i++)

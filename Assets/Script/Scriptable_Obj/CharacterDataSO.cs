@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
+[System.Serializable]
 public class BasicCharacterData
 {
 
@@ -16,6 +17,7 @@ public class BasicCharacterData
     public List<coordinate> move_range;
 }
 
+[System.Serializable]
 public class PlayableCharacterData 
 {
     public bool is_character_unlocked;

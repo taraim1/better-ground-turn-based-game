@@ -5,7 +5,7 @@ using UnityEditor;
 using System.Reflection;
 using System;
 
-[CustomPropertyDrawer(typeof(CardsSoDictonary))]
+[CustomPropertyDrawer(typeof(CardDataSoDictonary))]
 [CustomPropertyDrawer(typeof(characterEffectSpritesDictionary))]
 [CustomPropertyDrawer(typeof(StageSettingSO_dictionary))]
 [CustomPropertyDrawer(typeof(BasicCharacterData_dictionary))]

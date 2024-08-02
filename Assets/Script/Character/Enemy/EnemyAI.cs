@@ -134,7 +134,7 @@ public class temp : MonoBehaviour
         {
             // 이번 턴에 쓸 카드와 스킬 슬롯 만듦
             GameObject slot = Instantiate(skill_slot_prefab, layoutGroup.transform);
-            GameObject card_obj = CardManager.instance.Summon_enemyData(current_turn_useDatas[i], gameObject);
+            GameObject card_obj = CardManager.instance.Summon_enemy_card(current_turn_useDatas[i], gameObject);
             card card = card_obj.GetComponent<card>();
             slot.GetComponent<enemy_skillCard_slot>().card_obj = card_obj;
             slot.GetComponent<enemy_skillCard_slot>().enemy_Obj = gameObject;

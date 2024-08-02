@@ -83,16 +83,16 @@ public class BattleCalcManager : Singletone<BattleCalcManager>
         Character OwnerCharacter = using_card.owner.GetComponent<Character>();
 
         // 스킬 사용 가능 범위가 있을 시 사용 가능 검사
-        if (target_character != null && using_card.Data.RangeType == CardRangeType.limited) 
+        if (target_character != null) 
         {
-            if (!check_limited_range_usable(target_character.Coordinate, using_card.get_use_range(OwnerCharacter.Coordinate))) 
+            if (!using_card.check_usable_coordinate(target_character.Coordinate)) 
             {
                 return;
             }
         }
-        if (target_card != null && using_card.Data.RangeType == CardRangeType.limited) 
+        if (target_card != null) 
         {
-            if (!check_limited_range_usable(target_card.owner.GetComponent<Character>().Coordinate, using_card.get_use_range(OwnerCharacter.Coordinate))) 
+            if (!using_card.check_usable_coordinate(target_card.owner.Coordinate)) 
             {
                 return;
             }
@@ -247,12 +247,11 @@ public class BattleCalcManager : Singletone<BattleCalcManager>
     // 적이 턴 끝나고 스킬 사용시 판정
     public void Calc_enemy_turn_skill_use()
     {
-        Character OwnerCharacter = using_card.owner.GetComponent<Character>();
 
         if (using_card.Data.RangeType == CardRangeType.limited) 
         {
 
-            if (!check_limited_range_usable(target_character.Coordinate, using_card.get_use_range(OwnerCharacter.Coordinate)))
+            if (!using_card.check_usable_coordinate(target_character.Coordinate))
             {
                 // 카드 제거
                 using_card.Destroy_card();
@@ -269,7 +268,7 @@ public class BattleCalcManager : Singletone<BattleCalcManager>
     // 스킬 사용 시 위력 보여주는거
     private void show_power_roll_result(card card, int power) 
     {
-        card.gameObject.GetComponent<Character>().show_power_meter?.Invoke(power);
+        card.owner.show_power_meter?.Invoke(power);
     }
 
 
@@ -291,12 +290,6 @@ public class BattleCalcManager : Singletone<BattleCalcManager>
 
         // 카드 제거
         using_card.Destroy_card();
-    }
-
-    // 사용 가능 범위가 있는 스킬을 쓸 수 있는지 판별하는 메소드
-    public bool check_limited_range_usable(coordinate target_coordinate, List<coordinate> usable_tiles)
-    {
-        return usable_tiles.Contains(target_coordinate);
     }
 
     private void apply_clash_result(card using_card, card target_card, int power1, int power2) // 카드 둘 주면 캐릭터에 결과 적용해줌

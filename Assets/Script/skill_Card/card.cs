@@ -25,7 +25,7 @@ public class card : MonoBehaviour
     public GameObject drag_pointer;
     public GameObject target;
 
-    public GameObject owner; // 카드 가지고 있는 캐릭터
+    public Character owner; // 카드 가지고 있는 캐릭터
     public int minpower;
     public int maxpower;
 
@@ -45,7 +45,7 @@ public class card : MonoBehaviour
     { 
         normal,
         dragging,
-        highlighted_enemyData
+        highlighted_enemy_card
     }
 
     public current_mode state = current_mode.normal;
@@ -98,6 +98,17 @@ public class card : MonoBehaviour
         transform.localScale = prs.scale;
     }
 
+    // 특정 좌표에 이 카드를 쓸 수 있는지 반환
+    public bool check_usable_coordinate(coordinate coordinate) 
+    {
+        if (Data.RangeType == CardRangeType.limited)
+        {
+            return get_use_range(owner.Coordinate).Contains(coordinate);
+        }
+
+        // unlimited인 경우
+        return true;
+    }
 
     // 카드 드래그 감지 (일정 시간 이상 잡고 있어야만 드래그로 판별)
     public IEnumerator detect_drag(bool isDescription) 
@@ -165,7 +176,7 @@ public class card : MonoBehaviour
                 isDraggingStarted = true;
                 // 하이라이트된 카드 해제
                 CardManager.instance.clear_highlighted_card();
-                dragData();
+                drag_card();
             }
 
             dragging_time += 0.01f;
@@ -173,7 +184,7 @@ public class card : MonoBehaviour
         }
     }
 
-    void dragData() // 카드 드래그시 실행됨
+    void drag_card() // 카드 드래그시 실행됨
     {
         state = current_mode.dragging;
         Vector3 mousepos = Camera.main.ScreenToWorldPoint(Input.mousePosition);

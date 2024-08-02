@@ -30,8 +30,8 @@ public class CardManager : Singletone<CardManager>
     [SerializeField] Transform rightData_over4_transform;
     [SerializeField] Transform diactivatedData_transform;
     [SerializeField] Transform highlightedData_transform;
-    [SerializeField] Transform enemyData_transform;
-    [SerializeField] Transform enemyData_highlighted_transform;
+    [SerializeField] Transform enemy_card_transform;
+    [SerializeField] Transform enemy_card_highlighted_transform;
 
     // 기타 카드 정보 담은 클래스
     private class card_data_json 
@@ -161,14 +161,14 @@ public class CardManager : Singletone<CardManager>
         Align_cards(index);
     }
 
-    public GameObject Summon_enemyData(skillcard_code code, GameObject owner) // 적 카드 생성해서 리턴
+    public GameObject Summon_enemy_card(skillcard_code code, Character owner) // 적 카드 생성해서 리턴
     {
 
-        var cardObj = Instantiate(card_prefab, enemyData_transform.position, Quaternion.identity);
+        var cardObj = Instantiate(card_prefab, enemy_card_transform.position, Quaternion.identity);
         card card = cardObj.GetComponent<card>();
         card.owner = owner;
         card.isEnemyCard = true;
-        card.originPRS = new PRS(enemyData_transform.position, enemyData_transform.rotation, Vector3.one * 1.5f);
+        card.originPRS = new PRS(enemy_card_transform.position, enemy_card_transform.rotation, Vector3.one * 1.5f);
         card.Setup(getData_by_code(code), 0);
 
         return cardObj;
@@ -181,12 +181,12 @@ public class CardManager : Singletone<CardManager>
     }
 
     // 적 카드를 강조
-    public void highlight_enemyData(GameObject obj) 
+    public void highlight_enemy_card(GameObject obj) 
     {
         card card = obj.GetComponent<card>();
-        PRS prs = new PRS(enemyData_highlighted_transform.position, enemyData_highlighted_transform.rotation, Vector3.one * 2.2f);
+        PRS prs = new PRS(enemy_card_highlighted_transform.position, enemy_card_highlighted_transform.rotation, Vector3.one * 2.2f);
         card.MoveTransform(prs, true, 0.4f);
-        card.state = card.current_mode.highlighted_enemyData;
+        card.state = card.current_mode.highlighted_enemy_card;
 
     }
 

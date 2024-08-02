@@ -58,8 +58,7 @@ public class Card_UI : MonoBehaviour
         character_code Char_Code;
         Char_Code = CCFromString(Code);
 
-        GameObject character_obj = CharacterBuilder.instance.Code(Char_Code).IsEnemy(false).build();
-        Character character = character_obj.GetComponent<Character>();
+        Character character = CharacterBuilder.instance.Code(Char_Code).IsEnemy(false).build();
         Card_Name.text = character.Character_name;  
 
     }

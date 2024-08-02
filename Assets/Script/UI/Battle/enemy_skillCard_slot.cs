@@ -28,7 +28,7 @@ public class enemy_skillCard_slot : MonoBehaviour, IPointerEnterHandler, IPointe
     bool isBattleEnded;
     bool isDragging = false;
 
-    private List<Tuple<int, int>> current_range;
+    private List<coordinate> current_range;
 
     // 전투 끝났을때
     private void OnBattleEnd(bool victory) 
@@ -47,15 +47,12 @@ public class enemy_skillCard_slot : MonoBehaviour, IPointerEnterHandler, IPointe
 
         // 색상 설정
         set_lineRenderer_color(red);
-        if (using_card.Data.RangeType == CardRangeType.limited) 
-        {
 
-            if (!BattleCalcManager.instance.check_limited_range_usable(target_character.get_coordinate(), using_card.get_use_range(using_character.get_coordinate()))) 
-            {
-                set_lineRenderer_color(grey);
-            }
+        if (!using_card.check_usable_coordinate(target_character.Coordinate)) 
+        {
+            set_lineRenderer_color(grey);
         }
-        
+
 
         Vector3 objPos = transform.position;
         lineRenderer.SetPosition(0, new Vector3(objPos.x, objPos.y, -1f));
@@ -87,7 +84,7 @@ public class enemy_skillCard_slot : MonoBehaviour, IPointerEnterHandler, IPointe
             // 적 카드 강조 해제
             ActionManager.enemy_skillcard_deactivate?.Invoke();
             // 이 슬롯의 카드를 활성화 위치로
-            CardManager.instance.highlight_enemyData(card_obj);
+            CardManager.instance.highlight_enemy_card(card_obj);
             isHighlightedByClick = true;
         }
     }
@@ -104,7 +101,7 @@ public class enemy_skillCard_slot : MonoBehaviour, IPointerEnterHandler, IPointe
             // 적 카드 강조 해제
             ActionManager.enemy_skillcard_deactivate?.Invoke();
             // 이 슬롯의 카드를 활성화 위치로
-            CardManager.instance.highlight_enemyData(card_obj);
+            CardManager.instance.highlight_enemy_card(card_obj);
             isHighlightedByClick = false;
         }
 
@@ -153,9 +150,9 @@ public class enemy_skillCard_slot : MonoBehaviour, IPointerEnterHandler, IPointe
                 // 스킬 사정거리 보이기 해제
                 if (card.Data.RangeType == CardRangeType.limited)
                 {
-                    foreach (Tuple<int, int> coordinate in current_range)
+                    foreach (coordinate coordinate in current_range)
                     {
-                        BattleGridManager.instance.set_tile_color(coordinate.Item1, coordinate.Item2, Tile.TileColor.original);
+                        BattleGridManager.instance.set_tile_color(coordinate, Tile.TileColor.original);
                     }
                 }
                 isDragging = false;
@@ -171,10 +168,10 @@ public class enemy_skillCard_slot : MonoBehaviour, IPointerEnterHandler, IPointe
                 // 스킬 사정거리 보이기
                 if (card.Data.RangeType == CardRangeType.limited) 
                 {
-                    current_range = card.get_use_range(card.owner.GetComponent<Character>().get_coordinate());
-                    foreach (Tuple<int, int> coordinate in current_range) 
+                    current_range = card.get_use_range(card.owner.Coordinate);
+                    foreach (coordinate coordinate in current_range) 
                     {
-                        BattleGridManager.instance.set_tile_color(coordinate.Item1, coordinate.Item2, Tile.TileColor.red);
+                        BattleGridManager.instance.set_tile_color(coordinate, Tile.TileColor.red);
                     }
                 }
                 isDragging = true;
@@ -184,12 +181,6 @@ public class enemy_skillCard_slot : MonoBehaviour, IPointerEnterHandler, IPointe
             yield return new WaitForSeconds(0.01f);
 
         }
-    }
-
-    // 스킬이 사용되면 실행됨
-    private void skill_used() 
-    {
-        // 나중에 채워질 예정
     }
 
     // 적 카드 하이라이트 해제시 실행
@@ -216,7 +207,6 @@ public class enemy_skillCard_slot : MonoBehaviour, IPointerEnterHandler, IPointe
         lineRenderer.enabled = false;
         lineRenderer.startWidth = 0.05f;
         lineRenderer.endWidth = 0.05f;
-        ActionManager.skill_used += skill_used;
         ActionManager.enemy_skillcard_deactivate += Card_diactivated;
         ActionManager.battle_ended += OnBattleEnd;
         ActionManager.character_drag_started += On_character_drag_started;
@@ -228,7 +218,6 @@ public class enemy_skillCard_slot : MonoBehaviour, IPointerEnterHandler, IPointe
     private void OnDisable()
     {
         lineRenderer.enabled = false;
-        ActionManager.skill_used -= skill_used;
         ActionManager.enemy_skillcard_deactivate -= Card_diactivated;
         ActionManager.battle_ended -= OnBattleEnd;
         ActionManager.character_drag_started -= On_character_drag_started;

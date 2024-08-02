@@ -30,7 +30,7 @@ public class CharacterManager : Singletone<CharacterManager>
             Vector2 spawn_pos = BattleGridManager.instance.get_tile_pos(coordinate);
 
             // 플레이어블 캐릭터 오브젝트 생성
-            GameObject obj = CharacterBuilder.instance.
+            Character character = CharacterBuilder.instance.
                 IsEnemy(false).
                 Code(PartyManager.instance.get_charactor_code(i)).
                 Coordinate(coordinate).
@@ -40,13 +40,13 @@ public class CharacterManager : Singletone<CharacterManager>
                 build();
 
             // 좌표 설정
-            obj.transform.position = spawn_pos;
+            character.transform.position = spawn_pos;
 
             // 캐릭터 리스트에 넣어줌
-            StageManager.instance.characters.Add(obj);
+            StageManager.instance.characters.Add(character);
 
             // 스테이지 정보창 전용 스크립트 넣어줌
-            obj.AddComponent<Character_On_stage_show>();
+            character.gameObject.AddComponent<Character_On_stage_show>();
 
             // 셀 타입 변경
             BattleGridManager.instance.set_tile_type(coordinate, BattleGridManager.boardCell.player);
@@ -62,7 +62,7 @@ public class CharacterManager : Singletone<CharacterManager>
             Vector2 spawn_pos = BattleGridManager.instance.get_tile_pos(coordinate);
 
             // 적 캐릭터 오브젝트 생성
-            GameObject obj = CharacterBuilder.instance.
+            Character character = CharacterBuilder.instance.
                 IsEnemy(true).
                 Code(StageSettingSO.stage_Settings[stage_index].enemy_codes[i]).
                 Coordinate(coordinate).
@@ -72,10 +72,10 @@ public class CharacterManager : Singletone<CharacterManager>
                 build();
 
             // 좌표 설정
-            obj.transform.position = spawn_pos;
+            character.transform.position = spawn_pos;
 
             // 캐릭터 리스트에 넣어줌
-            StageManager.instance.characters.Add(obj);
+            StageManager.instance.characters.Add(character);
 
             // 셀 타입 변경
             BattleGridManager.instance.set_tile_type(coordinate, BattleGridManager.boardCell.enemy);
@@ -97,7 +97,7 @@ public class CharacterManager : Singletone<CharacterManager>
             Vector2 spawn_pos = BattleGridManager.instance.get_tile_pos(coordinate);
 
             // 플레이어블 캐릭터 오브젝트 생성
-            GameObject obj = CharacterBuilder.instance.
+            Character character = CharacterBuilder.instance.
                 IsEnemy(false).
                 Code(PartyManager.instance.get_charactor_code(i)).
                 Coordinate(coordinate).
@@ -112,10 +112,10 @@ public class CharacterManager : Singletone<CharacterManager>
             BattleManager.instance.hand_data.Add(hand);
 
             // 좌표 설정
-            obj.transform.position = spawn_pos;
+            character.transform.position = spawn_pos;
 
-            // 플레이어블 캐릭터 오브젝트를 BattleManager의 리스트에 넣기
-            BattleManager.instance.playable_characters.Add(obj);
+            // 플레이어블 캐릭터를 BattleManager의 리스트에 넣기
+            BattleManager.instance.playable_characters.Add(character);
 
             // 셀 타입 변경
             BattleGridManager.instance.set_tile_type(coordinate, BattleGridManager.boardCell.player);
@@ -131,7 +131,7 @@ public class CharacterManager : Singletone<CharacterManager>
             Vector2 spawn_pos = BattleGridManager.instance.get_tile_pos(coordinate);
 
             // 적 캐릭터 오브젝트 생성
-            GameObject obj = CharacterBuilder.instance.
+            Character character = CharacterBuilder.instance.
                 IsEnemy(true).
                 Code(StageSettingSO.stage_Settings[stage_index].enemy_codes[i]).
                 Coordinate(coordinate).
@@ -142,10 +142,10 @@ public class CharacterManager : Singletone<CharacterManager>
                 build();
 
             // 좌표 설정
-            obj.transform.position = spawn_pos;
+            character.transform.position = spawn_pos;
 
             // 적 캐릭터 오브젝트를 BattleManager의 리스트에 넣기
-            BattleManager.instance.enemy_characters.Add(obj);
+            BattleManager.instance.enemy_characters.Add(character);
 
             // 셀 타입 변경
             BattleGridManager.instance.set_tile_type(coordinate, BattleGridManager.boardCell.enemy);
