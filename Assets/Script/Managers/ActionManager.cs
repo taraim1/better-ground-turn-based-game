@@ -19,6 +19,8 @@ public class ActionManager : MonoBehaviour
     public static Action character_drag_started;
     public static Action character_drag_ended;
     public static Action<card> card_destroyed;
+    public static Action enemy_skill_set_complete;
+    public static Action<int> set_cost;
 
 
     // 스테이지 보여줄 때 씀

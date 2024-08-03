@@ -42,7 +42,7 @@ public class CardData // 카드 데이터가 스크립터블 오브젝트로 저장되는 클래스
     public bool IsDirectUsable => isDirectUsable;
     public bool IsSelfUsableOnly => isSelfUsableOnly;
     public bool IsFriendlyOnly => isFriendlyOnly;
-    public bool DontShowPowerRollResult => DontShowPowerRollResult;
+    public bool DontShowPowerRollResult => dontShowPowerRollResult;
     public CardRangeType RangeType => rangeType;
     public List<coordinate> get_copy_of_use_range() 
     {

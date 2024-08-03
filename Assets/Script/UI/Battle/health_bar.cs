@@ -1,9 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class health_bar : BattleUI.CharacterUI_slider
 {
+    [SerializeField] private TMP_Text TMP;
+
     public override void Initialize(Character character)
     {
         base.Initialize(character);
@@ -15,6 +18,12 @@ public class health_bar : BattleUI.CharacterUI_slider
     private void OnHealthChanged(int value) 
     { 
         SetValue(value);
+    }
+
+    public override void SetValue(int value)
+    {
+        base.SetValue(value);
+        TMP.text = value.ToString();
     }
 
     private void OnDestroy()

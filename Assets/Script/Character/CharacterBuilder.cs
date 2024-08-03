@@ -50,7 +50,8 @@ public class CharacterBuilder : Singletone<CharacterBuilder>
         Character character;
 
         if (isEnemy) 
-        { 
+        {
+            rootObj.tag = "EnemyCharacter";
             EnemyCharacter enemy_character = rootObj.AddComponent<EnemyCharacter>();
             character = enemy_character;
 
@@ -65,7 +66,11 @@ public class CharacterBuilder : Singletone<CharacterBuilder>
                     break;
             }
         }
-        else { character = rootObj.AddComponent<PlayableCharacter>(); }
+        else 
+        {
+            rootObj.tag = "PlayerCharacter";
+            character = rootObj.AddComponent<PlayableCharacter>(); 
+        }
 
         character.Data_SO = DataSO;
         character.Code = code;
@@ -80,6 +85,11 @@ public class CharacterBuilder : Singletone<CharacterBuilder>
             GameObject SPUM_unit_obj = character_base.Attach(character_base.location.Base, spPrefab);
             SPUM_unit_obj.transform.localPosition = new Vector3(0, -0.4f, 0);
             SPUM_unit_obj.transform.localScale = new Vector3(-1.3f, 1.3f, 1);
+
+            if (character.check_enemy()) 
+            { 
+                SPUM_unit_obj.transform.localScale = new Vector3(1.3f, 1.3f, 1);
+            }
         }
 
         List<BattleUI.CharacterUI> characterUIs = new List<BattleUI.CharacterUI>();

@@ -458,7 +458,7 @@ public class PlayableCharacter : Character
             transform.position = new Vector3(tileCoor[0], tileCoor[1], transform.position.z);
 
             // 드래그 해제 감지
-            if (Input.GetMouseButtonUp(0))
+            if (!Input.GetMouseButton(0))
             {
                 On_drag_end();
                 yield break;
@@ -492,6 +492,8 @@ public class EnemyCharacter : Character
     * 메소드
     */
 
+    public override bool check_enemy() { return true; }
+
     private void OnSkillReserved(skillcard_code code) 
     {
         remaining_skill_count += 1;
@@ -509,6 +511,7 @@ public class EnemyCharacter : Character
     {
         AI.Move();
         reserved_skills = AI.Get_skills_for_current_turn();
+        ActionManager.enemy_skill_set_complete?.Invoke();
     }
 
     private void Awake()

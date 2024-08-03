@@ -24,12 +24,12 @@ public class CardManager : Singletone<CardManager>
 {
     [SerializeField] CardDataSO CardDataSO;
     [SerializeField] Transform card_spawnpoint;
-    [SerializeField] Transform leftData_transform;
-    [SerializeField] Transform leftData_over4_transform;
-    [SerializeField] Transform rightData_transform;
-    [SerializeField] Transform rightData_over4_transform;
-    [SerializeField] Transform diactivatedData_transform;
-    [SerializeField] Transform highlightedData_transform;
+    [SerializeField] Transform left_card_transform;
+    [SerializeField] Transform left_card_over4_transform;
+    [SerializeField] Transform right_card_transform;
+    [SerializeField] Transform right_card_over4_transform;
+    [SerializeField] Transform diactivated_card_transform;
+    [SerializeField] Transform highlighted_card_transform;
     [SerializeField] Transform enemy_card_transform;
     [SerializeField] Transform enemy_card_highlighted_transform;
 
@@ -143,13 +143,13 @@ public class CardManager : Singletone<CardManager>
         
     }
 
-    public void SummonData(int index) // 카드 생성 후 index번째의 패에 추가
+    public void Summon_card(int index) // 카드 생성 후 index번째의 패에 추가
     {
      
         var cardObj = Instantiate(card_prefab, card_spawnpoint.position, Quaternion.identity);
         if (index != active_index)
         {
-            cardObj.transform.position = diactivatedData_transform.position;
+            cardObj.transform.position = diactivated_card_transform.position;
         }
         card card = cardObj.GetComponent<card>();
         // index번째 캐릭터의 덱에서 카드를 뽑아옴
@@ -214,11 +214,11 @@ public class CardManager : Singletone<CardManager>
         List<PRS> originDatas_PRS;
         if (BattleManager.instance.hand_data[index].Count >= 4) 
         {
-            originDatas_PRS = setData_alignment(leftData_over4_transform, rightData_over4_transform, BattleManager.instance.hand_data[index].Count, 0.5f, Vector3.one * 1.8f, index);
+            originDatas_PRS = set_card_alignment(left_card_over4_transform, right_card_over4_transform, BattleManager.instance.hand_data[index].Count, 0.5f, Vector3.one * 1.8f, index);
         }
         else 
         {
-            originDatas_PRS = setData_alignment(leftData_transform, rightData_transform, BattleManager.instance.hand_data[index].Count, 0.5f, Vector3.one * 1.8f, index);
+            originDatas_PRS = set_card_alignment(left_card_transform, right_card_transform, BattleManager.instance.hand_data[index].Count, 0.5f, Vector3.one * 1.8f, index);
         }
         
 
@@ -264,7 +264,7 @@ public class CardManager : Singletone<CardManager>
                     // 드래그 중인 카드가 없다면
                     if (!isdragging) 
                     {
-                        targetCard.MoveTransform(new PRS(new Vector3(highlightedData_transform.position.x, highlightedData_transform.position.y, targetCard.originPRS.pos.z), highlightedData_transform.rotation, Vector3.one * 2f), true, 0.2f);
+                        targetCard.MoveTransform(new PRS(new Vector3(highlighted_card_transform.position.x, highlighted_card_transform.position.y, targetCard.originPRS.pos.z), highlighted_card_transform.rotation, Vector3.one * 2f), true, 0.2f);
                     }
                     
                     continue;
@@ -287,7 +287,7 @@ public class CardManager : Singletone<CardManager>
      
     }
 
-    List<PRS> setData_alignment(Transform leftTr, Transform rightTr, int CardCount, float height, Vector3 scale, int index) // 카드들의 PRS값 리스트를 계산해 반환
+    List<PRS> set_card_alignment(Transform leftTr, Transform rightTr, int CardCount, float height, Vector3 scale, int index) // 카드들의 PRS값 리스트를 계산해 반환
     {
         float[] objLerps = new float[CardCount];
         List<PRS> results = new List<PRS>(CardCount);
@@ -297,7 +297,7 @@ public class CardManager : Singletone<CardManager>
         {
             for (int i = 0; i < CardCount; i++) 
             {
-                results.Add(new PRS(diactivatedData_transform.position, diactivatedData_transform.rotation, scale));
+                results.Add(new PRS(diactivated_card_transform.position, diactivated_card_transform.rotation, scale));
             }
             return results;
         }
@@ -374,6 +374,12 @@ public class CardManager : Singletone<CardManager>
         // 패 숨기기
         Change_active_hand(-1);
     }
+
+    private void OnSkillUsed(Character character, skillcard_code code) 
+    {
+        Align_cards(active_index);
+    }
+
     public void Setup_all() // 처음 세팅
     {
         SetupDataBuffer();
@@ -388,6 +394,7 @@ public class CardManager : Singletone<CardManager>
         ActionManager.character_drag_ended += On_character_drag_end;
         ActionManager.character_died += OnCharacterDied;
         ActionManager.card_destroyed += OnCardDestroyed;
+        ActionManager.skill_used += OnSkillUsed;
     }
 
     private void OnDisable()
@@ -396,6 +403,7 @@ public class CardManager : Singletone<CardManager>
         ActionManager.character_drag_ended -= On_character_drag_end;
         ActionManager.character_died -= OnCharacterDied;
         ActionManager.card_destroyed -= OnCardDestroyed;
+        ActionManager.skill_used -= OnSkillUsed;
     }
 
 

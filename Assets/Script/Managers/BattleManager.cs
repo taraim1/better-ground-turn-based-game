@@ -12,11 +12,9 @@ public class BattleManager : Singletone<BattleManager> // 싱글톤임
     public int current_turn = 0; // 현재 턴
     public phases current_phase; // 현재 페이즈
     public bool battle_start_trigger = false; // 전투를 시작시키는 트리거
-    public int enemy_skill_set_count = 0; // 적의 스킬 설정 완료시 늘어남
-
-
-
-    private cost_meter cost_meter; // 코스트 양 보여주는 오브젝트
+    private int enemy_skill_set_count = 0; // 적의 스킬 설정 완료시 늘어남
+    private int remaining_cost = 0;
+    public static int MAX_COST = 4;
 
     // 전투 중인 플레이어블 캐릭터 리스트
     public List<Character> playable_characters = new List<Character>();
@@ -61,22 +59,11 @@ public class BattleManager : Singletone<BattleManager> // 싱글톤임
         CardManager.instance.Setup_all();
 
         // 초기 패 세팅 (여기서 1장 + turn_start_phase 1장 뽑음) 패 최대 개수 : 7장
-        for (int i = 0; i < playable_characters.Count; i++) 
-        {
-            int card_draw_number_of_times = 1;
-            int character_index = playable_characters[i].GetComponent<Character>().Character_index;
-            for (int j = 0; j < card_draw_number_of_times; j++) 
-            {
-                if (hand_data[character_index].Count < 7) 
-                {
-                    CardManager.instance.SummonData(character_index);
-                }
-            }
-        }
+        give_card_to_all_playable_characters(1);
 
         // 초기 코스트 설정
-        cost_meter = GameObject.Find("cost_meter").GetComponent<cost_meter>();
-        cost_meter.Setup(4, 4);
+        fill_cost();
+
 
         // 턴 시작
         current_phase_coroutine = turn_start_phase();
@@ -92,22 +79,10 @@ public class BattleManager : Singletone<BattleManager> // 싱글톤임
         current_phase = phases.turn_start_phase;
 
         // 카드 1장 뽑음
-        for (int i = 0; i < playable_characters.Count; i++)
-        {
-            int character_index = playable_characters[i].GetComponent<Character>().Character_index;
-            int card_draw_number_of_times = 1;
+        give_card_to_all_playable_characters(1);
 
-            for (int j = 0; j < card_draw_number_of_times; j++)
-            {
-                if (hand_data[character_index].Count < 7)
-                {
-                    CardManager.instance.SummonData(character_index);
-                }
-            }
-        }
-
-        // 코스트 4 증가
-        cost_meter.Current_cost += 4;
+        // 코스트 증가
+        fill_cost();
 
         // 턴 시작 이벤트 날림
         ActionManager.turn_start_phase?.Invoke();
@@ -120,7 +95,7 @@ public class BattleManager : Singletone<BattleManager> // 싱글톤임
 
     }
 
-    // 적 스킬 설정 페이즈
+    // 적 (이동 및) 스킬 설정 페이즈
     IEnumerator enemy_skill_setting_phase() 
     {
         enemy_skill_set_count = 0;
@@ -130,18 +105,12 @@ public class BattleManager : Singletone<BattleManager> // 싱글톤임
         ActionManager.enemy_skill_setting_phase?.Invoke();
 
         // 스킬 설정 끝나는 거 감지
-        while (true) 
-        {
-            if (enemy_skill_set_count == enemy_characters.Count) 
-            {
-                current_phase_coroutine = player_skill_phase();
-                StartCoroutine(current_phase_coroutine);
-                yield break;
-            }
+        yield return new WaitUntil(() => enemy_skill_set_count == enemy_characters.Count);
 
-            yield return new WaitForSeconds(0.01f);
-        }
-        
+        current_phase_coroutine = player_skill_phase();
+        StartCoroutine(current_phase_coroutine);
+        yield break;
+
     }
 
     // 플레이어 스킬 사용 페이즈
@@ -238,6 +207,43 @@ public class BattleManager : Singletone<BattleManager> // 싱글톤임
         }
     }
 
+    private void give_card_to_all_playable_characters(int draw_number_of_times) 
+    {
+        for (int i = 0; i < playable_characters.Count; i++)
+        {
+            int character_index = playable_characters[i].Character_index;
+            for (int j = 0; j < draw_number_of_times; j++)
+            {
+                if (hand_data[character_index].Count < 7)
+                {
+                    CardManager.instance.Summon_card(character_index);
+                }
+            }
+        }
+    }
+
+    public int get_remaining_cost() 
+    {
+        return remaining_cost;
+    }
+
+    public void reduce_cost(int value) 
+    {
+        remaining_cost -= value;
+        if (remaining_cost < 0) 
+        {
+            remaining_cost = 0;
+        }
+
+        ActionManager.set_cost(remaining_cost);
+    }
+
+    private void fill_cost() 
+    {
+        remaining_cost = MAX_COST;
+        ActionManager.set_cost(remaining_cost);
+    }
+
     private void OnCardDestroyed(card card) 
     {
         // 적 카드면
@@ -248,7 +254,8 @@ public class BattleManager : Singletone<BattleManager> // 싱글톤임
         // 플레이어 카드면
         else
         {
-            hand_data[card.owner.GetComponent<Character>().Character_index].Remove(card);
+            hand_data[card.owner.Character_index].Remove(card);
+            CardManager.instance.Align_cards(CardManager.instance.active_index);
         }
     }
 
@@ -257,6 +264,12 @@ public class BattleManager : Singletone<BattleManager> // 싱글톤임
         // 아군이면
         if (!character.check_enemy()) 
         {
+            // 플레이어 캐릭터 리스트에 없는 경우 넘김
+            if (!playable_characters.Contains(character)) 
+            {
+                return;
+            }
+
             // 캐릭터의 패 없애기
             for (int i = 0; i < hand_data[character.Character_index].Count; i++)
             {
@@ -276,6 +289,12 @@ public class BattleManager : Singletone<BattleManager> // 싱글톤임
         }
         else // 적 캐릭터면
         {
+            // 적 캐릭터 리스트에 없는 경우 넘김
+            if (!enemy_characters.Contains(character))
+            {
+                return;
+            }
+
             // 적 캐릭터 리스트에서 없애기
             enemy_characters.Remove(character);
 
@@ -296,6 +315,12 @@ public class BattleManager : Singletone<BattleManager> // 싱글톤임
             ActionManager.battle_ended?.Invoke(false);
         }
     }
+
+    private void OnEnemySkillSetComplete() 
+    {
+        enemy_skill_set_count += 1;
+    }
+
     private void Update()
     {
         if (battle_start_trigger) 
@@ -315,6 +340,7 @@ public class BattleManager : Singletone<BattleManager> // 싱글톤임
         ActionManager.battle_ended += OnBattleEnd;
         ActionManager.card_destroyed += OnCardDestroyed;
         ActionManager.character_died += OnCharacterDied;
+        ActionManager.enemy_skill_set_complete += OnEnemySkillSetComplete;
     }
 
     private void OnDisable()
@@ -323,5 +349,6 @@ public class BattleManager : Singletone<BattleManager> // 싱글톤임
         ActionManager.battle_ended -= OnBattleEnd;
         ActionManager.card_destroyed -= OnCardDestroyed;
         ActionManager.character_died -= OnCharacterDied;
+        ActionManager.enemy_skill_set_complete -= OnEnemySkillSetComplete;
     }
 }

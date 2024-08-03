@@ -26,7 +26,7 @@ namespace BattleUI
             slider.maxValue = value;
         }
 
-        public void SetValue(int value) 
+        public virtual void SetValue(int value) 
         { 
             slider.value = value; 
         }

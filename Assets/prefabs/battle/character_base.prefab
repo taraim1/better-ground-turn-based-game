@@ -76,7 +76,7 @@ GameObject:
   - component: {fileID: 6449006251238364949}
   m_Layer: 8
   m_Name: character_base
-  m_TagString: EnemyCharacter
+  m_TagString: PlayerCharacter
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

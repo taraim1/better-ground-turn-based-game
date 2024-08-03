@@ -463,6 +463,54 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 50289417}
   m_CullTransparentMesh: 1
+--- !u!1 &64083861
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 64083862}
+  - component: {fileID: 64083863}
+  m_Layer: 0
+  m_Name: BattleClacManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &64083862
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 64083861}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -3.2409136, y: -0.9452975, z: 0.021683268}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 368447970}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &64083863
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 64083861}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ec726103152c3f144bf53ad076623be6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  using_card: {fileID: 0}
+  target_card: {fileID: 0}
+  target_character: {fileID: 0}
+  cost_Meter: {fileID: 0}
 --- !u!1 &110205573
 GameObject:
   m_ObjectHideFlags: 0
@@ -1693,6 +1741,7 @@ Transform:
   - {fileID: 2013910028}
   - {fileID: 777273756}
   - {fileID: 1649778100}
+  - {fileID: 64083862}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &368447971
@@ -2754,14 +2803,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4f83729e5c834e479fabd80265d9a4c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CardDataSO: {fileID: 0}
+  CardDataSO: {fileID: 11400000, guid: c9e591b7fe7a68a4a93c3a83152d5714, type: 2}
   card_spawnpoint: {fileID: 1101494328}
-  leftData_transform: {fileID: 0}
-  leftData_over4_transform: {fileID: 0}
-  rightData_transform: {fileID: 0}
-  rightData_over4_transform: {fileID: 0}
-  diactivatedData_transform: {fileID: 0}
-  highlightedData_transform: {fileID: 0}
+  left_card_transform: {fileID: 1023100748}
+  left_card_over4_transform: {fileID: 1784582164}
+  right_card_transform: {fileID: 1222665003}
+  right_card_over4_transform: {fileID: 1079312974}
+  diactivated_card_transform: {fileID: 1242286862}
+  highlighted_card_transform: {fileID: 494003142}
   enemy_card_transform: {fileID: 624573120}
   enemy_card_highlighted_transform: {fileID: 1126709295}
   card_prefab: {fileID: 3273811198982270407, guid: 4c5547a8f3f819b4b8cbbebefa4d2f34,

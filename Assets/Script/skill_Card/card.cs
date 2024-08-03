@@ -34,7 +34,7 @@ public class card : MonoBehaviour
 
     public bool isEnemyCard = false;
     public bool _isShowingRange = false;
-
+    private bool isDestroyed = false;
     public List<coordinate> usable_tiles;
     private void Awake()
     {
@@ -76,12 +76,15 @@ public class card : MonoBehaviour
     {
         StopCoroutine(running_drag);
         transform.DOKill();
+        isDestroyed = true;
         Destroy(gameObject);
     }
 
     // 주어진 PRS로 Dotween 사용한 이동 or 그냥 이동
     public void MoveTransform(PRS prs, bool use_Dotween, float DotweenTime) 
     {
+        if (isDestroyed) return;
+
         // 이동 초기화
         transform.DOKill();
 
@@ -224,7 +227,7 @@ public class card : MonoBehaviour
             _isShowingRange = false;
         }
 
-            state = current_mode.normal;
+        state = current_mode.normal;
         CardManager.instance.clear_highlighted_card();
         CardManager.instance.Align_cards(CardManager.instance.active_index);
     }

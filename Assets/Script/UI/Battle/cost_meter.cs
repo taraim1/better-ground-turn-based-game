@@ -11,7 +11,7 @@ public class cost_meter : MonoBehaviour
     [SerializeField]
     private TMP_Text tmp;
 
-    private int max_cost;
+    private int max_cost = BattleManager.MAX_COST;
     private int current_cost;
     public int Current_cost { 
         get { return current_cost; }
@@ -25,13 +25,21 @@ public class cost_meter : MonoBehaviour
         }
             
     }
-    public void Setup(int max_cost, int current_cost) 
+    private void OnSetCost(int cost) 
     { 
-        this.max_cost = max_cost;
-        this.Current_cost = current_cost;
+        Current_cost = cost;
+    }
+
+    private void Awake()
+    {
+        ActionManager.set_cost += OnSetCost;
+    }
+
+    private void OnDestroy()
+    {
+        ActionManager.set_cost -= OnSetCost;
     }
 
 
 
-    
 }

@@ -23,10 +23,6 @@ public class BattleCalcManager : Singletone<BattleCalcManager>
     [SerializeField]
     Character target_character;
 
-    // 남은 코스트 표시하는 거
-    [SerializeField]
-    cost_meter cost_Meter;
-
     // 카드 사용중인지 저장
     private bool isUsingCard = false;
     public bool IsUsingCard { get { return isUsingCard; } }
@@ -109,7 +105,7 @@ public class BattleCalcManager : Singletone<BattleCalcManager>
                 apply_skill_effect(using_card, skill_effect_timing.immediate, target_character);
 
                 ActionManager.skill_used?.Invoke(OwnerCharacter, using_card.Data.Code);
-                cost_Meter.Current_cost = cost_Meter.Current_cost - using_card.Data.Cost;
+                BattleManager.instance.reduce_cost(using_card.Data.Cost);
                 using_card_power = UnityEngine.Random.Range(using_card.minpower, using_card.maxpower + 1);
                 apply_direct_use_result(using_card, target_character, using_card_power);
             }
@@ -125,7 +121,7 @@ public class BattleCalcManager : Singletone<BattleCalcManager>
                 apply_skill_effect(using_card, skill_effect_timing.immediate, target_character);
 
                 ActionManager.skill_used?.Invoke(OwnerCharacter, using_card.Data.Code);
-                cost_Meter.Current_cost = cost_Meter.Current_cost - using_card.Data.Cost;
+                BattleManager.instance.reduce_cost(using_card.Data.Cost);
                 using_card_power = UnityEngine.Random.Range(using_card.minpower, using_card.maxpower + 1);
                 apply_direct_use_result(using_card, target_character, using_card_power);
             }
@@ -143,7 +139,7 @@ public class BattleCalcManager : Singletone<BattleCalcManager>
             ActionManager.enemy_skillcard_deactivate?.Invoke();
 
             ActionManager.skill_used?.Invoke(OwnerCharacter, using_card.Data.Code);
-            cost_Meter.Current_cost = cost_Meter.Current_cost - using_card.Data.Cost;
+            BattleManager.instance.reduce_cost(using_card.Data.Cost);
             using_card_power = UnityEngine.Random.Range(using_card.minpower, using_card.maxpower + 1);
             target_card_power = UnityEngine.Random.Range(target_card.minpower, target_card.maxpower + 1);
             apply_clash_result(using_card, target_card, using_card_power, target_card_power);
@@ -170,7 +166,7 @@ public class BattleCalcManager : Singletone<BattleCalcManager>
                 ActionManager.enemy_skillcard_deactivate?.Invoke();
 
                 ActionManager.skill_used?.Invoke(OwnerCharacter, using_card.Data.Code);
-                cost_Meter.Current_cost = cost_Meter.Current_cost - using_card.Data.Cost;
+                BattleManager.instance.reduce_cost(using_card.Data.Cost);
                 using_card_power = UnityEngine.Random.Range(using_card.minpower, using_card.maxpower + 1);
                 apply_direct_use_result(using_card, target_character, using_card_power);
             }
@@ -226,7 +222,7 @@ public class BattleCalcManager : Singletone<BattleCalcManager>
         if (!isUsingCard) { return false; }
 
         // 코스트 부족하면 못 씀
-        if (cost_Meter.Current_cost < card.Data.Cost) { return false; }
+        if (BattleManager.instance.get_remaining_cost() < card.Data.Cost) { return false; }
 
         // 특수효과 관련해서 못 쓰는 거 검사
         Character owner_character = card.owner.GetComponent<Character>();
