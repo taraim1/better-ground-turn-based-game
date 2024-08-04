@@ -3,28 +3,32 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-public class panic_sign : MonoBehaviour
+public class panic_sign : BattleUI.CharacterUI
 {
-    public TMP_Text tmp;
-    [SerializeField] private Character _character;
+    [SerializeField] private TMP_Text TMP;
 
-    public void Setup(GameObject target_obj) // 처음 생성시 설정용
+    private void show() 
     {
-        tmp.text = "";
+        TMP.text = "패닉!";
     }
 
-    public void show() 
+    private void hide() 
     {
-        tmp.text = "패닉!";
+        TMP.text = "";
     }
 
-    public void hide() 
+    public override void Initialize(Character character)
     {
-        tmp.text = "";
+        base.Initialize(character);
+
+        hide();
+        character.panicked += show;
+        character.out_of_panic += hide;
     }
 
-    private void Awake()
+    private void OnDestroy()
     {
-        _character.data.panic_Sign = this;
+        character.panicked -= show;
+        character.out_of_panic -= hide;
     }
 }

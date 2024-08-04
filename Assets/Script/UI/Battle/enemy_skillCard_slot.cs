@@ -9,10 +9,10 @@ using UnityEditor;
 
 public class enemy_skillCard_slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
-    public Image illust;
-    public GameObject card_obj;
-    public GameObject enemy_Obj;
-    public GameObject target_obj;
+    [SerializeField] private Image illustImage;
+    private GameObject card_obj;
+    private card card;
+    private Character target_character;
     [SerializeField] private LineRenderer lineRenderer;
     [SerializeField] private Image frame;
 
@@ -28,7 +28,20 @@ public class enemy_skillCard_slot : MonoBehaviour, IPointerEnterHandler, IPointe
     bool isBattleEnded;
     bool isDragging = false;
 
-    private List<Tuple<int, int>> current_range;
+    private List<coordinate> current_range;
+
+    public void Initialize(Sprite illust, GameObject card_obj)
+    {
+        illustImage.sprite = illust;
+        this.card_obj = card_obj;
+        card = card_obj.GetComponent<card>();
+        if (card.target != null)
+        {
+            target_character = card.target;
+            StartCoroutine(Set_line(target_character.gameObject.transform.position));
+        }
+        
+    }
 
     // 전투 끝났을때
     private void OnBattleEnd(bool victory) 
@@ -41,21 +54,14 @@ public class enemy_skillCard_slot : MonoBehaviour, IPointerEnterHandler, IPointe
     {
         yield return new WaitForSeconds(0.001f); // 레이아웃그룹 적용 시간 이슈때문에 약간 지연시킴
 
-        card using_card = card_obj.GetComponent<card>();
-        Character target_character = target_obj.GetComponent<Character>();
-        Character using_character = using_card.owner.GetComponent<Character>();
-
         // 색상 설정
         set_lineRenderer_color(red);
-        if (using_card._Card.rangeType == CardRangeType.limited) 
-        {
 
-            if (!BattleCalcManager.instance.check_limited_range_usable(target_character.get_coordinate(), using_card.get_use_range(using_character.get_coordinate()))) 
-            {
-                set_lineRenderer_color(grey);
-            }
+        if (!card.check_usable_coordinate(target_character.Coordinate)) 
+        {
+            set_lineRenderer_color(grey);
         }
-        
+
 
         Vector3 objPos = transform.position;
         lineRenderer.SetPosition(0, new Vector3(objPos.x, objPos.y, -1f));
@@ -85,7 +91,7 @@ public class enemy_skillCard_slot : MonoBehaviour, IPointerEnterHandler, IPointe
         if (BattleManager.instance.current_phase == BattleManager.phases.player_skill_phase)
         {
             // 적 카드 강조 해제
-            ActionManager.enemy_skill_card_deactivate?.Invoke();
+            ActionManager.enemy_skillcard_deactivate?.Invoke();
             // 이 슬롯의 카드를 활성화 위치로
             CardManager.instance.highlight_enemy_card(card_obj);
             isHighlightedByClick = true;
@@ -102,7 +108,7 @@ public class enemy_skillCard_slot : MonoBehaviour, IPointerEnterHandler, IPointe
             // 이 슬롯의 카드를 카드 판정 대상으로
             BattleCalcManager.instance.set_target(card_obj.GetComponent<card>());
             // 적 카드 강조 해제
-            ActionManager.enemy_skill_card_deactivate?.Invoke();
+            ActionManager.enemy_skillcard_deactivate?.Invoke();
             // 이 슬롯의 카드를 활성화 위치로
             CardManager.instance.highlight_enemy_card(card_obj);
             isHighlightedByClick = false;
@@ -117,12 +123,12 @@ public class enemy_skillCard_slot : MonoBehaviour, IPointerEnterHandler, IPointe
     {
         if (isBattleEnded) { return; }
 
-        if (!isHighlightedByClick) // 클릭으로 하이라이트된 게 아니면
+        if (!isHighlightedByClick && BattleCalcManager.instance.IsUsingCard) // 클릭으로 하이라이트된 게 아니면
         {
             // 타겟 설정 해제
             BattleCalcManager.instance.clear_target_card();
             // 적 카드 강조 해제
-            ActionManager.enemy_skill_card_deactivate?.Invoke();
+            ActionManager.enemy_skillcard_deactivate?.Invoke();
         }
 
         isMouseOnThis = false;
@@ -151,11 +157,11 @@ public class enemy_skillCard_slot : MonoBehaviour, IPointerEnterHandler, IPointe
                 // 드래그 중인 경우
 
                 // 스킬 사정거리 보이기 해제
-                if (card._Card.rangeType == CardRangeType.limited)
+                if (card.Data.RangeType == CardRangeType.limited)
                 {
-                    foreach (Tuple<int, int> coordinate in current_range)
+                    foreach (coordinate coordinate in current_range)
                     {
-                        BattleGridManager.instance.set_tile_color(coordinate.Item1, coordinate.Item2, Tile.TileColor.original);
+                        BattleGridManager.instance.set_tile_color(coordinate, Tile.TileColor.original);
                     }
                 }
                 isDragging = false;
@@ -166,15 +172,15 @@ public class enemy_skillCard_slot : MonoBehaviour, IPointerEnterHandler, IPointe
             if (dragging_time >= Util.drag_time_standard && !isDragging)
             {
                 // 적 카드 강조 해제
-                ActionManager.enemy_skill_card_deactivate?.Invoke();
+                ActionManager.enemy_skillcard_deactivate?.Invoke();
 
                 // 스킬 사정거리 보이기
-                if (card._Card.rangeType == CardRangeType.limited) 
+                if (card.Data.RangeType == CardRangeType.limited) 
                 {
-                    current_range = card.get_use_range(card.owner.GetComponent<Character>().get_coordinate());
-                    foreach (Tuple<int, int> coordinate in current_range) 
+                    current_range = card.get_use_range(card.owner.Coordinate);
+                    foreach (coordinate coordinate in current_range) 
                     {
-                        BattleGridManager.instance.set_tile_color(coordinate.Item1, coordinate.Item2, Tile.TileColor.red);
+                        BattleGridManager.instance.set_tile_color(coordinate, Tile.TileColor.red);
                     }
                 }
                 isDragging = true;
@@ -184,12 +190,6 @@ public class enemy_skillCard_slot : MonoBehaviour, IPointerEnterHandler, IPointe
             yield return new WaitForSeconds(0.01f);
 
         }
-    }
-
-    // 스킬이 사용되면 실행됨
-    private void skill_used() 
-    {
-        // 나중에 채워질 예정
     }
 
     // 적 카드 하이라이트 해제시 실행
@@ -205,9 +205,9 @@ public class enemy_skillCard_slot : MonoBehaviour, IPointerEnterHandler, IPointe
 
     private void On_character_drag_ended() 
     {
-        if (target_obj != null) 
+        if (target_character != null) 
         {
-            StartCoroutine(Set_line(target_obj.transform.position));
+            StartCoroutine(Set_line(target_character.gameObject.transform.position));
         }
     }
 
@@ -216,11 +216,11 @@ public class enemy_skillCard_slot : MonoBehaviour, IPointerEnterHandler, IPointe
         lineRenderer.enabled = false;
         lineRenderer.startWidth = 0.05f;
         lineRenderer.endWidth = 0.05f;
-        ActionManager.skill_used += skill_used;
-        ActionManager.enemy_skill_card_deactivate += Card_diactivated;
+        ActionManager.enemy_skillcard_deactivate += Card_diactivated;
         ActionManager.battle_ended += OnBattleEnd;
         ActionManager.character_drag_started += On_character_drag_started;
         ActionManager.character_drag_ended += On_character_drag_ended;
+        ActionManager.card_destroyed += OnCardDestoryed;
 
         isBattleEnded = false;
     }
@@ -228,11 +228,11 @@ public class enemy_skillCard_slot : MonoBehaviour, IPointerEnterHandler, IPointe
     private void OnDisable()
     {
         lineRenderer.enabled = false;
-        ActionManager.skill_used -= skill_used;
-        ActionManager.enemy_skill_card_deactivate -= Card_diactivated;
+        ActionManager.enemy_skillcard_deactivate -= Card_diactivated;
         ActionManager.battle_ended -= OnBattleEnd;
         ActionManager.character_drag_started -= On_character_drag_started;
         ActionManager.character_drag_ended -= On_character_drag_ended;
+        ActionManager.card_destroyed -= OnCardDestoryed;
     }
 
     private void Update()
@@ -253,5 +253,13 @@ public class enemy_skillCard_slot : MonoBehaviour, IPointerEnterHandler, IPointe
             Destroy(gameObject);
         }
 
+    }
+
+    private void OnCardDestoryed(card card) 
+    {
+        if (card == this.card) 
+        {
+            Destroy(gameObject);
+        }
     }
 }

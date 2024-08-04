@@ -55,18 +55,11 @@ public class Card_UI : MonoBehaviour
     }
     public void Char_UI_Set(string Code)
     {
-        Character character = new Character();
         character_code Char_Code;
-
         Char_Code = CCFromString(Code);
-        JsonUtility.FromJsonOverwrite(CharacterManager.instance.load_character_from_json(Char_Code), character);
 
-        this.Card_Name.text = character.character_name;
-        GameObject spPrefab = Resources.Load<GameObject>(character.SPUM_datapath);
-        character.data.SPUM_unit_obj = Instantiate(spPrefab, Card_Char);
-        character.data.SPUM_unit_obj.transform.localPosition = new Vector3(0f, -40f, 1);
-        character.data.SPUM_unit_obj.transform.localScale = new Vector3(125f, 125f, 1);
-        
+        Character character = CharacterBuilder.instance.Code(Char_Code).IsEnemy(false).build();
+        Card_Name.text = character.Character_name;  
 
     }
     //캐릭터 코드를 뽑은 문자열에서 가져와요!

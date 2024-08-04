@@ -23,9 +23,9 @@ public class card : MonoBehaviour
     SpriteRenderer spriteRenderer;
 
     public GameObject drag_pointer;
-    public GameObject target;
+    public Character target;
 
-    public GameObject owner; // 카드 가지고 있는 캐릭터
+    public Character owner; // 카드 가지고 있는 캐릭터
     public int minpower;
     public int maxpower;
 
@@ -33,12 +33,14 @@ public class card : MonoBehaviour
     public Coroutine running_drag = null;
 
     public bool isEnemyCard = false;
-
-    List<Tuple<int, int>> usable_tiles;
+    public bool _isShowingRange = false;
+    private bool isDestroyed = false;
+    public List<coordinate> usable_tiles;
     private void Awake()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
         origin_sprite = spriteRenderer.sprite;
+        ActionManager.enemy_skillcard_deactivate += OnEnemyCardDeactivate;
     }
     public enum current_mode 
     { 
@@ -52,28 +54,41 @@ public class card : MonoBehaviour
     // 카드의 원래 위치, 회전, 스케일을 저장
     public PRS originPRS;
 
-    public Cards _Card;
+    private CardData data;
+    public CardData Data => data;
 
-    public void Setup(Cards card, int index) 
+    public void Setup(CardData data, int index) 
     {
-        _Card = card;
+        this.data = data;
 
-        illust.sprite = _Card.sprite;
-        nameTMP.text = _Card.name;
-        costTMP.text = _Card.cost.ToString();
-        typeTMP.text = _Card.type;
-        behavior_typeTMP.text = _Card.behavior_type;
-        // 여기 나중에 레벨 적용해야함
-        minpower = _Card.minPowerOfLevel[0];
-        maxpower = _Card.maxPowerOfLevel[0];
+        illust.sprite = Data.sprite;
+        nameTMP.text = Data.Name;
+        costTMP.text = Data.Cost.ToString();
+        typeTMP.text = Data.Type;
+        behavior_typeTMP.text = Data.BehaviorType;
+        minpower = Data.MinPowerOfLevel[Data.Level-1];
+        maxpower = Data.MaxPowerOfLevel[Data.Level-1];
         value_rangeTMP.text = string.Format("{0} - {1}", minpower, maxpower); 
         this.index = index;
 
     }
 
+    public void Destroy_card() 
+    {
+        if (running_drag != null) 
+        {
+            StopCoroutine(running_drag);
+        }
+        transform.DOKill();
+        isDestroyed = true;
+        Destroy(gameObject);
+    }
+
     // 주어진 PRS로 Dotween 사용한 이동 or 그냥 이동
     public void MoveTransform(PRS prs, bool use_Dotween, float DotweenTime) 
     {
+        if (isDestroyed) return;
+
         // 이동 초기화
         transform.DOKill();
 
@@ -90,6 +105,17 @@ public class card : MonoBehaviour
         transform.localScale = prs.scale;
     }
 
+    // 특정 좌표에 이 카드를 쓸 수 있는지 반환
+    public bool check_usable_coordinate(coordinate coordinate) 
+    {
+        if (Data.RangeType == CardRangeType.limited)
+        {
+            return get_use_range(owner.Coordinate).Contains(coordinate);
+        }
+
+        // unlimited인 경우
+        return true;
+    }
 
     // 카드 드래그 감지 (일정 시간 이상 잡고 있어야만 드래그로 판별)
     public IEnumerator detect_drag(bool isDescription) 
@@ -127,7 +153,7 @@ public class card : MonoBehaviour
                 else 
                 {
                     // 카드 하이라이트 or 하이라이트 해제
-                    if (CardManager.instance.highlighted_card != this)
+                    if (CardManager.instance.highlightedData != this)
                     {
                         CardManager.instance.highlight_card(this);
                     }
@@ -137,10 +163,10 @@ public class card : MonoBehaviour
                     }
 
                     // 하이라이트된 카드 order설정
-                    if (CardManager.instance.highlighted_card != null)
+                    if (CardManager.instance.highlightedData != null)
                     {
 
-                        CardManager.instance.highlighted_card.gameObject.GetComponent<element_order>().Set_highlighted_order();
+                        CardManager.instance.highlightedData.gameObject.GetComponent<element_order>().Set_highlighted_order();
                     }
 
                     // 카드 위치 계산 및 정렬
@@ -150,7 +176,7 @@ public class card : MonoBehaviour
             }
             
             // 마우스를 안 뗀 상태로 일정 시간이 지나면 드래그 기능 시작 (패닉이 아니어야 함)
-            if (dragging_time >= Util.drag_time_standard && !isDraggingStarted && !owner.GetComponent<Character>().data.isPanic) 
+            if (dragging_time >= Util.drag_time_standard && !isDraggingStarted && !owner.GetComponent<Character>().IsPanic) 
             {
                 // 모든 카드를 원래 order로 
                 CardManager.instance.Set_origin_order(CardManager.instance.active_index);
@@ -171,57 +197,71 @@ public class card : MonoBehaviour
         Vector3 mousepos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         GameObject dragPointer = Instantiate(drag_pointer, new Vector3(mousepos.x, mousepos.y, -2), Quaternion.identity);
         dragPointer.GetComponent<SpriteRenderer>().sortingOrder = 200;
-        // 드래그 포인터로 카드 데이터 넘겨줌
-        dragPointer.GetComponent<drag_pointer>().cards = _Card;
         // 카드 판정기로 드래그 하는 중이라는 정보, 카드 데이터 넘겨줌
         BattleCalcManager.instance.set_using_card(this);
 
         CardManager.instance.Align_cards(CardManager.instance.active_index);
 
         // 사용 범위가 있는 스킬이면
-        if (_Card.rangeType == CardRangeType.limited)
+        if (Data.RangeType == CardRangeType.limited)
         {
             // 쓸 수 있는 타일 판별
             Character using_character = BattleManager.instance.playable_characters[CardManager.instance.active_index].GetComponent<Character>();
-            usable_tiles = get_use_range(using_character.get_coordinate());
+            usable_tiles = get_use_range(using_character.Coordinate);
 
             // 그 타일들을 초록색으로
-            foreach (Tuple<int, int> coordinate in usable_tiles) 
+            foreach (coordinate coordinate in usable_tiles) 
             {
-                BattleGridManager.instance.set_tile_color(coordinate.Item1, coordinate.Item2, Tile.TileColor.green);
+                BattleGridManager.instance.set_tile_color(coordinate, Tile.TileColor.green);
             }
+            _isShowingRange = true;
         }
     }
 
     void OnDragEnd() 
     {
         // 사용 범위가 있는 스킬이면
-        if (_Card.rangeType == CardRangeType.limited)
+        if (Data.RangeType == CardRangeType.limited)
         {
             // 사용 범위 타일들을 원래 색으로
-            foreach (Tuple<int, int> coordinate in usable_tiles)
+            foreach (coordinate coordinate in usable_tiles)
             {
-                BattleGridManager.instance.set_tile_color(coordinate.Item1, coordinate.Item2, Tile.TileColor.original);
+                BattleGridManager.instance.set_tile_color(coordinate, Tile.TileColor.original);
             }
-
+            _isShowingRange = false;
         }
 
-            state = current_mode.normal;
+        state = current_mode.normal;
         CardManager.instance.clear_highlighted_card();
         CardManager.instance.Align_cards(CardManager.instance.active_index);
     }
 
-    public List<Tuple<int, int>> get_use_range(Tuple<int, int> character_coordinate) 
+    public List<coordinate> get_use_range(coordinate character_coordinate) 
     {
-        List<Tuple<int, int>> relative_coors = _Card.get_use_range();
-        List<Tuple<int, int>> result = new List<Tuple<int, int>>();
+        List<coordinate> relative_coors = Data.get_copy_of_use_range();
+        List<coordinate> result = new List<coordinate>();
 
-        foreach (Tuple<int, int> coor in relative_coors) 
+        foreach (coordinate coor in relative_coors) 
         {
-            result.Add(Tuple.Create(coor.Item1 + character_coordinate.Item1, coor.Item2 + character_coordinate.Item2));
+            result.Add(character_coordinate + coor);
         }
 
         return result;
     }
 
+    private void OnEnemyCardDeactivate() 
+    {
+        if (isEnemyCard) 
+        {
+            transform.DOKill();
+            transform.position = originPRS.pos;
+            transform.localScale = originPRS.scale;
+        }
+    }
+
+    private void OnDestroy()
+    {
+        ActionManager.card_destroyed?.Invoke(this);
+        ActionManager.enemy_skillcard_deactivate -= OnEnemyCardDeactivate;
+    }
 }

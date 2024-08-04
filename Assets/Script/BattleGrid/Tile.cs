@@ -41,9 +41,9 @@ public class Tile : MonoBehaviour
         return transform.position;
     }
 
-    public Tuple<int, int> get_coordinate() 
+    public coordinate get_coordinate() 
     {
-        return Tuple.Create(_x, _y);
+        return new coordinate(_x, _y);
     }
 
     public void set_type(BattleGridManager.boardCell cellType) 

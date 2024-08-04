@@ -8,7 +8,7 @@ using static CharacterManager;
 using UnityEngine.TextCore.Text;
 using TMPro;
 
-public class Random_Card : MonoBehaviour
+public class RandomData : MonoBehaviour
 {
     GameObject Scene_Changer;
     public GameObject cardPrefab;
@@ -31,15 +31,15 @@ public class Random_Card : MonoBehaviour
     string[] Card_Grade = new string[]
     { "Common", "Rare", "Epic","Legendary"};
     //��ų ī�� ����Ʈ
-    readonly string[] Skill_Common_Card = { "Test1", "Test2" };
-    readonly string[] Skill_Rare_Card = { "Test1", "Test2" };
-    readonly string[] Skill_Epic_Card = {"Test1", "Test2" };
-    readonly string[] Skill_Legend_Card = {"Test1", "Test2" };
+    readonly string[] Skill_CommonData = { "Test1", "Test2" };
+    readonly string[] Skill_RareData = { "Test1", "Test2" };
+    readonly string[] Skill_EpicData = {"Test1", "Test2" };
+    readonly string[] Skill_LegendData = {"Test1", "Test2" };
     //ĳ���� ī�� ����Ʈ
-    readonly string[] Char_Common_Card ={ "kimchunsik", "test"};
-    readonly string[] Char_Rare_Card = { "kimchunsik", "test" };
-    readonly string[] Char_Epic_Card = { "kimchunsik", "test" };
-    readonly string[] Char_Legend_Card = { "kimchunsik", "test" };
+    readonly string[] Char_CommonData ={ "kimchunsik", "test"};
+    readonly string[] Char_RareData = { "kimchunsik", "test" };
+    readonly string[] Char_EpicData = { "kimchunsik", "test" };
+    readonly string[] Char_LegendData = { "kimchunsik", "test" };
 
     
     //�� ��޺� Ȯ��
@@ -79,26 +79,26 @@ public class Random_Card : MonoBehaviour
     public Card_Data Card_Pick_Skill(string Grade)
     {
         //card_DataSO = GetComponent<Card_DataSO>();
-        String[] selected_cardlist = null;
+        String[] selectedDatalist = null;
 
         //��޿� ���� ī��Ǯ ����
         switch (Grade)
         {
-            case "Common": selected_cardlist = Skill_Common_Card; break;
-            case "Rare": selected_cardlist = Skill_Rare_Card; break;
-            case "Epic": selected_cardlist = Skill_Epic_Card; break;
-            case "Legendary": selected_cardlist = Skill_Legend_Card; break;
+            case "Common": selectedDatalist = Skill_CommonData; break;
+            case "Rare": selectedDatalist = Skill_RareData; break;
+            case "Epic": selectedDatalist = Skill_EpicData; break;
+            case "Legendary": selectedDatalist = Skill_LegendData; break;
         }
 
         //���� ī�� Ǯ�߿��� �ϳ� ������ ����
-        if (selected_cardlist != null && selected_cardlist.Length > 0)
+        if (selectedDatalist != null && selectedDatalist.Length > 0)
         {
-            int randomIndex = UnityEngine.Random.Range(0, selected_cardlist.Length);
-            for (int i = 0; i < card_DataSO.cards.Length; i++)
+            int randomIndex = UnityEngine.Random.Range(0, selectedDatalist.Length);
+            for (int i = 0; i < card_DataSO.CardData.Length; i++)
             {
-                if (card_DataSO.cards[i].Card_Name == selected_cardlist[randomIndex])//�̸��� �����ؿ�
+                if (card_DataSO.CardData[i].Card_Name == selectedDatalist[randomIndex])//�̸��� �����ؿ�
                 {
-                    return card_DataSO.cards[i];
+                    return card_DataSO.CardData[i];
                 }
 
             }
@@ -109,19 +109,19 @@ public class Random_Card : MonoBehaviour
 
     public string Card_Pick_Char(string Grade)
     {
-        String[] selected_cardlist = null;
+        String[] selectedDatalist = null;
         switch (Grade)
         {
-            case "Common": selected_cardlist = Char_Common_Card; break;
-            case "Rare": selected_cardlist = Char_Rare_Card; break;
-            case "Epic": selected_cardlist = Char_Epic_Card; break;
-            case "Legendary": selected_cardlist = Char_Legend_Card; break;
+            case "Common": selectedDatalist = Char_CommonData; break;
+            case "Rare": selectedDatalist = Char_RareData; break;
+            case "Epic": selectedDatalist = Char_EpicData; break;
+            case "Legendary": selectedDatalist = Char_LegendData; break;
         }
         //���� ī�� Ǯ�߿��� �ϳ� ������ ����
-        if (selected_cardlist != null && selected_cardlist.Length > 0)
+        if (selectedDatalist != null && selectedDatalist.Length > 0)
         {
-            int randomIndex = UnityEngine.Random.Range(0, selected_cardlist.Length);
-            return selected_cardlist[randomIndex];
+            int randomIndex = UnityEngine.Random.Range(0, selectedDatalist.Length);
+            return selectedDatalist[randomIndex];
         }
         else
         {

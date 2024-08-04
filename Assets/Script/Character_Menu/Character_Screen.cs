@@ -24,7 +24,7 @@ public class Character_Screen : MonoBehaviour
     {
         //캐릭터의 json데이터가 저장된 경로
         string dPath = "/Data/CharaterData";
-        List<Character> Unlocked_Characters = new List<Character>(); //해금된 캐릭터를 저장할 경로
+        List<PlayableCharacter> Unlocked_Characters = new List<PlayableCharacter>(); //해금된 캐릭터를 저장할 경로
 
         //경로에 있는 json 파일들 경로의 모음
         string[] files = Directory.GetFiles(Application.dataPath + dPath, "*.json", SearchOption.TopDirectoryOnly);
@@ -32,11 +32,10 @@ public class Character_Screen : MonoBehaviour
         for (int i = 0; i < files.Length; i++)
         {
             GameObject Obj = Instantiate(Char_Scr_Btn_prefab, Scroll_content.transform);
-            Character character = Obj.GetComponent<Character>();
-            string output = File.ReadAllText(files[i]);
-            JsonUtility.FromJsonOverwrite(output, character);
+            PlayableCharacter character = Obj.GetComponent<PlayableCharacter>();
+            character.Load_data();
             Char_UI char_UI = Obj.GetComponent<Char_UI>();
-            if (character.is_character_unlocked)
+            if (character.Is_character_unlocked)
             {
                 Unlocked_Characters.Add(character);
                 char_UI.character = character;
