@@ -23,7 +23,7 @@ public class card : MonoBehaviour
     SpriteRenderer spriteRenderer;
 
     public GameObject drag_pointer;
-    public GameObject target;
+    public Character target;
 
     public Character owner; // 카드 가지고 있는 캐릭터
     public int minpower;
@@ -40,6 +40,7 @@ public class card : MonoBehaviour
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
         origin_sprite = spriteRenderer.sprite;
+        ActionManager.enemy_skillcard_deactivate += OnEnemyCardDeactivate;
     }
     public enum current_mode 
     { 
@@ -151,7 +152,7 @@ public class card : MonoBehaviour
                     // 카드 하이라이트 or 하이라이트 해제
                     if (CardManager.instance.highlightedData != this)
                     {
-                        CardManager.instance.highlightData(this);
+                        CardManager.instance.highlight_card(this);
                     }
                     else
                     {
@@ -245,8 +246,19 @@ public class card : MonoBehaviour
         return result;
     }
 
+    private void OnEnemyCardDeactivate() 
+    {
+        if (isEnemyCard) 
+        {
+            transform.DOKill();
+            transform.position = originPRS.pos;
+            transform.localScale = originPRS.scale;
+        }
+    }
+
     private void OnDestroy()
     {
         ActionManager.card_destroyed?.Invoke(this);
+        ActionManager.enemy_skillcard_deactivate -= OnEnemyCardDeactivate;
     }
 }

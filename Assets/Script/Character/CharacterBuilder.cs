@@ -16,11 +16,13 @@ public class CharacterBuilder : Singletone<CharacterBuilder>
     private bool makeSpumObj = false;
     private bool makePanicSign = false;
     private bool makeHealthAndWillpowerBar = false;
+    private bool makeSkillSlotController = false;
 
     [SerializeField] private GameObject character_base_prefab;
     [SerializeField] private GameObject panic_sign_prefab;
     [SerializeField] private GameObject health_bar_prefab;
     [SerializeField] private GameObject willpower_bar_prefab;
+    [SerializeField] private GameObject skillSlotController;
 
     [SerializeField] private CharacterDataSO DataSO;
 
@@ -32,8 +34,9 @@ public class CharacterBuilder : Singletone<CharacterBuilder>
         Index(0).
         AiType(EnemyAiType.NoAI).
         MakeSpumObj(false).
-        MakePanicSign(false);
-        MakeHealthAndWillpowerBar(false);
+        MakePanicSign(false).
+        MakeHealthAndWillpowerBar(false).
+        MakeSkillSlotController(false);
     }
 
     public CharacterBuilder IsEnemy(bool isEnemy){ this.isEnemy = isEnemy; return this; }
@@ -44,6 +47,8 @@ public class CharacterBuilder : Singletone<CharacterBuilder>
     public CharacterBuilder MakeSpumObj(bool flag) { makeSpumObj = flag; return this; }
     public CharacterBuilder MakePanicSign(bool flag) { makePanicSign = flag; return this; }
     public CharacterBuilder MakeHealthAndWillpowerBar(bool flag) { makeHealthAndWillpowerBar = flag; return this; }
+    public CharacterBuilder MakeSkillSlotController(bool flag) { makeSkillSlotController = flag; return this; }
+
     public Character build() 
     {
         GameObject rootObj = Instantiate(character_base_prefab);
@@ -62,6 +67,13 @@ public class CharacterBuilder : Singletone<CharacterBuilder>
                         enemy_character, 
                         new BehaviorTree.MoveTree_NoAI("NoMove", enemy_character),
                         new BehaviorTree.SkillSelectTree_NoAI("NoSkillSelect", enemy_character)
+                    ));
+                    break;
+                case EnemyAiType.RandomAI:
+                    enemy_character.SetAI(new EnemyAI(
+                        enemy_character,
+                        new BehaviorTree.MoveTree_NoAI("NoMove", enemy_character),
+                        new BehaviorTree.SkillSelectTree_RandomPickOne("RandomSkillSelect", enemy_character)
                     ));
                     break;
             }
@@ -106,6 +118,11 @@ public class CharacterBuilder : Singletone<CharacterBuilder>
             characterUIs.Add(Temp_obj.GetComponent<BattleUI.CharacterUI>());
             Temp_obj = character_base.Attach(character_base.location.Bottom_layoutGroup, willpower_bar_prefab);
             characterUIs.Add(Temp_obj.GetComponent<BattleUI.CharacterUI>());
+        }
+
+        if (makeSkillSlotController && isEnemy)
+        {
+            character_base.Attach(character_base.location.Base, skillSlotController);
         }
 
         foreach (BattleUI.CharacterUI characterUI in characterUIs) 

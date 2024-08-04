@@ -114,7 +114,7 @@ public class CardManager : Singletone<CardManager>
         for (int i = 0; i < BattleManager.instance.playable_characters.Count; i++) 
         {
             List<CardData> temp = new List<CardData>();
-            List<skillcard_code> deck = BattleManager.instance.playable_characters[i].GetComponent<Character>().Get_deck_copy();
+            List<skillcard_code> deck = BattleManager.instance.playable_characters[i].GetComponent<Character>().Deck;
 
             // 파티의 캐릭터마다의 덱에서 코드를 얻어서 카드 데이터를 불러옴
             for (int j = 0; j < deck.Count; j++) 
@@ -345,7 +345,7 @@ public class CardManager : Singletone<CardManager>
         }
     }
 
-    public void highlightData(card card) // 카드 하이라이트
+    public void highlight_card(card card) // 카드 하이라이트
     {
         highlightedData = card;
         card_Description.Set_target(card);

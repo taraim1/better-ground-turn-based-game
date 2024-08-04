@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class character_base : MonoBehaviour
 {
-    [SerializeField] private GameObject SkillSlotCanvas;
+    [SerializeField] private GameObject SkillSlotLayoutGroup;
     [SerializeField] private GameObject CharacterCanvas;
     [SerializeField] private GameObject MasterLayoutGroup;
     [SerializeField] private GameObject effectLayoutGroup;
@@ -26,7 +26,7 @@ public class character_base : MonoBehaviour
         switch (location) 
         {
             case location.Skill_slot:
-                parent = SkillSlotCanvas;
+                parent = SkillSlotLayoutGroup;
                 break;
             case location.Middle_canvas:
                 parent = CharacterCanvas;

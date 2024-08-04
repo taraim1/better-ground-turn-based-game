@@ -55,12 +55,9 @@ public abstract class Character : MonoBehaviour
         return max_willpowers_of_level[level];
     }
     private List<skillcard_code> deck;
-    public List<skillcard_code> Get_deck_copy() 
-    { 
-        List<skillcard_code> deck_copy = new List<skillcard_code>();
-        foreach (skillcard_code code in deck) { deck_copy.Add(code); }
-        return deck_copy;
-    }
+    public List<skillcard_code> Deck => deck;
+
+
     private string SPUM_datapath;
     public string SPUM_Datapath { get { return SPUM_datapath; } }
     private List<coordinate> move_range;
@@ -108,7 +105,7 @@ public abstract class Character : MonoBehaviour
     public CharacterDataSO Data_SO { set { DataSO = value; } }
     public Action<int> health_changed;
     public Action<int> willpower_changed;
-    public Action<skillcard_code> skillData_used;
+    public Action<skillcard_code> skillcard_used;
     public Action panicked;
     public Action out_of_panic;
     public Action health_damaged;
@@ -478,9 +475,9 @@ public class EnemyCharacter : Character
     private int remaining_skill_count = 0;
     public int Remaining_skill_count { get { return remaining_skill_count; } }
 
-    private List<skillcard_code> reserved_skills;
+    private List<card> reserved_cards;
 
-    public Action<skillcard_code> skill_reserved;
+    public Action<card> skillcard_reserved;
 
     private EnemyAI AI;
     public void SetAI(EnemyAI AI) 
@@ -494,7 +491,7 @@ public class EnemyCharacter : Character
 
     public override bool check_enemy() { return true; }
 
-    private void OnSkillReserved(skillcard_code code) 
+    private void OnSkillReserved(card card) 
     {
         remaining_skill_count += 1;
     }
@@ -510,20 +507,25 @@ public class EnemyCharacter : Character
     private void OnEnemySkillSettingPhase() 
     {
         AI.Move();
-        reserved_skills = AI.Get_skills_for_current_turn();
+        reserved_cards = AI.Get_skills_for_current_turn();
+
+        foreach (card card in reserved_cards) 
+        {
+            skillcard_reserved?.Invoke(card);
+        }
         ActionManager.enemy_skill_set_complete?.Invoke();
     }
 
     private void Awake()
     {
-        skill_reserved += OnSkillReserved;
+        skillcard_reserved += OnSkillReserved;
         ActionManager.skill_used += OnSkillUsed;
         ActionManager.enemy_skill_setting_phase += OnEnemySkillSettingPhase;
     }
 
     private void OnDestroy()
     {
-        skill_reserved -= OnSkillReserved;
+        skillcard_reserved -= OnSkillReserved;
         ActionManager.skill_used -= OnSkillUsed;
         ActionManager.enemy_skill_setting_phase -= OnEnemySkillSettingPhase;
     

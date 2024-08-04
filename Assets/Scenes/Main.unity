@@ -510,7 +510,6 @@ MonoBehaviour:
   using_card: {fileID: 0}
   target_card: {fileID: 0}
   target_character: {fileID: 0}
-  cost_Meter: {fileID: 0}
 --- !u!1 &110205573
 GameObject:
   m_ObjectHideFlags: 0
@@ -4483,6 +4482,8 @@ MonoBehaviour:
     type: 3}
   willpower_bar_prefab: {fileID: 953389889809876917, guid: 036998866c0c8fb4d9ac1e6ae5075a2f,
     type: 3}
+  skillSlotController: {fileID: 2486827344959942594, guid: 685ba5687b2fc5a42a76a6425fbed4cf,
+    type: 3}
   DataSO: {fileID: 11400000, guid: e54cf04d81f8ab142a80f91a0a8e393e, type: 2}
 --- !u!1 &1291836879
 GameObject:
@@ -5922,7 +5923,6 @@ MonoBehaviour:
   current_turn: 0
   current_phase: 0
   battle_start_trigger: 0
-  enemy_skill_set_count: 0
   playable_characters: []
   enemy_characters: []
   enemy_cards: []

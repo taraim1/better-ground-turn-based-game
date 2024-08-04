@@ -136,9 +136,11 @@ public class CharacterManager : Singletone<CharacterManager>
                 Code(StageSettingSO.stage_Settings[stage_index].enemy_codes[i]).
                 Coordinate(coordinate).
                 Index(i).
+                AiType(EnemyAiType.RandomAI).
                 MakeSpumObj(true).
                 MakePanicSign(true).
                 MakeHealthAndWillpowerBar(true).
+                MakeSkillSlotController(true).
                 build();
 
             // ÁÂÇ¥ ¼³Á¤

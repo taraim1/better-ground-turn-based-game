@@ -9,10 +9,10 @@ using UnityEditor;
 
 public class enemy_skillCard_slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
-    public Image illust;
-    public GameObject card_obj;
-    public GameObject enemy_Obj;
-    public GameObject target_obj;
+    [SerializeField] private Image illustImage;
+    private GameObject card_obj;
+    private card card;
+    private Character target_character;
     [SerializeField] private LineRenderer lineRenderer;
     [SerializeField] private Image frame;
 
@@ -30,6 +30,19 @@ public class enemy_skillCard_slot : MonoBehaviour, IPointerEnterHandler, IPointe
 
     private List<coordinate> current_range;
 
+    public void Initialize(Sprite illust, GameObject card_obj)
+    {
+        illustImage.sprite = illust;
+        this.card_obj = card_obj;
+        card = card_obj.GetComponent<card>();
+        if (card.target != null)
+        {
+            target_character = card.target;
+            StartCoroutine(Set_line(target_character.gameObject.transform.position));
+        }
+        
+    }
+
     // 전투 끝났을때
     private void OnBattleEnd(bool victory) 
     {
@@ -41,14 +54,10 @@ public class enemy_skillCard_slot : MonoBehaviour, IPointerEnterHandler, IPointe
     {
         yield return new WaitForSeconds(0.001f); // 레이아웃그룹 적용 시간 이슈때문에 약간 지연시킴
 
-        card using_card = card_obj.GetComponent<card>();
-        Character target_character = target_obj.GetComponent<Character>();
-        Character using_character = using_card.owner.GetComponent<Character>();
-
         // 색상 설정
         set_lineRenderer_color(red);
 
-        if (!using_card.check_usable_coordinate(target_character.Coordinate)) 
+        if (!card.check_usable_coordinate(target_character.Coordinate)) 
         {
             set_lineRenderer_color(grey);
         }
@@ -114,7 +123,7 @@ public class enemy_skillCard_slot : MonoBehaviour, IPointerEnterHandler, IPointe
     {
         if (isBattleEnded) { return; }
 
-        if (!isHighlightedByClick) // 클릭으로 하이라이트된 게 아니면
+        if (!isHighlightedByClick && BattleCalcManager.instance.IsUsingCard) // 클릭으로 하이라이트된 게 아니면
         {
             // 타겟 설정 해제
             BattleCalcManager.instance.clear_target_card();
@@ -196,9 +205,9 @@ public class enemy_skillCard_slot : MonoBehaviour, IPointerEnterHandler, IPointe
 
     private void On_character_drag_ended() 
     {
-        if (target_obj != null) 
+        if (target_character != null) 
         {
-            StartCoroutine(Set_line(target_obj.transform.position));
+            StartCoroutine(Set_line(target_character.gameObject.transform.position));
         }
     }
 

@@ -219,7 +219,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0d6e6ef252de0ff4bb6fc806b142a1a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _slot: {fileID: 899707436375417153}
+  _slot: {fileID: 969076414938957431}
 --- !u!1 &5244731783984257528
 GameObject:
   m_ObjectHideFlags: 0
@@ -305,7 +305,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3202634508867793239}
   - component: {fileID: 2543753459319559527}
-  - component: {fileID: 899707436375417153}
+  - component: {fileID: 969076414938957431}
   - component: {fileID: 128687339765677932}
   m_Layer: 5
   m_Name: enemy_skill_slot
@@ -344,7 +344,7 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5858226105626517123}
   m_CullTransparentMesh: 1
---- !u!114 &899707436375417153
+--- !u!114 &969076414938957431
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -356,10 +356,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f2a5a11245a28f443a1f55526500358b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  illust: {fileID: 3443290912605978679}
-  card_obj: {fileID: 0}
-  enemy_Obj: {fileID: 0}
-  target_obj: {fileID: 0}
+  illustImage: {fileID: 3443290912605978679}
   lineRenderer: {fileID: 128687339765677932}
   frame: {fileID: 3081685233403993950}
 --- !u!120 &128687339765677932
