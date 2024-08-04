@@ -1,3 +1,4 @@
+using BattleUI;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -17,12 +18,16 @@ public class CharacterBuilder : Singletone<CharacterBuilder>
     private bool makePanicSign = false;
     private bool makeHealthAndWillpowerBar = false;
     private bool makeSkillSlotController = false;
+    private bool makeSkillPowerMeter = false;
+    private bool makeCharacterEffectController = false;
 
     [SerializeField] private GameObject character_base_prefab;
     [SerializeField] private GameObject panic_sign_prefab;
     [SerializeField] private GameObject health_bar_prefab;
     [SerializeField] private GameObject willpower_bar_prefab;
-    [SerializeField] private GameObject skillSlotController;
+    [SerializeField] private GameObject skill_slot_controller;
+    [SerializeField] private GameObject skill_power_meter_prefab;
+    [SerializeField] private GameObject character_effect_controller_prefab;
 
     [SerializeField] private CharacterDataSO DataSO;
 
@@ -36,7 +41,9 @@ public class CharacterBuilder : Singletone<CharacterBuilder>
         MakeSpumObj(false).
         MakePanicSign(false).
         MakeHealthAndWillpowerBar(false).
-        MakeSkillSlotController(false);
+        MakeSkillSlotController(false).
+        MakeSkillPowerMeter(false).
+        MakeCharacterEffectController(false);
     }
 
     public CharacterBuilder IsEnemy(bool isEnemy){ this.isEnemy = isEnemy; return this; }
@@ -48,7 +55,8 @@ public class CharacterBuilder : Singletone<CharacterBuilder>
     public CharacterBuilder MakePanicSign(bool flag) { makePanicSign = flag; return this; }
     public CharacterBuilder MakeHealthAndWillpowerBar(bool flag) { makeHealthAndWillpowerBar = flag; return this; }
     public CharacterBuilder MakeSkillSlotController(bool flag) { makeSkillSlotController = flag; return this; }
-
+    public CharacterBuilder MakeSkillPowerMeter(bool flag) { makeSkillPowerMeter = flag; return this; }
+    public CharacterBuilder MakeCharacterEffectController(bool flag) { makeCharacterEffectController = flag; return this; }
     public Character build() 
     {
         GameObject rootObj = Instantiate(character_base_prefab);
@@ -104,33 +112,45 @@ public class CharacterBuilder : Singletone<CharacterBuilder>
             }
         }
 
-        List<BattleUI.CharacterUI> characterUIs = new List<BattleUI.CharacterUI>();
-        GameObject Temp_obj;
+        List<CharacterUI> characterUIs = new List<CharacterUI>();
         if (makePanicSign) 
         {
-            Temp_obj = character_base.Attach(character_base.location.Middle_canvas, panic_sign_prefab);
-            characterUIs.Add(Temp_obj.GetComponent<BattleUI.CharacterUI>());
+            characterUIs.Add(AttachUI(character_base, character_base.location.Middle_canvas, panic_sign_prefab));
         }
 
         if (makeHealthAndWillpowerBar) 
         {
-            Temp_obj = character_base.Attach(character_base.location.Bottom_layoutGroup, health_bar_prefab);
-            characterUIs.Add(Temp_obj.GetComponent<BattleUI.CharacterUI>());
-            Temp_obj = character_base.Attach(character_base.location.Bottom_layoutGroup, willpower_bar_prefab);
-            characterUIs.Add(Temp_obj.GetComponent<BattleUI.CharacterUI>());
+            characterUIs.Add(AttachUI(character_base, character_base.location.Bottom_layoutGroup, health_bar_prefab)); 
+            characterUIs.Add(AttachUI(character_base, character_base.location.Bottom_layoutGroup, willpower_bar_prefab));
         }
 
-        if (makeSkillSlotController && isEnemy)
+        if (makeSkillPowerMeter) 
         {
-            character_base.Attach(character_base.location.Base, skillSlotController);
+            characterUIs.Add(AttachUI(character_base, character_base.location.Middle_canvas, skill_power_meter_prefab));
         }
 
-        foreach (BattleUI.CharacterUI characterUI in characterUIs) 
+        foreach (CharacterUI characterUI in characterUIs) 
         {
             characterUI.Initialize(character);
         }
 
+        if (makeSkillSlotController && isEnemy)
+        {
+            character_base.Attach(character_base.location.Base, skill_slot_controller);
+        }
+
+        if (makeCharacterEffectController) 
+        {
+            character_base.Attach(character_base.location.Base, character_effect_controller_prefab);
+        }
+
         Reset_builder();
         return character;
+    }
+
+    private CharacterUI AttachUI(character_base character_base, character_base.location location, GameObject obj) 
+    {
+        GameObject Temp_obj = character_base.Attach(location, obj);
+        return Temp_obj.GetComponent<CharacterUI>();
     }
 }

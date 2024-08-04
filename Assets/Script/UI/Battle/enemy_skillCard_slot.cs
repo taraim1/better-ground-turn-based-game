@@ -220,6 +220,7 @@ public class enemy_skillCard_slot : MonoBehaviour, IPointerEnterHandler, IPointe
         ActionManager.battle_ended += OnBattleEnd;
         ActionManager.character_drag_started += On_character_drag_started;
         ActionManager.character_drag_ended += On_character_drag_ended;
+        ActionManager.card_destroyed += OnCardDestoryed;
 
         isBattleEnded = false;
     }
@@ -231,6 +232,7 @@ public class enemy_skillCard_slot : MonoBehaviour, IPointerEnterHandler, IPointe
         ActionManager.battle_ended -= OnBattleEnd;
         ActionManager.character_drag_started -= On_character_drag_started;
         ActionManager.character_drag_ended -= On_character_drag_ended;
+        ActionManager.card_destroyed -= OnCardDestoryed;
     }
 
     private void Update()
@@ -251,5 +253,13 @@ public class enemy_skillCard_slot : MonoBehaviour, IPointerEnterHandler, IPointe
             Destroy(gameObject);
         }
 
+    }
+
+    private void OnCardDestoryed(card card) 
+    {
+        if (card == this.card) 
+        {
+            Destroy(gameObject);
+        }
     }
 }

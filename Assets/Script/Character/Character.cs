@@ -506,12 +506,14 @@ public class EnemyCharacter : Character
 
     private void OnEnemySkillSettingPhase() 
     {
+        AI.Reset();
         AI.Move();
         reserved_cards = AI.Get_skills_for_current_turn();
 
         foreach (card card in reserved_cards) 
         {
             skillcard_reserved?.Invoke(card);
+            BattleManager.instance.enemy_cards.Add(card);
         }
         ActionManager.enemy_skill_set_complete?.Invoke();
     }

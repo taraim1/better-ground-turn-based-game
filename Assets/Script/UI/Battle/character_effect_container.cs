@@ -46,7 +46,7 @@ public class character_effect_container : BattleUI.CharacterUI
         }
 
         // 아이콘 불러오기
-        image.sprite = buffNdebuffManager.instance.get_icon_by_code(effect.code);
+        image.sprite = CharacterEffectManager.instance.get_icon_by_code(effect.code);
     }
 
     public void updateEffect(int power, character_effect_setType type) // 위력 갱신 or 추가
@@ -168,24 +168,6 @@ public class character_effect_container : BattleUI.CharacterUI
     public character_effect_code Get_effect_code() 
     {
         return effect.code;
-    }
-
-    private void OneffectRemove(character_effect_code code) 
-    {
-        if (effect.code == code) 
-        {
-            Destroy(gameObject);
-        }
-    }
-
-    private void Awake()
-    {
-        character.destroy_effect += OneffectRemove;
-    }
-
-    private void OnDestroy()
-    {
-        character.destroy_effect -= OneffectRemove;
     }
 
 }

@@ -105,6 +105,8 @@ public class CharacterManager : Singletone<CharacterManager>
                 MakeSpumObj(true).
                 MakePanicSign(true).
                 MakeHealthAndWillpowerBar(true).
+                MakeSkillPowerMeter(true).
+                MakeCharacterEffectController(true).
                 build();
 
             // 패 추가
@@ -140,7 +142,9 @@ public class CharacterManager : Singletone<CharacterManager>
                 MakeSpumObj(true).
                 MakePanicSign(true).
                 MakeHealthAndWillpowerBar(true).
+                MakeSkillPowerMeter(true).
                 MakeSkillSlotController(true).
+                MakeCharacterEffectController(true).
                 build();
 
             // 좌표 설정

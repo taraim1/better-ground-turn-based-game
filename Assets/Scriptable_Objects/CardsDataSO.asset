@@ -172,7 +172,7 @@ MonoBehaviour:
       type: "\uBD88"
       sprite: {fileID: 21300000, guid: 13e199fac305f6e4287859e68fcb530c, type: 3}
       behavior_type: "\uACF5\uACA9"
-      minPowerOfLevel: 02000000
+      minPowerOfLevel: 03000000
       maxPowerOfLevel: 04000000
       code: 4
       level: 1

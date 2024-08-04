@@ -4456,7 +4456,7 @@ Transform:
   m_GameObject: {fileID: 1267649767}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -4483,6 +4483,8 @@ MonoBehaviour:
   willpower_bar_prefab: {fileID: 953389889809876917, guid: 036998866c0c8fb4d9ac1e6ae5075a2f,
     type: 3}
   skillSlotController: {fileID: 2486827344959942594, guid: 685ba5687b2fc5a42a76a6425fbed4cf,
+    type: 3}
+  skillPowerMeter_prefab: {fileID: 3271687678273936230, guid: 6923df529ad6cf846a48edd2b2545cad,
     type: 3}
   DataSO: {fileID: 11400000, guid: e54cf04d81f8ab142a80f91a0a8e393e, type: 2}
 --- !u!1 &1291836879

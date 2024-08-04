@@ -75,6 +75,7 @@ namespace BehaviorTree
             {
                 cards.Add(Create_card(code, character));
             }
+            targetSelectTree.Reset();
             targetSelectTree.Process();
             return cards;
 
@@ -95,6 +96,12 @@ public class EnemyAI
         this.character = character;
         MoveTree = moveTree;
         SkillSelectTree = skillSelectTree;
+    }
+
+    public void Reset() 
+    {
+        MoveTree.Reset();
+        SkillSelectTree.Reset();
     }
 
     public void Move() => MoveTree.Move();

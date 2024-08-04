@@ -6,7 +6,7 @@ using System.Reflection;
 using System;
 
 [CustomPropertyDrawer(typeof(CardDataSoDictonary))]
-[CustomPropertyDrawer(typeof(characterEffectSpritesDictionary))]
+[CustomPropertyDrawer(typeof(characterEffectsDictionary))]
 [CustomPropertyDrawer(typeof(StageSettingSO_dictionary))]
 [CustomPropertyDrawer(typeof(BasicCharacterData_dictionary))]
 [CustomPropertyDrawer(typeof(PlayableCharacterData_dictionary))]

@@ -75,7 +75,10 @@ public class card : MonoBehaviour
 
     public void Destroy_card() 
     {
-        StopCoroutine(running_drag);
+        if (running_drag != null) 
+        {
+            StopCoroutine(running_drag);
+        }
         transform.DOKill();
         isDestroyed = true;
         Destroy(gameObject);

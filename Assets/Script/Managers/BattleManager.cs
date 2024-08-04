@@ -139,7 +139,7 @@ public class BattleManager : Singletone<BattleManager> // 싱글톤임
             if (card.Data.IsDirectUsable) // 직접 사용 가능인 카드면 사용
             {
                 BattleCalcManager.instance.set_using_card(card);
-                BattleCalcManager.instance.set_target(card.target.GetComponent<Character>());
+                BattleCalcManager.instance.set_target(card.target);
                 BattleCalcManager.instance.Calc_enemy_turn_skill_use();
             }
 
