@@ -15,6 +15,13 @@ public class Card_UI : MonoBehaviour
     private Text Card_Name;
     [SerializeField]
     public Image Card_Image;
+<<<<<<< Updated upstream
+=======
+    [SerializeField]
+    public Transform Card_Char;
+    [SerializeField]
+    public CardsSO cardsSO;
+>>>>>>> Stashed changes
 
     // Start is called before the first frame update
     void Start()
@@ -41,16 +48,81 @@ public class Card_UI : MonoBehaviour
             Card_BackImage.sprite = Card_Grade[3];
         }
     }
-    public void Card_UI_Set(Card_Data card)
+    public void Card_UI_Set(string SCode)
     {
-        this.Card_Name.text = card.Card_Name;
-        this.Card_Image.sprite = card.Card_Image;
+        if (cardsSO == null)
+        {
+            Debug.LogError("CardsSO is not assigned!");
+            return;
+        }
+        //CardsData_SO = GetComponent<CardsSO>();
+        Cards SCards = new Cards();
+        skillcard_code skillcard_Code;
+
+        skillcard_Code = SCFromString(SCode);
+        SCards = GetCardByCode(skillcard_Code);
+        
+        this.Card_Name.text = SCards.name;
+        this.Card_Image.sprite = SCards.sprite;
 
     }
 
+<<<<<<< Updated upstream
+=======
+        Char_Code = CCFromString(Code);
+        JsonUtility.FromJsonOverwrite(CharacterManager.instance.load_character_from_json(Char_Code), character);
+
+        if(character.is_character_unlocked) { Debug.Log("이미 있음!"); }
+
+        this.Card_Name.text = character.character_name;
+        GameObject spPrefab = Resources.Load<GameObject>(character.SPUM_datapath);
+        character.SPUM_unit_obj = Instantiate(spPrefab, Card_Char);
+        character.SPUM_unit_obj.transform.localPosition = new Vector3(0f, -40f, 1);
+        character.SPUM_unit_obj.transform.localScale = new Vector3(125f, 125f, 1);
+        
+
+    }
+    //스킬 카드 코드를 뽑은 문자열에서 가져온다
+    public static skillcard_code SCFromString(string skill_code)
+    {
+        // Enum.TryParse를 사용하여 문자열을 skill_code 열거형 값으로 변환 시도
+        if (Enum.TryParse(typeof(skillcard_code), skill_code, out var result))
+        {
+            // 변환 성공 시 해당 열거형 값을 반환
+            return (skillcard_code)result;
+        }
+        // 변환 실패 시 단순공격 반환
+        return skillcard_code.simple_attack;
+    }
+
+    //캐릭터 코드를 뽑은 문자열에서 가져와요!
+    public character_code CCFromString(string char_code)
+    {
+        // Enum.TryParse를 사용하여 문자열을 character_code 열거형 값으로 변환 시도
+        if (Enum.TryParse(typeof(character_code), char_code, out var result))
+        {
+            // 변환 성공 시 해당 열거형 값을 반환
+            return (character_code)result;
+        }
+        // 변환 실패 시 춘식이 반환
+        return character_code.kimchunsik;
+    }
+>>>>>>> Stashed changes
     public void Destroy_this()
     {
         DestroyImmediate(this.gameObject, true);
+    }
+    public Cards GetCardByCode(skillcard_code code)
+    {
+        if (cardsSO.cards_dict.TryGetValue(code, out Cards card))
+        {
+            return card;
+        }
+        else
+        {
+            Debug.LogWarning($"Card with code {code} not found.");
+            return null;
+        }
     }
 
     // Update is called once per frame
