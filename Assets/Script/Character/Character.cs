@@ -496,9 +496,9 @@ public class EnemyCharacter : Character
         remaining_skill_count += 1;
     }
 
-    private void OnSkillUsed(Character character, skillcard_code code) 
+    private void OnCardDestoryed(card card) 
     {
-        if (character == this && remaining_skill_count >= 0) 
+        if (card.owner == this && remaining_skill_count >= 0) 
         {
             remaining_skill_count -= 1;
         }
@@ -521,14 +521,14 @@ public class EnemyCharacter : Character
     private void Awake()
     {
         skillcard_reserved += OnSkillReserved;
-        ActionManager.skill_used += OnSkillUsed;
+        ActionManager.card_destroyed += OnCardDestoryed;
         ActionManager.enemy_skill_setting_phase += OnEnemySkillSettingPhase;
     }
 
     private void OnDestroy()
     {
         skillcard_reserved -= OnSkillReserved;
-        ActionManager.skill_used -= OnSkillUsed;
+        ActionManager.card_destroyed -= OnCardDestoryed;
         ActionManager.enemy_skill_setting_phase -= OnEnemySkillSettingPhase;
     
     }
