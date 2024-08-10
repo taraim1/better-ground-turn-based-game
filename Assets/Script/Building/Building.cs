@@ -7,39 +7,14 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using JetBrains.Annotations;
 using TMPro;
+using UnityEngine.Networking;
+using Unity.VisualScripting;
 
 public class Building : MonoBehaviour
 {
-    [System.Serializable]
-    private class BuildingDataGold // �ǹ��� �����͸� �����ϴ� Ŭ����
-    {
-        public string first_time_Gold_string;
-        public string last_time_Gold_string;
-        public bool isFirstClickSetGold = false;    
-    }
-    
-    [System.Serializable]
-    private class BuildingDataGem
-    {
-        public string first_time_Gem_string;
-        public string last_time_Gem_string;
-        public bool isFirstClickSetGem = false;   
-    }
-
-    [System.Serializable]
-    private class BuildingDataWater
-    {
-        public string first_time_Water_string;
-        public string last_time_Water_string;
-        public bool isFirstClickSetWater = false;
-    }
-
-    public DateTime firstGoldClickTime;
-    public DateTime lastGoldClickTime;
-    public DateTime firstGemClickTime;
-    public DateTime lastGemClickTime;
-    public DateTime firstWaterClickTime;
-    public DateTime lastWaterClickTime;
+    private int isFirstClickSetGold = 1;  
+    public int isFirstClickSetGem = 1;   
+    public int isFirstClickSetWater = 1;
     public TextMeshProUGUI GoldText;
     public GameObject GoldImage;
     public GameObject GoldPopup;
@@ -49,243 +24,195 @@ public class Building : MonoBehaviour
     public TextMeshProUGUI WaterText;
     public GameObject WaterImage;
     public GameObject WaterPopup;
-    BuildingDataGold buildingDataGold = new BuildingDataGold();
-    BuildingDataGem buildingDataGem = new BuildingDataGem();
-    BuildingDataWater buildingDataWater = new BuildingDataWater();
-
     public Button GoldButton;
     public Button GemButton;
     public Button WaterButton;
 
     public bool isInMainScene = true;
+    public string url = "";
+    private int GoldTime = 1;
+    private int GemTime = 1;
+    private int WaterTime = 1;
+    private void Start()
+    {
+        //Read_Json_file();
+        SceneManager.sceneLoaded += OnSceneLoaded;
+        isFirstClickSetGold = PlayerPrefs.GetInt("isFirstClickSetGold", 0);
+        isFirstClickSetGem = PlayerPrefs.GetInt("isFirstClickSetGem", 0);
+        isFirstClickSetWater = PlayerPrefs.GetInt("isFirstClickSetWater", 0);
+    }
     public void OnGoldClick()
     {
-        if (buildingDataGold.isFirstClickSetGold == false)
-        {
-            firstGoldClickTime = DateTime.Now;
-            buildingDataGold.isFirstClickSetGold = true;
-            ResourceManager.instance.Gold += 1000;
-            GoldText.text = "골드 : " +  ResourceManager.instance.Gold;
-            Write_Json_file();
-            Debug.Log("Gold : " + ResourceManager.instance.Gold);
-            Debug.Log("First button clicked at: " + firstGoldClickTime);
-            GoldImage.SetActive(false);
-        }
-        else
-        {
-            lastGoldClickTime = DateTime.Now;
-            Debug.Log("Last button clicked at: " + lastGoldClickTime);
-            if (buildingDataGold.isFirstClickSetGold == true)
-            {
-                CalculateTimeSpanGold();
-            }
-        }
+        StartCoroutine(GoldWebChk());
     }
-    void CalculateTimeSpanGold()
+    IEnumerator GoldWebChk()
     {
-        TimeSpan timeDifferenceGold = lastGoldClickTime - firstGoldClickTime;
-        int SpentMinutesGold = (int)timeDifferenceGold.TotalMinutes;
-        Debug.Log("Time span in minutes: " + SpentMinutesGold);
-
-        if (SpentMinutesGold >= 5)
+        UnityWebRequest request = new UnityWebRequest();
+        using (request = UnityWebRequest.Get(url))
         {
-            if (SpentMinutesGold >= 100){ SpentMinutesGold = 100; }
-            ResourceManager.instance.Gold = ResourceManager.instance.Gold + SpentMinutesGold*5*LevelManager.instance.GoldCaveLevel;
-            GoldText.text = "골드 : " +  ResourceManager.instance.Gold;
-            Debug.Log("Gold : " + ResourceManager.instance.Gold);
-            firstGoldClickTime = DateTime.Now;
-            GoldImage.SetActive(false);
+            yield return request.SendWebRequest();
 
-            Write_Json_file();
-        }
-        else
-        {
-            GoldPopup.SetActive(true);
+            if (request.result == UnityWebRequest.Result.ConnectionError)
+            {
+                Debug.Log(request.error);
+            }
+            else
+            {
+                string dateGold = request.GetResponseHeader("date");
+
+                DateTime dateTimeGold = DateTime.Parse(dateGold);
+                TimeSpan timestampGold = dateTimeGold - new DateTime(1970, 1, 1, 0, 0, 0);
+
+                int currentTimestampGold = (int)timestampGold.TotalMinutes;
+
+                if (isFirstClickSetGold == 1)
+                {
+                    PlayerPrefs.SetInt("netGold", currentTimestampGold);
+                    ResourceManager.instance.Gold += 1000;
+                    Debug.Log("Gold : " + ResourceManager.instance.Gold);
+                    GoldImage.SetActive(false);
+                    isFirstClickSetGold = 0;
+                    PlayerPrefs.SetInt("isFirstClickSetGold", isFirstClickSetGold);
+                }
+                else
+                {
+                    int savedTimestampGold = PlayerPrefs.GetInt("netGold", currentTimestampGold);
+                    int elapsedTimeGold = currentTimestampGold - savedTimestampGold;
+                    Debug.Log("Elapsed time Gold : " + elapsedTimeGold + " min");
+                    if (elapsedTimeGold >= GoldTime)
+                    {
+                        if (elapsedTimeGold >= 100){ elapsedTimeGold = 100; }
+                        ResourceManager.instance.Gold = ResourceManager.instance.Gold + elapsedTimeGold*5*LevelManager.instance.GoldCaveLevel;
+                        Debug.Log("Gold : " + ResourceManager.instance.Gold);
+                        GoldImage.SetActive(false);
+                        PlayerPrefs.SetInt("netGold", currentTimestampGold);
+                    }
+                    else
+                    {
+                        GoldPopup.SetActive(true);
+                    }
+                    
+                }
+            }
         }
     }
     public void OnGemClick()
     {
-        if (buildingDataGem.isFirstClickSetGem == false)
-        {
-            firstGemClickTime = DateTime.Now;
-            buildingDataGem.isFirstClickSetGem = true;
-            ResourceManager.instance.Gem += 100;
-            GemText.text = "보석 : " +  ResourceManager.instance.Gem;
-            Write_Json_file();
-            Debug.Log("Gem : " + ResourceManager.instance.Gem);
-            Debug.Log("First button clicked at: " + firstGemClickTime);
-            GemImage.SetActive(false);
-        }
-        else
-        {
-            lastGemClickTime = DateTime.Now;
-            Debug.Log("Last button clicked at: " + lastGemClickTime);
-            if (buildingDataGem.isFirstClickSetGem == true)
-            {
-                CalculateTimeSpanGem();
-                GemImage.SetActive(false);
-            }
-        }
+        StartCoroutine(GemWebChk());
     }
-    void CalculateTimeSpanGem()
+        IEnumerator GemWebChk()
     {
-        TimeSpan timeDifferenceGem = lastGemClickTime - firstGemClickTime;
-        int SpentMinutesGem = (int)timeDifferenceGem.TotalMinutes;
-        Debug.Log("Time span in minutes: " + SpentMinutesGem);
-
-        if (SpentMinutesGem >= 5)
+        UnityWebRequest request = new UnityWebRequest();
+        using (request = UnityWebRequest.Get(url))
         {
-            if (SpentMinutesGem >= 100){ SpentMinutesGem = 100; }
-            ResourceManager.instance.Gem = ResourceManager.instance.Gem + SpentMinutesGem*LevelManager.instance.GemCaveLevel;
-            GemText.text = "보석 : " +  ResourceManager.instance.Gem;
-            Debug.Log("Gem : " + ResourceManager.instance.Gem);
+            yield return request.SendWebRequest();
 
-            firstGemClickTime = DateTime.Now;
-            GemImage.SetActive(false);
+            if (request.result == UnityWebRequest.Result.ConnectionError)
+            {
+                Debug.Log(request.error);
+            }
+            else
+            {
+                string dateGem = request.GetResponseHeader("date");
 
-            Write_Json_file();
-        }
-        else
-        {
-            GemPopup.SetActive(true);
+                DateTime dateTimeGem = DateTime.Parse(dateGem);
+                TimeSpan timestampGem = dateTimeGem - new DateTime(1970, 1, 1, 0, 0, 0);
+
+                int currentTimestampGem = (int)timestampGem.TotalMinutes;
+
+                if (isFirstClickSetGem == 1)
+                {
+                    PlayerPrefs.SetInt("netGem", currentTimestampGem);
+                    ResourceManager.instance.Gem += 100;
+                    Debug.Log("Gem : " + ResourceManager.instance.Gem);
+                    GemImage.SetActive(false);
+                    isFirstClickSetGem = 0;
+                    PlayerPrefs.SetInt("isFirstClickSetGem", isFirstClickSetGem);
+                }
+                else
+                {
+                    int savedTimestampGem = PlayerPrefs.GetInt("netGem", currentTimestampGem);
+                    int elapsedTimeGem = currentTimestampGem - savedTimestampGem;
+                    Debug.Log("Elapsed time Gem : " + elapsedTimeGem + " min");
+                    if (elapsedTimeGem >= GemTime)
+                    {
+                        if (elapsedTimeGem >= 100){ elapsedTimeGem = 100; }
+                        ResourceManager.instance.Gem = ResourceManager.instance.Gem + elapsedTimeGem*LevelManager.instance.GemCaveLevel;
+                        Debug.Log("Gem : " + ResourceManager.instance.Gem);
+                        GemImage.SetActive(false);
+                        PlayerPrefs.SetInt("netGem", currentTimestampGem);
+                    }
+                    else
+                    {
+                        GemPopup.SetActive(true);
+                    }
+                    
+                }
+            }
         }
     }
     public void OnWaterClick()
     {
+        StartCoroutine(WaterWebChk());
+    }
+    
+    IEnumerator WaterWebChk()
+    {
+        UnityWebRequest request = new UnityWebRequest();
+        using (request = UnityWebRequest.Get(url))
+        {
+            yield return request.SendWebRequest();
 
-        if (buildingDataWater.isFirstClickSetWater == false)
-        {
-            firstWaterClickTime = DateTime.Now;
-            buildingDataWater.isFirstClickSetWater = true;
-            ResourceManager.instance.Water += 100;
-            WaterText.text = "성수 : " +  ResourceManager.instance.Water;
-            Write_Json_file();
-            Debug.Log("성수 : " + ResourceManager.instance.Water);
-            Debug.Log("First button clicked at: " + firstWaterClickTime);
-            WaterImage.SetActive(false);
-        }
-        else
-        {
-            lastWaterClickTime = DateTime.Now;
-            Debug.Log("Last button clicked at: " + lastWaterClickTime);
-            if (buildingDataWater.isFirstClickSetWater == true)
+            if (request.result == UnityWebRequest.Result.ConnectionError)
             {
-                CalculateTimeSpanWater();
+                Debug.Log(request.error);
+            }
+            else
+            {
+                string dateWater = request.GetResponseHeader("date");
+
+                DateTime dateTimeWater = DateTime.Parse(dateWater);
+                TimeSpan timestampWater = dateTimeWater - new DateTime(1970, 1, 1, 0, 0, 0);
+
+                int currentTimestampWater = (int)timestampWater.TotalMinutes;
+
+                if (isFirstClickSetWater == 1)
+                {
+                    PlayerPrefs.SetInt("netWater", currentTimestampWater);
+                    ResourceManager.instance.Water += 100;
+                    Debug.Log("Water : " + ResourceManager.instance.Water);
+                    WaterImage.SetActive(false);
+                    isFirstClickSetWater = 0;
+                    PlayerPrefs.SetInt("isFirstClickSetWater", isFirstClickSetWater);
+                }
+                else
+                {
+                    int savedTimestampWater = PlayerPrefs.GetInt("netWater", currentTimestampWater);
+                    int elapsedTimeWater = currentTimestampWater - savedTimestampWater;
+                    Debug.Log("Elapsed time Water : " + elapsedTimeWater + " min");
+                    if (elapsedTimeWater >= WaterTime)
+                    {
+                        if (elapsedTimeWater >= 100){ elapsedTimeWater = 100; }
+                        ResourceManager.instance.Water = ResourceManager.instance.Water + elapsedTimeWater*LevelManager.instance.WStatueLevel;
+                        Debug.Log("Water : " + ResourceManager.instance.Water);
+                        WaterImage.SetActive(false);
+                        PlayerPrefs.SetInt("netWater", currentTimestampWater);
+                    }
+                    else
+                    {
+                        WaterPopup.SetActive(true);
+                    }
+                    
+                }
             }
         }
     }
-    void CalculateTimeSpanWater()
+    void Update()
     {
-        TimeSpan timeDifferenceWater = lastWaterClickTime - firstWaterClickTime;
-        int SpentMinutesWater = (int)timeDifferenceWater.TotalMinutes;
-        Debug.Log("Time span in minutes: " + SpentMinutesWater);
-
-        if (SpentMinutesWater >= 5)
-        {
-            if (SpentMinutesWater >= 100){ SpentMinutesWater = 100; }
-            ResourceManager.instance.Water = ResourceManager.instance.Water + SpentMinutesWater*3*LevelManager.instance.WStatueLevel;
-            WaterText.text = "성수 : " +  ResourceManager.instance.Water;
-            Debug.Log("Water : " + ResourceManager.instance.Water);
-
-            firstWaterClickTime = DateTime.Now;
-            WaterImage.SetActive(false);
-
-            Write_Json_file();
-        }
-        else
-        {
-            WaterPopup.SetActive(true);
-        }
-    }
-
-    private void Update()
-    {
-        if (!isInMainScene) { return; }
-
-        // ���� �ð��� ������ �ڿ� ȹ�� ���� �˾��� ��
-        if (buildingDataGold.isFirstClickSetGold && GoldImage.activeSelf == false) 
-        {
-            TimeSpan timeDifferenceGold = DateTime.Now - firstGoldClickTime;
-            int SpentMinutesGold = (int)timeDifferenceGold.TotalMinutes;
-            if (SpentMinutesGold >= 5) 
-            {
-                GoldImage.SetActive(true);
-            }
-        }
-        
-        if (buildingDataGem.isFirstClickSetGem && GemImage.activeSelf == false) 
-        {
-            TimeSpan timeDifferenceGem = DateTime.Now - firstGoldClickTime;
-            int SpentMinutesGem = (int)timeDifferenceGem.TotalMinutes;
-            if (SpentMinutesGem >= 5) 
-            {
-                GemImage.SetActive(true);
-            }
-        }
-        
-        if (buildingDataWater.isFirstClickSetWater && WaterImage.activeSelf == false) 
-        {
-            TimeSpan timeDifferenceWater = DateTime.Now - firstWaterClickTime;
-            int SpentMinutesWater = (int)timeDifferenceWater.TotalMinutes;
-            if (SpentMinutesWater >= 5) 
-            {
-                WaterImage.SetActive(true);
-            }
-        }
         GoldText.text = "골드 : " +  ResourceManager.instance.Gold;
         GemText.text = "보석 : " +  ResourceManager.instance.Gem;
         WaterText.text = "성수 : " +  ResourceManager.instance.Water;
     }
-    
-    void Write_Json_file() 
-    {
-        buildingDataGold.first_time_Gold_string = firstGoldClickTime.ToString("yyyy-MM-dd HH:mm:ss");
-        buildingDataGold.last_time_Gold_string = lastGoldClickTime.ToString("yyyy-MM-dd HH:mm:ss");
-        string outputGold = JsonUtility.ToJson(buildingDataGold, true);
-        File.WriteAllText(Application.dataPath + "/Data/building/gold_cave.json", outputGold);
-        buildingDataGem.first_time_Gem_string = firstGemClickTime.ToString("yyyy-MM-dd HH:mm:ss");
-        buildingDataGem.last_time_Gem_string = lastGemClickTime.ToString("yyyy-MM-dd HH:mm:ss");
-        string outputGem = JsonUtility.ToJson(buildingDataGem, true);
-        File.WriteAllText(Application.dataPath + "/Data/building/Gem_cave.json", outputGem);
-        buildingDataWater.first_time_Water_string = firstWaterClickTime.ToString("yyyy-MM-dd HH:mm:ss");
-        buildingDataWater.last_time_Water_string = lastWaterClickTime.ToString("yyyy-MM-dd HH:mm:ss");
-        string outputWater = JsonUtility.ToJson(buildingDataWater, true);
-        File.WriteAllText(Application.dataPath + "/Data/building/Water_statue.json", outputWater);
-    }
-
-    void Read_Json_file() 
-    {
-        if (!File.Exists(Application.dataPath + "/Data/building/gold_cave.json")) 
-        {
-            Debug.Log("�ǹ� ������ ������ �����ϴ�.");
-            return;
-        }
-
-        buildingDataGold = JsonUtility.FromJson<BuildingDataGold>(File.ReadAllText(Application.dataPath + "/Data/building/gold_cave.json"));
-        firstGoldClickTime = DateTime.ParseExact(buildingDataGold.first_time_Gold_string, "yyyy-MM-dd HH:mm:ss", null);
-        lastGoldClickTime = DateTime.ParseExact(buildingDataGold.last_time_Gold_string, "yyyy-MM-dd HH:mm:ss", null);
-
-        if (!File.Exists(Application.dataPath + "/Data/building/gem_cave.json")) 
-        {
-            Debug.Log("�ǹ� ������ ������ �����ϴ�.");
-            return;
-        }
-
-        buildingDataGem = JsonUtility.FromJson<BuildingDataGem>(File.ReadAllText(Application.dataPath + "/Data/building/gem_cave.json"));
-        firstGemClickTime = DateTime.ParseExact(buildingDataGem.first_time_Gem_string, "yyyy-MM-dd HH:mm:ss", null);
-        lastGemClickTime = DateTime.ParseExact(buildingDataGem.last_time_Gem_string, "yyyy-MM-dd HH:mm:ss", null);
-
-        if (!File.Exists(Application.dataPath + "/Data/building/Water_statue.json")) 
-        {
-            Debug.Log("�ǹ� ������ ������ �����ϴ�.");
-            return;
-        }
-
-        buildingDataWater = JsonUtility.FromJson<BuildingDataWater>(File.ReadAllText(Application.dataPath + "/Data/building/Water_statue.json"));
-        firstWaterClickTime = DateTime.ParseExact(buildingDataWater.first_time_Water_string, "yyyy-MM-dd HH:mm:ss", null);
-        lastWaterClickTime = DateTime.ParseExact(buildingDataWater.last_time_Water_string, "yyyy-MM-dd HH:mm:ss", null);
-    }
-
     void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         if (scene.name == "Main")
@@ -321,15 +248,8 @@ public class Building : MonoBehaviour
         }
     }
 
-    private void Start()
-    {
-        Read_Json_file();
-        SceneManager.sceneLoaded += OnSceneLoaded;
-    }
-
     void OnDestroy()
     {
         SceneManager.sceneLoaded -= OnSceneLoaded;
     }
-
 }
