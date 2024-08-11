@@ -506,6 +506,7 @@ public class EnemyCharacter : Character
 
     private void OnEnemySkillSettingPhase() 
     {
+        isMovable = true; // 이 줄은 테스트용으로 넣은 것, 나중에 지워야 함
         AI.Reset();
         AI.Move();
         reserved_cards = AI.Get_skills_for_current_turn();

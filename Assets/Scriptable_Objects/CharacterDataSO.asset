@@ -86,10 +86,23 @@ MonoBehaviour:
       max_willpowers_of_level: 0000000006000000
       deck: 000000000000000001000000010000000200000002000000
       SPUM_datapath: SPUM/SPUM_Units/Enemy_base
-      move_range: []
+      move_range:
+      - x: 1
+        y: 0
+      - x: -1
+        y: 0
+      - x: 0
+        y: 1
+      - x: 0
+        y: -1
   PlayerData:
     m_keys: 010000000000000002000000
     m_values:
     - is_character_unlocked: 1
     - is_character_unlocked: 1
     - is_character_unlocked: 1
+  EnemyData:
+    m_keys: 03000000
+    m_values:
+    - moveAiType: 1
+      skillSelectAiType: 1
