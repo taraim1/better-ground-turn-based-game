@@ -8,7 +8,7 @@ using static CharacterManager;
 using UnityEngine.TextCore.Text;
 using TMPro;
 
-public class RandomData : MonoBehaviour
+public class Random_Card : MonoBehaviour
 {
     GameObject Scene_Changer;
     public GameObject cardPrefab;
@@ -20,7 +20,7 @@ public class RandomData : MonoBehaviour
     public List<Card_UI> Card_Prefabs;
 
     [SerializeField]
-    public List<Card_Data> Card_Results;
+    public List<string> Card_Results;
 
     [SerializeField]
     public List<string> Char_Results;
@@ -31,24 +31,24 @@ public class RandomData : MonoBehaviour
     string[] Card_Grade = new string[]
     { "Common", "Rare", "Epic","Legendary"};
     //��ų ī�� ����Ʈ
-    readonly string[] Skill_CommonData = { "Test1", "Test2" };
-    readonly string[] Skill_RareData = { "Test1", "Test2" };
-    readonly string[] Skill_EpicData = {"Test1", "Test2" };
-    readonly string[] Skill_LegendData = {"Test1", "Test2" };
+    readonly string[] Skill_Common_Card = { "simple_attack", "simple_defend" };
+    readonly string[] Skill_Rare_Card = { "simple_dodge" };
+    readonly string[] Skill_Epic_Card = { "powerful_attack", "fire_ball2" };
+    readonly string[] Skill_Legend_Card = { "concentration", "fire_enchantment" };
     //ĳ���� ī�� ����Ʈ
-    readonly string[] Char_CommonData ={ "kimchunsik", "test"};
-    readonly string[] Char_RareData = { "kimchunsik", "test" };
-    readonly string[] Char_EpicData = { "kimchunsik", "test" };
-    readonly string[] Char_LegendData = { "kimchunsik", "test" };
+    readonly string[] Char_Common_Card = { "kimchunsik", "test" };
+    readonly string[] Char_Rare_Card = { "kimchunsik", "test" };
+    readonly string[] Char_Epic_Card = { "kimchunsik", "test" };
+    readonly string[] Char_Legend_Card = { "kimchunsik", "test" };
 
-    
+
     //�� ��޺� Ȯ��
     float[] Card_Percent = new float[4]
     {
         5.0f, 3.0f, 1.0f, 0.5f
     };
-    
-//ī�带 �̴� �ڵ�
+
+    //ī�带 �̴� �ڵ�
     string Card_Grade_pick(float[] _Percent, string[] _Chosen_Grade)
     {
         //Ȯ�� ����� ���� Ȯ������ ���� ���
@@ -75,62 +75,59 @@ public class RandomData : MonoBehaviour
         //�������� 1�� ���ð�� Ȯ�� ����� ���� �����Ƿ� �ְ���� �̾��ֱ�
         return _Chosen_Grade[_Percent.Length - 1];
     }
-    
-    public Card_Data Card_Pick_Skill(string Grade)
+
+    public string Card_Pick_Skill(string Grade)
     {
         //card_DataSO = GetComponent<Card_DataSO>();
-        String[] selectedDatalist = null;
+        String[] selected_cardlist = null;
 
         //��޿� ���� ī��Ǯ ����
         switch (Grade)
         {
-            case "Common": selectedDatalist = Skill_CommonData; break;
-            case "Rare": selectedDatalist = Skill_RareData; break;
-            case "Epic": selectedDatalist = Skill_EpicData; break;
-            case "Legendary": selectedDatalist = Skill_LegendData; break;
+            case "Common": selected_cardlist = Skill_Common_Card; break;
+            case "Rare": selected_cardlist = Skill_Rare_Card; break;
+            case "Epic": selected_cardlist = Skill_Epic_Card; break;
+            case "Legendary": selected_cardlist = Skill_Legend_Card; break;
         }
 
-        //���� ī�� Ǯ�߿��� �ϳ� ������ ����
-        if (selectedDatalist != null && selectedDatalist.Length > 0)
-        {
-            int randomIndex = UnityEngine.Random.Range(0, selectedDatalist.Length);
-            for (int i = 0; i < card_DataSO.CardData.Length; i++)
-            {
-                if (card_DataSO.CardData[i].Card_Name == selectedDatalist[randomIndex])//�̸��� �����ؿ�
-                {
-                    return card_DataSO.CardData[i];
-                }
 
-            }
-            return null;
-        }
-        else return null;
-    }
-
-    public string Card_Pick_Char(string Grade)
-    {
-        String[] selectedDatalist = null;
-        switch (Grade)
+        if (selected_cardlist != null && selected_cardlist.Length > 0)
         {
-            case "Common": selectedDatalist = Char_CommonData; break;
-            case "Rare": selectedDatalist = Char_RareData; break;
-            case "Epic": selectedDatalist = Char_EpicData; break;
-            case "Legendary": selectedDatalist = Char_LegendData; break;
-        }
-        //���� ī�� Ǯ�߿��� �ϳ� ������ ����
-        if (selectedDatalist != null && selectedDatalist.Length > 0)
-        {
-            int randomIndex = UnityEngine.Random.Range(0, selectedDatalist.Length);
-            return selectedDatalist[randomIndex];
+            int randomIndex = UnityEngine.Random.Range(0, selected_cardlist.Length);
+            return selected_cardlist[randomIndex];
         }
         else
         {
             Debug.LogError("�ƴ� ����");
-            return null; 
+            return null;
         }
 
     }
-    
+
+    public string Card_Pick_Char(string Grade)
+    {
+        String[] selected_cardlist = null;
+        switch (Grade)
+        {
+            case "Common": selected_cardlist = Char_Common_Card; break;
+            case "Rare": selected_cardlist = Char_Rare_Card; break;
+            case "Epic": selected_cardlist = Char_Epic_Card; break;
+            case "Legendary": selected_cardlist = Char_Legend_Card; break;
+        }
+        //���� ī�� Ǯ�߿��� �ϳ� ������ ����
+        if (selected_cardlist != null && selected_cardlist.Length > 0)
+        {
+            int randomIndex = UnityEngine.Random.Range(0, selected_cardlist.Length);
+            return selected_cardlist[randomIndex];
+        }
+        else
+        {
+            Debug.LogError("�ƴ� ����");
+            return null;
+        }
+
+    }
+
 
     public void Randomizer_1Time()//1ȸ �̱� �ڵ�
     {
@@ -147,10 +144,10 @@ public class RandomData : MonoBehaviour
     public void Randomizer_10Time(string Type)//10ȸ �̱� �ڵ�
     {
         Grade_Result = new List<string>();
-        Card_Results = new List<Card_Data>();
+        Card_Results = new List<string>();
         Char_Results = new List<string>();
         Card_Prefabs = new List<Card_UI>();
-        for (int i = 0; i < 10;  i++)
+        for (int i = 0; i < 10; i++)
         {
             Card_UI card_UI = Instantiate(cardPrefab, Card_Summon).GetComponent<Card_UI>();
             Card_Prefabs.Add(card_UI);
@@ -170,7 +167,7 @@ public class RandomData : MonoBehaviour
 
             }
 
-            else if (Type == "Char")
+            /*else if (Type == "Char")
             {
                 Char_Results.Add(Card_Pick_Char(Grade_Result[i]));
                 if (Char_Results[i] != null)
@@ -182,12 +179,12 @@ public class RandomData : MonoBehaviour
                     Debug.LogError("List is empty");
                 }
 
-            }
+            }*/
         }
-        
+
     }
-    
-    
+
+
     public void Change()
     {
         Scene_Changer.GetComponent<Scene_Change>().Scene_Active(1);
@@ -200,7 +197,7 @@ public class RandomData : MonoBehaviour
 
     private void Start()
     {
-        
+
         Scene_Changer = GameObject.Find("Scene");
         Pick_10 += (string type) => Change();
         Pick_10 += (string type) => Randomizer_10Time(type);
@@ -211,7 +208,7 @@ public class RandomData : MonoBehaviour
     }
     public void Pick_10t()
     {
-        if(ResourceManager.instance.Gem >= 10)
+        if (ResourceManager.instance.Gem >= 10)
         {
             ResourceManager.instance.Gem -= 10;
             if (BtnManager.Current_Scene == 1)
@@ -234,7 +231,7 @@ public class RandomData : MonoBehaviour
     }
     public void Pick_1t()
     {
-        if(ResourceManager.instance.Gem >= 1)
+        if (ResourceManager.instance.Gem >= 1)
         {
             ResourceManager.instance.Gem -= 1;
             Pick_1();
@@ -245,11 +242,11 @@ public class RandomData : MonoBehaviour
         }
     }
 
-    public void DestroyCardPrefabs() // ������ ī�� �����յ��� �����ϴ� �Լ�
+    public void DestroyCardPrefabs() //프리팹을 파괴합니다
     {
         foreach (var cardPrefab in Card_Prefabs)
         {
-            if (cardPrefab != null)  Destroy(cardPrefab.gameObject); 
+            if (cardPrefab != null) Destroy(cardPrefab.gameObject);
         }
         Card_Prefabs.Clear();
     }
