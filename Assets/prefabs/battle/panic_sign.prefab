@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 6943843403377190106}
   - component: {fileID: 2105626890550941994}
   - component: {fileID: 3709859773207378191}
-  - component: {fileID: 319032845843870400}
   - component: {fileID: 911605540631906299}
   m_Layer: 5
   m_Name: panic_sign
@@ -137,20 +136,6 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
---- !u!114 &319032845843870400
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3271687678273936230}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 74e2e0e2b9fa0134c8a79b54ec947c96, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  target_object: {fileID: 0}
-  offset: {x: 0, y: 0, z: 0}
 --- !u!114 &911605540631906299
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -163,5 +148,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 29c9909df27bf6148bb782c222ab697a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tmp: {fileID: 3709859773207378191}
-  hook: {fileID: 319032845843870400}
+  TMP: {fileID: 3709859773207378191}

@@ -6,7 +6,7 @@ using UnityEngine.EventSystems;
 
 public class Character_image_on_stageShow : MonoBehaviour, IPointerDownHandler
 {
-    public CharacterManager.character_code code;
+    public character_code code;
 
     int click_count = 0;
     float clicktime = 0;

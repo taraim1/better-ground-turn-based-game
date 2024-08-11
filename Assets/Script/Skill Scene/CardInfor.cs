@@ -18,21 +18,21 @@ public class CardInfor : MonoBehaviour, IPointerDownHandler
     public TMP_Text Card_Behavior_Type;
     public TMP_Text Card_Min;
     public TMP_Text Card_Max;
-    public Cards carddata;
+    public CardData cardData;
     public GameObject Popup;
 
 
     public void OnPointerDown(PointerEventData eventData)
     {
         Popup.SetActive(true);
-        carddata = CardManager.instance.get_card_by_code(code);
-        Card_Name.text = carddata.name;
-        Card_Image.sprite = carddata.sprite;
-        Card_Cost.text = carddata.cost.ToString();
-        Card_Elemantal_Type.text = carddata.type;
-        Card_Behavior_Type.text = carddata.behavior_type;
-        Card_Min.text = carddata.minPowerOfLevel[0].ToString();
-        Card_Max.text = carddata.maxPowerOfLevel[0].ToString();
+        cardData = CardManager.instance.getData_by_code(code);
+        Card_Name.text = cardData.Name;
+        Card_Image.sprite = cardData.sprite;
+        Card_Cost.text = cardData.Cost.ToString();
+        Card_Elemantal_Type.text = cardData.Type;
+        Card_Behavior_Type.text = cardData.BehaviorType;
+        Card_Min.text = cardData.MinPowerOfLevel[0].ToString();
+        Card_Max.text = cardData.MaxPowerOfLevel[0].ToString();
     }
 }
 

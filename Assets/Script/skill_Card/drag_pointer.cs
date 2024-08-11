@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class drag_pointer : MonoBehaviour
 {
-    public Cards cards;
-
 
     void Update()
     {

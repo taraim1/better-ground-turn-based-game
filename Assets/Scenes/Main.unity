@@ -463,6 +463,53 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 50289417}
   m_CullTransparentMesh: 1
+--- !u!1 &64083861
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 64083862}
+  - component: {fileID: 64083863}
+  m_Layer: 0
+  m_Name: BattleClacManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &64083862
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 64083861}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -3.2409136, y: -0.9452975, z: 0.021683268}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 368447970}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &64083863
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 64083861}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ec726103152c3f144bf53ad076623be6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  using_card: {fileID: 0}
+  target_card: {fileID: 0}
+  target_character: {fileID: 0}
 --- !u!1 &110205573
 GameObject:
   m_ObjectHideFlags: 0
@@ -1551,7 +1598,6 @@ Transform:
   - {fileID: 1485318639}
   - {fileID: 2111067821}
   - {fileID: 293010030}
-  - {fileID: 1267649768}
   - {fileID: 772207835}
   - {fileID: 1538594533}
   - {fileID: 1665656115}
@@ -1559,6 +1605,7 @@ Transform:
   - {fileID: 2013910028}
   - {fileID: 777273756}
   - {fileID: 1649778100}
+  - {fileID: 64083862}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &368447971
@@ -2620,7 +2667,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4f83729e5c834e479fabd80265d9a4c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cardsSO: {fileID: 11400000, guid: 3080a6a9f21a05b46bb959639cbd0586, type: 2}
+  CardDataSO: {fileID: 11400000, guid: c9e591b7fe7a68a4a93c3a83152d5714, type: 2}
   card_spawnpoint: {fileID: 1101494328}
   left_card_transform: {fileID: 1023100748}
   left_card_over4_transform: {fileID: 1784582164}
@@ -2633,7 +2680,7 @@ MonoBehaviour:
   card_prefab: {fileID: 3273811198982270407, guid: 4c5547a8f3f819b4b8cbbebefa4d2f34,
     type: 3}
   active_index: 0
-  highlighted_card: {fileID: 0}
+  highlightedData: {fileID: 0}
 --- !u!1 &777273755
 GameObject:
   m_ObjectHideFlags: 0
@@ -2645,7 +2692,7 @@ GameObject:
   - component: {fileID: 777273756}
   - component: {fileID: 777273757}
   m_Layer: 0
-  m_Name: BuffNdebuffManager
+  m_Name: CharacterEffectManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2660,7 +2707,7 @@ Transform:
   m_GameObject: {fileID: 777273755}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 4.2891445, y: 12.670717, z: -0.24315003}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -4127,7 +4174,7 @@ GameObject:
   - component: {fileID: 1267649768}
   - component: {fileID: 1267649769}
   m_Layer: 0
-  m_Name: BattleUI_Manager
+  m_Name: CharacterBuilder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4142,11 +4189,11 @@ Transform:
   m_GameObject: {fileID: 1267649767}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 368447970}
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1267649769
 MonoBehaviour:
@@ -4157,19 +4204,24 @@ MonoBehaviour:
   m_GameObject: {fileID: 1267649767}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6a80fef0580c4a04c81e159a235fd6cf, type: 3}
+  m_Script: {fileID: 11500000, guid: 5d3acfbaf3286894687fb4b19bd1de1f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  character_base_prefab: {fileID: 1766090985930963044, guid: 9e25d508eddfdb247a2b34bb19f6cfd8,
+    type: 3}
+  panic_sign_prefab: {fileID: 3271687678273936230, guid: 03168627a369be24785262442d7615a6,
+    type: 3}
   health_bar_prefab: {fileID: 953389889809876917, guid: e0a15ee19bccfee419d609ebeb27ba21,
     type: 3}
   willpower_bar_prefab: {fileID: 953389889809876917, guid: 036998866c0c8fb4d9ac1e6ae5075a2f,
     type: 3}
+  skill_slot_controller: {fileID: 2486827344959942594, guid: 685ba5687b2fc5a42a76a6425fbed4cf,
+    type: 3}
   skill_power_meter_prefab: {fileID: 3271687678273936230, guid: 6923df529ad6cf846a48edd2b2545cad,
     type: 3}
-  layoutGroup_prefab: {fileID: 3457913086231521101, guid: 56ef78f845a1e4c49a12f8416008f26f,
+  character_effect_controller_prefab: {fileID: 4461365764715763095, guid: 4fbd1f0822abae54dbd1104669ac31d8,
     type: 3}
-  panic_sign_prefab: {fileID: 3271687678273936230, guid: 03168627a369be24785262442d7615a6,
-    type: 3}
+  DataSO: {fileID: 11400000, guid: e54cf04d81f8ab142a80f91a0a8e393e, type: 2}
 --- !u!1 &1291836879
 GameObject:
   m_ObjectHideFlags: 0
@@ -5607,9 +5659,6 @@ MonoBehaviour:
   current_turn: 0
   current_phase: 0
   battle_start_trigger: 0
-  is_Characters_spawned: 0
-  is_Characters_loaded: 0
-  enemy_skill_set_count: 0
   playable_characters: []
   enemy_characters: []
   enemy_cards: []
@@ -7760,3 +7809,4 @@ SceneRoots:
   - {fileID: 920713638}
   - {fileID: 344220073}
   - {fileID: 368447970}
+  - {fileID: 1267649768}

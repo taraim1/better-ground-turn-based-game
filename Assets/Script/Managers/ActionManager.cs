@@ -9,15 +9,18 @@ public class ActionManager : MonoBehaviour
 
     // 배틀에서 씀
     public static Action enemy_skill_setting_phase;
-    public static Action enemy_skill_card_deactivate;
-    public static Action skill_used;
+    public static Action enemy_skillcard_deactivate;
+    public static Action<Character, skillcard_code> skill_used;
     public static Action<Character, List<Character>> attacked; // <공격 주체, 공격 대상들>
     public static Action turn_start_phase;
     public static Action turn_end_phase;
-    public static Action player_character_died; 
+    public static Action<Character> character_died;
     public static Action<bool> battle_ended; // true값이면 이긴 거, false면 진 거
     public static Action character_drag_started;
     public static Action character_drag_ended;
+    public static Action<card> card_destroyed;
+    public static Action enemy_skill_set_complete;
+    public static Action<int> set_cost;
 
 
     // 스테이지 보여줄 때 씀

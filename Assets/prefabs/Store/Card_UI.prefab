@@ -289,3 +289,4 @@ MonoBehaviour:
   Card_Name: {fileID: 6549376869269986220}
   Card_Image: {fileID: 7280159343170693676}
   Card_Char: {fileID: 255976291749345764}
+  cardsSO: {fileID: 11400000, guid: c9e591b7fe7a68a4a93c3a83152d5714, type: 2}

@@ -21,7 +21,7 @@ public class PartyManager : Singletone<PartyManager>
         public int party_member_count;
         private int party_member_max = 4;
         public int party_member_Max { get { return party_member_max; } set { party_member_max = value; }}
-        public List<CharacterManager.character_code> party_codes = new List<CharacterManager.character_code>();
+        public List<character_code> party_codes = new List<character_code>();
     }
 
     // 현재 파티 데이터를 json 파일로 저장
@@ -40,7 +40,7 @@ public class PartyManager : Singletone<PartyManager>
     }
 
     // 캐릭터 코드를 파티에 추가
-    public void add_character_to_party(CharacterManager.character_code code) 
+    public void add_character_to_party(character_code code) 
     {
         if (PartyData.party_member_count >= PartyData.party_member_Max)
         {
@@ -56,7 +56,7 @@ public class PartyManager : Singletone<PartyManager>
     }
 
     // 캐릭터 코드를 파티에서 제거
-    public void remove_character_from_party(CharacterManager.character_code code)
+    public void remove_character_from_party(character_code code)
     {
         if (PartyData.party_member_count == 0)
         {
@@ -82,7 +82,7 @@ public class PartyManager : Singletone<PartyManager>
     }
 
     // 파티의 i번째 캐릭터 코드 리턴
-    public CharacterManager.character_code get_charactor_code(int index) 
+    public character_code get_charactor_code(int index) 
     {
         if (index < 0) 
         {
@@ -100,7 +100,7 @@ public class PartyManager : Singletone<PartyManager>
     }
 
     // 파티에 캐릭터가 있는지 리턴
-    public bool check_character_in_party(CharacterManager.character_code code) 
+    public bool check_character_in_party(character_code code) 
     {
         return PartyData.party_codes.Contains(code);
     }

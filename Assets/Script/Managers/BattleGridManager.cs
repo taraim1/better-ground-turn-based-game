@@ -8,6 +8,7 @@ using Unity.Mathematics;
 using UnityEngine.SceneManagement;
 using UnityEngine.TextCore.Text;
 using Unity.VisualScripting;
+using UnityEngine.SocialPlatforms;
 
 public class BattleGridManager : Singletone<BattleGridManager>
 {
@@ -82,7 +83,8 @@ public class BattleGridManager : Singletone<BattleGridManager>
         {
             for (int x = 0; x < _board[_board.Count - y - 1].row.Count; x++) 
             {
-                boardCell cell = get_tile(x, y);
+                coordinate coordinate = new coordinate { x = x, y = y };
+                boardCell cell = get_tile(coordinate);
 
                 if (cell == boardCell.empty)
                 {
@@ -91,7 +93,7 @@ public class BattleGridManager : Singletone<BattleGridManager>
                     _tiles[_board.Count - y - 1].Add(tile);
                     tile.set_grid(_grid);
                     tile.set_pos(x, y);
-                    set_tile_type(x, y, boardCell.empty);
+                    set_tile_type(coordinate, boardCell.empty);
                 }
                 else if (cell == boardCell.NOT_cell) 
                 {
@@ -103,8 +105,10 @@ public class BattleGridManager : Singletone<BattleGridManager>
 
 
     // 좌표평면상의 좌표를 주면 리스트의 인덱스로 바꿔주는 메소드, 유효하지 않은 좌표면 (-1, -1) 반환
-    private Tuple<int, int> convert_xy_to_index(int x, int y) 
+    private Tuple<int, int> convert_coordinate_to_index(coordinate coordinate) 
     {
+        int x = coordinate.x;
+        int y = coordinate.y;
         // 좌표에 음수 들어있으면 안 됨
         if (x < 0 || y < 0) { return Tuple.Create(-1, -1); }
 
@@ -118,9 +122,9 @@ public class BattleGridManager : Singletone<BattleGridManager>
 
 
     // 좌표 주면 해당하는 칸의 값 반환하는 메소드, 유효하지 않은 좌표면 NOT_cell 반환
-    public boardCell get_tile(int x, int y) 
+    public boardCell get_tile(coordinate coordinate) 
     {
-        Tuple<int, int> cell_ind = convert_xy_to_index(x, y);
+        Tuple<int, int> cell_ind = convert_coordinate_to_index(coordinate);
 
         if (cell_ind.Item1 == -1 && cell_ind.Item2 == -1) 
         {
@@ -130,23 +134,23 @@ public class BattleGridManager : Singletone<BattleGridManager>
         return _board[cell_ind.Item1].row[cell_ind.Item2];
     }
 
-    // 좌표 주면 해당 칸의 월드상 위치 반환하는 메소드, 유효하지 않은 좌표면 null 반환
-    public List<float> get_tile_pos(int x, int y) 
+    // 좌표 주면 해당 칸의 월드상 위치 반환하는 메소드, 유효하지 않은 좌표면 0, 0 반환
+    public Vector2 get_tile_pos(coordinate coordinate) 
     {
-        Tuple<int, int> cell_ind = convert_xy_to_index(x, y);
+        Tuple<int, int> cell_ind = convert_coordinate_to_index(coordinate);
         if (cell_ind.Item1 == -1 && cell_ind.Item2 == -1)
         {
-            return null;
+            return new Vector2(0, 0);
         }
 
         Vector3 pos = _tiles[cell_ind.Item1][cell_ind.Item2].get_pos();
-        return new List<float>() { pos.x, pos.y };
+        return new Vector2(pos.x, pos.y);
     }
 
     // 좌표상의 타일 타입 바꾸는 메소드, 유효하지 않은 좌표면 안 바꿈
-    public void set_tile_type(int x, int y, boardCell cellType) 
+    public void set_tile_type(coordinate coordinate, boardCell cellType) 
     { 
-        Tuple<int, int> ind = convert_xy_to_index(x, y);
+        Tuple<int, int> ind = convert_coordinate_to_index(coordinate);
         if (ind.Item1 == -1 && ind.Item2 == -1) 
         {
             return;
@@ -157,9 +161,9 @@ public class BattleGridManager : Singletone<BattleGridManager>
     }
 
     // 좌표상의 타일 컬러 바꾸는 메소드, 유효하지 않은 좌표면 안 바꿈
-    public void set_tile_color(int x, int y, Tile.TileColor color)
+    public void set_tile_color(coordinate coordinate, Tile.TileColor color)
     {
-        Tuple<int, int> ind = convert_xy_to_index(x, y);
+        Tuple<int, int> ind = convert_coordinate_to_index(coordinate);
         if (ind.Item1 == -1 && ind.Item2 == -1)
         {
             return;
@@ -173,9 +177,9 @@ public class BattleGridManager : Singletone<BattleGridManager>
 
 
     // 월드 좌표와 가장 가까운 셀 찾아주는 메소드 (exclude_filter에 들어간 타입은 제외, include_filter에 들어간 칸이 있으면 그 칸 중에서만 찾음)
-    public Tuple<int, int> get_nearest_tile(Vector2 pos, List<boardCell> exclude_filter, List<Tuple<int, int>> include_filter) 
+    public coordinate get_nearest_tile(Vector2 pos, List<boardCell> exclude_filter, List<coordinate> include_filter) 
     {
-        Tuple<int, int> min_coordinate = Tuple.Create(0, 0);
+        coordinate min_coordinate = new coordinate();
         float min_distance = 1000000f;
 
         foreach (List<Tile> row in _tiles) 
@@ -220,14 +224,26 @@ public class BattleGridManager : Singletone<BattleGridManager>
         }
     }
 
-
+    private void OnCardDestoryed(card card) 
+    {
+        // 범위를 보여주는 중이었다면 원래 색으로
+        if (card._isShowingRange)
+        {
+            foreach (coordinate coordinate in card.usable_tiles)
+            {
+                set_tile_color(coordinate, Tile.TileColor.original);
+            }
+        }
+    }
     private void OnEnable()
     {
         SceneManager.sceneLoaded += Check_scene;
+        ActionManager.card_destroyed += OnCardDestoryed;
     }
 
     private void OnDisable()
     {
         SceneManager.sceneLoaded -= Check_scene;
+        ActionManager.card_destroyed -= OnCardDestoryed;
     }
 }

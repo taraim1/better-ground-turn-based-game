@@ -65,14 +65,14 @@ public class DetectRay : MonoBehaviour
         {
             // 아군 캐릭터 클릭 시 
             case "PlayerCharacter":
-                Character character = obj.GetComponent<Character>();
+                PlayableCharacter character = obj.GetComponent<PlayableCharacter>();
                 // 그 캐릭터의 패 보여줌
                 CardManager.instance.clear_highlighted_card();
-                CardManager.instance.Change_active_hand(character.data.Character_index);
+                CardManager.instance.Change_active_hand(character.Character_index);
                 CardManager.instance.Set_origin_order(CardManager.instance.active_index);
 
                 // 드래그 감지 시작
-                character.data.running_drag = StartCoroutine(character.detect_drag());
+                character.start_drag_detection();
                 break;
 
             // 카드 클릭 시
@@ -85,7 +85,7 @@ public class DetectRay : MonoBehaviour
                     card.running_drag = StartCoroutine(card.detect_drag(false));
 
                     // 적 카드 강조 해제
-                    ActionManager.enemy_skill_card_deactivate?.Invoke();
+                    ActionManager.enemy_skillcard_deactivate?.Invoke();
                 }
                 // 적군 카드면
                 else
@@ -93,7 +93,7 @@ public class DetectRay : MonoBehaviour
                     // 적 카드 강조 해제
                     if (card.state == card.current_mode.highlighted_enemy_card)
                     {
-                        ActionManager.enemy_skill_card_deactivate?.Invoke();
+                        ActionManager.enemy_skillcard_deactivate?.Invoke();
                     }
                 }
                 break;
@@ -109,7 +109,7 @@ public class DetectRay : MonoBehaviour
                     card.running_drag = StartCoroutine(card.detect_drag(true));
 
                     // 적 카드 강조 해제
-                    ActionManager.enemy_skill_card_deactivate?.Invoke();
+                    ActionManager.enemy_skillcard_deactivate?.Invoke();
                 }
                 // 적군 카드면
                 else
@@ -117,7 +117,7 @@ public class DetectRay : MonoBehaviour
                     // 적 카드 강조 해제
                     if (card.state == card.current_mode.highlighted_enemy_card)
                     {
-                        ActionManager.enemy_skill_card_deactivate?.Invoke();
+                        ActionManager.enemy_skillcard_deactivate?.Invoke();
                     }
                 }
                 break;
@@ -155,7 +155,7 @@ public class DetectRay : MonoBehaviour
                 }
 
                 // 적 카드 강조 해제
-                ActionManager.enemy_skill_card_deactivate?.Invoke();
+                ActionManager.enemy_skillcard_deactivate?.Invoke();
 
                 // 모든 카드를 원래 order로
                 CardManager.instance.Set_origin_order(CardManager.instance.active_index);

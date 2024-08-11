@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1289191700854490473}
   - component: {fileID: 6180874969251113131}
-  - component: {fileID: 185627442434822042}
+  - component: {fileID: 4707233128693511692}
   m_Layer: 5
   m_Name: health_bar
   m_TagString: Untagged
@@ -91,7 +91,7 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &185627442434822042
+--- !u!114 &4707233128693511692
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -100,11 +100,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 953389889809876917}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5e42710dec93e9448bacc618c2fce2c9, type: 3}
+  m_Script: {fileID: 11500000, guid: 72b76d66e270521409faa8384f8c375f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  value_tmp: {fileID: 3235431911346895971}
-  slider: {fileID: 6180874969251113131}
+  TMP: {fileID: 3235431911346895971}
 --- !u!1 &3907036922818367598
 GameObject:
   m_ObjectHideFlags: 0

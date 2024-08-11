@@ -38,7 +38,7 @@ public class Character_On_stage_show : MonoBehaviour
 
             //  제거 박스면 캐릭터 제거
 
-            PartyManager.instance.remove_character_from_party(this.gameObject.GetComponent<Character>().code);
+            PartyManager.instance.remove_character_from_party(gameObject.GetComponent<Character>().Code);
             StageManager.instance.Reload_characters(); 
         }
 
