@@ -24,10 +24,20 @@ public class PlayableCharacterData
 }
 
 [System.Serializable]
+public class EnemyCharacterData
+{
+    public EnemyAiType moveAiType;
+    public EnemyAiType skillSelectAiType;
+}
+
+[System.Serializable]
 public class BasicCharacterData_dictionary : SerializableDictionary<character_code, BasicCharacterData> { }
 
 [System.Serializable]
 public class PlayableCharacterData_dictionary : SerializableDictionary<character_code, PlayableCharacterData> { }
+
+[System.Serializable]
+public class EnemyCharacterData_dictionary : SerializableDictionary<character_code, EnemyCharacterData> { }
 
 
 [CreateAssetMenu(fileName = "CharacterDataSO", menuName = "Scriptable_Objects_CharacterData")]
@@ -35,4 +45,5 @@ public class CharacterDataSO : ScriptableObject
 {
     public BasicCharacterData_dictionary BasicData;
     public PlayableCharacterData_dictionary PlayerData;
+    public EnemyCharacterData_dictionary EnemyData;
 }

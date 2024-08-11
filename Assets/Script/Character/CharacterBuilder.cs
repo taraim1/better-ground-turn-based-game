@@ -1,4 +1,5 @@
 using BattleUI;
+using BehaviorTree;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -12,7 +13,6 @@ public class CharacterBuilder : Singletone<CharacterBuilder>
     private character_code code = character_code.kimchunsik;
     private coordinate coordinate = new coordinate();
     private int index = 0;
-    private EnemyAiType aiType = EnemyAiType.NoAI;
 
     private bool makeSpumObj = false;
     private bool makePanicSign = false;
@@ -37,7 +37,6 @@ public class CharacterBuilder : Singletone<CharacterBuilder>
         Code(character_code.kimchunsik).
         Coordinate(new coordinate()).
         Index(0).
-        AiType(EnemyAiType.NoAI).
         MakeSpumObj(false).
         MakePanicSign(false).
         MakeHealthAndWillpowerBar(false).
@@ -50,7 +49,6 @@ public class CharacterBuilder : Singletone<CharacterBuilder>
     public CharacterBuilder Code(character_code code) { this.code = code; return this; }
     public CharacterBuilder Coordinate(coordinate coordinate) { this.coordinate = coordinate; return this; }
     public CharacterBuilder Index(int i) { index = i; return this; }
-    public CharacterBuilder AiType(EnemyAiType type) { aiType = type; return this; }
     public CharacterBuilder MakeSpumObj(bool flag) { makeSpumObj = flag; return this; }
     public CharacterBuilder MakePanicSign(bool flag) { makePanicSign = flag; return this; }
     public CharacterBuilder MakeHealthAndWillpowerBar(bool flag) { makeHealthAndWillpowerBar = flag; return this; }
@@ -68,23 +66,42 @@ public class CharacterBuilder : Singletone<CharacterBuilder>
             EnemyCharacter enemy_character = rootObj.AddComponent<EnemyCharacter>();
             character = enemy_character;
 
-            switch (aiType)
+            if (!DataSO.EnemyData.ContainsKey(code)) 
+            {
+                print("적 스폰 과정에서 오류 발생 : 적 데이터 딕셔너리에 없는 캐릭터 코드입니다.");
+            }
+
+            MoveTree moveTree;
+            SkillSelectTree skillSelectTree;
+
+            switch (DataSO.EnemyData[code].moveAiType)
             {
                 case EnemyAiType.NoAI:
-                    enemy_character.SetAI(new EnemyAI(
-                        enemy_character, 
-                        new BehaviorTree.MoveTree_NoAI("NoMove", enemy_character),
-                        new BehaviorTree.SkillSelectTree_NoAI("NoSkillSelect", enemy_character)
-                    ));
+                    moveTree = new MoveTree_NoAI("MoveTree_NoAi", enemy_character);
                     break;
                 case EnemyAiType.RandomAI:
-                    enemy_character.SetAI(new EnemyAI(
-                        enemy_character,
-                        new BehaviorTree.MoveTree_NoAI("NoMove", enemy_character),
-                        new BehaviorTree.SkillSelectTree_RandomPickOne("RandomSkillSelect", enemy_character)
-                    ));
+                    moveTree = new MoveTree_RandomMove("MoveTree_RandomMove", enemy_character);
+                    break;
+                default:
+                    moveTree = new MoveTree_NoAI("MoveTree_NoAi", enemy_character);
+                    break;
+
+            }
+
+            switch (DataSO.EnemyData[code].skillSelectAiType)
+            {
+                case EnemyAiType.NoAI:
+                    skillSelectTree = new SkillSelectTree_NoAI("SkillSelectTree_NoAi", enemy_character);
+                    break;
+                case EnemyAiType.RandomAI:
+                    skillSelectTree = new SkillSelectTree_RandomPickOne("SkillSelectTree_NoAi", enemy_character);
+                    break;
+                default:
+                    skillSelectTree = new SkillSelectTree_NoAI("SkillSelectTree_NoAi", enemy_character);
                     break;
             }
+
+            enemy_character.SetAI(new EnemyAI(enemy_character, moveTree, skillSelectTree));
         }
         else 
         {

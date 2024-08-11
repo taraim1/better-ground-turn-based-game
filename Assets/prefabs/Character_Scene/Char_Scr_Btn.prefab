@@ -919,7 +919,6 @@ GameObject:
   - component: {fileID: 5716938172246692498}
   - component: {fileID: 6900469662745586000}
   - component: {fileID: 7873539231694018319}
-  - component: {fileID: 4443365351724923389}
   m_Layer: 5
   m_Name: Char_Scr_Btn
   m_TagString: Untagged
@@ -1074,40 +1073,6 @@ MonoBehaviour:
   Card_Char: {fileID: 4649995377261788185}
   Character_port: {fileID: 7105018837287041047}
   character: {fileID: 0}
---- !u!114 &4443365351724923389
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7131119360408408915}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ebf9652bb0adef645872342c722b442e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  character_name: 
-  description: 
-  code: 0
-  enemy_code: 0
-  level: 0
-  max_health: 000000001e000000
-  max_willpower: 000000000f000000
-  is_character_unlocked: 0
-  deck: 000000000000000000000000000000000000000000000000
-  SPUM_datapath: 
-  current_health: 0
-  current_willpower: 0
-  health_bar: {fileID: 0}
-  willpower_bar: {fileID: 0}
-  skill_power_meter: {fileID: 0}
-  isEnemyCharacter: 0
-  Character_index: 0
-  panic_Sign: {fileID: 0}
-  skill_layoutGroup: {fileID: 0}
-  isPanic: 0
-  SPUM_unit_obj: {fileID: 0}
-  is_in_battle: 0
 --- !u!1 &7963254144751126987
 GameObject:
   m_ObjectHideFlags: 0
