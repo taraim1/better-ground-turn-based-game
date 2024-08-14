@@ -7,7 +7,7 @@ using UnityEditor.ShaderGraph.Internal;
 using Unity.VisualScripting;
 using System;
 
-public class card : MonoBehaviour
+public class card : MonoBehaviour, Iclickable
 {
     public SpriteRenderer illust;
     [SerializeField] TMP_Text nameTMP;
@@ -30,7 +30,7 @@ public class card : MonoBehaviour
     public int maxpower;
 
     [DoNotSerialize]
-    public Coroutine running_drag = null;
+    private Coroutine running_drag = null;
 
     public bool isEnemyCard = false;
     public bool _isShowingRange = false;
@@ -71,6 +71,28 @@ public class card : MonoBehaviour
         value_rangeTMP.text = string.Format("{0} - {1}", minpower, maxpower); 
         this.index = index;
 
+    }
+
+    public void OnClick() 
+    {
+        // 아군 카드이면
+        if (isEnemyCard == false)
+        {
+            // 카드 드래그 감지 시작
+            start_drag_detection(false);
+
+            // 적 카드 강조 해제
+            ActionManager.enemy_skillcard_deactivate?.Invoke();
+        }
+        // 적군 카드면
+        else
+        {
+            // 적 카드 강조 해제
+            if (state == current_mode.highlighted_enemy_card)
+            {
+                ActionManager.enemy_skillcard_deactivate?.Invoke();
+            }
+        }
     }
 
     public void Destroy_card() 
@@ -117,31 +139,39 @@ public class card : MonoBehaviour
         return true;
     }
 
+    public void start_drag_detection(bool keepHighLightedFlag)
+    {
+        running_drag = StartCoroutine(detect_drag(keepHighLightedFlag));
+    }
+
     // 카드 드래그 감지 (일정 시간 이상 잡고 있어야만 드래그로 판별)
-    public IEnumerator detect_drag(bool isDescription) 
+    private IEnumerator detect_drag(bool keepHighLightedFlag) 
     {
         float dragging_time = 0;
         bool isDraggingStarted = false;
+        Character ownerCharacter = owner.GetComponent<Character>();
 
         while (true) 
         {
-            
+            // 마우스를 안 뗀 상태로 일정 시간이 지나면 드래그 기능 시작 (패닉이 아니어야 함)
+            if (dragging_time >= Util.drag_time_standard && !isDraggingStarted && !ownerCharacter.IsPanic)
+            {
+                // 모든 카드를 원래 order로 
+                CardManager.instance.Set_origin_order(CardManager.instance.active_index);
+                isDraggingStarted = true;
+                // 하이라이트된 카드 해제
+                CardManager.instance.clear_highlighted_card();
+                drag_card();
+            }
 
             // 마우스 떼면 (스킬카드 설명 누른 경우 드래그중일 때 원위치로만 감)
             if (Input.GetMouseButton(0) == false) 
             {   
-                if (isDescription) 
+                if (!keepHighLightedFlag)
                 {
-                    // 드래그 중이었으면
-                    if (state == current_mode.dragging)
-                    {
-                        OnDragEnd();
-                    }
-                    yield break; 
+                    // 모든 카드를 원래 order로 
+                    CardManager.instance.Set_origin_order(CardManager.instance.active_index);
                 }
-
-                // 모든 카드를 원래 order로 
-                CardManager.instance.Set_origin_order(CardManager.instance.active_index);
 
                 // 드래그 중이었으면
                 if (state == current_mode.dragging)
@@ -152,7 +182,12 @@ public class card : MonoBehaviour
                 // 드래그 중이 아니면
                 else 
                 {
-                    // 카드 하이라이트 or 하이라이트 해제
+                    if (keepHighLightedFlag)
+                    {
+                        yield break;
+                    }
+
+                     // 카드 하이라이트 or 하이라이트 해제
                     if (CardManager.instance.highlightedData != this)
                     {
                         CardManager.instance.highlight_card(this);
@@ -173,17 +208,6 @@ public class card : MonoBehaviour
                     CardManager.instance.Align_cards(CardManager.instance.active_index);
                 }
                 yield break;
-            }
-            
-            // 마우스를 안 뗀 상태로 일정 시간이 지나면 드래그 기능 시작 (패닉이 아니어야 함)
-            if (dragging_time >= Util.drag_time_standard && !isDraggingStarted && !owner.GetComponent<Character>().IsPanic) 
-            {
-                // 모든 카드를 원래 order로 
-                CardManager.instance.Set_origin_order(CardManager.instance.active_index);
-                isDraggingStarted = true;
-                // 하이라이트된 카드 해제
-                CardManager.instance.clear_highlighted_card();
-                drag_card();
             }
 
             dragging_time += 0.01f;

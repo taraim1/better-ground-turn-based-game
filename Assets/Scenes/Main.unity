@@ -474,7 +474,7 @@ GameObject:
   - component: {fileID: 64083862}
   - component: {fileID: 64083863}
   m_Layer: 0
-  m_Name: BattleClacManager
+  m_Name: BattleCalcManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1601,9 +1601,9 @@ Transform:
   - {fileID: 772207835}
   - {fileID: 1538594533}
   - {fileID: 1665656115}
-  - {fileID: 948072115}
   - {fileID: 2013910028}
   - {fileID: 777273756}
+  - {fileID: 948072115}
   - {fileID: 1649778100}
   - {fileID: 64083862}
   m_Father: {fileID: 0}
@@ -3801,15 +3801,13 @@ GameObject:
   - component: {fileID: 948072115}
   - component: {fileID: 948072117}
   - component: {fileID: 948072116}
-  - component: {fileID: 948072119}
-  - component: {fileID: 948072118}
   m_Layer: 0
   m_Name: BuildingManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &948072115
 Transform:
   m_ObjectHideFlags: 0
@@ -3818,7 +3816,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 948072114}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -3872,36 +3870,6 @@ MonoBehaviour:
   WaterButton: {fileID: 2145496549}
   isInMainScene: 1
   url: https://www.naver.com/
---- !u!114 &948072118
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 948072114}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 12c0dd76ad79284448bf5ef7b6d2db0e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  goldCaveLevel: 1
-  gemCaveLevel: 1
-  wStatueLevel: 1
---- !u!114 &948072119
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 948072114}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 37d417aa8f9a30549a944d905c309671, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  gold: 0
-  gem: 0
-  water: 0
 --- !u!1 &1023100747
 GameObject:
   m_ObjectHideFlags: 0

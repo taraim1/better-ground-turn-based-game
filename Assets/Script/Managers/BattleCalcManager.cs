@@ -23,9 +23,15 @@ public class BattleCalcManager : Singletone<BattleCalcManager>
     [SerializeField]
     Character target_character;
 
-    // 카드 사용중인지 저장
-    private bool isUsingCard = false;
-    public bool IsUsingCard { get { return isUsingCard; } }
+
+    public bool isUsingCard() 
+    {
+        if (using_card == null)
+        {
+            return false;
+        }
+        return true;
+    }
 
     // 사용하는 카드값 받아서 판정 시작하는 메소드
     public void set_using_card(card using_card) 
@@ -33,7 +39,6 @@ public class BattleCalcManager : Singletone<BattleCalcManager>
         this.using_card = using_card;
         clear_target_card();
         clear_target_character();
-        isUsingCard = true;
     }
 
     // 판정 대상 받는 메소드
@@ -67,7 +72,7 @@ public class BattleCalcManager : Singletone<BattleCalcManager>
     {
         clear_target_card();
         clear_target_character();
-        isUsingCard = false;
+        using_card = null;
     }
 
     // 카드 사용시 경우의 수 판정함
@@ -83,6 +88,7 @@ public class BattleCalcManager : Singletone<BattleCalcManager>
         {
             if (!using_card.check_usable_coordinate(target_character.Coordinate)) 
             {
+                Clear_all();
                 return;
             }
         }
@@ -90,11 +96,10 @@ public class BattleCalcManager : Singletone<BattleCalcManager>
         {
             if (!using_card.check_usable_coordinate(target_card.owner.Coordinate)) 
             {
+                Clear_all();
                 return;
             }
         }
-
-        isUsingCard = false;
 
         // 자신에게 사용하는 스킬이고 타겟이 자신이면 사용
         if (using_card.Data.IsSelfUsableOnly) 
@@ -109,6 +114,7 @@ public class BattleCalcManager : Singletone<BattleCalcManager>
                 using_card_power = UnityEngine.Random.Range(using_card.minpower, using_card.maxpower + 1);
                 apply_direct_use_result(using_card, target_character, using_card_power);
             }
+            Clear_all();
             return;
         }
 
@@ -125,6 +131,7 @@ public class BattleCalcManager : Singletone<BattleCalcManager>
                 using_card_power = UnityEngine.Random.Range(using_card.minpower, using_card.maxpower + 1);
                 apply_direct_use_result(using_card, target_character, using_card_power);
             }
+            Clear_all();
             return;
         }
 
@@ -153,6 +160,7 @@ public class BattleCalcManager : Singletone<BattleCalcManager>
             // 타겟 캐릭터한테 남은 스킬이 있으면 발동 안 됨
             if (enemyCharacter.Remaining_skill_count != 0) 
             {
+                Clear_all();
                 return;
             }
 
@@ -172,6 +180,7 @@ public class BattleCalcManager : Singletone<BattleCalcManager>
             }
         }
 
+        Clear_all();
     }
 
     private void apply_skill_effect(card using_card, skill_effect_timing timing, Character target) // 특정 타이밍의 카드 특수 효과를 실행시켜줌
@@ -218,8 +227,7 @@ public class BattleCalcManager : Singletone<BattleCalcManager>
 
     private bool check_usable(card card) // 스킬 쓸 수 있는지 판별해서 쓸 수 있으면 true 줌
     {
-        // 카드 드래그 중이 아니면 못 씀
-        if (!isUsingCard) { return false; }
+        if (using_card == null) { return false; }
 
         // 코스트 부족하면 못 씀
         if (BattleManager.instance.get_remaining_cost() < card.Data.Cost) { return false; }
@@ -376,19 +384,29 @@ public class BattleCalcManager : Singletone<BattleCalcManager>
     }
 
     
-    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    private void Update()
     {
-        if (scene.name != "Battle")
+        Vector2 MousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+
+        Collider2D character_collider = Physics2D.OverlapPoint(MousePos, LayerMask.GetMask("character"));
+        if (character_collider != null)
         {
-            Destroy(this.gameObject);
+            // 캐릭터 타게팅 설정
+            if (character_collider.gameObject.tag == "PlayerCharacter" || character_collider.gameObject.tag == "EnemyCharacter")
+            {
+                set_target(character_collider.gameObject.GetComponent<Character>());
+            }
+        }
+
+        // 오브젝트 눌렀다 떼는 거 감지, 현재 페이즈가 플레이어 스킬 사용 페이즈여만 작동됨, 스킬 사용 판정용
+        if (Input.GetMouseButtonUp(0) && BattleManager.instance.current_phase == BattleManager.phases.player_skill_phase)
+        {
+            if (using_card != null)
+            {
+                // 스킬 사용 판정
+                Calc_skill_use();
+            }
         }
     }
-    void Start()
-    {
-        SceneManager.sceneLoaded += OnSceneLoaded;
-    }
-    void OnDestroy()
-    {
-        SceneManager.sceneLoaded -= OnSceneLoaded;
-    }
+
 }

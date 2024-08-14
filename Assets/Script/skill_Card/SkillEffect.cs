@@ -25,7 +25,7 @@ public enum skill_effect_target
 
 
 [System.Serializable]
-public struct SkillEffect
+public class SkillEffect
 {
     public skill_effect_code code;
     public skill_effect_timing timing;

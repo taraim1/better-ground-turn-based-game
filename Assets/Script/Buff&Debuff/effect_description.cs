@@ -4,7 +4,7 @@ using UnityEngine;
 using TMPro;
 using System;
 
-public class effect_description : MonoBehaviour
+public class effect_description : MonoBehaviour, Iclickable
 {
 
     [SerializeField] private TMP_Text nameTMP;
@@ -49,7 +49,10 @@ public class effect_description : MonoBehaviour
         Destroy(gameObject);
     }
 
-
+    public void OnClick() 
+    { 
+        // 아무 것도 안 함
+    }
 
 
 }
