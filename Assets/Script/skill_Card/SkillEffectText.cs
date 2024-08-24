@@ -7,10 +7,19 @@ using UnityEngine;
 [Serializable]
 public class skill_effect_text // 스킬 특수효과 보여주는 텍스트 관리 클래스
 {
-    public GameObject nameTextObj;
-    public GameObject effectTextObj;
+    private GameObject nameTextObj;
+    private GameObject effectTextObj;
     [SerializeField] private TMP_Text nameTMP;
     [SerializeField] private TMP_Text effectTMP;
+
+
+    public skill_effect_text(TMP_Text nameTMP, TMP_Text effectTMP) 
+    {
+        this.nameTMP = nameTMP;
+        this.effectTMP = effectTMP;
+        nameTextObj = nameTMP.gameObject;
+        effectTextObj = effectTMP.gameObject;
+    }
 
     public void deactivate() // 텍스트 오브젝트 비활성화
     {
@@ -30,4 +39,6 @@ public class skill_effect_text // 스킬 특수효과 보여주는 텍스트 관리 클래스
         nameTMP.text = description.Item1;
         effectTMP.text = description.Item2;
     }
+
+    
 }

@@ -4,6 +4,7 @@ using UnityEngine;
 using TMPro;
 using System;
 using static card;
+using UnityEngine.UI;
 
 public class card_description : MonoBehaviour, Iclickable
 {
@@ -13,17 +14,16 @@ public class card_description : MonoBehaviour, Iclickable
     [SerializeField] private Vector3 offset; // 카드와 얼마나 떨어져있어야 하는지 저장
     Vector3 current_offset;
     [SerializeField] private List<skill_effect_text> EffectTextPool;
-
+    [SerializeField] private GameObject nameObjPrefab;
+    [SerializeField] private GameObject descriptionObjPrefab;
+    [SerializeField] private GameObject content_layoutGroup;
+    [SerializeField] private ScrollRect scrollRect;
     public void OnClick()
     {
         // 아군 카드이면
         if (target_card.isEnemyCard == false)
         {
-            // 카드 드래그 감지 시작
-            target_card.start_drag_detection(true);
-
-            // 적 카드 강조 해제
-            ActionManager.enemy_skillcard_deactivate?.Invoke();
+            // 아무 것도 안 함
         }
         // 적군 카드면
         else
@@ -55,9 +55,20 @@ public class card_description : MonoBehaviour, Iclickable
         // 텍스트 오브젝트 활성화 및 텍스트 설정
         for (int i = 0; i < target_card.Effects.Count; i++) 
         {
+            // 추가해야 하는 경우
+            if (i >= EffectTextPool.Count) 
+            {
+                TMP_Text nameTmp = Instantiate(nameObjPrefab, content_layoutGroup.transform).GetComponent<TMP_Text>();
+                TMP_Text descriptionTmp = Instantiate(descriptionObjPrefab, content_layoutGroup.transform).GetComponentInChildren<TMP_Text>();
+                EffectTextPool.Add(new skill_effect_text(nameTmp, descriptionTmp));
+            }
+
             EffectTextPool[i].activate();
             EffectTextPool[i].set_effect_text(target_card.Effects[i]);
         }
+
+        // 스크롤 초기화
+        scrollRect.verticalNormalizedPosition = 1;
     }
 
 

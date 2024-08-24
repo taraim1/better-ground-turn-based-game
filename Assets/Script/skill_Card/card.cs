@@ -115,6 +115,7 @@ public class card : MonoBehaviour, Iclickable
                     Effects.Add(new Ignition(label.Code, this, label.Parameters));
                     break;
                 case skill_effect_code.fire_enchantment:
+                    Effects.Add(new Fire_Enchantment(label.Code, this, label.Parameters));
                     break;
             }
         }
