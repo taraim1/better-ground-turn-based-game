@@ -185,7 +185,7 @@ public class enemy_skillCard_slot : MonoBehaviour, IPointerEnterHandler, IPointe
                 // 스킬 사정거리 보이기
                 if (card.Data.RangeType == CardRangeType.limited) 
                 {
-                    current_range = card.get_use_range(card.owner.Coordinate);
+                    current_range = card.get_use_range();
                     foreach (coordinate coordinate in current_range) 
                     {
                         BattleGridManager.instance.set_tile_color(coordinate, Tile.TileColor.red);

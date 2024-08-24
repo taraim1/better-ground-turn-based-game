@@ -53,10 +53,10 @@ public class card_description : MonoBehaviour, Iclickable
         target_card_show_elapsed_time = 0;
 
         // 텍스트 오브젝트 활성화 및 텍스트 설정
-        for (int i = 0; i < target_card.Data.Effects.Count; i++) 
+        for (int i = 0; i < target_card.Effects.Count; i++) 
         {
             EffectTextPool[i].activate();
-            EffectTextPool[i].set_effect_text(target_card.Data.Effects[i]);
+            EffectTextPool[i].set_effect_text(target_card.Effects[i]);
         }
     }
 

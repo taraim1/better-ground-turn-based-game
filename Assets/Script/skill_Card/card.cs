@@ -36,6 +36,8 @@ public class card : MonoBehaviour, Iclickable
     public bool _isShowingRange = false;
     private bool isDestroyed = false;
     public List<coordinate> usable_tiles;
+    private List<SkillEffect> effects = new List<SkillEffect>();
+    public List<SkillEffect> Effects => effects;
     private void Awake()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
@@ -57,6 +59,10 @@ public class card : MonoBehaviour, Iclickable
     private CardData data;
     public CardData Data => data;
 
+    public Action<card, Character> OnUsed;
+    public Action<card, Character> OnDirectUsed;
+    public Action<card, Character> OnClashWin;
+
     public void Setup(CardData data, int index) 
     {
         this.data = data;
@@ -65,13 +71,55 @@ public class card : MonoBehaviour, Iclickable
         nameTMP.text = Data.Name;
         costTMP.text = Data.Cost.ToString();
         typeTMP.text = Data.Type;
-        behavior_typeTMP.text = Data.BehaviorType;
+
+        string behaviorText = "";
+        switch (Data.BehaviorType) 
+        {
+            case CardBehaviorType.attack:
+                behaviorText = "공격";
+                break;
+            case CardBehaviorType.defend:
+                behaviorText = "방어";
+                break;
+            case CardBehaviorType.dodge:
+                behaviorText = "회피";
+                break;
+            case CardBehaviorType.etc:
+                behaviorText = "기타";
+                break;
+        }
+        behavior_typeTMP.text = behaviorText;
         minpower = Data.MinPowerOfLevel[Data.Level-1];
         maxpower = Data.MaxPowerOfLevel[Data.Level-1];
         value_rangeTMP.text = string.Format("{0} - {1}", minpower, maxpower); 
         this.index = index;
 
+
+        // 특수효과 만들기
+
+        // 사용 가능 대상 지정 효과
+        Effects.Add(new TargetLimitEffect(skill_effect_code.target_limit, this, null, data.Targets));
+
+        // 나머지 효과
+        foreach (SkillEffect_label label in Data.skillEffect_Labels) 
+        {
+            switch (label.Code) 
+            { 
+                case skill_effect_code.willpower_consumption:
+                    Effects.Add(new Willpower_Consumtion(label.Code, this, label.Parameters));
+                    break;
+                case skill_effect_code.willpower_recovery:
+                    Effects.Add(new Willpower_Recovery(label.Code, this, label.Parameters));
+                    break;
+                case skill_effect_code.ignition:
+                    Effects.Add(new Ignition(label.Code, this, label.Parameters));
+                    break;
+                case skill_effect_code.fire_enchantment:
+                    break;
+            }
+        }
     }
+
 
     public void OnClick() 
     {
@@ -103,6 +151,11 @@ public class card : MonoBehaviour, Iclickable
         }
         transform.DOKill();
         isDestroyed = true;
+        foreach (SkillEffect effect in effects) 
+        {
+            effect.OnDestroy();
+        }
+
         Destroy(gameObject);
     }
 
@@ -132,7 +185,7 @@ public class card : MonoBehaviour, Iclickable
     {
         if (Data.RangeType == CardRangeType.limited)
         {
-            return get_use_range(owner.Coordinate).Contains(coordinate);
+            return get_use_range().Contains(coordinate);
         }
 
         // unlimited인 경우
@@ -230,8 +283,7 @@ public class card : MonoBehaviour, Iclickable
         if (Data.RangeType == CardRangeType.limited)
         {
             // 쓸 수 있는 타일 판별
-            Character using_character = BattleManager.instance.playable_characters[CardManager.instance.active_index].GetComponent<Character>();
-            usable_tiles = get_use_range(using_character.Coordinate);
+            usable_tiles = get_use_range();
 
             // 그 타일들을 초록색으로
             foreach (coordinate coordinate in usable_tiles) 
@@ -260,17 +312,44 @@ public class card : MonoBehaviour, Iclickable
         CardManager.instance.Align_cards(CardManager.instance.active_index);
     }
 
-    public List<coordinate> get_use_range(coordinate character_coordinate) 
+    public List<coordinate> get_use_range() 
     {
         List<coordinate> relative_coors = Data.get_copy_of_use_range();
         List<coordinate> result = new List<coordinate>();
 
         foreach (coordinate coor in relative_coors) 
         {
-            result.Add(character_coordinate + coor);
+            result.Add(owner.Coordinate + coor);
         }
 
         return result;
+    }
+
+    public bool check_card_usable(card card, Character character) 
+    {
+        foreach (SkillEffect skillEffect in Effects) 
+        {
+            if (!skillEffect.check_card_usable(card, character)) 
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    // 위력 굴리기
+    public int PowerRoll() 
+    {
+        int power = UnityEngine.Random.Range(minpower, maxpower + 1);
+        if (!Data.DontShowPowerRollResult) { show_power_roll_result(power); }
+        return power;
+    }
+
+    // 스킬 사용 시 위력 보여주는거
+    private void show_power_roll_result(int power)
+    {
+        owner.show_power_meter?.Invoke(power);
     }
 
     private void OnEnemyCardDeactivate() 
