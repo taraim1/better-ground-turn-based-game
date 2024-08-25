@@ -2,10 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-public class Changestory : MonoBehaviour
+public class ChangeMain1 : MonoBehaviour
 {
     public void ChangeScene()
     {
-        LoadingSceneControler.LoadScene("Story");
+        LoadingSceneControler.LoadScene("Main");
     }
 }
