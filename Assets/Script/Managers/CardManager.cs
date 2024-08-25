@@ -17,7 +17,28 @@ public enum skillcard_code
     powerful_attack,
     fire_ball,
     concentration,
-    fire_enchantment
+    fire_enchantment,
+    scratch,
+    distracting_attack,
+    fast_stab,
+    vital_point_stab,
+    distracting_shot,
+    aimed_shot,
+    double_shot,
+    swing,
+    downward_strike,
+    heavy_strike,
+    beat_to_a_pulp,
+    rampage,
+    all_out_strike,
+    awkward_footwork,
+    confusing_footwork,
+    confusion_spell,
+    deflect,
+    filp_balance,
+    block,
+    fend_off,
+    clash
 }
 
 public class CardManager : Singletone<CardManager>

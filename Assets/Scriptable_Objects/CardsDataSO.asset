@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: CardsDataSO
   m_EditorClassIdentifier: Assembly-CSharp::CardDataSO
   CardData_dict:
-    m_keys: 00000000010000000200000003000000040000000500000006000000
+    m_keys: 000000000100000002000000030000000400000005000000060000000700000008000000090000000a0000000b0000000c0000000d0000000e0000000f000000100000001100000012000000130000001400000015000000160000001700000018000000190000001a0000001b000000
     m_values:
     - name: "\uAC04\uB2E8\uD55C \uACF5\uACA9"
       cost: 1
@@ -183,7 +183,7 @@ MonoBehaviour:
       effect_labels:
       - code: 2
         parameters: 08000000
-    - name: "\uBC1C\uD654 \uB9C8\uBC95 \uBD80\uC5EC"
+    - name: "\uD654\uC5FC \uB9C8\uBC95 \uBD80\uC5EC"
       cost: 0
       type: "\uBD88"
       sprite: {fileID: 21300000, guid: a856cf1c0c2b1504088a4272f0979780, type: 3}
@@ -202,3 +202,926 @@ MonoBehaviour:
         parameters: 03000000
       - code: 4
         parameters: 01000000
+    - name: "\uD560\uD034\uAE30"
+      cost: 0
+      type: "\uBB34"
+      sprite: {fileID: 21300000, guid: 5fba135ea5e15be4eab4ad90d3f6c689, type: 3}
+      behavior_type: 0
+      minPowerOfLevel: 01000000
+      maxPowerOfLevel: 02000000
+      code: 7
+      level: 1
+      targets: 02000000
+      isDirectUsable: 1
+      dontShowPowerRollResult: 0
+      rangeType: 1
+      use_range:
+      - x: -1
+        y: -1
+      - x: -1
+        y: 0
+      - x: -1
+        y: 1
+      - x: 0
+        y: -1
+      - x: 0
+        y: 1
+      - x: 1
+        y: -1
+      - x: 1
+        y: 0
+      - x: 1
+        y: 1
+      effect_labels: []
+    - name: "\uACAC\uC81C \uACF5\uACA9"
+      cost: 0
+      type: "\uBB34"
+      sprite: {fileID: 21300000, guid: 525b042631ad4f44fbd970577cb1b1b3, type: 3}
+      behavior_type: 0
+      minPowerOfLevel: 01000000
+      maxPowerOfLevel: 02000000
+      code: 8
+      level: 1
+      targets: 02000000
+      isDirectUsable: 1
+      dontShowPowerRollResult: 0
+      rangeType: 1
+      use_range:
+      - x: -1
+        y: -1
+      - x: -1
+        y: 0
+      - x: -1
+        y: 1
+      - x: 0
+        y: -1
+      - x: 0
+        y: 1
+      - x: 1
+        y: -1
+      - x: 1
+        y: 0
+      - x: 1
+        y: 1
+      effect_labels: []
+    - name: "\uBE60\uB974\uAC8C \uCC0C\uB974\uAE30"
+      cost: 1
+      type: "\uBB34"
+      sprite: {fileID: 21300000, guid: 2f87bb036338efb4fa19a09892b1a15f, type: 3}
+      behavior_type: 0
+      minPowerOfLevel: 01000000
+      maxPowerOfLevel: 04000000
+      code: 9
+      level: 1
+      targets: 02000000
+      isDirectUsable: 1
+      dontShowPowerRollResult: 0
+      rangeType: 1
+      use_range:
+      - x: -1
+        y: -1
+      - x: -1
+        y: 0
+      - x: -1
+        y: 1
+      - x: 0
+        y: -1
+      - x: 0
+        y: 1
+      - x: 1
+        y: -1
+      - x: 1
+        y: 0
+      - x: 1
+        y: 1
+      - x: -2
+        y: 0
+      - x: 2
+        y: 0
+      - x: 0
+        y: -2
+      - x: 0
+        y: 2
+      effect_labels: []
+    - name: "\uAE09\uC18C \uCC0C\uB974\uAE30"
+      cost: 2
+      type: "\uBB34"
+      sprite: {fileID: 21300000, guid: 2f87bb036338efb4fa19a09892b1a15f, type: 3}
+      behavior_type: 0
+      minPowerOfLevel: 03000000
+      maxPowerOfLevel: 05000000
+      code: 10
+      level: 1
+      targets: 02000000
+      isDirectUsable: 1
+      dontShowPowerRollResult: 0
+      rangeType: 1
+      use_range:
+      - x: -1
+        y: -1
+      - x: -1
+        y: 0
+      - x: -1
+        y: 1
+      - x: 0
+        y: -1
+      - x: 0
+        y: 1
+      - x: 1
+        y: -1
+      - x: 1
+        y: 0
+      - x: 1
+        y: 1
+      - x: -2
+        y: 0
+      - x: 2
+        y: 0
+      - x: 0
+        y: -2
+      - x: 0
+        y: 2
+      - x: -2
+        y: -2
+      - x: -1
+        y: -2
+      - x: 1
+        y: -2
+      - x: 2
+        y: -2
+      - x: -2
+        y: -1
+      - x: 2
+        y: -1
+      - x: -2
+        y: 1
+      - x: 2
+        y: 1
+      - x: -2
+        y: 2
+      - x: -1
+        y: 2
+      - x: 1
+        y: 2
+      - x: 2
+        y: 2
+      effect_labels: []
+    - name: "\uACAC\uC81C \uC0AC\uACA9"
+      cost: 0
+      type: "\uBB34"
+      sprite: {fileID: 21300000, guid: b1e5a6efc9936bd4d838c839cd0a9aef, type: 3}
+      behavior_type: 0
+      minPowerOfLevel: 01000000
+      maxPowerOfLevel: 02000000
+      code: 11
+      level: 1
+      targets: 02000000
+      isDirectUsable: 1
+      dontShowPowerRollResult: 0
+      rangeType: 1
+      use_range:
+      - x: -1
+        y: -1
+      - x: -1
+        y: 0
+      - x: -1
+        y: 1
+      - x: 0
+        y: -1
+      - x: 0
+        y: 1
+      - x: 1
+        y: -1
+      - x: 1
+        y: 0
+      - x: 1
+        y: 1
+      - x: -2
+        y: 0
+      - x: 2
+        y: 0
+      - x: 0
+        y: -2
+      - x: 0
+        y: 2
+      - x: -2
+        y: -2
+      - x: -1
+        y: -2
+      - x: 1
+        y: -2
+      - x: 2
+        y: -2
+      - x: -2
+        y: -1
+      - x: 2
+        y: -1
+      - x: -2
+        y: 1
+      - x: 2
+        y: 1
+      - x: -2
+        y: 2
+      - x: -1
+        y: 2
+      - x: 1
+        y: 2
+      - x: 2
+        y: 2
+      - x: -3
+        y: -1
+      - x: -3
+        y: 0
+      - x: -3
+        y: 1
+      - x: -1
+        y: -3
+      - x: 0
+        y: -3
+      - x: 1
+        y: -3
+      - x: 3
+        y: -1
+      - x: 3
+        y: 0
+      - x: 3
+        y: 1
+      - x: -1
+        y: -3
+      - x: 0
+        y: -3
+      - x: 1
+        y: -3
+      effect_labels: []
+    - name: "\uC870\uC900 \uC0AC\uACA9"
+      cost: 1
+      type: "\uBB34"
+      sprite: {fileID: 21300000, guid: e5fbf9a6970eed14890cb3f82ae1447a, type: 3}
+      behavior_type: 0
+      minPowerOfLevel: 02000000
+      maxPowerOfLevel: 03000000
+      code: 12
+      level: 1
+      targets: 02000000
+      isDirectUsable: 1
+      dontShowPowerRollResult: 0
+      rangeType: 1
+      use_range:
+      - x: -1
+        y: -1
+      - x: -1
+        y: 0
+      - x: -1
+        y: 1
+      - x: 0
+        y: -1
+      - x: 0
+        y: 1
+      - x: 1
+        y: -1
+      - x: 1
+        y: 0
+      - x: 1
+        y: 1
+      - x: -2
+        y: 0
+      - x: 2
+        y: 0
+      - x: 0
+        y: -2
+      - x: 0
+        y: 2
+      - x: -2
+        y: -2
+      - x: -1
+        y: -2
+      - x: 1
+        y: -2
+      - x: 2
+        y: -2
+      - x: -2
+        y: -1
+      - x: 2
+        y: -1
+      - x: -2
+        y: 1
+      - x: 2
+        y: 1
+      - x: -2
+        y: 2
+      - x: -1
+        y: 2
+      - x: 1
+        y: 2
+      - x: 2
+        y: 2
+      - x: -3
+        y: -1
+      - x: -3
+        y: 0
+      - x: -3
+        y: 1
+      - x: -1
+        y: -3
+      - x: 0
+        y: -3
+      - x: 1
+        y: -3
+      - x: 3
+        y: -1
+      - x: 3
+        y: 0
+      - x: 3
+        y: 1
+      - x: -1
+        y: -3
+      - x: 0
+        y: -3
+      - x: 1
+        y: -3
+      effect_labels: []
+    - name: "\uC774\uC5F0\uBC1C \uC0AC\uACA9"
+      cost: 2
+      type: "\uBB34"
+      sprite: {fileID: 21300000, guid: 63d472d6facfca2438e03471c872e2da, type: 3}
+      behavior_type: 0
+      minPowerOfLevel: 02000000
+      maxPowerOfLevel: 03000000
+      code: 13
+      level: 1
+      targets: 02000000
+      isDirectUsable: 1
+      dontShowPowerRollResult: 0
+      rangeType: 1
+      use_range:
+      - x: -1
+        y: -1
+      - x: -1
+        y: 0
+      - x: -1
+        y: 1
+      - x: 0
+        y: -1
+      - x: 0
+        y: 1
+      - x: 1
+        y: -1
+      - x: 1
+        y: 0
+      - x: 1
+        y: 1
+      - x: -2
+        y: 0
+      - x: 2
+        y: 0
+      - x: 0
+        y: -2
+      - x: 0
+        y: 2
+      - x: -2
+        y: -2
+      - x: -1
+        y: -2
+      - x: 1
+        y: -2
+      - x: 2
+        y: -2
+      - x: -2
+        y: -1
+      - x: 2
+        y: -1
+      - x: -2
+        y: 1
+      - x: 2
+        y: 1
+      - x: -2
+        y: 2
+      - x: -1
+        y: 2
+      - x: 1
+        y: 2
+      - x: 2
+        y: 2
+      - x: -3
+        y: -1
+      - x: -3
+        y: 0
+      - x: -3
+        y: 1
+      - x: -1
+        y: -3
+      - x: 0
+        y: -3
+      - x: 1
+        y: -3
+      - x: 3
+        y: -1
+      - x: 3
+        y: 0
+      - x: 3
+        y: 1
+      - x: -1
+        y: -3
+      - x: 0
+        y: -3
+      - x: 1
+        y: -3
+      effect_labels: []
+    - name: "\uD718\uB450\uB974\uAE30"
+      cost: 1
+      type: "\uBB34"
+      sprite: {fileID: 21300000, guid: 764516da0ec1cfa4cbfa89c5bff81111, type: 3}
+      behavior_type: 0
+      minPowerOfLevel: 02000000
+      maxPowerOfLevel: 03000000
+      code: 14
+      level: 1
+      targets: 02000000
+      isDirectUsable: 1
+      dontShowPowerRollResult: 0
+      rangeType: 1
+      use_range:
+      - x: -1
+        y: -1
+      - x: -1
+        y: 0
+      - x: -1
+        y: 1
+      - x: 0
+        y: -1
+      - x: 0
+        y: 1
+      - x: 1
+        y: -1
+      - x: 1
+        y: 0
+      - x: 1
+        y: 1
+      - x: -2
+        y: 0
+      - x: 2
+        y: 0
+      - x: 0
+        y: -2
+      - x: 0
+        y: 2
+      - x: -2
+        y: -2
+      - x: -1
+        y: -2
+      - x: 1
+        y: -2
+      - x: 2
+        y: -2
+      - x: -2
+        y: -1
+      - x: 2
+        y: -1
+      - x: -2
+        y: 1
+      - x: 2
+        y: 1
+      - x: -2
+        y: 2
+      - x: -1
+        y: 2
+      - x: 1
+        y: 2
+      - x: 2
+        y: 2
+      effect_labels: []
+    - name: "\uB0B4\uB824\uCC0D\uAE30"
+      cost: 2
+      type: "\uBB34"
+      sprite: {fileID: 21300000, guid: c2ad88d8909ae3a44aec23a1539810f5, type: 3}
+      behavior_type: 0
+      minPowerOfLevel: 04000000
+      maxPowerOfLevel: 05000000
+      code: 15
+      level: 1
+      targets: 02000000
+      isDirectUsable: 1
+      dontShowPowerRollResult: 0
+      rangeType: 1
+      use_range:
+      - x: -1
+        y: -1
+      - x: -1
+        y: 0
+      - x: -1
+        y: 1
+      - x: 0
+        y: -1
+      - x: 0
+        y: 1
+      - x: 1
+        y: -1
+      - x: 1
+        y: 0
+      - x: 1
+        y: 1
+      - x: -2
+        y: 0
+      - x: 2
+        y: 0
+      - x: 0
+        y: -2
+      - x: 0
+        y: 2
+      - x: -2
+        y: -2
+      - x: -1
+        y: -2
+      - x: 1
+        y: -2
+      - x: 2
+        y: -2
+      - x: -2
+        y: -1
+      - x: 2
+        y: -1
+      - x: -2
+        y: 1
+      - x: 2
+        y: 1
+      - x: -2
+        y: 2
+      - x: -1
+        y: 2
+      - x: 1
+        y: 2
+      - x: 2
+        y: 2
+      effect_labels: []
+    - name: "\uBB34\uAC70\uC6B4 \uC77C\uACA9"
+      cost: 1
+      type: "\uBB34"
+      sprite: {fileID: 21300000, guid: 70aec0d3ec07adf4484ac8f9b47c3538, type: 3}
+      behavior_type: 0
+      minPowerOfLevel: 03000000
+      maxPowerOfLevel: 04000000
+      code: 16
+      level: 1
+      targets: 02000000
+      isDirectUsable: 1
+      dontShowPowerRollResult: 0
+      rangeType: 1
+      use_range:
+      - x: -1
+        y: -1
+      - x: -1
+        y: 0
+      - x: -1
+        y: 1
+      - x: 0
+        y: -1
+      - x: 0
+        y: 1
+      - x: 1
+        y: -1
+      - x: 1
+        y: 0
+      - x: 1
+        y: 1
+      - x: -2
+        y: 0
+      - x: 2
+        y: 0
+      - x: 0
+        y: -2
+      - x: 0
+        y: 2
+      - x: -2
+        y: -2
+      - x: -1
+        y: -2
+      - x: 1
+        y: -2
+      - x: 2
+        y: -2
+      - x: -2
+        y: -1
+      - x: 2
+        y: -1
+      - x: -2
+        y: 1
+      - x: 2
+        y: 1
+      - x: -2
+        y: 2
+      - x: -1
+        y: 2
+      - x: 1
+        y: 2
+      - x: 2
+        y: 2
+      effect_labels: []
+    - name: "\uACE4\uC8FD\uB0B4\uAE30"
+      cost: 1
+      type: "\uBB34"
+      sprite: {fileID: 21300000, guid: e875d4e4652b8cd48877dd80c761eca6, type: 3}
+      behavior_type: 0
+      minPowerOfLevel: 03000000
+      maxPowerOfLevel: 05000000
+      code: 17
+      level: 1
+      targets: 02000000
+      isDirectUsable: 1
+      dontShowPowerRollResult: 0
+      rangeType: 1
+      use_range:
+      - x: -1
+        y: -1
+      - x: -1
+        y: 0
+      - x: -1
+        y: 1
+      - x: 0
+        y: -1
+      - x: 0
+        y: 1
+      - x: 1
+        y: -1
+      - x: 1
+        y: 0
+      - x: 1
+        y: 1
+      - x: -2
+        y: 0
+      - x: 2
+        y: 0
+      - x: 0
+        y: -2
+      - x: 0
+        y: 2
+      - x: -2
+        y: -2
+      - x: -1
+        y: -2
+      - x: 1
+        y: -2
+      - x: 2
+        y: -2
+      - x: -2
+        y: -1
+      - x: 2
+        y: -1
+      - x: -2
+        y: 1
+      - x: 2
+        y: 1
+      - x: -2
+        y: 2
+      - x: -1
+        y: 2
+      - x: 1
+        y: 2
+      - x: 2
+        y: 2
+      effect_labels: []
+    - name: "\uAD11\uB780"
+      cost: 2
+      type: "\uBB34"
+      sprite: {fileID: 21300000, guid: 445d0934d59f9034b994416d4d5732e2, type: 3}
+      behavior_type: 0
+      minPowerOfLevel: 04000000
+      maxPowerOfLevel: 05000000
+      code: 18
+      level: 1
+      targets: 02000000
+      isDirectUsable: 1
+      dontShowPowerRollResult: 0
+      rangeType: 1
+      use_range:
+      - x: -1
+        y: -1
+      - x: -1
+        y: 0
+      - x: -1
+        y: 1
+      - x: 0
+        y: -1
+      - x: 0
+        y: 1
+      - x: 1
+        y: -1
+      - x: 1
+        y: 0
+      - x: 1
+        y: 1
+      - x: -2
+        y: 0
+      - x: 2
+        y: 0
+      - x: 0
+        y: -2
+      - x: 0
+        y: 2
+      - x: -2
+        y: -2
+      - x: -1
+        y: -2
+      - x: 1
+        y: -2
+      - x: 2
+        y: -2
+      - x: -2
+        y: -1
+      - x: 2
+        y: -1
+      - x: -2
+        y: 1
+      - x: 2
+        y: 1
+      - x: -2
+        y: 2
+      - x: -1
+        y: 2
+      - x: 1
+        y: 2
+      - x: 2
+        y: 2
+      effect_labels: []
+    - name: "\uD63C\uC2E0\uC758 \uC77C\uACA9"
+      cost: 3
+      type: "\uBB34"
+      sprite: {fileID: 21300000, guid: a12959038aa37b24aa1b767a9635a208, type: 3}
+      behavior_type: 0
+      minPowerOfLevel: 05000000
+      maxPowerOfLevel: 08000000
+      code: 19
+      level: 1
+      targets: 02000000
+      isDirectUsable: 1
+      dontShowPowerRollResult: 0
+      rangeType: 1
+      use_range:
+      - x: -1
+        y: -1
+      - x: -1
+        y: 0
+      - x: -1
+        y: 1
+      - x: 0
+        y: -1
+      - x: 0
+        y: 1
+      - x: 1
+        y: -1
+      - x: 1
+        y: 0
+      - x: 1
+        y: 1
+      - x: -2
+        y: 0
+      - x: 2
+        y: 0
+      - x: 0
+        y: -2
+      - x: 0
+        y: 2
+      - x: -2
+        y: -2
+      - x: -1
+        y: -2
+      - x: 1
+        y: -2
+      - x: 2
+        y: -2
+      - x: -2
+        y: -1
+      - x: 2
+        y: -1
+      - x: -2
+        y: 1
+      - x: 2
+        y: 1
+      - x: -2
+        y: 2
+      - x: -1
+        y: 2
+      - x: 1
+        y: 2
+      - x: 2
+        y: 2
+      effect_labels: []
+    - name: "\uC5C9\uC131\uD55C \uBC1C\uAC78\uC74C"
+      cost: 0
+      type: "\uBB34"
+      sprite: {fileID: 21300000, guid: 80dbaea11b08c1942a4cd2da6cd38eae, type: 3}
+      behavior_type: 2
+      minPowerOfLevel: 01000000
+      maxPowerOfLevel: 02000000
+      code: 20
+      level: 1
+      targets: 02000000
+      isDirectUsable: 0
+      dontShowPowerRollResult: 0
+      rangeType: 0
+      use_range: []
+      effect_labels: []
+    - name: "\uD604\uB780\uD55C \uBC1C\uAC78\uC74C"
+      cost: 1
+      type: "\uBB34"
+      sprite: {fileID: 21300000, guid: 157fcf332566b9e43bb6603e6d0db963, type: 3}
+      behavior_type: 2
+      minPowerOfLevel: 02000000
+      maxPowerOfLevel: 03000000
+      code: 21
+      level: 1
+      targets: 02000000
+      isDirectUsable: 0
+      dontShowPowerRollResult: 0
+      rangeType: 0
+      use_range: []
+      effect_labels: []
+    - name: "\uD63C\uB780 \uC8FC\uC220"
+      cost: 1
+      type: "\uBB34"
+      sprite: {fileID: 21300000, guid: fcd77b38feaceb241a23c4cc9ff26cb7, type: 3}
+      behavior_type: 2
+      minPowerOfLevel: 02000000
+      maxPowerOfLevel: 03000000
+      code: 22
+      level: 1
+      targets: 02000000
+      isDirectUsable: 0
+      dontShowPowerRollResult: 0
+      rangeType: 0
+      use_range: []
+      effect_labels: []
+    - name: "\uD295\uACA8\uB0B4\uAE30"
+      cost: 1
+      type: "\uBB34"
+      sprite: {fileID: 21300000, guid: 87b5da42520fae744b03444605d100e6, type: 3}
+      behavior_type: 2
+      minPowerOfLevel: 03000000
+      maxPowerOfLevel: 03000000
+      code: 23
+      level: 1
+      targets: 02000000
+      isDirectUsable: 0
+      dontShowPowerRollResult: 0
+      rangeType: 0
+      use_range: []
+      effect_labels: []
+    - name: "\uAE30\uC138 \uC5ED\uC804"
+      cost: 1
+      type: "\uBB34"
+      sprite: {fileID: 21300000, guid: 1bcefa5690137e64abf221bff8762193, type: 3}
+      behavior_type: 2
+      minPowerOfLevel: 03000000
+      maxPowerOfLevel: 04000000
+      code: 24
+      level: 1
+      targets: 02000000
+      isDirectUsable: 0
+      dontShowPowerRollResult: 0
+      rangeType: 0
+      use_range: []
+      effect_labels: []
+    - name: "\uB9C9\uC544\uB0B4\uAE30"
+      cost: 0
+      type: "\uBB34"
+      sprite: {fileID: 21300000, guid: 409ea6aabb570af44b9efb1113eec74d, type: 3}
+      behavior_type: 2
+      minPowerOfLevel: 01000000
+      maxPowerOfLevel: 02000000
+      code: 25
+      level: 1
+      targets: 02000000
+      isDirectUsable: 0
+      dontShowPowerRollResult: 0
+      rangeType: 0
+      use_range: []
+      effect_labels: []
+    - name: "\uCCD0\uB0B4\uAE30"
+      cost: 1
+      type: "\uBB34"
+      sprite: {fileID: 21300000, guid: 3fe0384c373e8aa48b76a69deb944c58, type: 3}
+      behavior_type: 2
+      minPowerOfLevel: 01000000
+      maxPowerOfLevel: 03000000
+      code: 25
+      level: 1
+      targets: 02000000
+      isDirectUsable: 0
+      dontShowPowerRollResult: 0
+      rangeType: 0
+      use_range: []
+      effect_labels: []
+    - name: "\uD798\uACA8\uB8E8\uAE30"
+      cost: 1
+      type: "\uBB34"
+      sprite: {fileID: 21300000, guid: ec847bf77da95fe438e551af3a536203, type: 3}
+      behavior_type: 2
+      minPowerOfLevel: 02000000
+      maxPowerOfLevel: 04000000
+      code: 25
+      level: 1
+      targets: 02000000
+      isDirectUsable: 0
+      dontShowPowerRollResult: 0
+      rangeType: 0
+      use_range: []
+      effect_labels: []
