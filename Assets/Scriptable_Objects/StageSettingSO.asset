@@ -15,7 +15,7 @@ MonoBehaviour:
   stage_Settings:
     m_keys: 00000000
     m_values:
-    - enemy_codes: 030000000300000003000000
+    - enemy_codes: 03000000
       holy_water_requirement: 3
       loots: 000000000100000002000000
       minLootNumber: 050000000100000002000000

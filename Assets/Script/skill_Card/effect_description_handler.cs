@@ -7,6 +7,8 @@ using UnityEngine.Rendering;
 public class effect_description_handler : MonoBehaviour
 {
     [SerializeField] private GameObject effect_description_prefab;
+    [SerializeField] private characterEffectSO characterEffectSO;
+    characterEffectsDictionary character_effect_dict;
     [SerializeField] private Camera cam;
     private int description_count = 0; // 현재 켜져있는 설명창 개수
     private int max_description_count = 0; // 현재 켜져있는 설명창 중 가장 나중에 켜진 게 몇 번째로 켜진 건지 저장
@@ -33,7 +35,7 @@ public class effect_description_handler : MonoBehaviour
         effect_description_obj.transform.position = new Vector3(mousepos.x, mousepos.y, -2f);
         
         effect_description description = effect_description_obj.GetComponent<effect_description>();
-        description.set_effect_text(code, cam);
+        description.set_effect_text(character_effect_dict[code].Name, character_effect_dict[code].Description, cam);
         description.set_order(max_description_count*5);
 
         description_count += 1;
@@ -54,6 +56,7 @@ public class effect_description_handler : MonoBehaviour
 
     void OnEnable()
     {
+        character_effect_dict = characterEffectSO.CharacterEffectDict;
         ActionManager.TMP_link_clicked += get_click;
     }
     private void OnDisable()

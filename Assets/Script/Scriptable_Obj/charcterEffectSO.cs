@@ -13,14 +13,12 @@ public class characterEffectSO : ScriptableObject
 public class characterEffectData 
 {
     [SerializeField] private Sprite sprite;
-    [SerializeField] private character_effect_timing timing;
-    [SerializeField] private character_effect_power_reduce_timing power_reduce_timing;
-    [SerializeField] private character_effect_target_type target_type;
+    [SerializeField] private string name;
+    [SerializeField] private string description;
 
     public Sprite Sprite => sprite;
-    public character_effect_timing Timing => timing;
-    public character_effect_power_reduce_timing PowerReduceTiming => power_reduce_timing;
-    public character_effect_target_type TargetType => target_type;
+    public string Name => name;
+    public string Description => description;
 
 }
 

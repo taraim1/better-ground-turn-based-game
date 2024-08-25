@@ -10,17 +10,11 @@ using UnityEngine.SceneManagement;
 
 public class BattleCalcManager : Singletone<BattleCalcManager>
 {
-    // 카드 위력 판정시 사용
+
     [SerializeField]
     card using_card;
     [SerializeField]
     card target_card;
-
-    // 카드 위력 판정시 사용
-    int using_card_power;
-    int target_card_power;
-
-    // 일방 공격시 사용
     [SerializeField]
     Character target_character;
 

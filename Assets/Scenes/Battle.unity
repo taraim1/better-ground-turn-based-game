@@ -2207,6 +2207,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   effect_description_prefab: {fileID: 3273811198982270407, guid: 23525e1b2f158f84295d416b98973849,
     type: 3}
+  characterEffectSO: {fileID: 11400000, guid: 3f44a4ad1aef3514cae73fc9e7767b15, type: 2}
   cam: {fileID: 742288449}
 --- !u!4 &1496538077
 Transform:

@@ -8,7 +8,7 @@ public class CharacterEffectController : MonoBehaviour
 
     private Character character;
     private character_base character_base;
-    private List<character_effect_container> containers = new List<character_effect_container>();
+    private List<character_effect> effects = new List<character_effect>();
 
     private void Awake()
     {
@@ -28,32 +28,31 @@ public class CharacterEffectController : MonoBehaviour
     {
 
         // 이미 있는 버프 / 디버프인지 확인
-        foreach (character_effect_container container in containers) 
+        foreach (character_effect effect in effects) 
         {
-            if (container.Get_effect_code() == code) 
+            if (effect.Code == code) 
             {
-                container.updateEffect(power, type);
+                effect.SetPower(power, type);
                 return;
             }
         }
 
         // 없으면 새로 추가
-        character_effect effect = CharacterEffectManager.instance.get_effect(code, power);
         GameObject containerObj = character_base.Attach(character_base.location.effect_layoutGroup, effectContainer_prefab);
         character_effect_container Container = containerObj.GetComponent<character_effect_container>();
         Container.Initialize(character);
-        containers.Add(Container);
-        Container.SetEffect(effect);
+
+        effects.Add(CharacterEffectManager.instance.make_effect(code, power, character, Container));
     }
 
     private void OnEffectDestory(character_effect_code code) 
     {
-        foreach (character_effect_container container in containers)
+        foreach (character_effect effect in effects)
         {
-            if (container.Get_effect_code() == code)
+            if (effect.Code == code)
             {
-                containers.Remove(container);
-                container.clear_delegate_and_destroy();
+                effects.Remove(effect);
+                effect.OnDestroy();
                 return;
             }
         }

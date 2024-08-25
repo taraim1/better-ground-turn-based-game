@@ -75,7 +75,7 @@ public abstract class Character : MonoBehaviour
             character_index = value; 
         }
     }
-    protected bool isPanic;
+    [SerializeField] protected bool isPanic;
     public bool IsPanic {  get { return isPanic; } }
     private int remaining_panic_turn;
     protected coordinate coordinate;
@@ -249,7 +249,7 @@ public abstract class Character : MonoBehaviour
         got_effect?.Invoke(code, type, power);
     }
 
-    // 버프 / 디버프 (컨테이너) 없애는 메소드
+    // 버프 / 디버프 없애는 메소드
     public void remove_effect(character_effect_code code)
     {
         destroy_effect?.Invoke(code);
@@ -258,6 +258,8 @@ public abstract class Character : MonoBehaviour
     // 턴 시작시 발동되는 메소드
     protected virtual void turn_start()
     {
+        print("발동");
+
         // 패닉 해제 or 패닉 턴 감소
         if (isPanic)
         {
@@ -310,7 +312,7 @@ public abstract class Character : MonoBehaviour
 
     public virtual bool check_enemy() { return false; }
 
-    private void Awake()
+    protected virtual void Awake()
     { 
         ActionManager.turn_start_phase += turn_start;
     }

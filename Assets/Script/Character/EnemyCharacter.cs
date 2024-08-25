@@ -43,6 +43,12 @@ public class EnemyCharacter : Character
 
     private void OnEnemySkillSettingPhase()
     {
+        if (isPanic) 
+        {
+            ActionManager.enemy_skill_set_complete?.Invoke();
+            return;
+        }
+
         isMovable = true; // 이 줄은 테스트용으로 넣은 것, 나중에 지워야 함
         AI.Reset();
         AI.Move();
@@ -53,11 +59,14 @@ public class EnemyCharacter : Character
             skillcard_reserved?.Invoke(card);
             BattleManager.instance.enemy_cards.Add(card);
         }
+
         ActionManager.enemy_skill_set_complete?.Invoke();
     }
 
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
+
         skillcard_reserved += OnSkillReserved;
         ActionManager.card_destroyed += OnCardDestoryed;
         ActionManager.enemy_skill_setting_phase += OnEnemySkillSettingPhase;
