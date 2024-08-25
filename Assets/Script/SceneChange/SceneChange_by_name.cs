@@ -10,6 +10,6 @@ public class SceneChangeByName : MonoBehaviour
 
     public void ChangeScene() 
     { 
-        SceneManager.LoadScene(SceneName);
+        LoadingSceneControler.LoadScene(SceneName);
     }
 }
