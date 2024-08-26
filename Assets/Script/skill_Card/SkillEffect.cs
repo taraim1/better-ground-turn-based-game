@@ -11,7 +11,8 @@ public enum skill_effect_code
     ignition,
     fire_enchantment,
     bleeding,
-    confusion
+    confusion,
+    prepare_counterattack
 }
 
 public enum skill_target 
@@ -76,8 +77,6 @@ namespace skillEffect
         protected virtual void OnSkillUsed(card target_card, Character target_character) { }
         protected virtual void OnDirectUsed(card target_card, Character target_character) { }
         protected virtual void OnClashWin(card target_card, Character target_character) { }
-
-
 
     }
 }

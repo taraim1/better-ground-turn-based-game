@@ -7,7 +7,8 @@ public enum character_effect_code
 { 
     flame,
     ignition_attack,
-    bleeding
+    bleeding,
+    attack_power_up
 }
 
 
@@ -117,5 +118,8 @@ namespace CharacterEffect
         protected virtual void OnAttack(List<Character> attacked_characters) { }
         protected virtual void OnGetAttacked(Character attacking_character) { }
         protected virtual void OnSkillUsed(card card) { }
+
+        // 카드 위력 변동치를 반환. +1 -1 이런 식으로
+        public virtual int Get_power_change(card using_card) { return 0; }
     }
 }

@@ -6,14 +6,18 @@ using CharacterEffect;
 public class CharacterEffectController : MonoBehaviour
 {
     [SerializeField] private GameObject effectContainer_prefab;
+    [SerializeField] private characterEffectSO characterEffectSO;
+    private characterEffectsDictionary effectDict;
 
     private Character character;
     private character_base character_base;
-    private List<character_effect> effects = new List<character_effect>();
+    private List<character_effect> effects;
 
     private void Awake()
     {
+        effectDict = characterEffectSO.CharacterEffectDict;
         character = GetComponentInParent<Character>();
+        effects = character.effects;
         character_base = GetComponentInParent<character_base>();
         character.got_effect += OnEffectGiven;
         character.destroy_effect += OnEffectDestory;
@@ -43,7 +47,7 @@ public class CharacterEffectController : MonoBehaviour
         character_effect_container Container = containerObj.GetComponent<character_effect_container>();
         Container.Initialize(character);
 
-        effects.Add(CharacterEffectManager.instance.make_effect(code, power, character, Container));
+        effects.Add(make_effect(code, power, character, Container));
     }
 
     private void OnEffectDestory(character_effect_code code) 
@@ -59,4 +63,30 @@ public class CharacterEffectController : MonoBehaviour
         }
     }
 
+    public character_effect make_effect(character_effect_code code, int power, Character character, character_effect_container container)
+    {
+        character_effect product;
+
+        switch (code)
+        {
+            case character_effect_code.flame:
+                product = new Flame(code, power, character, container);
+                break;
+            case character_effect_code.ignition_attack:
+                product = new Ignition_attack(code, power, character, container);
+                break;
+            case character_effect_code.bleeding:
+                product = new Bleeding(code, power, character, container);
+                break;
+            case character_effect_code.attack_power_up:
+                product = new AttackPowerUp(code, power, character, container);
+                break;
+
+            default:
+                product = new Flame(code, power, character, container);
+                break;
+        }
+
+        return product;
+    }
 }

@@ -124,6 +124,9 @@ public class card : MonoBehaviour, Iclickable
                 case skill_effect_code.confusion:
                     Effects.Add(new Confusion(label.Code, this, label.Parameters));
                     break;
+                case skill_effect_code.prepare_counterattack:
+                    Effects.Add(new Prepare_counterAttack(label.Code, this, label.Parameters));
+                    break;
             }
         }
     }
@@ -350,7 +353,16 @@ public class card : MonoBehaviour, Iclickable
     public int PowerRoll() 
     {
         int power = UnityEngine.Random.Range(minpower, maxpower + 1);
+
+        // 캐릭터 위력 변동 버프 / 디버프 적용
+        foreach (CharacterEffect.character_effect effect in owner.effects) 
+        {
+            power += effect.Get_power_change(this);
+        }
+
+        // 스킬 사용 시 위력 보여주는거
         if (!Data.DontShowPowerRollResult) { show_power_roll_result(power); }
+
         return power;
     }
 

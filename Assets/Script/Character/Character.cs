@@ -6,6 +6,7 @@ using UnityEngine;
 using System.IO;
 using UnityEditor.Experimental.GraphView;
 using JetBrains.Annotations;
+using CharacterEffect;
 
 public enum character_code
 {
@@ -103,6 +104,9 @@ public abstract class Character : MonoBehaviour
 
     protected CharacterDataSO DataSO;
     public CharacterDataSO Data_SO { set { DataSO = value; } }
+
+    public List<character_effect> effects = new List<character_effect>();
+
     public Action<int> health_changed;
     public Action<int> willpower_changed;
     public Action<card> skillcard_used;
