@@ -121,6 +121,9 @@ public class card : MonoBehaviour, Iclickable
                 case skill_effect_code.bleeding:
                     Effects.Add(new Bleeding(label.Code, this, label.Parameters));
                     break;
+                case skill_effect_code.confusion:
+                    Effects.Add(new Confusion(label.Code, this, label.Parameters));
+                    break;
             }
         }
     }

@@ -10,7 +10,8 @@ public enum skill_effect_code
     willpower_recovery,
     ignition,
     fire_enchantment,
-    bleeding
+    bleeding,
+    confusion
 }
 
 public enum skill_target 
