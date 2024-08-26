@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: charcterEffectSO
   m_EditorClassIdentifier: 
   CharacterEffectDict:
-    m_keys: 0000000001000000
+    m_keys: 000000000100000002000000
     m_values:
     - sprite: {fileID: 21300000, guid: 0c8442b4f4aea7648bd0801838c11c23, type: 3}
       name: "\uD654\uC5FC"
@@ -23,5 +23,12 @@ MonoBehaviour:
     - sprite: {fileID: 21300000, guid: 0c8442b4f4aea7648bd0801838c11c23, type: 3}
       name: "\uBC1C\uD654 \uACF5\uACA9"
       description: "\uBCF4\uC720 \uCE90\uB9AD\uD130\uAC00 \uACF5\uACA9\uC2DC \uACF5\uACA9
-        \uB300\uC0C1\uC5D0\uAC8C \uD654\uC5FC\uC744 \uC704\uB825\uB9CC\uD07C \uBD80\uC5EC\uD55C\uB2E4.
-        \uC774 \uD6A8\uACFC\uB294 \uD134 \uC885\uB8CC\uC2DC \uC0AC\uB77C\uC9C4\uB2E4."
+        \uB300\uC0C1\uC5D0\uAC8C <link=\"flame\"><style=\"Effect_Description\">\uD654\uC5FC</style></link>\uC744
+        \uC704\uB825\uB9CC\uD07C \uBD80\uC5EC\uD55C\uB2E4. \uC774 \uD6A8\uACFC\uB294
+        \uD134 \uC885\uB8CC\uC2DC \uC0AC\uB77C\uC9C4\uB2E4."
+    - sprite: {fileID: 21300000, guid: 0c8442b4f4aea7648bd0801838c11c23, type: 3}
+      name: "\uCD9C\uD608"
+      description: "\uC2A4\uD0AC\uCE74\uB4DC \uC0AC\uC6A9 \uC2DC \uC704\uB825\uB9CC\uD07C
+        \uCCB4\uB825 \uD53C\uD574\uB97C \uC900\uB2E4. \uD134 \uC885\uB8CC \uC2DC
+        \uC704\uB825\uC774 \uC808\uBC18\uC73C\uB85C \uAC10\uC18C\uD55C\uB2E4. (\uC18C\uC218\uC810
+        \uBC84\uB9BC)"

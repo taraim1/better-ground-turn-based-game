@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using skillEffect;
 
 [Serializable]
 public class skill_effect_text // 스킬 특수효과 보여주는 텍스트 관리 클래스

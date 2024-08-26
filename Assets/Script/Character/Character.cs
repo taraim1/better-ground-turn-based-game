@@ -105,7 +105,7 @@ public abstract class Character : MonoBehaviour
     public CharacterDataSO Data_SO { set { DataSO = value; } }
     public Action<int> health_changed;
     public Action<int> willpower_changed;
-    public Action<skillcard_code> skillcard_used;
+    public Action<card> skillcard_used;
     public Action panicked;
     public Action out_of_panic;
     public Action health_damaged;
@@ -258,7 +258,6 @@ public abstract class Character : MonoBehaviour
     // 턴 시작시 발동되는 메소드
     protected virtual void turn_start()
     {
-        print("발동");
 
         // 패닉 해제 or 패닉 턴 감소
         if (isPanic)

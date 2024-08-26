@@ -88,25 +88,34 @@ public class BattleCalcManager : Singletone<BattleCalcManager>
         // 적 카드 강조 해제
         ActionManager.enemy_skillcard_deactivate?.Invoke();
 
-        // 스킬 사용
+        // 코스트 감소
         if (!using_card.owner.check_enemy()) 
         {
             BattleManager.instance.reduce_cost(using_card.Data.Cost);
         }
 
         // 위력 판정 or 직접 사용함
+
+        ActionManager.skill_used?.Invoke(using_card.owner, using_card.Data.Code);
+        using_card.OnUsed?.Invoke(target_card, target_character);
+        using_card.owner.skillcard_used?.Invoke(using_card);
+
         if (target_card != null)
         {
+            ActionManager.skill_used?.Invoke(target_card.owner, target_card.Data.Code);
+            target_card.OnUsed?.Invoke(using_card, using_card.owner);
+            target_card.owner.skillcard_used?.Invoke(target_card);
+
             clash(using_card, target_card);
         }
         else 
         {
+            using_card.OnDirectUsed?.Invoke(null, target_character);
+
             direct_use(using_card, target_character);
         }
-        ActionManager.skill_used?.Invoke(using_card.owner, using_card.Data.Code);
-        using_card.OnUsed?.Invoke(target_card, target_character);
 
-        // 카드 제거 및 포기화
+        // 카드 제거 및 초기화
         using_card.Destroy_card();
         if (target_card != null) 
         {
@@ -187,8 +196,6 @@ public class BattleCalcManager : Singletone<BattleCalcManager>
             target_character.Damage_willpower(power);
             ActionManager.attacked?.Invoke(card.owner, new List<Character>() { target_character });
         }
-
-        card.OnDirectUsed?.Invoke(null, target_character);
     }
 
     // 위력 판정

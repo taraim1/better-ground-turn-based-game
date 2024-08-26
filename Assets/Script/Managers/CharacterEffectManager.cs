@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using CharacterEffect;
 
 public class CharacterEffectManager : Singletone<CharacterEffectManager>
 {
@@ -21,6 +22,10 @@ public class CharacterEffectManager : Singletone<CharacterEffectManager>
             case character_effect_code.ignition_attack:
                 product = new Ignition_attack(code, power, character, container);
                 break;
+            case character_effect_code.bleeding:
+                product = new Bleeding(code, power, character, container);
+                break;
+
             default:
                 product = new Flame(code, power, character, container);
                 break;

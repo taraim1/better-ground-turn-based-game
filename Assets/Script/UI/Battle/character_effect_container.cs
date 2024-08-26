@@ -7,7 +7,6 @@ using TMPro;
 public class character_effect_container : BattleUI.CharacterUI
 { 
     [SerializeField] private TMP_Text powerTmp;
-    private List<Character> targets = new List<Character>();
     [SerializeField] private Image image;
 
     // 이펙트를 받아와서 컨테이너 초기화

@@ -15,11 +15,11 @@
     "is_character_unlocked": true,
     "deck": [
         0,
-        0,
-        0,
         1,
         2,
-        2
+        2,
+        9,
+        9
     ],
     "SPUM_datapath": "SPUM/SPUM_Units/Player_base",
     "move_range": [

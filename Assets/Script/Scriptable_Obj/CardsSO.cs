@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
 using System;
+using Unity.VisualScripting;
 
 
 public enum CardRangeType
@@ -27,6 +28,7 @@ public class CardData // 카드 데이터가 스크립터블 오브젝트로 저장되는 클래스
     [SerializeField] private string type;
     public Sprite sprite;
     [SerializeField] private CardBehaviorType behavior_type;
+    [SerializeField] private bool isUnlocked;
     [SerializeField] private int[] minPowerOfLevel;
     [SerializeField] private int[] maxPowerOfLevel;
     [SerializeField] private skillcard_code code;
@@ -42,6 +44,7 @@ public class CardData // 카드 데이터가 스크립터블 오브젝트로 저장되는 클래스
     public int Cost => cost;
     public string Type => type;
     public CardBehaviorType BehaviorType => behavior_type;
+    public bool IsUnlocked => isUnlocked;
     public int[] MinPowerOfLevel => minPowerOfLevel;
     public int[] MaxPowerOfLevel => maxPowerOfLevel;
     public skillcard_code Code => code;
