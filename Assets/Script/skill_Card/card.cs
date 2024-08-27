@@ -6,8 +6,9 @@ using DG.Tweening;
 using UnityEditor.ShaderGraph.Internal;
 using Unity.VisualScripting;
 using System;
+using skillEffect;
 
-public class card : MonoBehaviour
+public class card : MonoBehaviour, Iclickable
 {
     public SpriteRenderer illust;
     [SerializeField] TMP_Text nameTMP;
@@ -30,12 +31,14 @@ public class card : MonoBehaviour
     public int maxpower;
 
     [DoNotSerialize]
-    public Coroutine running_drag = null;
+    private Coroutine running_drag = null;
 
     public bool isEnemyCard = false;
     public bool _isShowingRange = false;
     private bool isDestroyed = false;
     public List<coordinate> usable_tiles;
+    private List<SkillEffect> effects = new List<SkillEffect>();
+    public List<SkillEffect> Effects => effects;
     private void Awake()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
@@ -57,6 +60,10 @@ public class card : MonoBehaviour
     private CardData data;
     public CardData Data => data;
 
+    public Action<card, Character> OnUsed;
+    public Action<card, Character> OnDirectUsed;
+    public Action<card, Character> OnClashWin;
+
     public void Setup(CardData data, int index) 
     {
         this.data = data;
@@ -65,12 +72,95 @@ public class card : MonoBehaviour
         nameTMP.text = Data.Name;
         costTMP.text = Data.Cost.ToString();
         typeTMP.text = Data.Type;
-        behavior_typeTMP.text = Data.BehaviorType;
+
+        string behaviorText = "";
+        switch (Data.BehaviorType) 
+        {
+            case CardBehaviorType.attack:
+                behaviorText = "공격";
+                break;
+            case CardBehaviorType.defend:
+                behaviorText = "방어";
+                break;
+            case CardBehaviorType.dodge:
+                behaviorText = "회피";
+                break;
+            case CardBehaviorType.etc:
+                behaviorText = "기타";
+                break;
+        }
+        behavior_typeTMP.text = behaviorText;
         minpower = Data.MinPowerOfLevel[Data.Level-1];
         maxpower = Data.MaxPowerOfLevel[Data.Level-1];
         value_rangeTMP.text = string.Format("{0} - {1}", minpower, maxpower); 
         this.index = index;
 
+
+        // 특수효과 만들기
+
+        // 사용 가능 대상 지정 효과
+        Effects.Add(new TargetLimitEffect(skill_effect_code.target_limit, this, null, data.Targets));
+
+        // 나머지 효과 만들기
+        MakeEffects();
+    }
+
+    // 카드 특수효과 만들기
+    private void MakeEffects() 
+    {
+        foreach (SkillEffect_label label in Data.skillEffect_Labels)
+        {
+            switch (label.Code)
+            {
+                case skill_effect_code.willpower_consumption:
+                    Effects.Add(new Willpower_Consumtion(label.Code, this, label.Parameters));
+                    break;
+                case skill_effect_code.willpower_recovery:
+                    Effects.Add(new Willpower_Recovery(label.Code, this, label.Parameters));
+                    break;
+                case skill_effect_code.ignition:
+                    Effects.Add(new Ignition(label.Code, this, label.Parameters));
+                    break;
+                case skill_effect_code.fire_enchantment:
+                    Effects.Add(new Fire_Enchantment(label.Code, this, label.Parameters));
+                    break;
+                case skill_effect_code.bleeding:
+                    Effects.Add(new Bleeding(label.Code, this, label.Parameters));
+                    break;
+                case skill_effect_code.confusion:
+                    Effects.Add(new Confusion(label.Code, this, label.Parameters));
+                    break;
+                case skill_effect_code.prepare_counterattack:
+                    Effects.Add(new Prepare_counterAttack(label.Code, this, label.Parameters));
+                    break;
+                case skill_effect_code.dubble_attack:
+                    Effects.Add(new DubbleAttack(label.Code, this, label.Parameters));
+                    break;
+            }
+        }
+    }
+
+
+    public void OnClick() 
+    {
+        // 아군 카드이면
+        if (isEnemyCard == false)
+        {
+            // 카드 드래그 감지 시작
+            start_drag_detection(false);
+
+            // 적 카드 강조 해제
+            ActionManager.enemy_skillcard_deactivate?.Invoke();
+        }
+        // 적군 카드면
+        else
+        {
+            // 적 카드 강조 해제
+            if (state == current_mode.highlighted_enemy_card)
+            {
+                ActionManager.enemy_skillcard_deactivate?.Invoke();
+            }
+        }
     }
 
     public void Destroy_card() 
@@ -81,6 +171,11 @@ public class card : MonoBehaviour
         }
         transform.DOKill();
         isDestroyed = true;
+        foreach (SkillEffect effect in effects) 
+        {
+            effect.OnDestroy();
+        }
+
         Destroy(gameObject);
     }
 
@@ -110,38 +205,46 @@ public class card : MonoBehaviour
     {
         if (Data.RangeType == CardRangeType.limited)
         {
-            return get_use_range(owner.Coordinate).Contains(coordinate);
+            return get_use_range().Contains(coordinate);
         }
 
         // unlimited인 경우
         return true;
     }
 
+    public void start_drag_detection(bool keepHighLightedFlag)
+    {
+        running_drag = StartCoroutine(detect_drag(keepHighLightedFlag));
+    }
+
     // 카드 드래그 감지 (일정 시간 이상 잡고 있어야만 드래그로 판별)
-    public IEnumerator detect_drag(bool isDescription) 
+    private IEnumerator detect_drag(bool keepHighLightedFlag) 
     {
         float dragging_time = 0;
         bool isDraggingStarted = false;
+        Character ownerCharacter = owner.GetComponent<Character>();
 
         while (true) 
         {
-            
+            // 마우스를 안 뗀 상태로 일정 시간이 지나면 드래그 기능 시작 (패닉이 아니어야 함)
+            if (dragging_time >= Util.drag_time_standard && !isDraggingStarted && !ownerCharacter.IsPanic)
+            {
+                // 모든 카드를 원래 order로 
+                CardManager.instance.Set_origin_order(CardManager.instance.active_index);
+                isDraggingStarted = true;
+                // 하이라이트된 카드 해제
+                CardManager.instance.clear_highlighted_card();
+                drag_card();
+            }
 
             // 마우스 떼면 (스킬카드 설명 누른 경우 드래그중일 때 원위치로만 감)
             if (Input.GetMouseButton(0) == false) 
             {   
-                if (isDescription) 
+                if (!keepHighLightedFlag)
                 {
-                    // 드래그 중이었으면
-                    if (state == current_mode.dragging)
-                    {
-                        OnDragEnd();
-                    }
-                    yield break; 
+                    // 모든 카드를 원래 order로 
+                    CardManager.instance.Set_origin_order(CardManager.instance.active_index);
                 }
-
-                // 모든 카드를 원래 order로 
-                CardManager.instance.Set_origin_order(CardManager.instance.active_index);
 
                 // 드래그 중이었으면
                 if (state == current_mode.dragging)
@@ -152,7 +255,12 @@ public class card : MonoBehaviour
                 // 드래그 중이 아니면
                 else 
                 {
-                    // 카드 하이라이트 or 하이라이트 해제
+                    if (keepHighLightedFlag)
+                    {
+                        yield break;
+                    }
+
+                     // 카드 하이라이트 or 하이라이트 해제
                     if (CardManager.instance.highlightedData != this)
                     {
                         CardManager.instance.highlight_card(this);
@@ -173,17 +281,6 @@ public class card : MonoBehaviour
                     CardManager.instance.Align_cards(CardManager.instance.active_index);
                 }
                 yield break;
-            }
-            
-            // 마우스를 안 뗀 상태로 일정 시간이 지나면 드래그 기능 시작 (패닉이 아니어야 함)
-            if (dragging_time >= Util.drag_time_standard && !isDraggingStarted && !owner.GetComponent<Character>().IsPanic) 
-            {
-                // 모든 카드를 원래 order로 
-                CardManager.instance.Set_origin_order(CardManager.instance.active_index);
-                isDraggingStarted = true;
-                // 하이라이트된 카드 해제
-                CardManager.instance.clear_highlighted_card();
-                drag_card();
             }
 
             dragging_time += 0.01f;
@@ -206,8 +303,7 @@ public class card : MonoBehaviour
         if (Data.RangeType == CardRangeType.limited)
         {
             // 쓸 수 있는 타일 판별
-            Character using_character = BattleManager.instance.playable_characters[CardManager.instance.active_index].GetComponent<Character>();
-            usable_tiles = get_use_range(using_character.Coordinate);
+            usable_tiles = get_use_range();
 
             // 그 타일들을 초록색으로
             foreach (coordinate coordinate in usable_tiles) 
@@ -236,17 +332,53 @@ public class card : MonoBehaviour
         CardManager.instance.Align_cards(CardManager.instance.active_index);
     }
 
-    public List<coordinate> get_use_range(coordinate character_coordinate) 
+    public List<coordinate> get_use_range() 
     {
         List<coordinate> relative_coors = Data.get_copy_of_use_range();
         List<coordinate> result = new List<coordinate>();
 
         foreach (coordinate coor in relative_coors) 
         {
-            result.Add(character_coordinate + coor);
+            result.Add(owner.Coordinate + coor);
         }
 
         return result;
+    }
+
+    public bool check_card_usable(card card, Character character) 
+    {
+        foreach (SkillEffect skillEffect in Effects) 
+        {
+            if (!skillEffect.check_card_usable(card, character)) 
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    // 위력 굴리기
+    public int PowerRoll() 
+    {
+        int power = UnityEngine.Random.Range(minpower, maxpower + 1);
+
+        // 캐릭터 위력 변동 버프 / 디버프 적용
+        foreach (CharacterEffect.character_effect effect in owner.effects) 
+        {
+            power += effect.Get_power_change(this);
+        }
+
+        // 스킬 사용 시 위력 보여주는거
+        if (!Data.DontShowPowerRollResult) { show_power_roll_result(power); }
+
+        return power;
+    }
+
+    // 스킬 사용 시 위력 보여주는거
+    private void show_power_roll_result(int power)
+    {
+        owner.show_power_meter?.Invoke(power);
     }
 
     private void OnEnemyCardDeactivate() 

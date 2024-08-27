@@ -17,7 +17,28 @@ public enum skillcard_code
     powerful_attack,
     fire_ball,
     concentration,
-    fire_enchantment
+    fire_enchantment,
+    scratch,
+    distracting_attack,
+    fast_stab,
+    vital_point_stab,
+    distracting_shot,
+    aimed_shot,
+    double_shot,
+    swing,
+    downward_strike,
+    heavy_strike,
+    beat_to_a_pulp,
+    rampage,
+    all_out_strike,
+    awkward_footwork,
+    confusing_footwork,
+    confusion_spell,
+    deflect,
+    filp_balance,
+    block,
+    fend_off,
+    clash
 }
 
 public class CardManager : Singletone<CardManager>
@@ -32,29 +53,6 @@ public class CardManager : Singletone<CardManager>
     [SerializeField] Transform highlighted_card_transform;
     [SerializeField] Transform enemy_card_transform;
     [SerializeField] Transform enemy_card_highlighted_transform;
-
-    // 기타 카드 정보 담은 클래스
-    private class card_data_json 
-    {
-        // 카드 언락 데이터가 들어가는 리스트 (i번은 i번 스킬 언락유무)
-        public List<bool> unlockedData_checkList;
-
-        // 데이터 불러오기
-        public void read_json() 
-        { 
-            string output = File.ReadAllText(Application.dataPath + "/Data/skillData.json");
-            this.unlockedData_checkList = JsonUtility.FromJson<card_data_json>(output).unlockedData_checkList;
-        }
-
-        // 데이터 저장하기
-        public void write_json() 
-        {
-            string output = JsonUtility.ToJson(this, true);
-            File.WriteAllText(Application.dataPath + "/Data/skillData.json", output);
-        }
-    }
-
-    card_data_json JsonCardData = new card_data_json();
 
     // 캐릭터들의 덱이 랜덤으로 섞여 들어가는 버퍼
     List<List<CardData>> CardData_buffer = new List<List<CardData>>();
@@ -72,28 +70,10 @@ public class CardManager : Singletone<CardManager>
 
     private bool _isCharacterDragging = false;
 
-    private void Start()
-    {
-        JsonCardData.read_json();
-    }
-
     // 카드 코드 주면 카드 데이터 줌
     public CardData getData_by_code(skillcard_code code) 
     {
         return CardDataSO.CardData_dict[code];
-    }
-
-
-    // 카드 코드 주면 언락된건지 찾아줌
-    public bool check_unlocked(skillcard_code code) 
-    {
-        return JsonCardData.unlockedData_checkList[(int)code];
-    }
-
-    public void set_unlocked(skillcard_code code, bool value) 
-    {
-        JsonCardData.unlockedData_checkList[(int)code] = value;
-        JsonCardData.write_json();
     }
 
     // index번째 캐릭터의 덱 버퍼에서 첫 카드 뽑기

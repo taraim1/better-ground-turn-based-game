@@ -30,7 +30,23 @@ public class CardInfor : MonoBehaviour, IPointerDownHandler
         Card_Image.sprite = cardData.sprite;
         Card_Cost.text = cardData.Cost.ToString();
         Card_Elemantal_Type.text = cardData.Type;
-        Card_Behavior_Type.text = cardData.BehaviorType;
+        string behaviorText = "";
+        switch (cardData.BehaviorType)
+        {
+            case CardBehaviorType.attack:
+                behaviorText = "공격";
+                break;
+            case CardBehaviorType.defend:
+                behaviorText = "방어";
+                break;
+            case CardBehaviorType.dodge:
+                behaviorText = "회피";
+                break;
+            case CardBehaviorType.etc:
+                behaviorText = "기타";
+                break;
+        }
+        Card_Behavior_Type.text = behaviorText;
         Card_Min.text = cardData.MinPowerOfLevel[0].ToString();
         Card_Max.text = cardData.MaxPowerOfLevel[0].ToString();
     }

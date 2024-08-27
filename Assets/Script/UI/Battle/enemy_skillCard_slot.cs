@@ -7,7 +7,7 @@ using UnityEngine.UI;
 using System;
 using UnityEditor;
 
-public class enemy_skillCard_slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
+public class enemy_skillCard_slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, Iclickable
 {
     [SerializeField] private Image illustImage;
     private GameObject card_obj;
@@ -19,13 +19,12 @@ public class enemy_skillCard_slot : MonoBehaviour, IPointerEnterHandler, IPointe
     Color red = new Color(1f, 0f, 0f, 1f);
     Color grey = new Color(0.7f, 0.7f, 0.7f, 1f);
 
-    public Coroutine running_drag = null;
+    private Coroutine running_drag = null;
 
     // PC환경 때문에 쓰는 변수
     private bool isHighlightedByClick = false;
     bool isMouseOnThis = false;
 
-    bool isBattleEnded;
     bool isDragging = false;
 
     private List<coordinate> current_range;
@@ -46,7 +45,22 @@ public class enemy_skillCard_slot : MonoBehaviour, IPointerEnterHandler, IPointe
     // 전투 끝났을때
     private void OnBattleEnd(bool victory) 
     {
-        isBattleEnded = true;
+        Destroy(gameObject);
+    }
+
+    public void OnClick() 
+    {
+        // 아군 카드 강조 해제
+        CardManager.instance.clear_highlighted_card();
+
+        // 모든 카드를 원래 order로 
+        CardManager.instance.Set_origin_order(CardManager.instance.active_index);
+
+        // 카드 위치 계산 및 정렬
+        CardManager.instance.Align_cards(CardManager.instance.active_index);
+
+        // 드래그 감지 시작
+        running_drag = StartCoroutine(detect_drag());
     }
 
     // 위치를 주면 라인렌더러를 그려줌
@@ -85,8 +99,6 @@ public class enemy_skillCard_slot : MonoBehaviour, IPointerEnterHandler, IPointe
     // 이 UI를 눌렀을 때 발동
     private void OnPointerDown() 
     {
-        if (isBattleEnded) { return; }
-
         // 현재 페이즈가 플레이어 스킬 사용 페이즈여만 작동됨
         if (BattleManager.instance.current_phase == BattleManager.phases.player_skill_phase)
         {
@@ -101,9 +113,7 @@ public class enemy_skillCard_slot : MonoBehaviour, IPointerEnterHandler, IPointe
     // 이 UI 위에 마우스를 대면 (모바일상에선 드래그 중에)
     public void OnPointerEnter(PointerEventData eventData)
     {
-        if (isBattleEnded) { return; }
-
-        if (BattleCalcManager.instance.IsUsingCard) // 카드 사용 중이면
+        if (BattleCalcManager.instance.isUsingCard()) // 카드 사용 중이면
         {
             // 이 슬롯의 카드를 카드 판정 대상으로
             BattleCalcManager.instance.set_target(card_obj.GetComponent<card>());
@@ -121,9 +131,7 @@ public class enemy_skillCard_slot : MonoBehaviour, IPointerEnterHandler, IPointe
     // 드래그 중 이 UI 위에 들어왔다 나가면
     public void OnPointerExit(PointerEventData eventData)
     {
-        if (isBattleEnded) { return; }
-
-        if (!isHighlightedByClick && BattleCalcManager.instance.IsUsingCard) // 클릭으로 하이라이트된 게 아니면
+        if (!isHighlightedByClick && BattleCalcManager.instance.isUsingCard()) // 클릭으로 하이라이트된 게 아니면
         {
             // 타겟 설정 해제
             BattleCalcManager.instance.clear_target_card();
@@ -135,7 +143,7 @@ public class enemy_skillCard_slot : MonoBehaviour, IPointerEnterHandler, IPointe
     }
 
     // 드래그 감지
-    public IEnumerator detect_drag()
+    private IEnumerator detect_drag()
     {
         card card = card_obj.GetComponent<card>();
 
@@ -177,7 +185,7 @@ public class enemy_skillCard_slot : MonoBehaviour, IPointerEnterHandler, IPointe
                 // 스킬 사정거리 보이기
                 if (card.Data.RangeType == CardRangeType.limited) 
                 {
-                    current_range = card.get_use_range(card.owner.Coordinate);
+                    current_range = card.get_use_range();
                     foreach (coordinate coordinate in current_range) 
                     {
                         BattleGridManager.instance.set_tile_color(coordinate, Tile.TileColor.red);
@@ -221,8 +229,6 @@ public class enemy_skillCard_slot : MonoBehaviour, IPointerEnterHandler, IPointe
         ActionManager.character_drag_started += On_character_drag_started;
         ActionManager.character_drag_ended += On_character_drag_ended;
         ActionManager.card_destroyed += OnCardDestoryed;
-
-        isBattleEnded = false;
     }
 
     private void OnDisable()
@@ -237,20 +243,10 @@ public class enemy_skillCard_slot : MonoBehaviour, IPointerEnterHandler, IPointe
 
     private void Update()
     {
-        if (isMouseOnThis && BattleCalcManager.instance.IsUsingCard) 
+        if (isMouseOnThis && BattleCalcManager.instance.isUsingCard()) 
         {
             // 이 슬롯의 카드를 카드 판정 대상으로 (드래그 타이밍 때문에 버그나는거 수정)
-            BattleCalcManager.instance.set_target(card_obj.GetComponent<card>());
-        }
-
-        // 스킬을 썼는데도 슬롯이 안 없어지는 버그 수정
-        try 
-        {
-            Transform trans = card_obj.transform;
-        }
-        catch(MissingReferenceException e) 
-        {
-            Destroy(gameObject);
+            BattleCalcManager.instance.set_target(card);
         }
 
     }

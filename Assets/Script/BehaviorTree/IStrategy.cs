@@ -76,7 +76,7 @@ namespace BehaviorTree
                 {
                     switch (card.Data.BehaviorType)
                     {
-                        case "АјАн":
+                        case CardBehaviorType.attack:
                             int rand = UnityEngine.Random.Range(0, BattleManager.instance.playable_characters.Count);
                             card.target = BattleManager.instance.playable_characters[rand];
                             break;
