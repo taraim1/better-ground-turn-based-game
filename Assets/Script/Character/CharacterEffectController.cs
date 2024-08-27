@@ -6,8 +6,6 @@ using CharacterEffect;
 public class CharacterEffectController : MonoBehaviour
 {
     [SerializeField] private GameObject effectContainer_prefab;
-    [SerializeField] private characterEffectSO characterEffectSO;
-    private characterEffectsDictionary effectDict;
 
     private Character character;
     private character_base character_base;
@@ -15,7 +13,7 @@ public class CharacterEffectController : MonoBehaviour
 
     private void Awake()
     {
-        effectDict = characterEffectSO.CharacterEffectDict;
+
         character = GetComponentInParent<Character>();
         effects = character.effects;
         character_base = GetComponentInParent<character_base>();

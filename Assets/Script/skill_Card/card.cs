@@ -101,11 +101,17 @@ public class card : MonoBehaviour, Iclickable
         // 사용 가능 대상 지정 효과
         Effects.Add(new TargetLimitEffect(skill_effect_code.target_limit, this, null, data.Targets));
 
-        // 나머지 효과
-        foreach (SkillEffect_label label in Data.skillEffect_Labels) 
+        // 나머지 효과 만들기
+        MakeEffects();
+    }
+
+    // 카드 특수효과 만들기
+    private void MakeEffects() 
+    {
+        foreach (SkillEffect_label label in Data.skillEffect_Labels)
         {
-            switch (label.Code) 
-            { 
+            switch (label.Code)
+            {
                 case skill_effect_code.willpower_consumption:
                     Effects.Add(new Willpower_Consumtion(label.Code, this, label.Parameters));
                     break;
@@ -126,6 +132,9 @@ public class card : MonoBehaviour, Iclickable
                     break;
                 case skill_effect_code.prepare_counterattack:
                     Effects.Add(new Prepare_counterAttack(label.Code, this, label.Parameters));
+                    break;
+                case skill_effect_code.dubble_attack:
+                    Effects.Add(new DubbleAttack(label.Code, this, label.Parameters));
                     break;
             }
         }

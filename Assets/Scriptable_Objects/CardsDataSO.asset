@@ -646,7 +646,9 @@ MonoBehaviour:
         y: -3
       - x: 1
         y: -3
-      effect_labels: []
+      effect_labels:
+      - code: 8
+        parameters: 
     - name: "\uD718\uB450\uB974\uAE30"
       cost: 1
       type: "\uBB34"
@@ -979,6 +981,8 @@ MonoBehaviour:
       effect_labels:
       - code: 5
         parameters: 01000000
+      - code: 8
+        parameters: 01000000
     - name: "\uD63C\uC2E0\uC758 \uC77C\uACA9"
       cost: 3
       type: "\uBB34"
@@ -1126,7 +1130,9 @@ MonoBehaviour:
       dontShowPowerRollResult: 0
       rangeType: 0
       use_range: []
-      effect_labels: []
+      effect_labels:
+      - code: 7
+        parameters: 01000000
     - name: "\uB9C9\uC544\uB0B4\uAE30"
       cost: 0
       type: "\uBB34"

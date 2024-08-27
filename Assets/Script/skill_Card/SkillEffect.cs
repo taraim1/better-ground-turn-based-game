@@ -12,7 +12,8 @@ public enum skill_effect_code
     fire_enchantment,
     bleeding,
     confusion,
-    prepare_counterattack
+    prepare_counterattack,
+    dubble_attack
 }
 
 public enum skill_target 
