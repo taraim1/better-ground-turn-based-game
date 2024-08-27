@@ -6,6 +6,6 @@ public class ChangeBattle : MonoBehaviour
 {
     public void ChangeScene()
     {
-        SceneManager.LoadScene("Battle");
+        LoadingSceneControler.LoadScene("Battle");
     }
 }

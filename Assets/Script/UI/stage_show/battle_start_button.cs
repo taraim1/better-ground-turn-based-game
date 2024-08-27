@@ -29,7 +29,7 @@ public class battle_start_button : MonoBehaviour
         if (PartyManager.instance.get_party_member_count() != 0 && ResourceManager.instance.Water >= holy_water_requirement) 
         {
             ResourceManager.instance.Water -= holy_water_requirement;
-            SceneManager.LoadScene(SceneName);
+            LoadingSceneControler.LoadScene(SceneName);
         }
     }
 
@@ -38,8 +38,8 @@ public class battle_start_button : MonoBehaviour
         holy_water_requirement = StageManager.instance.get_holy_water_requirement();
         Check_empty_party();
         ActionManager.party_member_changed += Check_empty_party;
-        holy_water_text.text = string.Format("¼º¼ö {0} ¼Ò¸ð", holy_water_requirement);
-        holy_water_text2.text = string.Format("({0} º¸À¯)", ResourceManager.instance.Water);
+        holy_water_text.text = string.Format("ì„±ìˆ˜ {0} ì†Œëª¨", holy_water_requirement);
+        holy_water_text2.text = string.Format("({0} ë³´ìœ )", ResourceManager.instance.Water);
         if (ResourceManager.instance.Water < holy_water_requirement) 
         {
             holy_water_text2.text = "<color=#FF1212>" + holy_water_text2.text + "</color>";
