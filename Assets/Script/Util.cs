@@ -57,3 +57,10 @@ public struct coordinate
     public int x, y;
 }
 
+public enum Rarity
+{
+    common,
+    rare,
+    epic,
+    legendary
+}

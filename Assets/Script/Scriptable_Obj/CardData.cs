@@ -16,6 +16,8 @@ public enum CardBehaviorType
     etc
 }
 
+
+
 [System.Serializable]
 public class CardData // 카드 데이터가 스크립터블 오브젝트로 저장되는 클래스
 {
@@ -24,6 +26,7 @@ public class CardData // 카드 데이터가 스크립터블 오브젝트로 저장되는 클래스
     [SerializeField] private string type;
     public Sprite sprite;
     [SerializeField] private CardBehaviorType behavior_type;
+    [SerializeField] private Rarity rarity;
     [SerializeField] private bool isUnlocked;
     [SerializeField] private int[] minPowerOfLevel;
     [SerializeField] private int[] maxPowerOfLevel;
@@ -61,4 +64,5 @@ public class CardData // 카드 데이터가 스크립터블 오브젝트로 저장되는 클래스
         return result;
     }
     public List<SkillEffect_label> skillEffect_Labels => effect_labels;
+    public Rarity Rarity => rarity;
 }
