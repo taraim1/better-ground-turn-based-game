@@ -6,7 +6,7 @@ public class element_order : MonoBehaviour
 {
     [SerializeField] Renderer[] back_renderers;
     [SerializeField] Renderer[] middle_renderers;
-    [SerializeField] string sorting_layer_name;
+    [SerializeField] Renderer[] upper_renderers;
     int origin_order;
     int current_order;
     public void Set_origin_order(int origin_order)
@@ -32,14 +32,17 @@ public class element_order : MonoBehaviour
 
         foreach (var renderer in back_renderers) 
         { 
-            renderer.sortingLayerName = sorting_layer_name;
             renderer.sortingOrder = order;
         }
 
         foreach (var renderer in middle_renderers)
         {
-            renderer.sortingLayerName = sorting_layer_name;
             renderer.sortingOrder = order + 1;
+        }
+
+        foreach (var renderer in upper_renderers)
+        {
+            renderer.sortingOrder = order + 2;
         }
 
         current_order = order;

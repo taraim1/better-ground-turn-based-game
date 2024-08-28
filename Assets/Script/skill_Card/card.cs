@@ -13,7 +13,7 @@ public class card : MonoBehaviour, Iclickable
     public SpriteRenderer illust;
     [SerializeField] TMP_Text nameTMP;
     [SerializeField] TMP_Text costTMP;
-    [SerializeField] TMP_Text typeTMP;
+    //[SerializeField] TMP_Text typeTMP;
     [SerializeField] TMP_Text behavior_typeTMP;
     [SerializeField] TMP_Text value_rangeTMP;
     [SerializeField] int index;
@@ -71,7 +71,7 @@ public class card : MonoBehaviour, Iclickable
         illust.sprite = Data.sprite;
         nameTMP.text = Data.Name;
         costTMP.text = Data.Cost.ToString();
-        typeTMP.text = Data.Type;
+        //typeTMP.text = Data.Type;
 
         string behaviorText = "";
         switch (Data.BehaviorType) 
