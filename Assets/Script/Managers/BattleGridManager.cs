@@ -235,15 +235,23 @@ public class BattleGridManager : Singletone<BattleGridManager>
             }
         }
     }
+
+    private void OnCharacterDied(Character character) 
+    {
+        set_tile_type(character.Coordinate, boardCell.empty);
+    }
+
     private void OnEnable()
     {
         SceneManager.sceneLoaded += Check_scene;
         ActionManager.card_destroyed += OnCardDestoryed;
+        ActionManager.character_died += OnCharacterDied;
     }
 
     private void OnDisable()
     {
         SceneManager.sceneLoaded -= Check_scene;
         ActionManager.card_destroyed -= OnCardDestoryed;
+        ActionManager.character_died -= OnCharacterDied;
     }
 }
