@@ -30,5 +30,6 @@ public class ActionManager : MonoBehaviour
     // °ø¿ë
     public static Action party_member_changed;
     public static Action<string> TMP_link_clicked;
+    public static Action<resource_code, int> resource_changed;
 
 }

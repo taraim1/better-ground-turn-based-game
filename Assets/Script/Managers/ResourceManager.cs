@@ -3,14 +3,16 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
 
+public enum resource_code
+{
+    gold,
+    gem,
+    water
+}
+
 public class ResourceManager : Singletone<ResourceManager>
 {
-    public enum resource_code 
-    { 
-        gold,
-        gem,
-        water
-    }
+
 
 
     [SerializeField]
@@ -25,6 +27,7 @@ public class ResourceManager : Singletone<ResourceManager>
             { 
                 gold = value;
                 write_Json_file();
+                ActionManager.resource_changed?.Invoke(resource_code.gold, value);
             } 
             else { Debug.Log("���� ������ �� �� �����ϴ�. ��� ������ ��ҵǾ����ϴ�."); };
         }
@@ -43,6 +46,7 @@ public class ResourceManager : Singletone<ResourceManager>
             { 
                 gem = value;
                 write_Json_file();
+                ActionManager.resource_changed?.Invoke(resource_code.gem, value);
             } 
             else { Debug.Log("���� ������ �� �� �����ϴ�. ��� ������ ��ҵǾ����ϴ�."); };
         }
@@ -61,6 +65,7 @@ public class ResourceManager : Singletone<ResourceManager>
             { 
                 water = value;
                 write_Json_file();
+                ActionManager.resource_changed?.Invoke(resource_code.water, value);
             } 
             else { Debug.Log("���� ������ �� �� �����ϴ�. ��� ������ ��ҵǾ����ϴ�."); };
         }

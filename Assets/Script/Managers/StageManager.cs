@@ -49,14 +49,14 @@ public class StageManager : Singletone<StageManager>
     public IEnumerator calc_and_show_battle_loot() 
     {
         // 실제로 재화 변동 적용되는 부분
-        ResourceManager.resource_code[] loots = stageSettingSO.stage_Settings[stage_index].loots;
+        resource_code[] loots = stageSettingSO.stage_Settings[stage_index].loots;
         int[] minNum = stageSettingSO.stage_Settings[stage_index].minLootNumber;
         int[] maxNum = stageSettingSO.stage_Settings[stage_index].maxLootNumber;
 
         List<int> result = new List<int>();
         for (int i = 0; i < loots.Length; i++) 
         {
-            ResourceManager.resource_code code = loots[i];
+            resource_code code = loots[i];
             int current = ResourceManager.instance.GetResourceValue(code);
 
             result.Add(UnityEngine.Random.Range(minNum[i], maxNum[i] + 1));
@@ -70,7 +70,7 @@ public class StageManager : Singletone<StageManager>
 
         for (int i = 0; i < loots.Length; i++)
         {
-            ResourceManager.resource_code code = loots[i];
+            resource_code code = loots[i];
             GameObject lootObj = Instantiate(loot_prefab, loots_layoutgroup.transform);
             loot loot = lootObj.GetComponent<loot>();
             loot.Set_name(ResourceManager.instance.GetResourceName(code));
