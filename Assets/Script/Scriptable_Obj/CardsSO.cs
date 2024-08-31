@@ -15,6 +15,3 @@ public class CardDataSO : ScriptableObject
     public CardDataSoDictonary CardData_dict;
 }
 
-
-[System.Serializable]
-public class CardDataSoDictonary : SerializableDictionary<skillcard_code, CardData>{}

@@ -42,7 +42,10 @@ public class character_base : MonoBehaviour
                 break;
         }
 
-        return Instantiate(obj, parent.transform);
+        GameObject instantiated_obj = Instantiate(obj, parent.transform);
+        effectLayoutGroup.transform.SetAsLastSibling();
+
+        return instantiated_obj;
     }
 
 }

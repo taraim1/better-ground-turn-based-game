@@ -44,7 +44,7 @@ MonoBehaviour:
       level: 1
       max_healthes_of_level: 000000000a000000
       max_willpowers_of_level: 0000000005000000
-      deck: 1200000015000000160000000a0000000c0000000e000000
+      deck: 18000000
       SPUM_datapath: SPUM/SPUM_Units/Player_base
       move_range:
       - x: 1
@@ -82,8 +82,8 @@ MonoBehaviour:
     - character_name: "\uD14C\uC2A4\uD2B8\uC6A9 \uC801"
       description: "\uC801\uC774\uB2E4"
       level: 1
-      max_healthes_of_level: 0000000064000000
-      max_willpowers_of_level: 0000000064000000
+      max_healthes_of_level: 000000000c000000
+      max_willpowers_of_level: 0000000006000000
       deck: 000000000000000001000000010000000200000002000000
       SPUM_datapath: SPUM/SPUM_Units/Enemy_base
       move_range:
