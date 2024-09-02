@@ -160,7 +160,7 @@ public class BattleGridManager : Singletone<BattleGridManager>
         _tiles[ind.Item1][ind.Item2].set_type(cellType);
     }
 
-    // 좌표상의 타일 컬러 바꾸는 메소드, 유효하지 않은 좌표면 안 바꿈
+    // 좌표상의 타일 색 바꾸는 메소드, 유효하지 않은 좌표면 안 바꿈
     public void set_tile_color(coordinate coordinate, Tile.TileColor color)
     {
         Tuple<int, int> ind = convert_coordinate_to_index(coordinate);
@@ -171,9 +171,25 @@ public class BattleGridManager : Singletone<BattleGridManager>
 
         if (_tiles[ind.Item1][ind.Item2] != null) 
         {
-            _tiles[ind.Item1][ind.Item2].set_color(color);
+            _tiles[ind.Item1][ind.Item2].change_color(color);
         }
     }
+
+    // 좌표상의 타일 색을 원래 색으로 바꾸는 메소드, 유효하지 않은 좌표면 안 바꿈
+    public void revert_tile_color_to_original(coordinate coordinate)
+    {
+        Tuple<int, int> ind = convert_coordinate_to_index(coordinate);
+        if (ind.Item1 == -1 && ind.Item2 == -1)
+        {
+            return;
+        }
+
+        if (_tiles[ind.Item1][ind.Item2] != null)
+        {
+            _tiles[ind.Item1][ind.Item2].revert_to_original_color();
+        }
+    }
+
 
 
     // 월드 좌표와 가장 가까운 셀 찾아주는 메소드 (exclude_filter에 들어간 타입은 제외, include_filter에 들어간 칸이 있으면 그 칸 중에서만 찾음)
@@ -231,7 +247,7 @@ public class BattleGridManager : Singletone<BattleGridManager>
         {
             foreach (coordinate coordinate in card.usable_tiles)
             {
-                set_tile_color(coordinate, Tile.TileColor.original);
+                set_tile_color(coordinate, Tile.TileColor.white);
             }
         }
     }

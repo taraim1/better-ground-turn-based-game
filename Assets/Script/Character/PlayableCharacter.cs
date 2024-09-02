@@ -57,11 +57,11 @@ public class PlayableCharacter : Character, Iclickable
         // 이동 가능한 칸들을 원래 색으로 표시
         foreach (coordinate coordinate in current_movable_tiles)
         {
-            BattleGridManager.instance.set_tile_color(coordinate, Tile.TileColor.original);
+            BattleGridManager.instance.revert_tile_color_to_original(coordinate);
         }
 
         // 현재 칸을 원래 색으로 표시
-        BattleGridManager.instance.set_tile_color(coordinate, Tile.TileColor.original);
+        BattleGridManager.instance.revert_tile_color_to_original(coordinate);
 
         // 가장 가까운 빈 칸 좌표를 찾음 (원래 칸 포함)
         coordinate nearest_tile = BattleGridManager.instance.get_nearest_tile(gameObject.transform.position, moveFilter, current_movable_tiles);

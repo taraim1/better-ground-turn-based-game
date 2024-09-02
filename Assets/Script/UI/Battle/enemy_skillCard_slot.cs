@@ -17,7 +17,7 @@ public class enemy_skillCard_slot : MonoBehaviour, IPointerEnterHandler, IPointe
     [SerializeField] private Image frame;
 
     Color red = new Color(1f, 0f, 0f, 1f);
-    Color grey = new Color(0.7f, 0.7f, 0.7f, 1f);
+    Color grey = new Color(0.5f, 0.5f, 0.5f, 1f);
 
     private Coroutine running_drag = null;
 
@@ -169,7 +169,7 @@ public class enemy_skillCard_slot : MonoBehaviour, IPointerEnterHandler, IPointe
                 {
                     foreach (coordinate coordinate in current_range)
                     {
-                        BattleGridManager.instance.set_tile_color(coordinate, Tile.TileColor.original);
+                        BattleGridManager.instance.revert_tile_color_to_original(coordinate);
                     }
                 }
                 isDragging = false;

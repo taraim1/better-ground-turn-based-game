@@ -1,27 +1,28 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UIElements;
 
+
+[RequireComponent(typeof(SpriteRenderer))]
 public class Tile : MonoBehaviour
 {
     [SerializeField] private Grid _grid;
-    [SerializeField] private Sprite _normal_sprite;
-    [SerializeField] private Sprite _player_sprite;
-    [SerializeField] private Sprite _enemy_sprite;
-    [SerializeField] private Sprite _green_sprite;
+
 
     private SpriteRenderer _renderer;
     private BattleGridManager.boardCell _cellType;
     private int _x, _y;
-    private Sprite _origin_sprite;
+    private TileColor original_color = TileColor.white;
 
     public enum TileColor 
     { 
-        original,
+        white,
         red,
-        green
+        green,
+        blue
     }
 
     public void set_grid(Grid grid) 
@@ -49,7 +50,7 @@ public class Tile : MonoBehaviour
     public void set_type(BattleGridManager.boardCell cellType) 
     {
         _cellType = cellType;
-        change_sprite(_cellType);
+        change_original_color_by_type(_cellType);
     }
 
     public BattleGridManager.boardCell get_type() 
@@ -57,39 +58,50 @@ public class Tile : MonoBehaviour
         return _cellType;
     }
 
-    private void change_sprite(BattleGridManager.boardCell cellType) 
+    private void change_original_color_by_type(BattleGridManager.boardCell cellType) 
     {
         switch (cellType) 
         {
             case BattleGridManager.boardCell.empty:
-                _renderer.sprite = _normal_sprite;
-                _origin_sprite = _normal_sprite;
+                original_color = TileColor.white;
+                change_color(TileColor.white);
                 break;
             case BattleGridManager.boardCell.player:
-                _renderer.sprite = _player_sprite;
-                _origin_sprite = _player_sprite;
+                original_color = TileColor.blue;
+                change_color(TileColor.blue);
                 break;
             case BattleGridManager.boardCell.enemy:
-                _renderer.sprite = _enemy_sprite;
-                _origin_sprite = _enemy_sprite;
+                original_color = TileColor.red;
+                change_color(TileColor.red);
+                break;
+            default:
+                original_color = TileColor.white;
                 break;
         }
     }
 
-    public void set_color(TileColor color) 
+    public void change_color(TileColor color) 
     {
         switch (color) 
         {
-            case TileColor.original:
-                _renderer.sprite = _origin_sprite;
+            case TileColor.white:
+                _renderer.color = new Color(1f, 1f, 1f, 1f);
                 break;
             case TileColor.red:
-                _renderer.sprite = _enemy_sprite;
+                _renderer.color = new Color(1f, 0.4509f, 0.5294f, 1f);
                 break;
             case TileColor.green:
-                _renderer.sprite = _green_sprite;
+                _renderer.color = new Color(0.5294f, 1f, 0.4509f, 1f);
+                break;
+            case TileColor.blue:
+                _renderer.color = new Color(0.4509f, 0.5294f, 1f, 1f);
                 break;
         }
+    }
+
+    public void revert_to_original_color() 
+    {
+        change_color(original_color);
     }
 
     private void Awake()

@@ -23,6 +23,10 @@ public class StageManager : Singletone<StageManager>
         characters.Clear();
         if (scene.name == "Stage_show")
         {
+            // 배경 불러오기
+            Instantiate(stageSettingSO.stage_Settings[stage_index].background_prefab);
+
+            // 캐릭터 생성
             Reload_characters();
         }
     }

@@ -322,7 +322,7 @@ public class card : MonoBehaviour, Iclickable
             // 사용 범위 타일들을 원래 색으로
             foreach (coordinate coordinate in usable_tiles)
             {
-                BattleGridManager.instance.set_tile_color(coordinate, Tile.TileColor.original);
+                BattleGridManager.instance.revert_tile_color_to_original(coordinate);
             }
             _isShowingRange = false;
         }
