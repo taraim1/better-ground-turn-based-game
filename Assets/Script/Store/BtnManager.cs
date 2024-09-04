@@ -6,8 +6,7 @@ using UnityEngine.Events;
 
 public class BtnManager : MonoBehaviour
 {
-    [SerializeField] Sprite btnNormal; //버튼 비선택시 이미지
-    [SerializeField] Sprite btnSelected; //버튼 선택시 이미지
+
     [SerializeField] Text ExText; //설명창 텍스트
     [SerializeField] GameObject Img_Panel;// 텍스트 표시 창
     
@@ -34,7 +33,6 @@ public class BtnManager : MonoBehaviour
                 Current_Scene = i;
                 Panel_Change.Invoke();
             }
-            tabs[i].ChangeBtnImg(isActiveTab? btnSelected : btnNormal); //삼항연산자로 이미지 바꾸기
         }
     }
 
