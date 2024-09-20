@@ -74,8 +74,8 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 59e9d33eaea471d43bf09c1220306aef, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.5019608}
+  m_Sprite: {fileID: -507645358, guid: d61862a942d000944bda2f34026389a0, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -98,7 +98,3 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _grid: {fileID: 0}
-  _normal_sprite: {fileID: 21300000, guid: 59e9d33eaea471d43bf09c1220306aef, type: 3}
-  _player_sprite: {fileID: 21300000, guid: 1da0857a465cf734ba49896654cbdc64, type: 3}
-  _enemy_sprite: {fileID: 21300000, guid: fa815354d327df7429957ac828951f92, type: 3}
-  _green_sprite: {fileID: 21300000, guid: 83424f29ebfb0fb41b05a846bbcdeb24, type: 3}
