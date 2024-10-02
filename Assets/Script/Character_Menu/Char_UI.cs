@@ -13,6 +13,9 @@ public class Char_UI : MonoBehaviour
     [SerializeField]
     private GameObject Character_port;
 
+    [SerializeField] private GameObject character_popup_prefab;
+    [SerializeField] private GameObject popup_canvas;
+
     public Character character;
 
     public class Character_UI_Set
@@ -29,5 +32,12 @@ public class Char_UI : MonoBehaviour
         SPUM_unit_obj.transform.localScale = new Vector3(100f, 100f, 1);
 
 
+    }
+
+    public void Onclick() 
+    {
+        popup_canvas = GameObject.Find("PopupCanvas");
+        Character_popup popup = Instantiate(character_popup_prefab, popup_canvas.transform).GetComponent<Character_popup>();
+        popup.Setup(character.Code);
     }
 }

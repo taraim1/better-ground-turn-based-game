@@ -62,6 +62,7 @@ public abstract class Character : MonoBehaviour
     private string SPUM_datapath;
     public string SPUM_Datapath { get { return SPUM_datapath; } }
     private List<coordinate> move_range;
+    public List<coordinate> Move_range => move_range;
     private int current_health;
     public int Current_health { get { return current_health; } }
     private int current_willpower;
