@@ -15,6 +15,8 @@ public class Character_popup : MonoBehaviour
     [SerializeField] TMP_Text status_tmp;
     [SerializeField] private GameObject cell_prefab;
     [SerializeField] private GameObject move_range_display;
+    [SerializeField] private GameObject deck_cell_prefab;
+    [SerializeField] private GameObject deck_cell_layout_group;
     private List<List<GameObject>> rangeCells = new List<List<GameObject>>();
     private int range_display_cell_number_per_row = 7;
 
@@ -55,6 +57,13 @@ public class Character_popup : MonoBehaviour
         }
         // ÆÄ¶û
         rangeCells[range_display_cell_number_per_row / 2][range_display_cell_number_per_row / 2].GetComponent<Image>().color = new Color(0.4509f, 0.5294f, 1f, 1f);
+
+        // µ¦ ºÒ·¯¿À±â
+        foreach (skillcard_code skill_code in character.Deck) 
+        {
+            deckCell deck_cell = Instantiate(deck_cell_prefab, deck_cell_layout_group.transform).GetComponent<deckCell>();
+            deck_cell.Setup(skill_code);
+        }
     }
 
     public void DestroyPopup()

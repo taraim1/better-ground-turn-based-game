@@ -44,7 +44,7 @@ MonoBehaviour:
       level: 1
       max_healthes_of_level: 000000000a000000
       max_willpowers_of_level: 0000000005000000
-      deck: 18000000
+      deck: 00000000010000000200000003000000090000000f000000
       SPUM_datapath: SPUM/SPUM_Units/Player_base
       move_range:
       - x: 1
