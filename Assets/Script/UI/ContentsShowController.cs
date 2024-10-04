@@ -43,4 +43,10 @@ public class ContentsShowController : MonoBehaviour
         }
         contents[index].Activate();
     }
+
+    // index번째의 content에 오브젝트 추가
+    public void AddObj(int index, GameObject obj) 
+    {
+        contents[index].gameObjects.Add(obj);
+    }
 }
