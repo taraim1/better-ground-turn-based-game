@@ -796,6 +796,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4366323104470189693}
   - component: {fileID: 8916743559332877685}
+  - component: {fileID: 2366600525360369183}
   m_Layer: 5
   m_Name: deckCell
   m_TagString: Untagged
@@ -812,7 +813,7 @@ RectTransform:
   m_GameObject: {fileID: 4656406265592859919}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.2, y: 1.2, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3811200667909608952}
@@ -842,6 +843,39 @@ MonoBehaviour:
   behavior_tmp: {fileID: 8091577930797450731}
   power_range_tmp: {fileID: 5591586144606672315}
   illust: {fileID: 7323168968048946890}
+--- !u!114 &2366600525360369183
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4656406265592859919}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 09511aca13746da48ac5cbf8bad0711a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Card_Image: {fileID: 7323168968048946890}
+  Card_Name: {fileID: 1259265690292268358}
+  Card_Cost: {fileID: 8704564539309768633}
+  cardData:
+    name: 
+    cost: 0
+    type: 
+    sprite: {fileID: 0}
+    behavior_type: 0
+    rarity: 0
+    isUnlocked: 0
+    minPowerOfLevel: 
+    maxPowerOfLevel: 
+    code: 0
+    level: 0
+    targets: 
+    isDirectUsable: 0
+    dontShowPowerRollResult: 0
+    rangeType: 0
+    use_range: []
+    effect_labels: []
 --- !u!1 &7343871748300638415
 GameObject:
   m_ObjectHideFlags: 0
