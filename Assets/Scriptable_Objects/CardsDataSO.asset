@@ -20,6 +20,7 @@ MonoBehaviour:
       type: "\uBB34"
       sprite: {fileID: 21300000, guid: 6024196ba47729546b854ad6d4de7300, type: 3}
       behavior_type: 0
+      rarity: 0
       isUnlocked: 1
       minPowerOfLevel: 02000000
       maxPowerOfLevel: 03000000
@@ -84,6 +85,7 @@ MonoBehaviour:
       type: "\uBB34"
       sprite: {fileID: 21300000, guid: da927cbc7151aa84f851db4e33234bd9, type: 3}
       behavior_type: 1
+      rarity: 0
       isUnlocked: 1
       minPowerOfLevel: 01000000
       maxPowerOfLevel: 02000000
@@ -100,6 +102,7 @@ MonoBehaviour:
       type: "\uBB34"
       sprite: {fileID: 21300000, guid: 2224cdc862e62504a917c8ab400733f3, type: 3}
       behavior_type: 2
+      rarity: 0
       isUnlocked: 1
       minPowerOfLevel: 01000000
       maxPowerOfLevel: 03000000
@@ -116,6 +119,7 @@ MonoBehaviour:
       type: "\uBB34"
       sprite: {fileID: 21300000, guid: 265caba9989274b4b94297e3a8adecad, type: 3}
       behavior_type: 0
+      rarity: 0
       isUnlocked: 1
       minPowerOfLevel: 03000000
       maxPowerOfLevel: 05000000
@@ -156,6 +160,7 @@ MonoBehaviour:
       type: "\uBD88"
       sprite: {fileID: 21300000, guid: 13e199fac305f6e4287859e68fcb530c, type: 3}
       behavior_type: 0
+      rarity: 0
       isUnlocked: 1
       minPowerOfLevel: 03000000
       maxPowerOfLevel: 04000000
@@ -176,6 +181,7 @@ MonoBehaviour:
       type: "\uBB34"
       sprite: {fileID: 21300000, guid: 479236501fd586f47afc09a3c54040de, type: 3}
       behavior_type: 3
+      rarity: 0
       isUnlocked: 1
       minPowerOfLevel: 02000000
       maxPowerOfLevel: 04000000
@@ -194,6 +200,7 @@ MonoBehaviour:
       type: "\uBD88"
       sprite: {fileID: 21300000, guid: a856cf1c0c2b1504088a4272f0979780, type: 3}
       behavior_type: 3
+      rarity: 0
       isUnlocked: 1
       minPowerOfLevel: 00000000
       maxPowerOfLevel: 00000000
@@ -214,6 +221,7 @@ MonoBehaviour:
       type: "\uBB34"
       sprite: {fileID: 21300000, guid: 5fba135ea5e15be4eab4ad90d3f6c689, type: 3}
       behavior_type: 0
+      rarity: 0
       isUnlocked: 0
       minPowerOfLevel: 01000000
       maxPowerOfLevel: 02000000
@@ -246,6 +254,7 @@ MonoBehaviour:
       type: "\uBB34"
       sprite: {fileID: 21300000, guid: 525b042631ad4f44fbd970577cb1b1b3, type: 3}
       behavior_type: 0
+      rarity: 0
       isUnlocked: 0
       minPowerOfLevel: 01000000
       maxPowerOfLevel: 02000000
@@ -278,6 +287,7 @@ MonoBehaviour:
       type: "\uBB34"
       sprite: {fileID: 21300000, guid: 2f87bb036338efb4fa19a09892b1a15f, type: 3}
       behavior_type: 0
+      rarity: 0
       isUnlocked: 0
       minPowerOfLevel: 01000000
       maxPowerOfLevel: 04000000
@@ -320,6 +330,7 @@ MonoBehaviour:
       type: "\uBB34"
       sprite: {fileID: 21300000, guid: 2f87bb036338efb4fa19a09892b1a15f, type: 3}
       behavior_type: 0
+      rarity: 0
       isUnlocked: 0
       minPowerOfLevel: 03000000
       maxPowerOfLevel: 05000000
@@ -386,6 +397,7 @@ MonoBehaviour:
       type: "\uBB34"
       sprite: {fileID: 21300000, guid: b1e5a6efc9936bd4d838c839cd0a9aef, type: 3}
       behavior_type: 0
+      rarity: 0
       isUnlocked: 0
       minPowerOfLevel: 01000000
       maxPowerOfLevel: 02000000
@@ -474,6 +486,7 @@ MonoBehaviour:
       type: "\uBB34"
       sprite: {fileID: 21300000, guid: e5fbf9a6970eed14890cb3f82ae1447a, type: 3}
       behavior_type: 0
+      rarity: 0
       isUnlocked: 0
       minPowerOfLevel: 02000000
       maxPowerOfLevel: 03000000
@@ -564,6 +577,7 @@ MonoBehaviour:
       type: "\uBB34"
       sprite: {fileID: 21300000, guid: 63d472d6facfca2438e03471c872e2da, type: 3}
       behavior_type: 0
+      rarity: 0
       isUnlocked: 0
       minPowerOfLevel: 02000000
       maxPowerOfLevel: 03000000
@@ -654,6 +668,7 @@ MonoBehaviour:
       type: "\uBB34"
       sprite: {fileID: 21300000, guid: 764516da0ec1cfa4cbfa89c5bff81111, type: 3}
       behavior_type: 0
+      rarity: 0
       isUnlocked: 0
       minPowerOfLevel: 02000000
       maxPowerOfLevel: 03000000
@@ -720,6 +735,7 @@ MonoBehaviour:
       type: "\uBB34"
       sprite: {fileID: 21300000, guid: c2ad88d8909ae3a44aec23a1539810f5, type: 3}
       behavior_type: 0
+      rarity: 0
       isUnlocked: 0
       minPowerOfLevel: 04000000
       maxPowerOfLevel: 05000000
@@ -786,6 +802,7 @@ MonoBehaviour:
       type: "\uBB34"
       sprite: {fileID: 21300000, guid: 70aec0d3ec07adf4484ac8f9b47c3538, type: 3}
       behavior_type: 0
+      rarity: 0
       isUnlocked: 0
       minPowerOfLevel: 03000000
       maxPowerOfLevel: 04000000
@@ -852,6 +869,7 @@ MonoBehaviour:
       type: "\uBB34"
       sprite: {fileID: 21300000, guid: e875d4e4652b8cd48877dd80c761eca6, type: 3}
       behavior_type: 0
+      rarity: 0
       isUnlocked: 0
       minPowerOfLevel: 03000000
       maxPowerOfLevel: 05000000
@@ -920,6 +938,7 @@ MonoBehaviour:
       type: "\uBB34"
       sprite: {fileID: 21300000, guid: 445d0934d59f9034b994416d4d5732e2, type: 3}
       behavior_type: 0
+      rarity: 0
       isUnlocked: 0
       minPowerOfLevel: 04000000
       maxPowerOfLevel: 05000000
@@ -988,6 +1007,7 @@ MonoBehaviour:
       type: "\uBB34"
       sprite: {fileID: 21300000, guid: a12959038aa37b24aa1b767a9635a208, type: 3}
       behavior_type: 0
+      rarity: 0
       isUnlocked: 0
       minPowerOfLevel: 05000000
       maxPowerOfLevel: 08000000
@@ -1052,6 +1072,7 @@ MonoBehaviour:
       type: "\uBB34"
       sprite: {fileID: 21300000, guid: 80dbaea11b08c1942a4cd2da6cd38eae, type: 3}
       behavior_type: 2
+      rarity: 0
       isUnlocked: 0
       minPowerOfLevel: 01000000
       maxPowerOfLevel: 02000000
@@ -1068,6 +1089,7 @@ MonoBehaviour:
       type: "\uBB34"
       sprite: {fileID: 21300000, guid: 157fcf332566b9e43bb6603e6d0db963, type: 3}
       behavior_type: 2
+      rarity: 0
       isUnlocked: 0
       minPowerOfLevel: 02000000
       maxPowerOfLevel: 03000000
@@ -1086,6 +1108,7 @@ MonoBehaviour:
       type: "\uBB34"
       sprite: {fileID: 21300000, guid: fcd77b38feaceb241a23c4cc9ff26cb7, type: 3}
       behavior_type: 2
+      rarity: 0
       isUnlocked: 0
       minPowerOfLevel: 02000000
       maxPowerOfLevel: 03000000
@@ -1104,6 +1127,7 @@ MonoBehaviour:
       type: "\uBB34"
       sprite: {fileID: 21300000, guid: 87b5da42520fae744b03444605d100e6, type: 3}
       behavior_type: 2
+      rarity: 0
       isUnlocked: 0
       minPowerOfLevel: 03000000
       maxPowerOfLevel: 03000000
@@ -1120,6 +1144,7 @@ MonoBehaviour:
       type: "\uBB34"
       sprite: {fileID: 21300000, guid: 1bcefa5690137e64abf221bff8762193, type: 3}
       behavior_type: 2
+      rarity: 0
       isUnlocked: 0
       minPowerOfLevel: 03000000
       maxPowerOfLevel: 04000000
@@ -1138,6 +1163,7 @@ MonoBehaviour:
       type: "\uBB34"
       sprite: {fileID: 21300000, guid: 409ea6aabb570af44b9efb1113eec74d, type: 3}
       behavior_type: 2
+      rarity: 0
       isUnlocked: 0
       minPowerOfLevel: 01000000
       maxPowerOfLevel: 02000000
@@ -1154,6 +1180,7 @@ MonoBehaviour:
       type: "\uBB34"
       sprite: {fileID: 21300000, guid: 3fe0384c373e8aa48b76a69deb944c58, type: 3}
       behavior_type: 2
+      rarity: 0
       isUnlocked: 0
       minPowerOfLevel: 01000000
       maxPowerOfLevel: 03000000
@@ -1170,6 +1197,7 @@ MonoBehaviour:
       type: "\uBB34"
       sprite: {fileID: 21300000, guid: ec847bf77da95fe438e551af3a536203, type: 3}
       behavior_type: 2
+      rarity: 0
       isUnlocked: 0
       minPowerOfLevel: 02000000
       maxPowerOfLevel: 04000000

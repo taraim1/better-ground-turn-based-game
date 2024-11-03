@@ -1,3 +1,4 @@
+﻿/*
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -10,137 +11,6 @@ using TMPro;
 
 public class Random_Card : MonoBehaviour
 {
-    public List<CardDataSO> cardDataList;       // 카드 데이터 리스트 (ScriptableObject로부터 참조)
-    public List<CharacterDataSO> characterDataList; // 캐릭터 데이터 리스트 (ScriptableObject로부터 참조)
-
-    public GameObject cardPrefab;  // 카드 프리팹
-    public Transform Card_Summon;  // 카드 소환 위치
-    public GameObject NoGem;       // 보석 부족 시 나타나는 오브젝트
-
-    // 카드 뽑기 확률 (등급별)
-    float[] Card_Percent = new float[4] { 5.0f, 3.0f, 1.0f, 0.5f };
-
-    string[] Card_Grade = new string[] { "Common", "Rare", "Epic", "Legendary" }; // 카드 등급 배열
-
-    // 카드 등급을 뽑는 함수
-    string Card_Grade_pick(float[] _Percent, string[] _Chosen_Grade)
-    {
-        float total = 0;
-
-        for (int i = 0; i < _Percent.Length; i++)
-        {
-            total += _Percent[i];
-        }
-
-        float randomPoint = UnityEngine.Random.value * total;
-
-        for (int i = 0; i < _Percent.Length; i++)
-        {
-            if (randomPoint < _Percent[i])
-            {
-                return _Chosen_Grade[i];
-            }
-            else
-            {
-                randomPoint -= _Percent[i];
-            }
-        }
-
-        return _Chosen_Grade[_Percent.Length - 1];
-    }
-
-    // 특정 등급의 카드 데이터를 ScriptableObject에서 선택
-    public CardDataSO PickRandomCard(string grade)
-    {
-        List<CardDataSO> filteredCards = cardDataList.FindAll(card => card.grade == grade);
-        if (filteredCards.Count > 0)
-        {
-            int randomIndex = UnityEngine.Random.Range(0, filteredCards.Count);
-            return filteredCards[randomIndex];
-        }
-        else
-        {
-            Debug.LogError("해당 등급에 해당하는 카드가 없습니다.");
-            return null;
-        }
-    }
-
-    // 특정 등급의 캐릭터 데이터를 ScriptableObject에서 선택
-    public CharacterDataSO PickRandomCharacter(string grade)
-    {
-        List<CharacterDataSO> filteredCharacters = characterDataList.FindAll(character => character.grade == grade);
-        if (filteredCharacters.Count > 0)
-        {
-            int randomIndex = UnityEngine.Random.Range(0, filteredCharacters.Count);
-            return filteredCharacters[randomIndex];
-        }
-        else
-        {
-            Debug.LogError("해당 등급에 해당하는 캐릭터가 없습니다.");
-            return null;
-        }
-    }
-
-    // 1회 뽑기
-    public void Randomizer_1Time(string type)
-    {
-        string grade = Card_Grade_pick(Card_Percent, Card_Grade);
-
-        if (type == "Skill")
-        {
-            CardDataSO selectedCard = PickRandomCard(grade);
-            if (selectedCard != null)
-            {
-                Card_UI card_UI = Instantiate(cardPrefab, Card_Summon).GetComponent<Card_UI>();
-                card_UI.Card_UI_Set(selectedCard.Card_Name, selectedCard.grade, selectedCard.description);
-            }
-        }
-        else if (type == "Char")
-        {
-            CharacterDataSO selectedCharacter = PickRandomCharacter(grade);
-            if (selectedCharacter != null)
-            {
-                Card_UI card_UI = Instantiate(cardPrefab, Card_Summon).GetComponent<Card_UI>();
-                card_UI.Char_UI_Set(selectedCharacter.characterName, selectedCharacter.grade, selectedCharacter.skill);
-            }
-        }
-    }
-
-    // 10회 뽑기
-    public void Randomizer_10Time(string type)
-    {
-        for (int i = 0; i < 10; i++)
-        {
-            Randomizer_1Time(type);
-        }
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    /*
     GameObject Scene_Changer;
     public GameObject cardPrefab;
     public Transform Card_Summon;
@@ -380,6 +250,7 @@ public class Random_Card : MonoBehaviour
             if (cardPrefab != null) Destroy(cardPrefab.gameObject);
         }
         Card_Prefabs.Clear();
-    }*/
+    }
 
 }
+*/
