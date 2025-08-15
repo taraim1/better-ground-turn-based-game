@@ -1,0 +1,108 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d2bdad02254235f49b2fb82fedfdc42f, type: 3}
+  m_Name: CharacterDataSO
+  m_EditorClassIdentifier: 
+  BasicData:
+    m_keys: 00000000010000000200000003000000
+    m_values:
+    - character_name: "\uAE40\uCD98\uC2DD"
+      description: "\uAE40\uCD98\uC2DD\uC774\uB2E4"
+      level: 1
+      max_healthes_of_level: 0000000014000000
+      max_willpowers_of_level: 000000000a000000
+      deck: 000000000000000001000000020000000300000003000000
+      SPUM_datapath: SPUM/SPUM_Units/KimChunSik
+      move_range:
+      - x: -1
+        y: 0
+      - x: -2
+        y: 0
+      - x: 1
+        y: 0
+      - x: 2
+        y: 0
+      - x: 0
+        y: 1
+      - x: 0
+        y: 2
+      - x: 0
+        y: -1
+      - x: 0
+        y: -2
+    - character_name: "\uD14C\uC2A4\uD2B8 \uCE90\uB9AD\uD130"
+      description: "\uD14C\uC2A4\uD2B8\uC6A9"
+      level: 1
+      max_healthes_of_level: 000000000a000000
+      max_willpowers_of_level: 0000000005000000
+      deck: 00000000010000000200000003000000090000000f000000
+      SPUM_datapath: SPUM/SPUM_Units/Player_base
+      move_range:
+      - x: 1
+        y: 1
+      - x: 2
+        y: 2
+      - x: -1
+        y: -1
+      - x: -2
+        y: -2
+      - x: 1
+        y: -1
+      - x: 2
+        y: -2
+      - x: -1
+        y: 1
+      - x: -2
+        y: 2
+    - character_name: "\uD654\uC5FC \uB9C8\uBC95\uC0AC"
+      description: "\uC911\uC138\uD310 \uD654\uC5FC\uBC29\uC0AC\uAE30(\uC758\uC2DD\uC788\uC74C)"
+      level: 1
+      max_healthes_of_level: 000000000f000000
+      max_willpowers_of_level: 000000001e000000
+      deck: 010000000400000004000000050000000500000006000000
+      SPUM_datapath: SPUM/SPUM_Units/Fire_Mage
+      move_range:
+      - x: 1
+        y: 0
+      - x: -1
+        y: 0
+      - x: 0
+        y: 1
+      - x: 0
+        y: -1
+    - character_name: "\uD14C\uC2A4\uD2B8\uC6A9 \uC801"
+      description: "\uC801\uC774\uB2E4"
+      level: 1
+      max_healthes_of_level: 000000000c000000
+      max_willpowers_of_level: 0000000006000000
+      deck: 000000000000000001000000010000000200000002000000
+      SPUM_datapath: SPUM/SPUM_Units/Enemy_base
+      move_range:
+      - x: 1
+        y: 0
+      - x: -1
+        y: 0
+      - x: 0
+        y: 1
+      - x: 0
+        y: -1
+  PlayerData:
+    m_keys: 010000000000000002000000
+    m_values:
+    - is_character_unlocked: 1
+    - is_character_unlocked: 1
+    - is_character_unlocked: 1
+  EnemyData:
+    m_keys: 03000000
+    m_values:
+    - moveAiType: 1
+      skillSelectAiType: 1

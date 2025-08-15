@@ -1,0 +1,112 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using System.IO;
+using UnityEngine.Rendering.VirtualTexturing;
+using UnityEngine.TextCore.Text;
+using Unity.VisualScripting;
+
+
+public class PartyManager : Singletone<PartyManager>
+{
+
+    // 현재 파티 데이터가 담기는 곳
+    private PartyDataContainer PartyData = new PartyDataContainer();
+
+
+
+    [System.Serializable]
+    private class PartyDataContainer 
+    {
+        public int party_member_count;
+        private int party_member_max = 4;
+        public int party_member_Max { get { return party_member_max; } set { party_member_max = value; }}
+        public List<character_code> party_codes = new List<character_code>();
+    }
+
+    // 현재 파티 데이터를 json 파일로 저장
+    private void save_party_to_json() 
+    {
+        string output = JsonUtility.ToJson(PartyData, true);
+        File.WriteAllText(Application.dataPath + "/Data/PartyData.json", output);
+    }
+
+    // 현재 파티 데이터를 json 파일에서 불러와 덮어씌움
+    private void load_party_from_json()
+    {
+        string output = File.ReadAllText(Application.dataPath + "/Data/PartyData.json");
+        PartyData = JsonUtility.FromJson<PartyDataContainer>(output);
+        ActionManager.party_member_changed?.Invoke();
+    }
+
+    // 캐릭터 코드를 파티에 추가
+    public void add_character_to_party(character_code code) 
+    {
+        if (PartyData.party_member_count >= PartyData.party_member_Max)
+        {
+            Debug.Log("오류: 파티 최대 인원 수에 도달하여 더 이상 추가가 불가능합니다.");
+            return;
+        }
+
+        PartyData.party_codes.Add(code);
+        PartyData.party_member_count++;
+        ActionManager.party_member_changed?.Invoke();
+        save_party_to_json();
+
+    }
+
+    // 캐릭터 코드를 파티에서 제거
+    public void remove_character_from_party(character_code code)
+    {
+        if (PartyData.party_member_count == 0)
+        {
+            Debug.Log("오류: 파티가 비어 있어 삭제가 불가능합니다.");
+            return;
+        }
+
+        if (!PartyData.party_codes.Remove(code)) 
+        {
+            Debug.Log("오류: 파티에 삭제하려는 캐릭터가 없습니다.");
+            return;
+        }
+
+        PartyData.party_member_count--;
+        ActionManager.party_member_changed?.Invoke();
+        save_party_to_json();
+    }
+
+    // 파티에 몇 명 있는지 리턴
+    public int get_party_member_count() 
+    {
+        return PartyData.party_member_count;
+    }
+
+    // 파티의 i번째 캐릭터 코드 리턴
+    public character_code get_charactor_code(int index) 
+    {
+        if (index < 0) 
+        {
+            Debug.Log("오류: 음수 인덱스의 파티 데이터는 없습니다.");
+            return 0;
+        }
+
+        if (index >= get_party_member_count()) 
+        {
+            Debug.Log("오류: 파티 데이터 크기를 넘어서는 인덱스 값으로 데이터를 요청했습니다.");
+            return 0;
+        }
+
+        return PartyData.party_codes[index];
+    }
+
+    // 파티에 캐릭터가 있는지 리턴
+    public bool check_character_in_party(character_code code) 
+    {
+        return PartyData.party_codes.Contains(code);
+    }
+
+    private void Start()
+    {
+        load_party_from_json();
+    }
+}

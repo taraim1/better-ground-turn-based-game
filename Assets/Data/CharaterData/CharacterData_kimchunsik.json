@@ -1,0 +1,61 @@
+{
+    "character_name": "김춘식",
+    "description": "김춘식이다",
+    "code": 1,
+    "enemy_code": 0,
+    "level": 1,
+    "max_health": [
+        0,
+        20
+    ],
+    "max_willpower": [
+        0,
+        10
+    ],
+    "current_health": 0,
+    "current_willpower": 0,
+    "is_character_unlocked": true,
+    "deck": [
+        0,
+        0,
+        1,
+        2,
+        3,
+        3
+    ],
+    "SPUM_datapath": "SPUM/SPUM_Units/KimChunSik",
+    "move_range": [
+        {
+            "x": -1,
+            "y": 0
+        },
+        {
+            "x": -2,
+            "y": 0
+        },
+        {
+            "x": 1,
+            "y": 0
+        },
+        {
+            "x": 2,
+            "y": 0
+        },
+        {
+            "x": 0,
+            "y": 1
+        },
+        {
+            "x": 0,
+            "y": 2
+        },
+        {
+            "x": 0,
+            "y": -1
+        },
+        {
+            "x": 0,
+            "y": -2
+        }
+    ]
+}

@@ -1,0 +1,62 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!78 &1
+TagManager:
+  serializedVersion: 2
+  tags:
+  - PlayerCharacter
+  - SkillCard
+  - EnemyCharacter
+  - enemySkillSlot
+  - skillDescription
+  - effectDescription
+  - BattleGrid
+  layers:
+  - Default
+  - TransparentFX
+  - Ignore Raycast
+  - Back
+  - Water
+  - UI
+  - SkillCard
+  - skillslot
+  - character
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - Layer 1
+  - Layer 2
+  - Layer 3
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  m_SortingLayers:
+  - name: Back
+    uniqueID: 1032323147
+    locked: 0
+  - name: Default
+    uniqueID: 0
+    locked: 0
+  - name: UI
+    uniqueID: 1543579149
+    locked: 0
+  - name: skillSlot
+    uniqueID: 1785872553
+    locked: 0
+  - name: Cards
+    uniqueID: 2425651459
+    locked: 0
